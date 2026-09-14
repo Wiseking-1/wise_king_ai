@@ -1,1 +1,1 @@
-# wise_king_ai
+# wise-king-ai
