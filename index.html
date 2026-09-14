@@ -317,7 +317,7 @@ body{background:linear-gradient(145deg,var(--bg),#14062a);color:var(--light);fon
 <div class="disclaimer"><i class="fas fa-info-circle"></i> Wise King AI is an AI. Please double-check important information.</div>
 <div class="welcome-screen" id="welcomeScreen">
 <div class="welcome-icon">👑</div>
-<h2 class="welcome-title">Sannu! Welcome to Wise King AI</h2>
+<h2 class="welcome-Hello,🙏! Welcome to Wise King AI</h2>
 <p class="welcome-desc">I'm your persistent, intelligent assistant — created by <strong style="color:var(--pink)">IBRAHIM ABDULLAHI</strong> from Nigeria 🇳🇬<br>I remember projects, <strong style="color:#fbbf24">Master Locks</strong>, and your preferences across all chats. 🧠🔒</p>
 </div>
 <div class="messages-area" id="messagesArea"></div>
@@ -485,7 +485,7 @@ Auto Web Search
 <div class="settings-group-title">🗣️ Voice Language</div>
 <div class="settings-card">
 <select class="modal-input" id="voiceLangSelect" style="margin-bottom:0">
-<option value="ha-NG">Hausa (Nigeria)</option>
+<option value="ha-NG">Hausa/English (Nigeria)</option>
 <option value="en-US">English (US)</option>
 <option value="en-GB">English (UK)</option>
 </select>
@@ -535,7 +535,7 @@ let isSending=false;
 let currentAbortController=null;
 
 // ===== FAST MODELS =====
-const FREE_TIER_MODELS=["gemini-2.5-flash","gemini-2.0-flash","gemini-1.5-flash","gemini-1.5-pro"];
+const FREE_TIER_MODELS=["gemini-3.5-flash lite","gemini-2.5-flash","gemini-3.7-flash","gemini-3.5-pro"];
 const MODEL_COOLDOWNS={};
 function isModelAvailable(id){return Date.now()>(MODEL_COOLDOWNS[id]||0);}
 function setModelCooldown(id,sec){MODEL_COOLDOWNS[id]=Date.now()+(sec*1000);}
