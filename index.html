@@ -510,17 +510,16 @@
       <div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div>
       <div class="settings-card">
         <select class="input-field" id="modelSelect" style="margin-bottom:8px">
-          <optgroup label="⚡ Recommended">
-            <option value="gemini-2.5-flash">Gemini 2.5 Flash — Fast &amp; stable ✅</option>
-            <option value="gemini-2.5-pro">Gemini 2.5 Pro — Most capable</option>
-            <option value="gemini-2.0-flash">Gemini 2.0 Flash — Reliable</option>
-          </optgroup>
-          <optgroup label="🔄 Auto-updating aliases">
-            <option value="gemini-flash-latest">Gemini Flash (latest)</option>
-            <option value="gemini-pro-latest">Gemini Pro (latest)</option>
+          <optgroup label="⚡ Recommended (Gemini 3 & 2.5)">
+            <option value="gemini-3.8-flash">Gemini 3.8 Flash — Speed, Logic & Coding ✅</option>
+            <option value="gemini-3.7-flash">Gemini 3.7 Flash — Multimodal (Vision/Audio)</option>
+            <option value="gemini-3.6-flash">Gemini 3.6 Flash — Fast & Token Efficient</option>
+            <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash Lite — Low-cost Automation</option>
+            <option value="gemini-3.1-pro">Gemini 3.1 Pro — Advanced Logic & Deep Coding</option>
+            <option value="gemini-2.5-pro">Gemini 2.5 Pro — Legacy Document Context</option>
           </optgroup>
         </select>
-        <p style="font-size:11px;color:var(--text-tertiary);margin-top:4px">If one model fails, the app automatically tries the others.</p>
+        <p style="font-size:11px;color:var(--text-tertiary);margin-top:4px">If one model fails, the app automatically tries the fallback chain.</p>
       </div>
     </div>
 
@@ -574,31 +573,10 @@
 <div class="toast" id="toast"></div>
 
 <script>
-/* ============================================================
-   🎯 WISE KING AI — REVIVED BUILD (v2.0)
-   Fixes in this version:
-   1. Inline onclick handlers removed — they broke the DOM whenever
-      the AI reply contained an apostrophe or HTML tags.
-      → Now uses event delegation + data attributes.
-   2. getAIResponse no longer duplicates the user message and no
-      longer sends consecutive same-role turns (Gemini rejects those
-      with "multiturn requests must alternate").
-   3. Only REAL Gemini model names are used + gemini-flash-latest as
-      a guaranteed working fallback.
-   4. Empty text parts are filtered (Gemini 400s on empty parts).
-   5. Safety-block and finishReason are surfaced instead of silently
-      returning nothing.
-   6. Auto-login: if you already signed in, the login screen no
-      longer blocks the app on every reload.
-   7. "Test key & list models" button in Settings — tells you exactly
-      which models your API key can actually use.
-   8. Global error handlers so a crash never leaves a silent blank UI.
-   ============================================================ */
-
 // PDF worker
 if (window.pdfjsLib) { try { pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; } catch(e) {} }
 
-// ===== SYSTEM PROMPT (declared first — no hoisting issues) =====
+// ===== SYSTEM PROMPT =====
 const WISE_KING_PROMPT = `You are WISE KING AI created by IBRAHIM ABDULLAHI from Nigeria (Wise King Industry).
 
 CRITICAL IMAGE RULE: When the user asks for an image ("create picture", "generate image", "draw", "photo of", "make me a picture"), YOU MUST respond ONLY with this exact tag and nothing else: [GENERATE_IMAGE: <detailed English visual description>]. Never say "image created" — the app handles display.
@@ -611,23 +589,26 @@ LANGUAGE: Default Hausa (Nigeria). Adapt to English/mixed. Write beautifully.
 
 OWNER: IBRAHIM ABDULLAHI. Address him with great respect.`;
 
-// ===== MODEL LISTS — ONLY real, existing models =====
+// ===== MODEL LISTS — UPDATED WORKING & SUPPORTED MODELS =====
 const AVAILABLE_MODELS = [
-  'gemini-2.5-flash',
-  'gemini-2.5-pro',
-  'gemini-2.0-flash',
-  'gemini-flash-latest',
-  'gemini-pro-latest'
+  'gemini-3.8-flash',
+  'gemini-3.7-flash',
+  'gemini-3.6-flash',
+  'gemini-3.5-flash-lite',
+  'gemini-3.1-pro',
+  'gemini-2.5-pro'
 ];
-// Order tried when the selected model fails
+
+// Order tried when the selected model encounters Quota Limit or Error
 const FALLBACK_CHAIN = [
-  'gemini-2.5-flash',
-  'gemini-2.0-flash',
-  'gemini-flash-latest',
-  'gemini-2.5-pro',
-  'gemini-pro-latest'
+  'gemini-3.8-flash',
+  'gemini-3.7-flash',
+  'gemini-3.6-flash',
+  'gemini-3.5-flash-lite',
+  'gemini-3.1-pro',
+  'gemini-2.5-pro'
 ];
-const DEFAULT_MODEL = 'gemini-2.5-flash';
+const DEFAULT_MODEL = 'gemini-3.8-flash';
 
 // ===== STATE =====
 let isLoginMode = true;
@@ -722,7 +703,6 @@ function init() {
     setupThemeSwatches();
     setupMessageDelegation();
 
-    // ✅ Auto-login — don't block the app on every reload
     if (localStorage.getItem('wk_logged_in') === '1') {
       unlockApp(localStorage.getItem('wk_user_name') || 'IBRAHIM ABDULLAHI');
     }
@@ -856,7 +836,7 @@ function filterChats() {
   });
 }
 
-// ===== MESSAGE RENDERING (event delegation — NO inline content handlers) =====
+// ===== MESSAGE RENDERING =====
 function setupMessageDelegation() {
   const area = document.getElementById('messagesArea');
   if (!area || area._wkBound) return;
@@ -968,7 +948,6 @@ function buildMessageEl(msg, idx) {
   content.className = 'msg-content ' + (msg.error ? 'error' : (isAI ? 'ai' : 'user'));
   content.innerHTML = buildContentHtml(msg);
 
-  // Attached images
   if (msg.images && msg.images.length) {
     const wrap = document.createElement('div');
     wrap.className = 'attachments';
@@ -980,7 +959,6 @@ function buildMessageEl(msg, idx) {
     });
     content.appendChild(wrap);
   }
-  // Attached docs
   if (msg.docs && msg.docs.length) {
     msg.docs.forEach(d => {
       const chip = document.createElement('div');
@@ -991,7 +969,6 @@ function buildMessageEl(msg, idx) {
       content.appendChild(chip);
     });
   }
-  // Generated image
   if (msg.generatedImage) {
     const gw = document.createElement('div');
     gw.className = 'gen-image-wrap';
@@ -1021,7 +998,6 @@ function buildMessageEl(msg, idx) {
   body.appendChild(name);
   body.appendChild(content);
 
-  // Share row for AI messages
   if (isAI && msg.content && !msg.error) {
     const shareText = encodeURIComponent((msg.content || '').slice(0, 500) + '\n\n— via Wise King AI 👑');
     const row = document.createElement('div');
@@ -1069,7 +1045,6 @@ function buildMessageEl(msg, idx) {
     body.appendChild(row);
   }
 
-  // Meta + tools
   const meta = document.createElement('div');
   meta.className = 'msg-meta';
   const time = document.createElement('span');
@@ -1294,7 +1269,7 @@ function isImageRequest(t) {
   ].some(p => p.test(t));
 }
 
-// ===== BUILD GEMINI TURNS (fixed alternation) =====
+// ===== BUILD GEMINI TURNS =====
 function buildTurns(msgs) {
   const turns = [];
   for (const m of msgs) {
@@ -1303,10 +1278,10 @@ function buildTurns(msgs) {
     if (m.docs && m.docs.length) {
       txt += (txt ? '\n\n' : '') + m.docs.map(d => `[Attached document: ${d.name}]`).join('\n');
     }
-    if (!txt) continue; // Gemini rejects empty text parts
+    if (!txt) continue;
     const last = turns[turns.length - 1];
     if (last && last.role === role) {
-      last.parts[0].text += '\n\n' + txt; // merge to keep alternation valid
+      last.parts[0].text += '\n\n' + txt;
     } else {
       turns.push({ role, parts: [{ text: txt }] });
     }
@@ -1314,7 +1289,7 @@ function buildTurns(msgs) {
   return turns;
 }
 
-// ===== 🎯 getAIResponse — bulletproof =====
+// ===== getAIResponse WITH SMART FALLBACK =====
 async function getAIResponse(text, docs, chat, signal) {
   const apiKey = (localStorage.getItem('wk_api_key') || '').trim();
   if (!apiKey) {
@@ -1338,10 +1313,9 @@ async function getAIResponse(text, docs, chat, signal) {
       try {
         const r = await performWebSearch(text);
         if (r) { webContext = `\n\n*** LIVE WEB (${r.source}): ***\n${r.text}\n${r.url || ''}`; webSource = r.source; usedWeb = true; }
-      } catch (e) { /* web search is optional */ }
+      } catch (e) { /* web search optional */ }
     }
 
-    // History = everything except the final user message (which we send with context)
     const historyMsgs = chat.messages.slice(0, -1).slice(-12);
     const sysPrompt = WISE_KING_PROMPT + rulesContext;
 
@@ -1354,7 +1328,6 @@ async function getAIResponse(text, docs, chat, signal) {
     const currentText = (text || '📎 Attachment') + docContext + webContext + lockContext;
     const lastTurn = contents[contents.length - 1];
     if (lastTurn && lastTurn.role === 'user') {
-      // merge so we never send two user turns in a row
       lastTurn.parts[0].text += '\n\n' + currentText;
     } else {
       contents.push({ role: 'user', parts: [{ text: currentText }] });
@@ -1388,7 +1361,6 @@ async function getAIResponse(text, docs, chat, signal) {
           const msg = (data && data.error && data.error.message) || ('HTTP ' + res.status);
           lastErr = msg;
           console.warn('[WiseKing] model failed:', model, msg);
-          // If the key itself is bad, don't waste time on other models
           if (res.status === 400 && /API key not valid|API_KEY_INVALID/i.test(msg)) {
             return {
               role: 'ai', error: true, createdAt: Date.now(),
@@ -1416,7 +1388,6 @@ async function getAIResponse(text, docs, chat, signal) {
           continue;
         }
 
-        // ---- IMAGE PATH ----
         const m = reply.match(/\[GENERATE_IMAGE[:\s]+(.+?)\]/is);
         if (m) {
           showToast('🎨 Generating image...');
@@ -1443,7 +1414,7 @@ async function getAIResponse(text, docs, chat, signal) {
     if (signal && signal.aborted) return null;
     return {
       role: 'ai', error: true, createdAt: Date.now(),
-      content: `⚠️ Could not reach Gemini\n\nTried: ${triedModels.join(', ')}\nLast error: ${lastErr || 'Unknown'}\n\nChecklist:\n• Internet connection working?\n• API key correct? (Settings ⚙️ → "Test key & list models")\n• Free-tier quota not exhausted?\n• Key has the Generative Language API enabled?`
+      content: `⚠️ Could not reach Gemini API\n\nTried: ${triedModels.join(', ')}\nLast error: ${lastErr || 'Unknown'}\n\nChecklist:\n• Internet connection working?\n• API key correct? (Settings ⚙️ → "Test key & list models")\n• Key quota not exhausted?`
     };
 
   } catch (fatal) {
@@ -1454,7 +1425,6 @@ async function getAIResponse(text, docs, chat, signal) {
 
 // ===== IMAGE GENERATION =====
 async function generateImage(prompt) {
-  // 1) Try Replicate if the user provided a key
   const rk = (localStorage.getItem('wk_replicate_key') || '').trim();
   if (rk) {
     try {
@@ -1467,7 +1437,6 @@ async function generateImage(prompt) {
       if (d && d.output && d.output[0]) return d.output[0];
     } catch (e) { console.warn('Replicate failed, falling back to Pollinations', e); }
   }
-  // 2) Free fallback — Pollinations (no key required)
   const enhanced = prompt + ', professional, cinematic, photorealistic, highly detailed, 8K, masterpiece';
   const seed = Math.floor(Math.random() * 1000000);
   return `https://image.pollinations.ai/prompt/${encodeURIComponent(enhanced)}?width=1024&height=1024&seed=${seed}&nologo=true&model=flux&enhance=true`;
@@ -1768,7 +1737,6 @@ async function testApiKey() {
       `<details style="margin-top:8px"><summary style="cursor:pointer;color:var(--accent-hover)">Show all ${models.length} models your key can use</summary>` +
       `<div style="margin-top:6px;max-height:160px;overflow:auto;font-family:monospace;font-size:11px">${models.map(escapeHtml).join('<br>')}</div></details>`;
 
-    // Auto-pick a working model if the saved one isn't available
     if (usable.length && !models.includes(getSelectedModel())) {
       localStorage.setItem('wk_model', usable[0]);
       document.getElementById('modelSelect').value = usable[0];
