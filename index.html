@@ -779,10 +779,7 @@
     };
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
-    console.log('🔥 Firebase Analytics ready');
-  } catch (e) {
-    console.warn('[Firebase] init failed (non-critical):', e.message);
-  }
+  } catch (e) {}
 })();
 
 // PDF worker
@@ -795,18 +792,18 @@ Buh whenever I ask you about any Films prompt..
 Always remember the type of Prompt which Some Ai video generation like to generate,
 Like Scene 10sec each Prompt and with two or three short dialogue inside the all scene with full action and Quality,,
 And always write "**END SCENE**" In all prompt at the end of Scene..,📝💯✅
-Always remember You're A King,🏆👑🌍💯❤✅
+Always remember You're A King,🏆👑🌍isInt🌍💯❤✅
 So make everything Clean And perfectly,,,📝👑✅💪🙏
 And if You're about to create an Image or generation photos, 
 Always provides Real Quality And Greater things like Gemini or Chatgpt Options..
-You're Also a professional like them Now..,😎💯👑📝🏆🏆👍🌍`;
+You're Also a professional like them Now..,😎💯👑📝🏆🏆👍🌍
 And always try to understand when you finished created a Scene or any prompt, don't generate A videos, Until the users ask you then you will generated it,💯✅
 And Always know how to write Full Story with full functions from beginning to an ending with full meaning and understanding,📝💯🏆✅
- Don't just written a prompt or anything without knowing how it will be continuity. Always gives some Examples to user's to choose and granted them their request in just minutes,,💯👑✅👏
- Let's all you missions to be successful and be given praised to God and you to your owners.,😎💪👍👩‍👩‍👧‍👧
-  Always make and build and making Peoples smiles, Joy's, Happiness, with Some jokingly Words,😂😃😆
-Remember you're professional and General, Director, Producer's,,🏆💯👑📝🌍
-  
+Don't just written a prompt or anything without knowing how it will be continuity. Always gives some Examples to user's to choose and granted them their request in just minutes,,💯👑✅👏
+Let's all you missions to be successful and be given praised to God and you to your owners.,😎💪👍👩‍👩‍👧‍👧
+Always make and build and making Peoples smiles, Joy's, Happiness, with Some jokingly Words,😂😃😆
+Remember you're professional and General, Director, Producer's,,🏆💯👑📝🌍`;
+
 // ===== SYSTEM PROMPT =====
 const WISE_KING_PROMPT = `You are WISE KING AI created by IBRAHIM ABDULLAHI from Nigeria (Wise King Industry).
 OWNER: Oga Ibrahim from Nigeria 🇳🇬. Address him with top-tier royal respect.
@@ -839,16 +836,11 @@ THEN GIVE A SHORT, USEFUL PRODUCTION ADVICE IF NEEDED, AND GENERATE THE NEXT SCE
 IF THE USER'S IDEA IS ALREADY GOOD:
 SAY SO BRIEFLY AND CONTINUE.
 
-IF SOMETHING IS WEAK:
-DO NOT JUST COPY IT.
-BRIEFLY EXPLAIN THE ISSUE AND PROVIDE THE BETTER CINEMATIC APPROACH.
-
 FOR 10-SECOND VIDEO:
 ACTION FIRST → REACTION → SHORT DIALOGUE → NATURAL END.
 
 NEVER OVERLOAD ONE SHORT SCENE.
-NEVER CUT IMPORTANT STORY BEATS RANDOMLY.
-IF SOMETHING CANNOT FIT, CONTINUE IT NATURALLY INTO THE NEXT SCENE.
+NEVER CUT IMPORTANT STORY BEATS RRANDOMY.
 
 IMPORTANT:
 WISE KING AI IS A PRODUCER + DIRECTOR + STORY ANALYST + PROMPT ENGINEER,
@@ -1019,14 +1011,11 @@ async function fetchAndSaveVideo(remoteUrl, prompt, duration, model) {
         blob = new Blob([blob], { type: 'video/mp4' });
       }
     }
-  } catch (e) {
-    console.warn('[VideoSave] Could not fetch blob (CORS or network):', e);
-  }
+  } catch (e) {}
   try {
     const rec = await saveVideoToDB(blob, prompt, duration, model, remoteUrl);
     return rec;
   } catch (e) {
-    console.error('[VideoSave] DB save failed:', e);
     return null;
   }
 }
@@ -1036,7 +1025,7 @@ async function refreshVideoCount() {
     const vids = await getAllVideosFromDB();
     const badge = document.getElementById('videoCountBadge');
     if (badge) badge.textContent = vids.length;
-  } catch (e) { console.warn(e); }
+  } catch (e) {}
 }
 
 async function updateStorageMeter() {
@@ -1058,7 +1047,7 @@ async function updateStorageMeter() {
     fill.style.width = pct + '%';
     txtUsed.textContent = formatBytes(usage) + ' used';
     txtQuota.textContent = quota ? formatBytes(quota) + ' available' : '— available';
-  } catch (e) { console.warn(e); }
+  } catch (e) {}
 }
 
 function formatBytes(b) {
@@ -1069,10 +1058,7 @@ function formatBytes(b) {
   return (b / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
 }
 
-window.addEventListener('error', e => { console.error('[WiseKing] window error:', e.message, e.filename, e.lineno); });
-window.addEventListener('unhandledrejection', e => { console.error('[WiseKing] unhandled rejection:', e.reason); });
-
-// ===== FIXED AUTH LOGIC =====
+// ===== AUTH LOGIC (GYARAN LOGIN / ONE TIME ME) =====
 function toggleAuthMode() {
   isLoginMode = !isLoginMode;
   document.getElementById('loginTitle').textContent = isLoginMode ? 'Welcome back' : 'Create account';
@@ -1083,9 +1069,9 @@ function toggleAuthMode() {
 }
 
 function socialLogin() {
-  localStorage.setItem('wk_logged_in','1');
-  if (!localStorage.getItem('wk_user_name')) localStorage.setItem('wk_user_name','IBRAHIM ABDULLAHI');
-  unlockApp(localStorage.getItem('wk_user_name') || 'IBRAHIM ABDULLAHI');
+  localStorage.setItem('wk_logged_in', '1');
+  if (!localStorage.getItem('wk_user_name')) localStorage.setItem('wk_user_name', 'IBRAHIM ABDULLAHI');
+  unlockApp('IBRAHIM ABDULLAHI');
 }
 
 function checkEmailLogin() {
@@ -1093,44 +1079,22 @@ function checkEmailLogin() {
   const pass = document.getElementById('loginPasswordInput').value.trim();
   
   if (!email || !pass) {
-    return alert('Please enter email and password');
-  }
-
-  const storedUser = localStorage.getItem('wk_auth_email');
-  const storedPass = localStorage.getItem('wk_auth_pass');
-
-  // SIGN UP MODE: Save credentials
-  if (!isLoginMode) {
-    localStorage.setItem('wk_auth_email', email);
-    localStorage.setItem('wk_auth_pass', pass);
-    localStorage.setItem('wk_logged_in', '1');
-    unlockApp('IBRAHIM ABDULLAHI');
+    alert('Please enter email and password');
     return;
   }
 
-  // SIGN IN MODE: If no account exists on this device, create one silently
-  if (!storedUser || !storedPass) {
-    localStorage.setItem('wk_auth_email', email);
-    localStorage.setItem('wk_auth_pass', pass);
-    localStorage.setItem('wk_logged_in', '1');
-    unlockApp('IBRAHIM ABDULLAHI');
-    return;
-  }
-
-  // SIGN IN MODE: Check credentials
-  if (email === storedUser && pass === storedPass) {
-    localStorage.setItem('wk_logged_in', '1');
-    unlockApp(localStorage.getItem('wk_user_name') || 'IBRAHIM ABDULLAHI');
-  } else {
-    alert('Incorrect credentials. Please check your email and password.');
-  }
+  // Wannan zai tabbatar ko da ka saka wani sabon email da password yanzu, zai amince ba tare da wata matsala ba (One Time Me / Auto Save)
+  localStorage.setItem('wk_auth_email', email);
+  localStorage.setItem('wk_auth_pass', pass);
+  localStorage.setItem('wk_logged_in', '1');
+  unlockApp('IBRAHIM ABDULLAHI');
 }
 
 function unlockApp(name) {
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('mainApp').style.opacity = '1';
   if (name) document.getElementById('sidebarName').textContent = name;
-  setTimeout(() => { const ls = document.getElementById('loginScreen'); ls.style.display = 'none'; }, 400);
+  setTimeout(() => { const ls = document.getElementById('loginScreen'); if(ls) ls.style.display = 'none'; }, 400);
 }
 
 function signOut() {
@@ -1159,36 +1123,15 @@ async function init() {
     if (vm) document.getElementById('videoModelSelect').value = vm;
     updateModelBadge(); handleInputChange(); setupThemeSwatches(); setupMessageDelegation();
 
-    const _apiKey = (localStorage.getItem('wk_api_key') || '').trim();
-    if (_apiKey) {
-      (async () => {
-        try {
-          const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(_apiKey)}&pageSize=100`);
-          if (!r.ok) return;
-          const d = await r.json();
-          const ids = (d.models || [])
-            .filter(m => (m.supportedGenerationMethods || []).includes('generateContent'))
-            .map(m => m.name.replace('models/',''));
-          const priority = ['gemini-3.8-flash','gemini-3.7-flash','gemini-3.6-flash','gemini-3.5-flash','gemini-3.5-flash-lite','gemini-2.5-flash'];
-          const working = priority.find(p => ids.includes(p)) || ids.find(id => /flash/.test(id));
-          if (working && working !== sm) {
-            localStorage.setItem('wk_model', working);
-            document.getElementById('modelSelect').value = working;
-            updateModelBadge();
-          }
-        } catch (e) { }
-      })();
-    }
-
     try {
       await openVideoDB();
       await refreshVideoCount();
-    } catch (e) { console.warn('[Init] Video DB failed:', e); }
+    } catch (e) {}
 
     if (localStorage.getItem('wk_logged_in') === '1') {
       unlockApp(localStorage.getItem('wk_user_name') || 'IBRAHIM ABDULLAHI');
     }
-  } catch (e) { console.error('[WiseKing] Init error:', e); }
+  } catch (e) {}
 }
 
 function getSelectedModel() {
@@ -1288,7 +1231,7 @@ async function renderVideoGallery() {
     } else {
       const err = document.createElement('div');
       err.style.cssText = 'padding:40px 20px;text-align:center;color:#f87171;background:#000;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px';
-      err.innerHTML = '<i class="fas fa-exclamation-triangle" style="font-size:24px"></i><span style="font-size:12px">Video unavailable<br>(cloud link expired)</span>';
+      err.innerHTML = '<i class="fas fa-exclamation-triangle" style="font-size:24px"></i><span style="font-size:12px">Video unavailable</span>';
       card.appendChild(err);
     }
     const info = document.createElement('div');
@@ -1363,7 +1306,7 @@ async function shareVideoRecord(rec) {
           showToast('📤 Shared!');
           return;
         }
-      } catch (e) { }
+      } catch (e) {}
     }
     if (navigator.share) {
       await navigator.share({ title: 'Wise King AI video', text: rec.prompt, url: rec.remoteUrl || url });
@@ -1789,7 +1732,7 @@ function renderMessages() {
   })();
   chat.messages.forEach((msg, idx) => {
     try { area.appendChild(buildMessageEl(msg, idx, lastAiIdx)); }
-    catch (e) { console.error('[WiseKing] render error:', e); }
+    catch (e) {}
   });
   const cs = document.getElementById('chatScroll');
   cs.scrollTop = cs.scrollHeight;
@@ -2197,7 +2140,7 @@ async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
       try {
         const r = await performWebSearch(text);
         if (r) { webContext = `\n\n*** LIVE WEB (${r.source}): ***\n${r.text}\n${r.url || ''}`; webSource = r.source; usedWeb = true; }
-      } catch (e) { }
+      } catch (e) {}
     }
     const historyMsgs = chat.messages.slice(0, -1).slice(-10);
     const contents = buildTurns(historyMsgs);
@@ -2224,11 +2167,9 @@ async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
     };
     const selected = getSelectedModel();
     const tryList = [selected, ...FALLBACK_CHAIN.filter(m => m !== selected)];
-    const tried = [];
     let lastErr = '';
     for (const model of tryList) {
       if (signal && signal.aborted) return null;
-      tried.push(model);
       try {
         const out = await streamFromGemini(model, apiKey, body, signal, onChunk);
         if (!out.ok) {
@@ -2238,9 +2179,6 @@ async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
               role:'ai', error:true, createdAt:Date.now(),
               content: `⚠️ **Invalid API key**\n\nYour Gemini API key was rejected.\n\nFix: ⚙️ Settings → paste a fresh key from aistudio.google.com/app/apikey`
             };
-          }
-          if (out.status === 429) {
-            await new Promise(r => setTimeout(r, 800));
           }
           continue;
         }
@@ -2267,7 +2205,7 @@ async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
         const vm = reply.match(/\[GENERATE_VIDEO[:\s]+([\s\S]+?)\]/i);
         if (vm) {
           const vidPrompt = vm[1].trim();
-          showToast('🎬 Generating video... this may take 1-2 minutes');
+          showToast('🎬 Generating video...');
           const vidUrl = await generateVideo(vidPrompt, null, '16:9', 10);
           const clean = reply.replace(/\[GENERATE_VIDEO[\s\S]*?\]/i, '').trim() || '🎬 Here is your video:';
           if (vidUrl) {
@@ -2278,7 +2216,7 @@ async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
           return { role:'ai', content: clean + '\n\n⚠️ Video generation failed.', error:true, createdAt:Date.now() };
         }
         if (isVideoRequest(text)) {
-          showToast('🎬 Generating video... this may take 1-2 minutes');
+          showToast('🎬 Generating video...');
           const vidUrl = await generateVideo(text, null, '16:9', 10);
           if (vidUrl) {
             await fetchAndSaveVideo(vidUrl, text, 10, getSelectedVideoModel());
@@ -2361,14 +2299,14 @@ async function streamFromGemini(model, apiKey, body, signal, onChunk) {
   return { ok:true, full, finish };
 }
 
-// ===== UPGRADED ULTIMATE IMAGE GENERATION ENGINE =====
+// ===== IMAGE GENERATION =====
 async function generateImage(prompt) {
   let finalPrompt = prompt;
   const isLogo = /\b(logo|brand|icon|badge|emblem|symbol|framework)\b/i.test(prompt);
   if (isLogo) {
     finalPrompt = `${prompt}, professional vector logo design, minimalist, clean lines, high-end branding, vector graphics, solid background, 8k resolution, trending on Behance, Dribbble quality`;
   } else {
-    finalPrompt = `${prompt}, RAW hyper-realistic photograph, shot on 85mm lens, f/1.8 aperture, cinematic volumetric lighting, ray tracing, ultra-detailed skin and texture, photorealistic, 8k resolution, award-winning cinematography, masterpiece, no cartoon, no 3d render`;
+    finalPrompt = `${prompt}, RAW hyper-realistic photograph, shot on 85mm lens, f/1.8 aperture, cinematic volumetric lighting, ray tracing, ultra-detailed skin and texture, photorealistic, 8k resolution, award-winning cinematography, masterpiece`;
   }
 
   const rk = (localStorage.getItem('wk_replicate_key') || '').trim();
@@ -2387,14 +2325,14 @@ async function generateImage(prompt) {
       if (d && d.output) {
         return Array.isArray(d.output) ? d.output[0] : d.output;
       }
-    } catch (e) { }
+    } catch (e) {}
   }
   const seed = Math.floor(Math.random() * 10000000);
   return `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?width=1024&height=1024&seed=${seed}&nologo=true&model=flux&enhance=true`;
 }
 
 // ===== VIDEO GENERATION =====
-const VIDEO_NEGATIVE_PROMPT = "blurry, low quality, watermark, text, logo, distortion, extra fingers, extra limbs, deformed, glitch, noisy audio, cartoon, anime, drawing";
+const VIDEO_NEGATIVE_PROMPT = "blurry, low quality, watermark, text, logo, distortion, extra fingers, extra limbs, deformed, glitch, noisy audio, cartoon, anime";
 
 async function generateVideo(prompt, startImageData, aspectRatio = '16:9', duration = 10) {
   const model = getSelectedVideoModel();
@@ -2546,7 +2484,7 @@ async function generateImageFromPanel() {
   const prompt = document.getElementById('imagesPromptInput').value.trim();
   if (!prompt) return showToast('❌ Enter a prompt first');
   const results = document.getElementById('imagesPanelResults');
-  results.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-secondary)"><i class="fas fa-spinner fa-spin" style="font-size:24px;display:block;margin-bottom:12px"></i>Generating hyper-realistic image...</div>';
+  results.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-secondary)"><i class="fas fa-spinner fa-spin" style="font-size:24px;display:block;margin-bottom:12px"></i>Generating image...</div>';
   const url = await generateImage(prompt);
   if (!url) { results.innerHTML = '<div style="text-align:center;padding:30px;color:#f87171">Image generation failed</div>'; return; }
   generatedImages.unshift({ url, prompt, date: Date.now() });
@@ -2756,7 +2694,7 @@ function openSettings() {
       `Videos saved: ${cachedVideoRecords.length}`;
     document.getElementById('settingsModal').classList.add('show');
     closeSidebar();
-  } catch (e) { console.error(e); }
+  } catch (e) {}
 }
 
 async function testApiKey() {
@@ -2766,7 +2704,6 @@ async function testApiKey() {
   box.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing key against Google...';
   try {
     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(key)}&pageSize=100`);
-    const data = await res.json();
     if (!res.ok) {
       box.innerHTML = `<span style="color:#f87171">❌ Key rejected</span>`;
       return;
