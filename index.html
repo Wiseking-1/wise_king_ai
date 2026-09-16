@@ -1066,7 +1066,7 @@ function formatBytes(b) {
 window.addEventListener('error', e => { console.error('[WiseKing] window error:', e.message, e.filename, e.lineno); });
 window.addEventListener('unhandledrejection', e => { console.error('[WiseKing] unhandled rejection:', e.reason); });
 
-// ===== AUTH =====
+// ===== FIXED AUTH LOGIC =====
 function toggleAuthMode() {
   isLoginMode = !isLoginMode;
   document.getElementById('loginTitle').textContent = isLoginMode ? 'Welcome back' : 'Create account';
@@ -1075,35 +1075,58 @@ function toggleAuthMode() {
   document.getElementById('authSwitchText').textContent = isLoginMode ? "Don't have an account? " : 'Already have an account? ';
   document.getElementById('authSwitchBtn').textContent = isLoginMode ? 'Sign up' : 'Sign in';
 }
+
 function socialLogin() {
   localStorage.setItem('wk_logged_in','1');
   if (!localStorage.getItem('wk_user_name')) localStorage.setItem('wk_user_name','IBRAHIM ABDULLAHI');
   unlockApp(localStorage.getItem('wk_user_name') || 'IBRAHIM ABDULLAHI');
 }
+
 function checkEmailLogin() {
   const email = document.getElementById('loginEmailInput').value.trim();
   const pass = document.getElementById('loginPasswordInput').value.trim();
-  if (!email || !pass) return alert('Please enter email and password');
+  
+  if (!email || !pass) {
+    return alert('Please enter email and password');
+  }
+
   const storedUser = localStorage.getItem('wk_auth_email');
   const storedPass = localStorage.getItem('wk_auth_pass');
-  if (isLoginMode) {
-    if (email === storedUser && pass === storedPass) {
-      localStorage.setItem('wk_logged_in','1');
-      unlockApp(localStorage.getItem('wk_user_name') || 'IBRAHIM ABDULLAHI');
-    } else { alert('Incorrect credentials. Create an account first (tap "Sign up").'); }
-  } else {
+
+  // SIGN UP MODE: Save credentials
+  if (!isLoginMode) {
     localStorage.setItem('wk_auth_email', email);
     localStorage.setItem('wk_auth_pass', pass);
-    localStorage.setItem('wk_logged_in','1');
+    localStorage.setItem('wk_logged_in', '1');
     unlockApp('IBRAHIM ABDULLAHI');
+    return;
+  }
+
+  // SIGN IN MODE: If no account exists on this device, create one silently
+  if (!storedUser || !storedPass) {
+    localStorage.setItem('wk_auth_email', email);
+    localStorage.setItem('wk_auth_pass', pass);
+    localStorage.setItem('wk_logged_in', '1');
+    unlockApp('IBRAHIM ABDULLAHI');
+    return;
+  }
+
+  // SIGN IN MODE: Check credentials
+  if (email === storedUser && pass === storedPass) {
+    localStorage.setItem('wk_logged_in', '1');
+    unlockApp(localStorage.getItem('wk_user_name') || 'IBRAHIM ABDULLAHI');
+  } else {
+    alert('Incorrect credentials. Please check your email and password.');
   }
 }
+
 function unlockApp(name) {
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('mainApp').style.opacity = '1';
   if (name) document.getElementById('sidebarName').textContent = name;
   setTimeout(() => { const ls = document.getElementById('loginScreen'); ls.style.display = 'none'; }, 400);
 }
+
 function signOut() {
   if (confirm('Sign out? Your chats and settings stay saved on this device.')) {
     localStorage.removeItem('wk_logged_in');
@@ -2793,7 +2816,7 @@ function importAllData(e) {
       showToast('✅ Imported');
     } catch (err) { alert('Invalid backup file'); }
   };
-  fr.readAsText(f); e.target.value = &apos;&apos;;
+  fr.readAsText(f); e.target.value = '';
 }
 
 // ===== VOICE =====
