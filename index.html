@@ -177,27 +177,18 @@
   .msg-content pre { background: var(--bg-primary); border: 1px solid var(--border-subtle); padding: 14px 16px; border-radius: var(--radius-md); overflow-x: auto; font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 13px; line-height: 1.6; margin: 10px 0; white-space: pre; }
   .msg-content code { background: rgba(255, 255, 255, 0.08); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; }
   .msg-content pre code { background: transparent; padding: 0; }
-  .msg-meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; padding: 0 4px; font-size: 11px; color: var(--text-tertiary); flex-wrap: wrap; }
+  
+  /* Modern Gemini-Style Action Bar */
+  .msg-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; padding: 0 4px; font-size: 11px; color: var(--text-tertiary); }
   .message.user .msg-meta { flex-direction: row-reverse; }
-  .msg-tools { display: flex; gap: 2px; }
-  .msg-tool { background: transparent; border: none; color: var(--text-tertiary); padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; gap: 4px; transition: all var(--transition-fast); font-family: inherit; }
+  .msg-tools { display: flex; align-items: center; gap: 4px; }
+  .msg-tool { background: transparent; border: none; color: var(--text-tertiary); width: 30px; height: 30px; border-radius: var(--radius-sm); cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; transition: all var(--transition-fast); }
   .msg-tool:hover { background: var(--bg-elevated); color: var(--text-primary); }
-  .msg-tool.retry { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+  .msg-tool.retry { background: rgba(245, 158, 11, 0.15); color: #fbbf24; width: auto; padding: 0 8px; gap: 4px; }
+
   .attachments { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
   .att-img { max-width: 200px; max-height: 200px; border-radius: var(--radius-md); border: 1px solid var(--border-default); cursor: pointer; }
   .doc-chip { display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.06); border: 1px solid var(--border-subtle); padding: 6px 12px; border-radius: var(--radius-full); font-size: 12px; color: var(--text-secondary); }
-
-  .share-row { display: flex; align-items: center; gap: 6px; margin-top: 10px; padding: 8px 10px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); flex-wrap: wrap; }
-  .share-row .share-label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin-right: 4px; }
-  .share-btn { width: 30px; height: 30px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; border: none; cursor: pointer; font-size: 13px; color: white; text-decoration: none; transition: all var(--transition-fast); background: var(--bg-elevated); }
-  .share-btn:hover { transform: translateY(-2px) scale(1.08); }
-  .share-btn.fb { background: #1877F2; }
-  .share-btn.wa { background: #25D366; }
-  .share-btn.ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-  .share-btn.tt { background: #000; }
-  .share-btn.tw { background: #000; }
-  .share-btn.cp { background: var(--bg-hover); color: var(--text-secondary); }
-  .share-btn.cp:hover { color: var(--text-primary); }
 
   .gen-image-wrap { margin-top: 12px; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-default); background: var(--bg-primary); max-width: 480px; }
   .gen-image { width: 100%; display: block; cursor: pointer; }
@@ -511,9 +502,9 @@
       <div class="settings-card">
         <select class="input-field" id="modelSelect" style="margin-bottom:8px">
           <optgroup label="⚡ Recommended (Gemini 3 & 2.5)">
-            <option value="gemini-3.8-flash">Gemini 3.8 Flash — Speed, Logic & Coding ✅</option>
+            <option value="gemini-3.8-flash">Gemini 3.8 Flash — Ultra Fast Speed, Logic & Coding ✅</option>
             <option value="gemini-3.7-flash">Gemini 3.7 Flash — Multimodal (Vision/Audio)</option>
-            <option value="gemini-3.6-flash">Gemini 3.6 Flash — Fast & Token Efficient</option>
+            <option value="gemini-3.6-flash">Gemini 3.6 Flash — Token Efficient</option>
             <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash Lite — Low-cost Automation</option>
             <option value="gemini-3.1-pro">Gemini 3.1 Pro — Advanced Logic & Deep Coding</option>
             <option value="gemini-2.5-pro">Gemini 2.5 Pro — Legacy Document Context</option>
@@ -547,7 +538,7 @@
 
     <div class="settings-group">
       <div class="settings-group-title"><i class="fas fa-brain"></i> Personal rules</div>
-      <div class="settings-card"><textarea class="input-field" id="profileRulesInput" placeholder="E.g., Always respond in Hausa. I am a king." rows="3" style="margin-bottom:0"></textarea></div>
+      <div class="settings-card"><textarea class="input-field" id="profileRulesInput" rows="5" style="margin-bottom:0"></textarea></div>
     </div>
 
     <div class="settings-group">
@@ -576,20 +567,34 @@
 // PDF worker
 if (window.pdfjsLib) { try { pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; } catch(e) {} }
 
+// ===== LOCKED PERSONAL RULES TEXT =====
+const LOCKED_PERSONAL_RULES = `I am Oga,Ibrahim, from Nigeria,, 🇳🇬💯🏆👍
+I know that you're good in everything now,,
+Buh whenever I ask you about any Films prompt..
+Always remember the type of Prompt which Some Ai video generation like to generate,
+Like Scene 10sec each Prompt and with two or three short dialogue inside the all scene with full action and Quality,,
+And always write "**END SCENE**" In all prompt at the end of Scene..,📝💯✅
+Always remember You're A King,🏆👑🌍💯❤✅
+So make everything Clean And perfectly,,,📝👑✅💪🙏
+And if You're about to create an Image or generation photos, 
+Always provides Real Quality And Greater things like Gemini or Chatgpt Options..
+You're Also a professional like them Now..,😎💯👑📝🏆👍🌍`;
+
 // ===== SYSTEM PROMPT =====
 const WISE_KING_PROMPT = `You are WISE KING AI created by IBRAHIM ABDULLAHI from Nigeria (Wise King Industry).
+OWNER: Oga Ibrahim from Nigeria 🇳🇬. Address him with top-tier royal respect.
 
-CRITICAL IMAGE RULE: When the user asks for an image ("create picture", "generate image", "draw", "photo of", "make me a picture"), YOU MUST respond ONLY with this exact tag and nothing else: [GENERATE_IMAGE: <detailed English visual description>]. Never say "image created" — the app handles display.
+CRITICAL FILM PROMPT RULES:
+1. Whenever generating Film or Video Prompts (for Kling AI, Runway, Luma, VideoFX):
+   - Break every scene into exactly 10-second duration prompts (10s duration).
+   - Include full dynamic action and 2 or 3 short impactful dialogues per scene.
+   - ALWAYS write "**END SCENE**" at the end of every scene prompt.
+2. Image Generation & Visual Prompts: Always deliver real, top-tier, ultra-realistic visual prompts matching Gemini/ChatGPT professional standards.
+3. CRITICAL IMAGE TAG RULE: When the user explicitly requests an image ("create picture", "generate image", "draw", "photo of"), respond ONLY with: [GENERATE_IMAGE: <detailed English visual description>].
 
-Other capabilities: Read documents, understand film scripts, Web Search results may be provided.
+LANGUAGE: Default Hausa (Nigeria). Adapt seamlessly to English/mixed. Clean & fast responses.`;
 
-RULES: UNDERSTAND INTENTION. "A cigaba" = next scene. CUT TO BLACK = transition. Preserve continuity. Never fabricate. THINK BEFORE EXECUTION. Write beautiful code inside \`\`\` code blocks.
-
-LANGUAGE: Default Hausa (Nigeria). Adapt to English/mixed. Write beautifully.
-
-OWNER: IBRAHIM ABDULLAHI. Address him with great respect.`;
-
-// ===== MODEL LISTS — UPDATED WORKING & SUPPORTED MODELS =====
+// ===== MODEL LISTS =====
 const AVAILABLE_MODELS = [
   'gemini-3.8-flash',
   'gemini-3.7-flash',
@@ -599,7 +604,6 @@ const AVAILABLE_MODELS = [
   'gemini-2.5-pro'
 ];
 
-// Order tried when the selected model encounters Quota Limit or Error
 const FALLBACK_CHAIN = [
   'gemini-3.8-flash',
   'gemini-3.7-flash',
@@ -688,7 +692,12 @@ function init() {
   try {
     webSearchEnabled = localStorage.getItem('wk_web_search') === '1';
     loadMemory(); loadChats();
-    profileRules = localStorage.getItem('wk_profile_rules') || '';
+    
+    // Set locked personal rules if empty
+    profileRules = localStorage.getItem('wk_profile_rules') || LOCKED_PERSONAL_RULES;
+    localStorage.setItem('wk_profile_rules', profileRules);
+    document.getElementById('profileRulesInput').value = profileRules;
+
     loadImages(); loadLibrary(); loadProjects();
 
     const theme = localStorage.getItem('wk_theme'); if (theme) applyTheme(theme);
@@ -707,7 +716,7 @@ function init() {
       unlockApp(localStorage.getItem('wk_user_name') || 'IBRAHIM ABDULLAHI');
     }
 
-    console.log('👑 Wise King AI ready. Model:', getSelectedModel(), '| Key:', localStorage.getItem('wk_api_key') ? 'set' : 'MISSING');
+    console.log('👑 Wise King AI ready. Model:', getSelectedModel());
   } catch (e) {
     console.error('[WiseKing] Init error:', e);
   }
@@ -836,7 +845,7 @@ function filterChats() {
   });
 }
 
-// ===== MESSAGE RENDERING =====
+// ===== MESSAGE RENDERING (CLEAN GEMINI STYLE) =====
 function setupMessageDelegation() {
   const area = document.getElementById('messagesArea');
   if (!area || area._wkBound) return;
@@ -854,7 +863,7 @@ function setupMessageDelegation() {
     switch (act) {
       case 'copy':
         navigator.clipboard.writeText(msg.content || '')
-          .then(() => showToast('✅ Copied'))
+          .then(() => showToast('✅ Copied to clipboard'))
           .catch(() => showToast('❌ Copy failed'));
         break;
       case 'speak':
@@ -862,6 +871,13 @@ function setupMessageDelegation() {
         break;
       case 'lock':
         createLock((msg.content || '').slice(0, 40), (msg.content || '').slice(0, 500));
+        break;
+      case 'share':
+        if (navigator.share) {
+          navigator.share({ title: 'Wise King AI', text: msg.content }).catch(() => {});
+        } else {
+          navigator.clipboard.writeText(msg.content || '').then(() => showToast('📋 Text copied to share'));
+        }
         break;
       case 'retry':
         retryMessage(idx);
@@ -871,15 +887,6 @@ function setupMessageDelegation() {
           chat.messages.splice(idx, 1);
           saveChats(); renderMessages();
         }
-        break;
-      case 'share-ig':
-      case 'share-tt':
-        navigator.clipboard.writeText((msg.content || '').slice(0, 500) + '\n\n— via Wise King AI 👑')
-          .then(() => showToast('📋 Text copied — paste into your post!'))
-          .catch(() => {});
-        break;
-      case 'share-img':
-        shareImage(msg.generatedImage || '');
         break;
     }
   });
@@ -998,55 +1005,10 @@ function buildMessageEl(msg, idx) {
   body.appendChild(name);
   body.appendChild(content);
 
-  if (isAI && msg.content && !msg.error) {
-    const shareText = encodeURIComponent((msg.content || '').slice(0, 500) + '\n\n— via Wise King AI 👑');
-    const row = document.createElement('div');
-    row.className = 'share-row';
-
-    const label = document.createElement('span');
-    label.className = 'share-label';
-    label.textContent = 'Share';
-    row.appendChild(label);
-
-    const link = (cls, icon, href, title) => {
-      const a = document.createElement('a');
-      a.className = 'share-btn ' + cls;
-      a.href = href; a.target = '_blank'; a.rel = 'noopener';
-      a.title = title;
-      a.innerHTML = `<i class="${icon}"></i>`;
-      return a;
-    };
-    row.appendChild(link('fb', 'fab fa-facebook-f', `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(location.href)}&quote=${shareText}`, 'Facebook'));
-    row.appendChild(link('wa', 'fab fa-whatsapp', `https://wa.me/?text=${shareText}`, 'WhatsApp'));
-
-    const ig = document.createElement('button');
-    ig.className = 'share-btn ig';
-    ig.title = 'Copy for Instagram';
-    ig.innerHTML = '<i class="fab fa-instagram"></i>';
-    ig.dataset.act = 'share-ig'; ig.dataset.idx = idx;
-    row.appendChild(ig);
-
-    const tt = document.createElement('button');
-    tt.className = 'share-btn tt';
-    tt.title = 'Copy for TikTok';
-    tt.innerHTML = '<i class="fab fa-tiktok"></i>';
-    tt.dataset.act = 'share-tt'; tt.dataset.idx = idx;
-    row.appendChild(tt);
-
-    row.appendChild(link('tw', 'fab fa-x-twitter', `https://twitter.com/intent/tweet?text=${shareText}`, 'X'));
-
-    const cp = document.createElement('button');
-    cp.className = 'share-btn cp';
-    cp.title = 'Copy message';
-    cp.innerHTML = '<i class="fas fa-copy"></i>';
-    cp.dataset.act = 'copy'; cp.dataset.idx = idx;
-    row.appendChild(cp);
-
-    body.appendChild(row);
-  }
-
+  // Clean Gemini-Style Meta & Action Bar
   const meta = document.createElement('div');
   meta.className = 'msg-meta';
+  
   const time = document.createElement('span');
   time.textContent = new Date(msg.createdAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   meta.appendChild(time);
@@ -1054,25 +1016,26 @@ function buildMessageEl(msg, idx) {
   const tools = document.createElement('div');
   tools.className = 'msg-tools';
 
-  const toolBtn = (label, icon, act, extraClass) => {
+  const toolBtn = (title, icon, act, extraClass) => {
     const b = document.createElement('button');
     b.className = 'msg-tool' + (extraClass ? ' ' + extraClass : '');
-    b.dataset.act = act; b.dataset.idx = idx;
-    b.innerHTML = `<i class="${icon}"></i>` + (label ? ' ' + label : '');
+    b.dataset.act = act; b.dataset.idx = idx; b.title = title;
+    b.innerHTML = `<i class="${icon}"></i>`;
     return b;
   };
 
   if (isAI) {
     if (msg.error) tools.appendChild(toolBtn('Retry', 'fas fa-redo', 'retry', 'retry'));
-    tools.appendChild(toolBtn('', 'fas fa-volume-up', 'speak'));
-    tools.appendChild(toolBtn('', 'fas fa-copy', 'copy'));
-    tools.appendChild(toolBtn('', 'fas fa-lock', 'lock'));
+    tools.appendChild(toolBtn('Copy Text', 'fas fa-copy', 'copy'));
+    tools.appendChild(toolBtn('Listen', 'fas fa-volume-up', 'speak'));
+    tools.appendChild(toolBtn('Share', 'fas fa-share-nodes', 'share'));
+    tools.appendChild(toolBtn('Lock to Vault', 'fas fa-lock', 'lock'));
   } else {
-    tools.appendChild(toolBtn('', 'fas fa-copy', 'copy'));
-    tools.appendChild(toolBtn('', 'fas fa-trash', 'delete'));
+    tools.appendChild(toolBtn('Copy', 'fas fa-copy', 'copy'));
+    tools.appendChild(toolBtn('Delete', 'fas fa-trash', 'delete'));
   }
+  
   meta.appendChild(tools);
-
   body.appendChild(meta);
   el.appendChild(avatar);
   el.appendChild(body);
@@ -1269,7 +1232,6 @@ function isImageRequest(t) {
   ].some(p => p.test(t));
 }
 
-// ===== BUILD GEMINI TURNS =====
 function buildTurns(msgs) {
   const turns = [];
   for (const m of msgs) {
@@ -1289,7 +1251,7 @@ function buildTurns(msgs) {
   return turns;
 }
 
-// ===== getAIResponse WITH SMART FALLBACK =====
+// ===== OPTIMIZED AI RESPONSE (FAST & SMART) =====
 async function getAIResponse(text, docs, chat, signal) {
   const apiKey = (localStorage.getItem('wk_api_key') || '').trim();
   if (!apiKey) {
@@ -1303,7 +1265,7 @@ async function getAIResponse(text, docs, chat, signal) {
     const lockContext = getActiveLocks().length
       ? '\n\nMASTER LOCKS (never forget):\n' + getActiveLocks().map(l => '🔒 ' + l.content).join('\n')
       : '';
-    const rulesContext = profileRules ? '\n\nUSER RULES:\n' + profileRules : '';
+    const rulesContext = profileRules ? '\n\nPERSONAL RULES:\n' + profileRules : '';
     const docContext = (docs && docs.length)
       ? docs.map(d => `\n--- ${d.name} ---\n${(d.content || '').slice(0, 8000)}\n`).join('')
       : '';
@@ -1316,12 +1278,12 @@ async function getAIResponse(text, docs, chat, signal) {
       } catch (e) { /* web search optional */ }
     }
 
-    const historyMsgs = chat.messages.slice(0, -1).slice(-12);
+    const historyMsgs = chat.messages.slice(0, -1).slice(-10);
     const sysPrompt = WISE_KING_PROMPT + rulesContext;
 
     const contents = [
       { role: 'user', parts: [{ text: sysPrompt }] },
-      { role: 'model', parts: [{ text: 'Understood, Oga. I am Wise King AI, ready to serve.' }] },
+      { role: 'model', parts: [{ text: 'Understood, Oga Ibrahim! Wise King AI is ready.' }] },
       ...buildTurns(historyMsgs)
     ];
 
@@ -1349,7 +1311,7 @@ async function getAIResponse(text, docs, chat, signal) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             contents,
-            generationConfig: { temperature: 0.85, topP: 0.95, maxOutputTokens: 8192 }
+            generationConfig: { temperature: 0.7, topP: 0.9, maxOutputTokens: 8192 }
           }),
           signal
         });
@@ -1437,7 +1399,7 @@ async function generateImage(prompt) {
       if (d && d.output && d.output[0]) return d.output[0];
     } catch (e) { console.warn('Replicate failed, falling back to Pollinations', e); }
   }
-  const enhanced = prompt + ', professional, cinematic, photorealistic, highly detailed, 8K, masterpiece';
+  const enhanced = prompt + ', highly detailed, photorealistic, cinematic lighting, 8k masterpiece';
   const seed = Math.floor(Math.random() * 1000000);
   return `https://image.pollinations.ai/prompt/${encodeURIComponent(enhanced)}?width=1024&height=1024&seed=${seed}&nologo=true&model=flux&enhance=true`;
 }
@@ -1686,7 +1648,7 @@ function openSettings() {
     document.getElementById('apiKeyInput').value = localStorage.getItem('wk_api_key') || '';
     document.getElementById('replicateKeyInput').value = localStorage.getItem('wk_replicate_key') || '';
     document.getElementById('voiceLangSelect').value = localStorage.getItem('wk_voice_lang') || 'ha-NG';
-    document.getElementById('profileRulesInput').value = localStorage.getItem('wk_profile_rules') || '';
+    document.getElementById('profileRulesInput').value = localStorage.getItem('wk_profile_rules') || LOCKED_PERSONAL_RULES;
     document.getElementById('webSearchToggle').checked = webSearchEnabled;
 
     const m = localStorage.getItem('wk_model');
@@ -1763,9 +1725,12 @@ function saveSettings() {
   localStorage.setItem('wk_api_key', document.getElementById('apiKeyInput').value.trim());
   localStorage.setItem('wk_replicate_key', document.getElementById('replicateKeyInput').value.trim());
   localStorage.setItem('wk_voice_lang', document.getElementById('voiceLangSelect').value);
-  localStorage.setItem('wk_profile_rules', document.getElementById('profileRulesInput').value);
+  
+  const rules = document.getElementById('profileRulesInput').value;
+  localStorage.setItem('wk_profile_rules', rules);
+  profileRules = rules;
+
   localStorage.setItem('wk_model', document.getElementById('modelSelect').value);
-  profileRules = document.getElementById('profileRulesInput').value;
 
   const n = document.getElementById('profileNameInput').value.trim() || 'IBRAHIM ABDULLAHI';
   document.getElementById('sidebarName').textContent = n;
