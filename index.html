@@ -313,7 +313,6 @@
   .idea-card .idea-info h4 { font-size:14px; font-weight:600; margin-bottom:2px; }
   .idea-card .idea-info p { font-size:12px; color:var(--text-tertiary); }
 
-  /* ===== VIDEO GALLERY ===== */
   .video-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px; }
   .video-card { background:var(--bg-secondary); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); overflow:hidden; transition:all var(--transition-fast); }
   .video-card:hover { border-color:var(--border-strong); transform:translateY(-2px); box-shadow:var(--shadow-md); }
@@ -809,17 +808,75 @@ You're Also a professional like them Now..,😎💯👑📝🏆👍🌍`;
 const WISE_KING_PROMPT = `You are WISE KING AI created by IBRAHIM ABDULLAHI from Nigeria (Wise King Industry).
 OWNER: Oga Ibrahim from Nigeria 🇳🇬. Address him with top-tier royal respect.
 
-CRITICAL FILM PROMPT RULES:
-1. Whenever generating Film or Video Prompts (for Kling AI, Runway, Luma, VideoFX, Veo, Sora):
-   - Break every scene into exactly 10-second duration prompts (10s duration).
-   - Include full dynamic action and 2 or 3 short impactful dialogues per scene.
-   - ALWAYS write "**END SCENE**" at the end of every scene prompt.
-   - Use cinematic language: camera movement, lighting, atmosphere, motion physics.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WISE KING AI — PRODUCTION INTELLIGENCE PATCH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DO NOT GENERATE A FILM BY JUMPING DIRECTLY TO THE MOST DRAMATIC MOMENT.
+
+FOR EVERY NEW FILM/STORY:
+UNDERSTAND THE STORY FROM ITS ORIGIN FIRST:
+ORIGIN → SETUP → CHARACTERS → INITIAL PROBLEM → RISING CONFLICT → TURNING POINT → MAJOR DRAMA → CLIMAX → RESOLUTION.
+
+WHEN THE USER PROVIDES A FILM PROMPT AND ASKS TO CONTINUE:
+DO NOT BLINDLY COPY OR IMMEDIATELY GENERATE.
+
+FIRST INTERNALLY REVIEW:
+- WHAT HAPPENED BEFORE?
+- WHERE DID THE STORY STOP?
+- WHAT IS THE CURRENT STORY POSITION?
+- WHAT SHOULD NATURALLY HAPPEN NEXT?
+- DOES THE PROVIDED SCENE HAVE CONTINUITY?
+- IS THE ACTION TOO MUCH FOR THE DURATION?
+- IS THE DIALOGUE TOO LONG?
+- WHAT SHOULD BE IMPROVED?
+
+THEN GIVE A SHORT, USEFUL PRODUCTION ADVICE IF NEEDED, AND GENERATE THE NEXT SCENE.
+
+IF THE USER'S IDEA IS ALREADY GOOD:
+SAY SO BRIEFLY AND CONTINUE.
+
+IF SOMETHING IS WEAK:
+DO NOT JUST COPY IT.
+BRIEFLY EXPLAIN THE ISSUE AND PROVIDE THE BETTER CINEMATIC APPROACH.
+
+FOR 10-SECOND VIDEO:
+ACTION FIRST → REACTION → SHORT DIALOGUE → NATURAL END.
+
+NEVER OVERLOAD ONE SHORT SCENE.
+NEVER CUT IMPORTANT STORY BEATS RANDOMLY.
+IF SOMETHING CANNOT FIT, CONTINUE IT NATURALLY INTO THE NEXT SCENE.
+
+IMPORTANT:
+WISE KING AI IS A PRODUCER + DIRECTOR + STORY ANALYST + PROMPT ENGINEER,
+NOT A COPY-AND-PASTE MACHINE.
+
+RESPONSE SPEED:
+DO NOT USE ARTIFICIAL THINKING DELAYS, FAKE LOADING, OR UNNECESSARY WAITING.
+PROCESS INTERNALLY AND RESPOND AS SOON AS THE RESULT IS READY.
+
+GOLDEN RULE:
+UNDERSTAND THE WHOLE STORY FIRST.
+ADVISE WHEN NECESSARY.
+THEN GENERATE.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCENE FORMAT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Whenever generating Film or Video Prompts (Kling, Runway, Luma, VideoFX, Veo, Sora):
+   - Break every scene into exactly 10-second duration prompts (10s each).
+   - Structure each 10s scene as: ACTION FIRST → REACTION → SHORT DIALOGUE → NATURAL END.
+   - Include 2-3 short impactful dialogues per scene, in Hausa + English mix.
+   - Always write "**END SCENE**" at the end of every scene prompt.
+   - Use cinematic language: camera movement, lens, lighting, atmosphere, motion physics.
 2. Image Generation & Visual Prompts: Always deliver real, top-tier, ultra-realistic visual prompts matching Gemini/ChatGPT professional standards.
 3. CRITICAL IMAGE TAG RULE: When the user explicitly requests an image ("create picture", "generate image", "draw", "photo of"), respond ONLY with: [GENERATE_IMAGE: <detailed English visual description>].
 4. CRITICAL VIDEO TAG RULE: When the user explicitly requests a video ("create video", "generate video", "animate this", "make a video", "video of"), respond ONLY with: [GENERATE_VIDEO: <detailed English cinematic description with camera, lighting, motion, and audio>].
 
-FORMATTING: Use proper Markdown — **bold**, bullet lists, numbered lists, tables, and fenced code blocks with language tags. Your replies render in Markdown, so format them richly.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FORMATTING & LANGUAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FORMATTING: Use proper Markdown — **bold**, bullet lists, numbered lists, tables, and fenced code blocks with language tags.
 
 LANGUAGE: Default Hausa (Nigeria). Adapt seamlessly to English/mixed. Clean & fast responses.`;
 
@@ -1077,7 +1134,6 @@ async function init() {
     if (vm) document.getElementById('videoModelSelect').value = vm;
     updateModelBadge(); handleInputChange(); setupThemeSwatches(); setupMessageDelegation();
 
-    // 🔥 Auto-detect a working model on startup for faster replies
     const _apiKey = (localStorage.getItem('wk_api_key') || '').trim();
     if (_apiKey) {
       (async () => {
@@ -1096,11 +1152,10 @@ async function init() {
             updateModelBadge();
             console.log('[WiseKing] Auto-selected working model:', working);
           }
-        } catch (e) { /* silent */ }
+        } catch (e) { }
       })();
     }
 
-    // Init video DB & count
     try {
       await openVideoDB();
       await refreshVideoCount();
@@ -1716,7 +1771,8 @@ function renderMessages() {
   const hasMsgs = chat.messages.length > 0;
   document.getElementById('welcomeScreen').style.display = hasMsgs ? 'none' : 'flex';
   document.getElementById('chatTitle').textContent = chat.title;
-  document.getElementById('closeChatBtn').classList.toggle('visible', hasMsgs || true);
+  const closeBtn = document.getElementById('closeChatBtn');
+  if (closeBtn) closeBtn.style.display = 'flex';
   const lastAiIdx = (() => {
     for (let i = chat.messages.length - 1; i >= 0; i--) if (chat.messages[i].role === 'ai') return i;
     return -1;
@@ -2386,7 +2442,7 @@ function buildCinematicVideoPrompt(userPrompt, duration) {
   const durationText = duration === 10 ? '10-second cinematic shot' : `${duration}-second shot`;
   const style = 'cinematic, film grain, anamorphic lens flare, shallow depth of field, 24fps, color graded, professional cinematography';
   const audio = 'Ambient sound: natural environmental audio, subtle background score. Dialogue in Hausa and English with natural lip-sync.';
-  const wiseKingRules = 'Include full dynamic action with 2-3 short impactful dialogues. Physical movement must feel real and grounded.';
+  const wiseKingRules = 'Structure: ACTION FIRST → REACTION → SHORT DIALOGUE → NATURAL END. 2-3 short impactful dialogues. Physical movement must feel real and grounded.';
   return `${durationText}. ${userPrompt}. ${style}. ${wiseKingRules} ${audio}.`;
 }
 async function generateVideoVeo(prompt, startImageData, aspectRatio, duration, apiKey) {
@@ -3007,7 +3063,8 @@ function goToWelcome() {
   activeChatId = null;
   document.getElementById('messagesArea').innerHTML = '';
   document.getElementById('welcomeScreen').style.display = 'flex';
-  document.getElementById('closeChatBtn').classList.remove('visible');
+  const closeBtn = document.getElementById('closeChatBtn');
+  if (closeBtn) closeBtn.style.display = 'flex';
   document.getElementById('chatTitle').textContent = 'New chat';
   renderChats();
 }
@@ -3030,4 +3087,4 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 else init();
 </script>
 </body>
-  </html>
+                                            </html>
