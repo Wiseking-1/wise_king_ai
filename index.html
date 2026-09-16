@@ -170,16 +170,42 @@
   .md-cursor::after { content:"▍"; color:var(--accent); animation:blink 1s steps(2) infinite; margin-left:1px; }
   @keyframes blink { 50% { opacity:0; } }
 
-  /* ===== Action Bar ===== */
+  /* ===== Action Bar (FIXED ALIGNMENT) ===== */
   .msg-meta { display:flex; align-items:center; justify-content:space-between; margin-top:6px; padding:0 4px; font-size:11px; color:var(--text-tertiary); }
   .message.user .msg-meta { flex-direction:row-reverse; }
-  .msg-tools { display:flex; align-items:center; gap:4px; flex-wrap:wrap; }
-  .msg-tool { background:transparent; border:none; color:var(--text-tertiary); width:30px; height:30px; border-radius:var(--radius-sm); cursor:pointer; font-size:13px; display:inline-flex; align-items:center; justify-content:center; transition:all var(--transition-fast); position:relative; }
+  .msg-tools {
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:nowrap;
+    justify-content:flex-end;
+  }
+  .message.user .msg-tools { justify-content:flex-end; }
+  .msg-tool {
+    flex:0 0 auto;
+    background:transparent;
+    border:none;
+    color:var(--text-tertiary);
+    width:32px;
+    height:32px;
+    min-width:32px;
+    padding:0;
+    margin:0;
+    line-height:1;
+    border-radius:var(--radius-sm);
+    cursor:pointer;
+    font-size:13px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    transition:all var(--transition-fast);
+    position:relative;
+  }
   .msg-tool:hover { background:var(--bg-elevated); color:var(--text-primary); }
-  .msg-tool.retry { background:rgba(245,158,11,0.15); color:#fbbf24; width:auto; padding:0 8px; gap:4px; }
+  .msg-tool.retry { background:rgba(245,158,11,0.15); color:#fbbf24; width:auto; padding:0 10px; height:32px; gap:4px; }
   .msg-tool.liked { background:rgba(16,185,129,0.15); color:#34d399; }
   .msg-tool.disliked { background:rgba(239,68,68,0.15); color:#f87171; }
-  .msg-tool.regen { background:rgba(99,102,241,0.12); color:var(--accent-hover); width:auto; padding:0 8px; gap:4px; }
+  .msg-tool.regen { background:rgba(99,102,241,0.12); color:var(--accent-hover); width:auto; padding:0 10px; height:32px; gap:4px; }
   .msg-tool.regen:hover { background:rgba(99,102,241,0.22); }
   .msg-tool .tool-label { font-size:11px; font-weight:500; }
 
@@ -235,7 +261,6 @@
   .send-btn.stop { background:var(--danger); }
   .send-btn.hidden { display:none; }
   .input-hint { text-align:center; font-size:11px; color:var(--text-tertiary); margin-top:8px; }
-  .input-hint kbd { background:var(--bg-elevated); padding:1px 5px; border-radius:3px; font-family:'JetBrains Mono',monospace; font-size:10px; border:1px solid var(--border-subtle); }
 
   .dropdown { position:fixed; background:var(--bg-elevated); border:1px solid var(--border-default); border-radius:var(--radius-md); min-width:180px; padding:4px; z-index:500; box-shadow:var(--shadow-lg); display:none; animation:dropIn 0.15s ease; }
   @keyframes dropIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
@@ -358,7 +383,8 @@
   @media (max-width:480px) {
     .top-btn .label { display:none; }
     .top-btn { padding:8px 10px; }
-    .msg-tools { gap:2px; }
+    .msg-tools { gap:4px; }
+    .msg-tool { width:30px; height:30px; min-width:30px; font-size:12px; }
     .msg-tool.regen .tool-label { display:none; }
   }
 </style>
@@ -440,7 +466,7 @@
           <div class="suggestions">
             <div class="suggestion-card" onclick="useSuggestion('Explain quantum computing in simple terms')"><i class="fas fa-atom"></i><div class="sc-title">Explain quantum computing</div><div class="sc-desc">In simple, clear terms</div></div>
             <div class="suggestion-card" onclick="useSuggestion('Write a professional email to my boss requesting a raise')"><i class="fas fa-envelope"></i><div class="sc-title">Write a professional email</div><div class="sc-desc">Requesting a raise from my boss</div></div>
-            <div class="suggestion-card" onclick="useSuggestion('Generate an image of a futuristic Lagos skyline at sunset')"><i class="fas fa-image"></i><div class="sc-title">Generate an image</div><div class="sc-desc">Futuristic Lagos skyline at sunset</div></div>
+            <div class="suggestion-card" onclick="useSuggestion('Generate a photorealistic portrait of an African king in royal attire')"><i class="fas fa-image"></i><div class="sc-title">Generate an image</div><div class="sc-desc">Real portrait of an African king</div></div>
             <div class="suggestion-card" onclick="useSuggestion('Write a Hausa film script about a king and his lost son')"><i class="fas fa-film"></i><div class="sc-title">Write a Hausa film script</div><div class="sc-desc">A king and his lost son</div></div>
           </div>
         </div>
@@ -462,7 +488,7 @@
           <button class="input-btn" id="micBtn" onmousedown="startVoice()" ontouchstart="startVoice()" onmouseup="stopVoice()" ontouchend="stopVoice()" title="Hold to record"><i class="fas fa-microphone"></i></button>
           <button class="send-btn hidden" id="sendBtn" onclick="handleSendOrCancel()" title="Send"><i class="fas fa-arrow-up"></i></button>
         </div>
-        <div class="input-hint">Wise King may make mistakes. <kbd>Enter</kbd> to send, <kbd>Shift</kbd>+<kbd>Enter</kbd> for new line</div>
+        <div class="input-hint">Wise King is an AI — please double-check information</div>
       </div>
     </div>
   </main>
@@ -870,7 +896,7 @@ function filterChats() {
   });
 }
 
-// ===== MARKDOWN RENDERER (XSS-safe) =====
+// ===== MARKDOWN RENDERER =====
 function escapeHtml(t) {
   if (t === null || t === undefined) return '';
   const d = document.createElement('div');
@@ -883,11 +909,9 @@ function renderMarkdown(src) {
   const stash = [];
   const save = html => { stash.push(html); return `\u0000${stash.length - 1}\u0000`; };
 
-  // fenced code blocks
   s = s.replace(/```([\w+#.\-]*)[ \t]*\n?([\s\S]*?)```/g, (_, lang, code) =>
-    save(`<pre class="md-pre"><button class="md-copy" type="button" data-code-idx="${stash.length}"><i class="fas fa-copy"></i> Copy</button><code class="lang-${escapeHtml(lang||'text')}">${code.replace(/\n$/,'')}</code></pre>`));
+    save(`<pre class="md-pre"><button class="md-copy" type="button"><i class="fas fa-copy"></i> Copy</button><code class="lang-${escapeHtml(lang||'text')}">${code.replace(/\n$/,'')}</code></pre>`));
 
-  // inline code
   s = s.replace(/`([^`\n]+)`/g, (_, c) => save(`<code>${c}</code>`));
 
   const lines = s.split('\n');
@@ -914,7 +938,6 @@ function renderMarkdown(src) {
   flush();
   let html = out.join('');
 
-  // pipe tables
   html = html.replace(/(?:^\|.*\|\s*$\n?)+/gm, table => {
     const rows = table.trim().split('\n').map(r => r.replace(/^\||\|$/g,'').split('|').map(c => c.trim()));
     if (rows.length < 2 || !/^[\s:|-]+$/.test(rows[1].join('|'))) return table;
@@ -922,7 +945,6 @@ function renderMarkdown(src) {
     return `<table><thead><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${body.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
   });
 
-  // inline formatting
   html = html
     .replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
     .replace(/__([^_\n]+)__/g, '<strong>$1</strong>')
@@ -954,7 +976,6 @@ function setupMessageDelegation() {
   if (!area || area._wkBound) return;
   area._wkBound = true;
   area.addEventListener('click', ev => {
-    // Code copy button
     const copyCodeBtn = ev.target.closest('.md-copy');
     if (copyCodeBtn) {
       const pre = copyCodeBtn.closest('pre');
@@ -975,7 +996,6 @@ function setupMessageDelegation() {
       return;
     }
 
-    // Action buttons
     const btn = ev.target.closest('[data-act]');
     if (!btn) return;
     const act = btn.dataset.act;
@@ -1056,16 +1076,12 @@ function saveEdit() {
   const newText = ta.value.trim();
   if (!newText) return showToast('❌ Message cannot be empty');
 
-  // Update the edited user message
   chat.messages[editingMessageIdx].content = newText;
   chat.messages[editingMessageIdx].edited = true;
-
-  // Drop everything after it
   chat.messages = chat.messages.slice(0, editingMessageIdx + 1);
   editingMessageIdx = -1;
   saveChats(); renderMessages();
 
-  // Trigger a fresh AI reply
   setTimeout(() => {
     const um = chat.messages[chat.messages.length - 1];
     triggerResponse(chat, um);
@@ -1078,12 +1094,10 @@ async function regenerateAt(idx) {
   if (!chat || !chat.messages[idx]) return;
   if (chat.messages[idx].role !== 'ai') return;
 
-  // Find preceding user message
   let um = null;
   for (let i = idx - 1; i >= 0; i--) { if (chat.messages[i].role === 'user') { um = chat.messages[i]; break; } }
   if (!um) return;
 
-  // Remove the AI message being regenerated
   chat.messages.splice(idx, 1);
   saveChats(); renderMessages();
   showToast('🔄 Regenerating...');
@@ -1091,7 +1105,6 @@ async function regenerateAt(idx) {
   triggerResponse(chat, um);
 }
 
-// Send a user message and stream back a reply
 async function triggerResponse(chat, userMsg) {
   isSending = true;
   const btn = document.getElementById('sendBtn');
@@ -1200,7 +1213,6 @@ function buildMessageEl(msg, idx, lastAiIdx) {
   name.textContent = isAI ? 'Wise King AI' : 'You';
   body.appendChild(name);
 
-  // ===== EDIT MODE for user messages =====
   if (editingMessageIdx === idx && !isAI) {
     const editBox = document.createElement('div');
     editBox.className = 'edit-box';
@@ -1275,7 +1287,6 @@ function buildMessageEl(msg, idx, lastAiIdx) {
 
   body.appendChild(content);
 
-  // ===== ACTION BAR =====
   const meta = document.createElement('div');
   meta.className = 'msg-meta';
   const time = document.createElement('span');
@@ -1293,17 +1304,7 @@ function buildMessageEl(msg, idx, lastAiIdx) {
   };
 
   if (isAI) {
-    if (msg.error) {
-      tools.appendChild(toolBtn('Retry', 'fas fa-redo', 'retry', 'retry', 'Retry'));
-    } else {
-      // Regenerate — shown on every AI reply (highlighted on last one)
-      const regenExtra = (idx === lastAiIdx) ? 'regen' : '';
-      tools.appendChild(toolBtn('Regenerate response', 'fas fa-rotate', 'regenerate', regenExtra, 'Regenerate'));
-    }
-    tools.appendChild(toolBtn('Copy Text', 'fas fa-copy', 'copy'));
-    tools.appendChild(toolBtn('Listen', 'fas fa-volume-up', 'speak'));
-    tools.appendChild(toolBtn('Share', 'fas fa-share-nodes', 'share'));
-
+    // Exact order requested: 👍 Like → 👎 Dislike → 📋 Copy → 🔊 Speaker → 🔒 Lock → ➡️ Share
     const likeBtn = toolBtn('Like', 'fas fa-thumbs-up', 'like');
     if (msg.liked) likeBtn.classList.add('liked');
     tools.appendChild(likeBtn);
@@ -1312,9 +1313,19 @@ function buildMessageEl(msg, idx, lastAiIdx) {
     if (msg.disliked) dislikeBtn.classList.add('disliked');
     tools.appendChild(dislikeBtn);
 
+    tools.appendChild(toolBtn('Copy Text', 'fas fa-copy', 'copy'));
+    tools.appendChild(toolBtn('Listen', 'fas fa-volume-up', 'speak'));
     tools.appendChild(toolBtn('Lock to Vault', 'fas fa-lock', 'lock'));
+    tools.appendChild(toolBtn('Share', 'fas fa-share-nodes', 'share'));
+
+    // Regenerate / Retry kept at the END
+    if (msg.error) {
+      tools.appendChild(toolBtn('Retry', 'fas fa-redo', 'retry', 'retry', 'Retry'));
+    } else {
+      const regenExtra = (idx === lastAiIdx) ? 'regen' : '';
+      tools.appendChild(toolBtn('Regenerate response', 'fas fa-rotate', 'regenerate', regenExtra, 'Regenerate'));
+    }
   } else {
-    // Edit button FIRST on user messages
     tools.appendChild(toolBtn('Edit', 'fas fa-pen', 'edit'));
     tools.appendChild(toolBtn('Copy', 'fas fa-copy', 'copy'));
     tools.appendChild(toolBtn('Delete', 'fas fa-trash', 'delete'));
@@ -1533,10 +1544,10 @@ function sendMessage(textOverride) {
 function isImageRequest(t) {
   if (!t) return false;
   return [
-    /\b(create|generate|make|draw|paint|render)\s+(me\s+)?(a\s+)?(picture|image|photo|drawing|illustration|artwork)/i,
-    /\b(picture|image|photo)\s+of\b/i,
-    /\bshow me (a|an)\b.*\b(picture|image|photo)/i,
-    /\bi want (a|an|to see)\b.*\b(picture|image|photo)/i
+    /\b(create|generate|make|draw|paint|render)\s+(me\s+)?(a\s+)?(picture|image|photo|drawing|illustration|artwork|logo|frame)/i,
+    /\b(picture|image|photo|logo|frame)\s+of\b/i,
+    /\bshow me (a|an)\b.*\b(picture|image|photo|logo|frame)/i,
+    /\bi want (a|an|to see)\b.*\b(picture|image|photo|logo|frame)/i
   ].some(p => p.test(t));
 }
 
@@ -1607,18 +1618,16 @@ async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
       try {
         const r = await performWebSearch(text);
         if (r) { webContext = `\n\n*** LIVE WEB (${r.source}): ***\n${r.text}\n${r.url || ''}`; webSource = r.source; usedWeb = true; }
-      } catch (e) { /* web optional */ }
+      } catch (e) { }
     }
 
     const historyMsgs = chat.messages.slice(0, -1).slice(-10);
     const contents = buildTurns(historyMsgs);
 
-    // Build current user turn — text + docs + web + locks + rules + IMAGES
     const parts = [];
     const currentText = (text || '📎 Attachment') + docContext + webContext + lockContext + rulesContext;
     parts.push({ text: currentText });
 
-    // 🆕 ATTACH IMAGES SO GEMINI CAN SEE THEM
     (imgs || []).forEach(dataUrl => {
       const m = /^data:(image\/[\w+.-]+);base64,(.+)$/.exec(dataUrl || '');
       if (m) {
@@ -1718,7 +1727,6 @@ async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
   }
 }
 
-// 🆕 STREAMING via SSE
 async function streamFromGemini(model, apiKey, body, signal, onChunk) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`;
 
@@ -1741,7 +1749,6 @@ async function streamFromGemini(model, apiKey, body, signal, onChunk) {
     return { ok:false, status:res.status, error:msg };
   }
 
-  // Fallback when body isn't a readable stream
   if (!res.body || !res.body.getReader) {
     const j = await res.json().catch(() => null);
     const cand = j?.candidates?.[0];
@@ -1790,23 +1797,54 @@ async function streamFromGemini(model, apiKey, body, signal, onChunk) {
   return { ok:true, full, finish };
 }
 
-// ===== IMAGE GENERATION =====
+// ===== HIGH-QUALITY MULTI-STYLE IMAGE GENERATION (REAL HUMANS, LOGOS, FRAMES, ETC) =====
 async function generateImage(prompt) {
+  const rawPrompt = (prompt || '').trim();
+  let finalPrompt = rawPrompt;
+
+  // Realism & Style Keywords Auto-Injection based on Intent
+  const isHuman = /\b(man|woman|person|girl|boy|human|portrait|lady|guy|model|face|actor|actress|king|queen|child|baby|people)\b/i.test(rawPrompt);
+  const isLogo = /\b(logo|emblem|icon|badge|brand|vector|symbol|typography)\b/i.test(rawPrompt);
+  const isFrame = /\b(frame|border|template|mockup|poster)\b/i.test(rawPrompt);
+
+  if (isHuman) {
+    finalPrompt += ", RAW high-end photograph, shot on Hasselblad X2D 100C with 90mm f/1.4 lens, natural skin pores and realistic skin texture, authentic lighting, studio depth of field, 8k UHD resolution, hyperrealistic, authentic real human photo, photojournalism, no cartoon, no 3d render, no CGI, no digital drawing, no anime";
+  } else if (isLogo) {
+    finalPrompt += ", clean minimal professional vector logo, modern branding design, sharp vector lines, high resolution graphic design, dynamic composition, isolated on clean studio background, 8k resolution, flat design, masterpiece";
+  } else if (isFrame) {
+    finalPrompt += ", ornate elegant border frame design, high detail picture frame mockup, studio lighting, clean display aesthetic, ultra-sharp detail, 8k resolution";
+  } else {
+    finalPrompt += ", ultra-photorealistic photography, 8k resolution, cinematic studio lighting, sharp focus, hyper-detailed masterpiece, vivid colors, photorealistic";
+  }
+
+  // 1. Replicate Engine (If API Key is provided)
   const rk = (localStorage.getItem('wk_replicate_key') || '').trim();
   if (rk) {
     try {
-      const res = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-schnell/predictions', {
+      const res = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-1.1-pro/predictions', {
         method:'POST',
         headers: { 'Content-Type':'application/json', 'Authorization':'Bearer ' + rk, 'Prefer':'wait' },
-        body: JSON.stringify({ input:{ prompt, num_outputs:1, aspect_ratio:'1:1' } })
+        body: JSON.stringify({ 
+          input:{ 
+            prompt: finalPrompt, 
+            aspect_ratio: '1:1', 
+            output_format: 'jpg', 
+            output_quality: 100 
+          } 
+        })
       });
       const d = await res.json();
-      if (d && d.output && d.output[0]) return d.output[0];
-    } catch (e) { console.warn('Replicate failed, falling back to Pollinations', e); }
+      if (d && d.output) {
+        return Array.isArray(d.output) ? d.output[0] : d.output;
+      }
+    } catch (e) { 
+      console.warn('Replicate API failed/CORS issue, falling back to Flux Realism Engine', e); 
+    }
   }
-  const enhanced = prompt + ', highly detailed, photorealistic, cinematic lighting, 8k masterpiece';
-  const seed = Math.floor(Math.random() * 1000000);
-  return `https://image.pollinations.ai/prompt/${encodeURIComponent(enhanced)}?width=1024&height=1024&seed=${seed}&nologo=true&model=flux&enhance=true`;
+
+  // 2. Pollinations Flux Engine Fallback
+  const seed = Math.floor(Math.random() * 10000000);
+  return `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?width=1024&height=1024&seed=${seed}&nologo=true&model=flux&enhance=true`;
 }
 
 function showTyping() {
