@@ -792,14 +792,14 @@ if (window.pdfjsLib) { try { pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://c
 const LOCKED_PERSONAL_RULES = `I am Oga,Ibrahim, from Nigeria,, 🇳🇬💯🏆👍
 I know that you're good in everything now,,
 Buh whenever I ask you about any Films prompt..
-Always remember the type of Prompt which Some Ai video generation like to generate,and always remember to write one click and paste for all prompt and allow users to copy it.✅📝💯
+Always remember the type of Prompt which Some Ai video generation like to generate,
 Like Scene 10sec each Prompt and with two or three short dialogue inside the all scene with full action and Quality,,
 And always write "**END SCENE**" In all prompt at the end of Scene..,📝💯✅
 Always remember You're A King,🏆👑🌍💯❤✅
-So make everything Clean And perfectly, And also give users some greater vision of knowledge or suggestion good advised in any Messages they brought you, to make them satisfied of what they need as answers,📝👑✅💪🙏
+So make everything Clean And perfectly,,,📝👑✅💪🙏
 And if You're about to create an Image or generation photos, 
 Always provides Real Quality And Greater things like Gemini or Chatgpt Options..
-You're Also a professional like them Now,And at end of any prompt or scene don't try to generate video until users ask for it by then you Will generate it ..,😎💯👑📝🏆👍🌍`;
+You're Also a professional like them Now..,😎💯👑📝🏆🏆👍🌍`;
 
 // ===== SYSTEM PROMPT =====
 const WISE_KING_PROMPT = `You are WISE KING AI created by IBRAHIM ABDULLAHI from Nigeria (Wise King Industry).
@@ -867,7 +867,7 @@ SCENE FORMAT RULES
    - Always write "**END SCENE**" at the end of every scene prompt.
    - Use cinematic language: camera movement, lens, lighting, atmosphere, motion physics.
 2. Image Generation & Visual Prompts: Always deliver real, top-tier, ultra-realistic visual prompts matching Gemini/ChatGPT professional standards.
-3. CRITICAL IMAGE TAG RULE: When the user explicitly requests an image ("create picture", "generate image", "draw", "photo of"), respond ONLY with: [GENERATE_IMAGE: <detailed English visual description>].
+3. CRITICAL IMAGE TAG RULE: When the user explicitly requests an image ("create picture", "generate image", "draw", "photo of", "logo", "design"), respond ONLY with: [GENERATE_IMAGE: <detailed English visual description>].
 4. CRITICAL VIDEO TAG RULE: When the user explicitly requests a video ("create video", "generate video", "animate this", "make a video", "video of"), respond ONLY with: [GENERATE_VIDEO: <detailed English cinematic description with camera, lighting, motion, and audio>].
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -2094,8 +2094,8 @@ function sendMessage(textOverride) {
 function isImageRequest(t) {
   if (!t) return false;
   return [
-    /\b(create|generate|make|draw|paint|render)\s+(me\s+)?(a\s+)?(picture|image|photo|drawing|illustration|artwork)/i,
-    /\b(picture|image|photo)\s+of\b/i
+    /\b(create|generate|make|draw|paint|render|design)\s+(me\s+)?(a\s+)?(picture|image|photo|drawing|illustration|artwork|logo|framework)/i,
+    /\b(picture|image|photo|logo)\s+of\b/i
   ].some(p => p.test(t));
 }
 function isVideoRequest(t) {
@@ -2211,7 +2211,7 @@ async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
             };
           }
           if (out.status === 429) {
-            await new Promise(r => setTimeout(r, 1200));
+            await new Promise(r => setTimeout(r, 800));
           }
           continue;
         }
@@ -2225,15 +2225,15 @@ async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
         }
         const m = reply.match(/\[GENERATE_IMAGE[:\s]+([\s\S]+?)\]/i);
         if (m) {
-          showToast('🎨 Generating image...');
+          showToast('🎨 Generating hyper-realistic image...');
           const imgUrl = await generateImage(m[1].trim());
-          const clean = reply.replace(/\[GENERATE_IMAGE[\s\S]*?\]/i, '').trim() || '🖼️ Here is your image:';
+          const clean = reply.replace(/\[GENERATE_IMAGE[\s\S]*?\]/i, '').trim() || '🖼️ Here is your master image:';
           return { role:'ai', content:clean, generatedImage:imgUrl, createdAt:Date.now() };
         }
         if (isImageRequest(text) && !(imgs && imgs.length)) {
-          showToast('🎨 Generating image...');
+          showToast('🎨 Generating hyper-realistic image...');
           const imgUrl = await generateImage(text);
-          return { role:'ai', content: reply.trim() || '🖼️ Here is your image:', generatedImage:imgUrl, createdAt:Date.now() };
+          return { role:'ai', content: reply.trim() || '🖼️ Here is your master image:', generatedImage:imgUrl, createdAt:Date.now() };
         }
         const vm = reply.match(/\[GENERATE_VIDEO[:\s]+([\s\S]+?)\]/i);
         if (vm) {
@@ -2332,10 +2332,16 @@ async function streamFromGemini(model, apiKey, body, signal, onChunk) {
   return { ok:true, full, finish };
 }
 
-// ===== IMAGE GENERATION =====
+// ===== UPGRADED ULTIMATE IMAGE GENERATION ENGINE =====
 async function generateImage(prompt) {
-  const realismKeywords = ", RAW photograph, shot on 85mm lens, f/1.8 aperture, highly detailed skin texture, photorealistic, 8k resolution, cinematic lighting, ultra-realistic";
-  const finalPrompt = prompt + realismKeywords;
+  let finalPrompt = prompt;
+  const isLogo = /\b(logo|brand|icon|badge|emblem|symbol|framework)\b/i.test(prompt);
+  if (isLogo) {
+    finalPrompt = `${prompt}, professional vector logo design, minimalist, clean lines, high-end branding, vector graphics, solid background, 8k resolution, trending on Behance, Dribbble quality`;
+  } else {
+    finalPrompt = `${prompt}, RAW hyper-realistic photograph, shot on 85mm lens, f/1.8 aperture, cinematic volumetric lighting, ray tracing, ultra-detailed skin and texture, photorealistic, 8k resolution, award-winning cinematography, masterpiece, no cartoon, no 3d render`;
+  }
+
   const rk = (localStorage.getItem('wk_replicate_key') || '').trim();
   if (rk) {
     try {
@@ -2511,7 +2517,7 @@ async function generateImageFromPanel() {
   const prompt = document.getElementById('imagesPromptInput').value.trim();
   if (!prompt) return showToast('❌ Enter a prompt first');
   const results = document.getElementById('imagesPanelResults');
-  results.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-secondary)"><i class="fas fa-spinner fa-spin" style="font-size:24px;display:block;margin-bottom:12px"></i>Generating image...</div>';
+  results.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-secondary)"><i class="fas fa-spinner fa-spin" style="font-size:24px;display:block;margin-bottom:12px"></i>Generating hyper-realistic image...</div>';
   const url = await generateImage(prompt);
   if (!url) { results.innerHTML = '<div style="text-align:center;padding:30px;color:#f87171">Image generation failed</div>'; return; }
   generatedImages.unshift({ url, prompt, date: Date.now() });
@@ -2787,7 +2793,7 @@ function importAllData(e) {
       showToast('✅ Imported');
     } catch (err) { alert('Invalid backup file'); }
   };
-  fr.readAsText(f); e.target.value = '';
+  fr.readAsText(f); e.target.value = &apos;&apos;;
 }
 
 // ===== VOICE =====
