@@ -112,7 +112,7 @@
   .chat-topbar { padding:12px 20px; border-bottom:1px solid var(--border-subtle); display:flex; align-items:center; gap:12px; background:rgba(10,10,15,0.8); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); z-index:10; flex-shrink:0; }
   .menu-btn { display:none; background:transparent; border:none; color:var(--text-primary); font-size:18px; cursor:pointer; padding:6px; border-radius:6px; }
   .menu-btn:hover { background:var(--bg-elevated); }
-  .close-chat-btn { background:transparent; border:none; color:var(--text-secondary); font-size:18px; cursor:pointer; padding:6px 10px; border-radius:8px; transition:all var(--transition-fast); display:none; align-items:center; justify-content:center; }
+  .close-chat-btn { background:transparent; border:none; color:var(--text-secondary); font-size:18px; cursor:pointer; padding:6px 10px; border-radius:8px; transition:all var(--transition-fast); display:flex; align-items:center; justify-content:center; }
   .close-chat-btn.visible { display:flex; }
   .close-chat-btn:hover { background:var(--bg-elevated); color:var(--text-primary); }
   .chat-title-wrap { display:flex; align-items:center; gap:8px; flex:1; min-width:0; }
@@ -488,7 +488,7 @@
   <main class="chat-main">
     <div class="chat-topbar">
       <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-      <button class="close-chat-btn" id="closeChatBtn" onclick="goToWelcome()" title="Close chat"><i class="fas fa-times"></i></button>
+      <button class="close-chat-btn visible" id="closeChatBtn" onclick="goToWelcome()" title="Close chat"><i class="fas fa-times"></i></button>
       <div class="chat-title-wrap">
         <span class="chat-title" id="chatTitle">New chat</span>
         <span class="chat-model-badge" id="modelBadge"><i class="fas fa-circle"></i> <span id="modelBadgeText">Gemini</span></span>
@@ -767,6 +767,28 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// ===== FIREBASE ANALYTICS (non-blocking) =====
+(async () => {
+  try {
+    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js");
+    const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js");
+    const firebaseConfig = {
+      apiKey: "AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU",
+      authDomain: "wise-king-ai-259fc.firebaseapp.com",
+      projectId: "wise-king-ai-259fc",
+      storageBucket: "wise-king-ai-259fc.firebasestorage.app",
+      messagingSenderId: "19851699752",
+      appId: "1:19851699752:web:6735280bf59561e8ffb71d",
+      measurementId: "G-4SER8RBCZG"
+    };
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    console.log('🔥 Firebase Analytics ready');
+  } catch (e) {
+    console.warn('[Firebase] init failed (non-critical):', e.message);
+  }
+})();
+
 // PDF worker
 if (window.pdfjsLib) { try { pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; } catch(e) {} }
 
@@ -890,16 +912,6 @@ async function getAllVideosFromDB() {
   });
 }
 
-async function getVideoFromDB(id) {
-  const db = await openVideoDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(VIDEO_STORE, 'readonly');
-    const req = tx.objectStore(VIDEO_STORE).get(id);
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = e => reject(e.target.error);
-  });
-}
-
 async function deleteVideoFromDB(id) {
   const db = await openVideoDB();
   return new Promise((resolve, reject) => {
@@ -937,8 +949,6 @@ function getVideoPlayableUrl(rec) {
   return rec.remoteUrl || '';
 }
 
-/** Fetch video blob from remote URL and store it in IndexedDB.
- *  Returns the stored record (blob may be null if fetch fails). */
 async function fetchAndSaveVideo(remoteUrl, prompt, duration, model) {
   let blob = null;
   try {
@@ -1067,6 +1077,29 @@ async function init() {
     if (vm) document.getElementById('videoModelSelect').value = vm;
     updateModelBadge(); handleInputChange(); setupThemeSwatches(); setupMessageDelegation();
 
+    // 🔥 Auto-detect a working model on startup for faster replies
+    const _apiKey = (localStorage.getItem('wk_api_key') || '').trim();
+    if (_apiKey) {
+      (async () => {
+        try {
+          const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(_apiKey)}&pageSize=100`);
+          if (!r.ok) return;
+          const d = await r.json();
+          const ids = (d.models || [])
+            .filter(m => (m.supportedGenerationMethods || []).includes('generateContent'))
+            .map(m => m.name.replace('models/',''));
+          const priority = ['gemini-3.8-flash','gemini-3.7-flash','gemini-3.6-flash','gemini-3.5-flash','gemini-3.5-flash-lite','gemini-2.5-flash'];
+          const working = priority.find(p => ids.includes(p)) || ids.find(id => /flash/.test(id));
+          if (working && working !== sm) {
+            localStorage.setItem('wk_model', working);
+            document.getElementById('modelSelect').value = working;
+            updateModelBadge();
+            console.log('[WiseKing] Auto-selected working model:', working);
+          }
+        } catch (e) { /* silent */ }
+      })();
+    }
+
     // Init video DB & count
     try {
       await openVideoDB();
@@ -1147,34 +1180,26 @@ async function renderVideoGallery() {
   const el = document.getElementById('videoGalleryContent');
   if (!el) return;
   el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-tertiary)"><i class="fas fa-spinner fa-spin" style="font-size:24px;display:block;margin-bottom:12px"></i>Loading videos...</div>';
-
   try {
     cachedVideoRecords = await getAllVideosFromDB();
   } catch (e) {
     el.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Storage unavailable</h3><p>IndexedDB is blocked or unavailable</p></div>';
     return;
   }
-
   const badge = document.getElementById('videoCountBadge');
   if (badge) badge.textContent = cachedVideoRecords.length;
-
   if (!cachedVideoRecords.length) {
     el.innerHTML = `<div class="empty-state"><i class="fas fa-film"></i><h3>No videos yet</h3><p>Generate your first video from the Videos panel</p></div>`;
     return;
   }
-
   el.innerHTML = '';
   const grid = document.createElement('div');
   grid.className = 'video-grid';
-
   cachedVideoRecords.forEach(rec => {
     const card = document.createElement('div');
     card.className = 'video-card';
     card.dataset.id = rec.id;
-
     const playableUrl = getVideoPlayableUrl(rec);
-
-    // Video player
     if (playableUrl) {
       const v = document.createElement('video');
       v.src = playableUrl;
@@ -1188,7 +1213,6 @@ async function renderVideoGallery() {
       err.innerHTML = '<i class="fas fa-exclamation-triangle" style="font-size:24px"></i><span style="font-size:12px">Video unavailable<br>(cloud link expired)</span>';
       card.appendChild(err);
     }
-
     const info = document.createElement('div');
     info.className = 'video-card-info';
     const safeTitle = escapeHtml(rec.prompt || 'Untitled video');
@@ -1202,30 +1226,24 @@ async function renderVideoGallery() {
         <span><i class="fas fa-hdd"></i> ${sizeStr}</span>
       </div>`;
     card.appendChild(info);
-
     const actions = document.createElement('div');
     actions.className = 'video-card-actions';
-
     const dlBtn = document.createElement('button');
     dlBtn.innerHTML = '<i class="fas fa-download"></i> Save';
     dlBtn.addEventListener('click', () => downloadVideoRecord(rec));
     actions.appendChild(dlBtn);
-
     const shBtn = document.createElement('button');
     shBtn.innerHTML = '<i class="fas fa-share-nodes"></i> Share';
     shBtn.addEventListener('click', () => shareVideoRecord(rec));
     actions.appendChild(shBtn);
-
     const delBtn = document.createElement('button');
     delBtn.className = 'danger';
     delBtn.innerHTML = '<i class="fas fa-trash"></i> Delete';
     delBtn.addEventListener('click', () => deleteVideoRecord(rec));
     actions.appendChild(delBtn);
-
     card.appendChild(actions);
     grid.appendChild(card);
   });
-
   el.appendChild(grid);
 }
 
@@ -1239,7 +1257,6 @@ async function downloadVideoRecord(rec) {
       blob = await res.blob();
     }
     if (!blob) { showToast('❌ Video no longer available'); return; }
-
     const url = URL.createObjectURL(blob);
     const safeName = (rec.prompt || 'wiseking').slice(0, 40).replace(/[^\w\u0600-\u06FF]+/g, '_') || 'wiseking';
     const a = document.createElement('a');
@@ -1252,7 +1269,6 @@ async function downloadVideoRecord(rec) {
     showToast('✅ Saved to your Downloads');
   } catch (e) {
     console.error('[Download]', e);
-    // Fallback: open in new tab
     if (rec.remoteUrl) { window.open(rec.remoteUrl, '_blank'); showToast('📥 Opened in new tab — long-press to save'); }
     else showToast('❌ Download failed');
   }
@@ -1262,8 +1278,6 @@ async function shareVideoRecord(rec) {
   try {
     const url = getVideoPlayableUrl(rec);
     if (!url) { showToast('❌ Video unavailable'); return; }
-
-    // Try native share with file
     if (navigator.canShare && rec.blob) {
       try {
         const file = new File([rec.blob], `WiseKing_${(rec.prompt||'video').slice(0,30)}.mp4`, { type: 'video/mp4' });
@@ -1272,16 +1286,13 @@ async function shareVideoRecord(rec) {
           showToast('📤 Shared!');
           return;
         }
-      } catch (e) { /* fall through to URL share */ }
+      } catch (e) { }
     }
-
     if (navigator.share) {
       await navigator.share({ title: 'Wise King AI video', text: rec.prompt, url: rec.remoteUrl || url });
       showToast('📤 Shared!');
       return;
     }
-
-    // Fallback: our share sheet
     pendingShareText = rec.prompt || 'Wise King AI video';
     document.getElementById('shareSheet').classList.add('show');
   } catch (e) {
@@ -1705,7 +1716,7 @@ function renderMessages() {
   const hasMsgs = chat.messages.length > 0;
   document.getElementById('welcomeScreen').style.display = hasMsgs ? 'none' : 'flex';
   document.getElementById('chatTitle').textContent = chat.title;
-  document.getElementById('closeChatBtn').classList.toggle('visible', hasMsgs);
+  document.getElementById('closeChatBtn').classList.toggle('visible', hasMsgs || true);
   const lastAiIdx = (() => {
     for (let i = chat.messages.length - 1; i >= 0; i--) if (chat.messages[i].role === 'ai') return i;
     return -1;
@@ -2221,7 +2232,6 @@ async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
           const vidUrl = await generateVideo(vidPrompt, null, '16:9', 10);
           const clean = reply.replace(/\[GENERATE_VIDEO[\s\S]*?\]/i, '').trim() || '🎬 Here is your video:';
           if (vidUrl) {
-            // Auto-save to IndexedDB
             const rec = await fetchAndSaveVideo(vidUrl, vidPrompt, 10, getSelectedVideoModel());
             await refreshVideoCount();
             return { role:'ai', content: clean + '\n\n💾 Saved to **My Videos**', generatedVideo: vidUrl, createdAt:Date.now() };
@@ -2357,7 +2367,6 @@ async function generateVideo(prompt, startImageData, aspectRatio = '16:9', durat
   const geminiKey = (localStorage.getItem('wk_api_key') || '').trim();
   const rk = (localStorage.getItem('wk_replicate_key') || '').trim();
   const cinematicPrompt = buildCinematicVideoPrompt(prompt, duration);
-
   if (model === 'veo-3.1-generate-preview') {
     if (!geminiKey) { showToast('❌ Gemini API key required for Veo'); return null; }
     return await generateVideoVeo(cinematicPrompt, startImageData, aspectRatio, duration, geminiKey);
@@ -2373,7 +2382,6 @@ async function generateVideo(prompt, startImageData, aspectRatio = '16:9', durat
   showToast('❌ Unknown video model');
   return null;
 }
-
 function buildCinematicVideoPrompt(userPrompt, duration) {
   const durationText = duration === 10 ? '10-second cinematic shot' : `${duration}-second shot`;
   const style = 'cinematic, film grain, anamorphic lens flare, shallow depth of field, 24fps, color graded, professional cinematography';
@@ -2381,7 +2389,6 @@ function buildCinematicVideoPrompt(userPrompt, duration) {
   const wiseKingRules = 'Include full dynamic action with 2-3 short impactful dialogues. Physical movement must feel real and grounded.';
   return `${durationText}. ${userPrompt}. ${style}. ${wiseKingRules} ${audio}.`;
 }
-
 async function generateVideoVeo(prompt, startImageData, aspectRatio, duration, apiKey) {
   try {
     const baseUrl = 'https://generativelanguage.googleapis.com/v1beta';
@@ -2416,7 +2423,6 @@ async function generateVideoVeo(prompt, startImageData, aspectRatio, duration, a
     const operationName = submitData.name;
     if (!operationName) { showToast('❌ No operation name from Veo'); return null; }
     showToast('🎬 Veo is rendering your video...');
-
     let videoUri = null;
     const maxAttempts = 60;
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -2451,7 +2457,6 @@ async function generateVideoVeo(prompt, startImageData, aspectRatio, duration, a
     return null;
   }
 }
-
 async function generateVideoKling(prompt, startImageData, aspectRatio, duration, rk) {
   try {
     const input = {
@@ -2486,7 +2491,6 @@ async function generateVideoKling(prompt, startImageData, aspectRatio, duration,
     return null;
   }
 }
-
 async function generateVideoWan(prompt, startImageData, aspectRatio, duration, rk) {
   try {
     if (!startImageData) {
@@ -2525,7 +2529,6 @@ async function generateVideoWan(prompt, startImageData, aspectRatio, duration, r
     return null;
   }
 }
-
 function blobToDataUrl(blob) {
   return new Promise((resolve, reject) => {
     const fr = new FileReader();
@@ -2567,25 +2570,18 @@ async function generateVideoFromPanel() {
   const duration = parseInt(document.getElementById('videoDurationSelect').value, 10) || 10;
   const aspect = document.getElementById('videoAspectSelect').value;
   const withAudio = document.getElementById('videoAudioToggle').checked;
-
   const results = document.getElementById('videoPanelResults');
   results.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-secondary)"><i class="fas fa-spinner fa-spin" style="font-size:24px;display:block;margin-bottom:12px"></i>Rendering video... This takes 1-2 minutes.<br><span style="font-size:11px;margin-top:8px;display:block;color:var(--text-tertiary)">💾 Your video will auto-save to My Videos</span></div>';
-
   showToast('🎬 Generating video... please wait');
   const imgData = videoMode === 'image' ? videoStartImageData : null;
-
   const videoUrl = await generateVideo(prompt, imgData, aspect, duration);
-
   if (!videoUrl) {
     results.innerHTML = '<div style="text-align:center;padding:30px;color:#f87171"><i class="fas fa-exclamation-triangle" style="font-size:24px;display:block;margin-bottom:12px"></i>Video generation failed. Check your API keys in Settings.</div>';
     return;
   }
-
-  // Auto-save to IndexedDB
   showToast('💾 Saving to My Videos...');
   const rec = await fetchAndSaveVideo(videoUrl, prompt, duration, getSelectedVideoModel());
   await refreshVideoCount();
-
   results.innerHTML = '';
   const card = document.createElement('div');
   card.className = 'result-card';
