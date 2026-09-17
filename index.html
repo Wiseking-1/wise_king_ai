@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0f">
 <title>Wise King AI — IBRAHIM ABDULLAHI 🇳🇬</title>
+<!-- PWA Manifest Link -->
+<link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Wise%20King%20AI%22%2C%22short_name%22%3A%22WiseKing%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230a0a0f%22%2C%22theme_color%22%3A%22%236366f1%22%2C%22icons%22%3A%5B%5D%7D">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -34,24 +36,17 @@
 
   #loginScreen { position:fixed; inset:0; background:radial-gradient(circle at 20% 20%,rgba(99,102,241,0.15) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(168,85,247,0.12) 0%,transparent 50%),var(--bg-primary); display:flex; align-items:center; justify-content:center; z-index:9999; padding:24px; transition:opacity 0.4s ease; }
   #loginScreen.hidden { opacity:0; pointer-events:none; }
-  .login-card { width:100%; max-width:420px; background:var(--bg-secondary); border:1px solid var(--border-default); border-radius:var(--radius-xl); padding:36px 32px; box-shadow:var(--shadow-lg),0 0 80px rgba(99,102,241,0.1); animation:slideUp 0.5s cubic-bezier(0.4,0,0.2,1); }
+  .login-card { width:100%; max-width:420px; background:var(--bg-secondary); border:1px solid var(--border-default); border-radius:var(--radius-xl); padding:36px 32px; box-shadow:var(--shadow-lg),0 0 80px rgba(99,102,241,0.1); animation:slideUp 0.5s cubic-bezier(0.4,0,0.2,1); text-align:center; }
   @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-  .login-logo { width:56px; height:56px; border-radius:var(--radius-lg); background:var(--accent-gradient); display:flex; align-items:center; justify-content:center; font-size:28px; margin-bottom:20px; box-shadow:var(--shadow-glow); }
+  .login-logo { width:56px; height:56px; border-radius:var(--radius-lg); background:var(--accent-gradient); display:flex; align-items:center; justify-content:center; font-size:28px; margin:0 auto 20px; box-shadow:var(--shadow-glow); }
   .login-title { font-size:26px; font-weight:700; letter-spacing:-0.02em; margin-bottom:6px; }
   .login-subtitle { color:var(--text-secondary); font-size:14px; margin-bottom:28px; }
-  .social-btn { width:100%; display:flex; align-items:center; justify-content:center; gap:10px; padding:12px; margin-bottom:10px; border-radius:var(--radius-md); background:var(--bg-elevated); border:1px solid var(--border-default); color:var(--text-primary); font-size:14px; font-weight:500; cursor:pointer; transition:all var(--transition-fast); font-family:inherit; }
+  .social-btn { width:100%; display:flex; align-items:center; justify-content:center; gap:10px; padding:12px; margin-bottom:12px; border-radius:var(--radius-md); background:var(--bg-elevated); border:1px solid var(--border-default); color:var(--text-primary); font-size:14px; font-weight:500; cursor:pointer; transition:all var(--transition-fast); font-family:inherit; }
   .social-btn:hover { background:var(--bg-hover); border-color:var(--border-strong); transform:translateY(-1px); }
   .divider { display:flex; align-items:center; gap:12px; margin:20px 0; color:var(--text-tertiary); font-size:12px; }
   .divider::before, .divider::after { content:""; flex:1; height:1px; background:var(--border-default); }
-  .field { margin-bottom:14px; }
-  .field label { display:block; font-size:13px; font-weight:500; color:var(--text-secondary); margin-bottom:6px; }
-  .field input { width:100%; padding:12px 14px; background:var(--bg-input); border:1px solid var(--border-default); border-radius:var(--radius-md); color:var(--text-primary); font-size:14px; outline:none; transition:all var(--transition-fast); font-family:inherit; }
-  .field input:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-glow); }
-  .btn-primary { width:100%; padding:12px; background:var(--accent-gradient); color:white; border:none; border-radius:var(--radius-md); font-size:14px; font-weight:600; cursor:pointer; transition:all var(--transition-fast); font-family:inherit; }
-  .btn-primary:hover { box-shadow:var(--shadow-glow); transform:translateY(-1px); }
-  .auth-switch { text-align:center; margin-top:20px; color:var(--text-secondary); font-size:13px; }
-  .auth-switch button { background:none; border:none; color:var(--accent-hover); font-weight:500; cursor:pointer; font-family:inherit; font-size:13px; }
-  .auth-switch button:hover { text-decoration:underline; }
+  .skip-auth { background:none; border:none; color:var(--text-secondary); font-size:13px; cursor:pointer; margin-top:16px; text-decoration:underline; font-family:inherit; }
+  .skip-auth:hover { color:var(--text-primary); }
 
   .app { display:flex; height:100vh; height:100dvh; width:100vw; overflow:hidden; }
   .sidebar { width:var(--sidebar-width); min-width:var(--sidebar-width); background:var(--bg-secondary); border-right:1px solid var(--border-subtle); display:flex; flex-direction:column; height:100vh; height:100dvh; transition:transform var(--transition-smooth); z-index:40; }
@@ -120,6 +115,8 @@
   .chat-actions { display:flex; align-items:center; gap:6px; }
   .top-btn { background:transparent; border:1px solid transparent; color:var(--text-secondary); cursor:pointer; padding:7px 12px; border-radius:var(--radius-md); font-size:13px; font-family:inherit; display:inline-flex; align-items:center; gap:6px; transition:all var(--transition-fast); white-space:nowrap; }
   .top-btn:hover { background:var(--bg-elevated); color:var(--text-primary); border-color:var(--border-subtle); }
+  .top-btn.install-btn { background:var(--accent-gradient); color:white; border:none; box-shadow:var(--shadow-sm); }
+  .top-btn.install-btn:hover { box-shadow:var(--shadow-glow); }
 
   .chat-scroll { flex:1; overflow-y:auto; padding:24px 20px 120px; scroll-behavior:smooth; }
   .chat-inner { max-width:780px; margin:0 auto; }
@@ -397,18 +394,14 @@
 </head>
 <body>
 
+<!-- LOGIN / WELCOME SCREEN WITH FIREBASE GOOGLE SIGN-IN -->
 <div id="loginScreen">
   <div class="login-card">
     <div class="login-logo">👑</div>
-    <h1 class="login-title" id="loginTitle">Welcome back</h1>
-    <p class="login-subtitle" id="loginSubtitle">Sign in to continue to Wise King AI</p>
-    <button class="social-btn" onclick="socialLogin()"><i class="fab fa-google" style="color:#ea4335"></i> Continue with Google</button>
-    <button class="social-btn" onclick="socialLogin()"><i class="fab fa-apple"></i> Continue with Apple</button>
-    <div class="divider">OR</div>
-    <div class="field"><label>Email</label><input type="email" id="loginEmailInput" placeholder="you@example.com" autocomplete="email"></div>
-    <div class="field"><label>Password</label><input type="password" id="loginPasswordInput" placeholder="••••••••" autocomplete="current-password"></div>
-    <button class="btn-primary" id="loginMainBtn" onclick="checkEmailLogin()">Sign in</button>
-    <div class="auth-switch"><span id="authSwitchText">Don't have an account? </span><button onclick="toggleAuthMode()" id="authSwitchBtn">Sign up</button></div>
+    <h1 class="login-title" id="loginTitle">Welcome to Wise King AI</h1>
+    <p class="login-subtitle" id="loginSubtitle">Sign in with Google to sync your chats across all devices</p>
+    <button class="social-btn" onclick="firebaseGoogleLogin()"><i class="fab fa-google" style="color:#ea4335"></i> Continue with Google</button>
+    <button class="skip-auth" onclick="skipLoginAsGuest()">Continue as Guest (Local Mode)</button>
   </div>
 </div>
 
@@ -475,7 +468,7 @@
     <div class="sidebar-footer">
       <div class="user-chip" onclick="openSettings()">
         <div class="avatar" id="sidebarAvatar">WK</div>
-        <div class="user-info"><div class="user-name" id="sidebarName">IBRAHIM ABDULLAHI</div><div class="user-plan">Pro plan</div></div>
+        <div class="user-info"><div class="user-name" id="sidebarName">IBRAHIM ABDULLAHI</div><div class="user-plan" id="userPlanBadge">Pro plan</div></div>
       </div>
       <button class="icon-action" onclick="openSettings()" title="Settings"><i class="fas fa-cog"></i></button>
     </div>
@@ -489,6 +482,8 @@
         <span class="chat-model-badge" id="modelBadge"><i class="fas fa-circle"></i> <span id="modelBadgeText">Gemini</span></span>
       </div>
       <div class="chat-actions">
+        <!-- INSTALL APP BUTTON -->
+        <button class="top-btn install-btn" id="installAppBtn" onclick="promptInstallApp()" title="Install App"><i class="fas fa-download"></i><span class="label"> Install App</span></button>
         <button class="top-btn" onclick="goToWelcome()" title="Go back to main view"><i class="fas fa-house"></i><span class="label"> Home</span></button>
         <button class="top-btn" onclick="openVault()" title="Vault"><i class="fas fa-shield-halved"></i><span class="label"> Vault</span></button>
         <button class="top-btn" onclick="openSearchWebPanel()" title="Search web"><i class="fas fa-globe"></i><span class="label"> Search</span></button>
@@ -533,6 +528,7 @@
   </main>
 </div>
 
+<!-- ALL PANELS AND MODALS -->
 <div class="full-panel" id="searchWebPanel">
   <div class="panel-header"><div class="panel-title"><i class="fas fa-globe"></i> Search the web</div><button class="btn ghost" onclick="closeSearchWebPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
   <div class="panel-body"><div class="panel-inner"><input type="text" class="search-big" id="searchWebInput" placeholder="Ask anything: latest news, weather, facts..." oninput="doSearchWeb(this.value)"><div id="searchWebResults"></div></div></div>
@@ -645,13 +641,15 @@
     <div class="modal-head"><div class="modal-title"><i class="fas fa-cog"></i> Settings</div><button class="modal-close" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button></div>
 
     <div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-user"></i> Profile</div>
+      <div class="settings-group-title"><i class="fas fa-user"></i> Profile & Account</div>
       <div class="settings-card">
         <div class="settings-row">
           <div class="avatar" style="width:52px;height:52px;font-size:20px" id="settingsAvatar">WK</div>
-          <div style="flex:1"><label for="avatarUpload" class="btn solid" style="cursor:pointer;font-size:12px"><i class="fas fa-upload"></i> Change photo</label><input type="file" id="avatarUpload" accept="image/*" style="display:none" onchange="handleAvatarUpload(event)"></div>
+          <div style="flex:1">
+            <div id="settingsUserEmail" style="font-size:13px;color:var(--text-secondary);margin-bottom:6px">Not signed in</div>
+            <button class="btn accent" style="font-size:12px;padding:6px 12px" onclick="firebaseGoogleLogin()"><i class="fab fa-google"></i> Google Sign-In</button>
+          </div>
         </div>
-        <div class="settings-row"><input type="text" class="input-field" id="profileNameInput" placeholder="Your name" style="margin-bottom:0"></div>
       </div>
     </div>
 
@@ -737,7 +735,7 @@
     <div id="debugInfoBox" style="margin-top:16px;padding:10px;background:#0a0a0f;border-radius:8px;font-size:11px;color:#71717a;font-family:monospace;line-height:1.6;word-break:break-all;"></div>
 
     <div class="modal-actions" style="justify-content:space-between">
-      <button class="btn ghost" style="color:#f87171" onclick="signOut()"><i class="fas fa-sign-out-alt"></i> Sign out</button>
+      <button class="btn ghost" style="color:#f87171" onclick="firebaseSignOut()"><i class="fas fa-sign-out-alt"></i> Sign out</button>
       <button class="btn accent" onclick="saveSettings()">Save changes</button>
     </div>
   </div>
@@ -762,26 +760,45 @@
 
 <div class="toast" id="toast"></div>
 
-<script>
-// ===== FIREBASE ANALYTICS (non-blocking) =====
-(async () => {
-  try {
-    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js");
-    const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js");
-    const firebaseConfig = {
-      apiKey: "AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU",
-      authDomain: "wise-king-ai-259fc.firebaseapp.com",
-      projectId: "wise-king-ai-259fc",
-      storageBucket: "wise-king-ai-259fc.firebasestorage.app",
-      messagingSenderId: "19851699752",
-      appId: "1:19851699752:web:6735280bf59561e8ffb71d",
-      measurementId: "G-4SER8RBCZG"
-    };
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-  } catch (e) {}
-})();
+<!-- FIREBASE SDKs & APP SCRIPT -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+  import { getFirestore, collection, doc, setDoc, getDocs, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU",
+    authDomain: "wise-king-ai-259fc.firebaseapp.com",
+    projectId: "wise-king-ai-259fc",
+    storageBucket: "wise-king-ai-259fc.firebasestorage.app",
+    messagingSenderId: "19851699752",
+    appId: "1:19851699752:web:6735280bf59561e8ffb71d",
+    measurementId: "G-4SER8RBCZG"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  window.fbAuth = auth;
+  window.fbDb = db;
+  window.fbGoogleProvider = new GoogleAuthProvider();
+  window.fbSignInWithPopup = signInWithPopup;
+  window.fbSignInWithRedirect = signInWithRedirect;
+  window.fbSignOut = signOut;
+  window.fbCollection = collection;
+  window.fbDoc = doc;
+  window.fbSetDoc = setDoc;
+  window.fbGetDocs = getDocs;
+  window.fbDeleteDoc = deleteDoc;
+  window.fbQuery = query;
+  window.fbWhere = where;
+  window.onAuthStateChanged = onAuthStateChanged;
+</script>
+
+<script>
 // PDF worker
 if (window.pdfjsLib) { try { pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; } catch(e) {} }
 
@@ -792,7 +809,7 @@ Buh whenever I ask you about any Films prompt..
 Always remember the type of Prompt which Some Ai video generation like to generate,
 Like Scene 10sec each Prompt and with two or three short dialogue inside the all scene with full action and Quality,,
 And always write "**END SCENE**" In all prompt at the end of Scene..,📝💯✅
-Always remember You're A King,🏆👑🌍isInt🌍💯❤✅
+Always remember You're A King,🏆👑🌍💯❤✅
 So make everything Clean And perfectly,,,📝👑✅💪🙏
 And if You're about to create an Image or generation photos, 
 Always provides Real Quality And Greater things like Gemini or Chatgpt Options..
@@ -840,7 +857,7 @@ FOR 10-SECOND VIDEO:
 ACTION FIRST → REACTION → SHORT DIALOGUE → NATURAL END.
 
 NEVER OVERLOAD ONE SHORT SCENE.
-NEVER CUT IMPORTANT STORY BEATS RRANDOMY.
+NEVER CUT IMPORTANT STORY BEATS RANDOMLY.
 
 IMPORTANT:
 WISE KING AI IS A PRODUCER + DIRECTOR + STORY ANALYST + PROMPT ENGINEER,
@@ -887,7 +904,6 @@ const FALLBACK_CHAIN = [
 const DEFAULT_MODEL = 'gemini-3.8-flash';
 
 // ===== STATE =====
-let isLoginMode = true;
 let chats = [];
 let activeChatId = null;
 let pendingActionChatId = null;
@@ -909,7 +925,8 @@ let editingMessageIdx = -1;
 let videoMode = 'text';
 let videoStartImageData = null;
 let cachedVideoRecords = [];
-const objectUrlCache = new Map();
+let currentUser = null;
+let deferredPWAEvent = null;
 
 // ===== IndexedDB for video blobs =====
 const VIDEO_DB_NAME = 'WiseKingVideosDB';
@@ -991,6 +1008,7 @@ async function clearAllVideosFromDB() {
   });
 }
 
+const objectUrlCache = new Map();
 function getVideoPlayableUrl(rec) {
   if (rec.blob) {
     if (!objectUrlCache.has(rec.id)) {
@@ -1058,49 +1076,156 @@ function formatBytes(b) {
   return (b / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
 }
 
-// ===== AUTH LOGIC (GYARAN LOGIN / ONE TIME ME) =====
-function toggleAuthMode() {
-  isLoginMode = !isLoginMode;
-  document.getElementById('loginTitle').textContent = isLoginMode ? 'Welcome back' : 'Create account';
-  document.getElementById('loginSubtitle').textContent = isLoginMode ? 'Sign in to continue to Wise King AI' : 'Start your journey with Wise King AI';
-  document.getElementById('loginMainBtn').textContent = isLoginMode ? 'Sign in' : 'Create account';
-  document.getElementById('authSwitchText').textContent = isLoginMode ? "Don't have an account? " : 'Already have an account? ';
-  document.getElementById('authSwitchBtn').textContent = isLoginMode ? 'Sign up' : 'Sign in';
-}
-
-function socialLogin() {
-  localStorage.setItem('wk_logged_in', '1');
-  if (!localStorage.getItem('wk_user_name')) localStorage.setItem('wk_user_name', 'IBRAHIM ABDULLAHI');
-  unlockApp('IBRAHIM ABDULLAHI');
-}
-
-function checkEmailLogin() {
-  const email = document.getElementById('loginEmailInput').value.trim();
-  const pass = document.getElementById('loginPasswordInput').value.trim();
-  
-  if (!email || !pass) {
-    alert('Please enter email and password');
-    return;
+// ===== FIREBASE AUTH & FIRESTORE CHAT SYNC =====
+async function firebaseGoogleLogin() {
+  try {
+    const provider = window.fbGoogleProvider;
+    await window.fbSignInWithPopup(window.fbAuth, provider);
+  } catch (err) {
+    try {
+      await window.fbSignInWithRedirect(window.fbAuth, provider);
+    } catch (e) {
+      showToast('❌ Google Sign-In failed');
+    }
   }
-
-  // Wannan zai tabbatar ko da ka saka wani sabon email da password yanzu, zai amince ba tare da wata matsala ba (One Time Me / Auto Save)
-  localStorage.setItem('wk_auth_email', email);
-  localStorage.setItem('wk_auth_pass', pass);
-  localStorage.setItem('wk_logged_in', '1');
-  unlockApp('IBRAHIM ABDULLAHI');
 }
 
-function unlockApp(name) {
+async function firebaseSignOut() {
+  try {
+    await window.fbSignOut(window.fbAuth);
+    localStorage.removeItem('wk_logged_in');
+    location.reload();
+  } catch (e) {
+    showToast('❌ Sign out failed');
+  }
+}
+
+function skipLoginAsGuest() {
+  localStorage.setItem('wk_logged_in', '1');
+  unlockApp('IBRAHIM ABDULLAHI', 'Guest Mode', null);
+}
+
+function unlockApp(name, email, photoURL) {
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('mainApp').style.opacity = '1';
   if (name) document.getElementById('sidebarName').textContent = name;
+  if (email) {
+    const semail = document.getElementById('settingsUserEmail');
+    if (semail) semail.textContent = email;
+  }
+  if (photoURL) {
+    ['sidebarAvatar','settingsAvatar'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = `<img src="${photoURL}">`;
+    });
+  }
   setTimeout(() => { const ls = document.getElementById('loginScreen'); if(ls) ls.style.display = 'none'; }, 400);
 }
 
-function signOut() {
-  if (confirm('Sign out? Your chats and settings stay saved on this device.')) {
-    localStorage.removeItem('wk_logged_in');
-    location.reload();
+// Listen to Firebase Auth state
+setTimeout(() => {
+  if (window.onAuthStateChanged && window.fbAuth) {
+    window.onAuthStateChanged(window.fbAuth, async (user) => {
+      if (user) {
+        currentUser = user;
+        localStorage.setItem('wk_logged_in', '1');
+        localStorage.setItem('wk_user_name', user.displayName || 'IBRAHIM ABDULLAHI');
+        unlockApp(user.displayName || 'IBRAHIM ABDULLAHI', user.email, user.photoURL);
+        await loadChatsFromFirestore();
+      } else {
+        currentUser = null;
+        if (localStorage.getItem('wk_logged_in') !== '1') {
+          // Keep login screen visible if not signed in and not guest
+        } else {
+          unlockApp('IBRAHIM ABDULLAHI', 'Local Mode', null);
+          loadChatsFromLocalStorage();
+        }
+      }
+    });
+  }
+}, 800);
+
+async function saveChatsToFirestore() {
+  if (!currentUser || !window.fbDb) {
+    localStorage.setItem('wk_chats', JSON.stringify(chats));
+    return;
+  }
+  try {
+    for (const chat of chats) {
+      const chatRef = window.fbDoc(window.fbDb, 'users', currentUser.uid, 'chats', chat.id);
+      await window.fbSetDoc(chatRef, chat, { merge: true });
+    }
+  } catch (e) {
+    console.warn('[Firestore] Save error:', e);
+  }
+}
+
+async function loadChatsFromFirestore() {
+  if (!currentUser || !window.fbDb) return;
+  try {
+    const chatsCol = window.fbCollection(window.fbDb, 'users', currentUser.uid, 'chats');
+    const snapshot = await window.fbGetDocs(chatsCol);
+    const cloudChats = [];
+    snapshot.forEach(docSnap => {
+      cloudChats.push(docSnap.data());
+    });
+    if (cloudChats.length > 0) {
+      chats = cloudChats.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    } else {
+      loadChatsFromLocalStorage();
+      if (chats.length > 0) await saveChatsToFirestore();
+    }
+    if (!activeChatId && chats.length > 0) activeChatId = chats[0].id;
+    renderChats();
+    renderMessages();
+  } catch (e) {
+    loadChatsFromLocalStorage();
+  }
+}
+
+function loadChatsFromLocalStorage() {
+  try { const s = localStorage.getItem('wk_chats'); if (s) chats = JSON.parse(s); } catch (e) { chats = []; }
+  if (!Array.isArray(chats) || !chats.length) {
+    chats = [{ id:'chat-'+Date.now(), title:'New chat', messages:[], createdAt:Date.now() }];
+  }
+  if (!activeChatId) activeChatId = chats[0].id;
+  renderChats(); renderMessages();
+}
+
+async function deleteFirestoreChat(id) {
+  if (currentUser && window.fbDb) {
+    try {
+      const chatRef = window.fbDoc(window.fbDb, 'users', currentUser.uid, 'chats', id);
+      await window.fbDeleteDoc(chatRef);
+    } catch (e) {}
+  }
+}
+
+// ===== PWA INSTALL APP LOGIC =====
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPWAEvent = e;
+  const btn = document.getElementById('installAppBtn');
+  if (btn) btn.style.display = 'inline-flex';
+});
+
+function promptInstallApp() {
+  if (deferredPWAEvent) {
+    deferredPWAEvent.prompt();
+    deferredPWAEvent.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        showToast('✅ App installed successfully!');
+      }
+      deferredPWAEvent = null;
+    });
+  } else {
+    // Instructions for iOS or already installed
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS) {
+      alert('To install on iPhone/iPad:\n1. Tap the Share button at the bottom of Safari.\n2. Scroll down and tap "Add to Home Screen".');
+    } else {
+      alert('To install:\nTap your browser menu (3 dots at top right) and select "Install app" or "Add to Home Screen".');
+    }
   }
 }
 
@@ -1108,7 +1233,7 @@ function signOut() {
 async function init() {
   try {
     webSearchEnabled = localStorage.getItem('wk_web_search') === '1';
-    loadMemory(); loadChats();
+    loadChatsFromLocalStorage();
     profileRules = localStorage.getItem('wk_profile_rules') || LOCKED_PERSONAL_RULES;
     localStorage.setItem('wk_profile_rules', profileRules);
     document.getElementById('profileRulesInput').value = profileRules;
@@ -1128,8 +1253,8 @@ async function init() {
       await refreshVideoCount();
     } catch (e) {}
 
-    if (localStorage.getItem('wk_logged_in') === '1') {
-      unlockApp(localStorage.getItem('wk_user_name') || 'IBRAHIM ABDULLAHI');
+    if (localStorage.getItem('wk_logged_in') === '1' && !currentUser) {
+      unlockApp(localStorage.getItem('wk_user_name') || 'IBRAHIM ABDULLAHI', 'Local Mode', null);
     }
   } catch (e) {}
 }
@@ -1365,15 +1490,11 @@ function renderLibraryPanel() {
 }
 
 // ===== CHATS =====
-function loadChats() {
-  try { const s = localStorage.getItem('wk_chats'); if (s) chats = JSON.parse(s); } catch (e) { chats = []; }
-  if (!Array.isArray(chats) || !chats.length) {
-    chats = [{ id:'chat-'+Date.now(), title:'New chat', messages:[], createdAt:Date.now() }];
-  }
-  if (!activeChatId) activeChatId = chats[0].id;
-  renderChats(); renderMessages();
+function saveChats() {
+  localStorage.setItem('wk_chats', JSON.stringify(chats));
+  saveChatsToFirestore();
+  renderChats();
 }
-function saveChats() { localStorage.setItem('wk_chats', JSON.stringify(chats)); renderChats(); }
 function createNewChat() {
   const id = 'chat-' + Date.now();
   chats.unshift({ id, title:'New chat', messages:[], createdAt:Date.now() });
@@ -1382,6 +1503,7 @@ function createNewChat() {
 }
 function switchToChat(id) { activeChatId = id; renderChats(); renderMessages(); document.getElementById('messageInput').focus(); closeSidebar(); }
 function deleteChat(id) {
+  deleteFirestoreChat(id);
   chats = chats.filter(c => c.id !== id);
   if (!chats.length) chats.push({ id:'chat-'+Date.now(), title:'New chat', messages:[] });
   activeChatId = chats[0].id; saveChats(); renderMessages();
@@ -1393,6 +1515,10 @@ function renameChat(id, t) {
 function renderChats() {
   const list = document.getElementById('chatsList'); if (!list) return;
   list.innerHTML = '';
+  if (!chats.length) {
+    list.innerHTML = '<div style="padding:10px 12px;font-size:13px;color:var(--text-tertiary)">No chat history yet</div>';
+    return;
+  }
   chats.slice().sort((a,b) => (b.pinned?1:0) - (a.pinned?1:0)).forEach(chat => {
     const div = document.createElement('div');
     div.className = 'chat-item' + (chat.id === activeChatId ? ' active' : '');
@@ -2674,7 +2800,6 @@ function exportLocks() {
 // ===== SETTINGS =====
 function openSettings() {
   try {
-    document.getElementById('profileNameInput').value = document.getElementById('sidebarName').textContent;
     document.getElementById('apiKeyInput').value = localStorage.getItem('wk_api_key') || '';
     document.getElementById('replicateKeyInput').value = localStorage.getItem('wk_replicate_key') || '';
     document.getElementById('voiceLangSelect').value = localStorage.getItem('wk_voice_lang') || 'ha-NG';
@@ -2733,9 +2858,6 @@ function saveSettings() {
   profileRules = rules;
   localStorage.setItem('wk_model', document.getElementById('modelSelect').value);
   localStorage.setItem('wk_video_model', document.getElementById('videoModelSelect').value);
-  const n = document.getElementById('profileNameInput').value.trim() || 'IBRAHIM ABDULLAHI';
-  document.getElementById('sidebarName').textContent = n;
-  localStorage.setItem('wk_user_name', n);
   updateModelBadge();
   closeModal('settingsModal');
   showToast('✅ Settings saved');
