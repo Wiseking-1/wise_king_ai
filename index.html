@@ -764,7 +764,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
   import { getFirestore, collection, doc, setDoc, getDocs, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -786,7 +786,6 @@
   window.fbDb = db;
   window.fbGoogleProvider = new GoogleAuthProvider();
   window.fbSignInWithPopup = signInWithPopup;
-  window.fbSignInWithRedirect = signInWithRedirect;
   window.fbSignOut = signOut;
   window.fbCollection = collection;
   window.fbDoc = doc;
@@ -1076,17 +1075,13 @@ function formatBytes(b) {
   return (b / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
 }
 
-// ===== FIREBASE AUTH & FIRESTORE CHAT SYNC =====
+// ===== FIREBASE AUTH (POPUP FIX) & FIRESTORE CHAT SYNC =====
 async function firebaseGoogleLogin() {
   try {
     const provider = window.fbGoogleProvider;
     await window.fbSignInWithPopup(window.fbAuth, provider);
   } catch (err) {
-    try {
-      await window.fbSignInWithRedirect(window.fbAuth, provider);
-    } catch (e) {
-      showToast('❌ Google Sign-In failed');
-    }
+    showToast('❌ Google Sign-In failed: ' + (err.message || err));
   }
 }
 
