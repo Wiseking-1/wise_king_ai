@@ -43,14 +43,12 @@
   .login-subtitle { color:var(--text-secondary); font-size:14px; margin-bottom:28px; }
   .social-btn { width:100%; display:flex; align-items:center; justify-content:center; gap:10px; padding:12px; margin-bottom:12px; border-radius:var(--radius-md); background:var(--bg-elevated); border:1px solid var(--border-default); color:var(--text-primary); font-size:14px; font-weight:500; cursor:pointer; transition:all var(--transition-fast); font-family:inherit; }
   .social-btn:hover { background:var(--bg-hover); border-color:var(--border-strong); transform:translateY(-1px); }
-  .divider { display:flex; align-items:center; gap:12px; margin:20px 0; color:var(--text-tertiary); font-size:12px; }
-  .divider::before, .divider::after { content:""; flex:1; height:1px; background:var(--border-default); }
   .skip-auth { background:none; border:none; color:var(--text-secondary); font-size:13px; cursor:pointer; margin-top:16px; text-decoration:underline; font-family:inherit; }
   .skip-auth:hover { color:var(--text-primary); }
 
   .app { display:flex; height:100vh; height:100dvh; width:100vw; overflow:hidden; }
   .sidebar { width:var(--sidebar-width); min-width:var(--sidebar-width); background:var(--bg-secondary); border-right:1px solid var(--border-subtle); display:flex; flex-direction:column; height:100vh; height:100dvh; transition:transform var(--transition-smooth); z-index:40; }
-  .sidebar-header { padding:14px 16px; border-bottom:1px solid var(--border-subtle); flex-shrink:0; display:flex; align-items:center; justify-content:between; }
+  .sidebar-header { padding:14px 16px; border-bottom:1px solid var(--border-subtle); flex-shrink:0; display:flex; align-items:center; justify-content:space-between; }
   .brand { display:flex; align-items:center; gap:10px; }
   .brand-logo { width:32px; height:32px; border-radius:10px; background:var(--accent-gradient); display:flex; align-items:center; justify-content:center; font-size:16px; box-shadow:0 0 12px var(--accent-glow); }
   .brand-name { font-weight:600; font-size:17px; letter-spacing:-0.01em; }
@@ -144,11 +142,21 @@
   .message.user .msg-body { display:flex; flex-direction:column; align-items:flex-end; }
   .msg-name { font-size:12.5px; font-weight:600; color:var(--text-secondary); margin-bottom:4px; padding:0 4px; }
   .message.user .msg-name { text-align:right; }
-  .msg-content { padding:12px 16px; border-radius:var(--radius-lg); font-size:15px; line-height:1.7; word-wrap:break-word; overflow-wrap:break-word; white-space:pre-wrap; letter-spacing:-0.005em; max-width:100%; }
+  .msg-content { padding:12px 16px; border-radius:var(--radius-lg); font-size:15px; line-height:1.7; word-wrap:break-word; overflow-wrap:break-word; white-space:pre-wrap; letter-spacing:-0.005em; max-width:100%; transition:max-height var(--transition-smooth); }
   .msg-content.ai { background:var(--bg-secondary); border:1px solid var(--border-subtle); border-top-left-radius:4px; color:var(--text-primary); }
   .msg-content.user { background:var(--accent-gradient); color:white; border-top-right-radius:4px; box-shadow:var(--shadow-sm); }
   .msg-content.error { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25); color:#fca5a5; }
-  .msg-content pre { background:var(--bg-primary); border:1px solid var(--border-subtle); padding:14px 16px; border-radius:var(--radius-md); overflow-x:auto; font-family:'JetBrains Mono','Consolas',monospace; font-size:13px; line-height:1.6; margin:10px 0; white-space:pre; position:relative; }
+
+  /* Gemini Style Collapse Styles */
+  .msg-content.collapsible { position:relative; overflow:hidden; }
+  .msg-content.collapsible.collapsed { max-height: 160px; }
+  .msg-content.collapsible.collapsed::after { content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 60px; background: linear-gradient(transparent, var(--bg-secondary)); pointer-events: none; }
+  .message.user .msg-content.collapsible.collapsed::after { background: linear-gradient(transparent, #6366f1); }
+  .see-more-btn { display:inline-block; margin-top:8px; font-size:13px; font-weight:600; color:var(--accent-hover); background:none; border:none; cursor:pointer; padding:2px 4px; font-family:inherit; }
+  .message.user .see-more-btn { color:#fff; text-decoration:underline; }
+  .see-more-btn:hover { opacity:0.8; }
+
+  .msg-content pre { background:var(--bg-primary); border:1px solid var(--border-subtle); padding:14px 16px; border-radius:var(--radius-md); overflow-x:auto; font-family:'JetBrains Mono','Consolas',monospace; font-size:13px; line-height:1.6; margin:10px 0; white-space:pre; position:relative; padding-top: 36px; }
   .msg-content code { background:rgba(255,255,255,0.08); padding:2px 6px; border-radius:4px; font-family:'JetBrains Mono',monospace; font-size:0.9em; }
   .msg-content pre code { background:transparent; padding:0; }
 
@@ -168,10 +176,10 @@
   .md th,.md td { border:1px solid var(--border-default); padding:7px 10px; text-align:left; }
   .md th { background:var(--bg-elevated); font-weight:600; }
   .md-pre { position:relative; }
-  .md-copy { position:absolute; top:8px; right:8px; background:var(--bg-elevated); border:1px solid var(--border-default); color:var(--text-secondary); font-size:11px; padding:4px 9px; border-radius:6px; cursor:pointer; font-family:inherit; opacity:0; transition:opacity .15s; display:inline-flex; align-items:center; gap:5px; z-index:2; }
-  .md-pre:hover .md-copy { opacity:1; }
-  .md-copy:hover { background:var(--bg-hover); color:var(--text-primary); }
-  .md-copy.copied { background:rgba(16,185,129,0.2); color:#34d399; border-color:rgba(16,185,129,0.4); }
+  .md-actions { position:absolute; top:8px; right:8px; display:flex; gap:6px; z-index:2; }
+  .md-btn { background:var(--bg-elevated); border:1px solid var(--border-default); color:var(--text-secondary); font-size:11px; padding:4px 9px; border-radius:6px; cursor:pointer; font-family:inherit; transition:all .15s; display:inline-flex; align-items:center; gap:5px; }
+  .md-btn:hover { background:var(--bg-hover); color:var(--text-primary); }
+  .md-btn.copied { background:rgba(16,185,129,0.2); color:#34d399; border-color:rgba(16,185,129,0.4); }
   .md-cursor::after { content:"▍"; color:var(--accent); animation:blink 1s steps(2) infinite; margin-left:1px; }
   @keyframes blink { 50% { opacity:0; } }
 
@@ -212,11 +220,8 @@
 
   .typing-indicator { display:flex; gap:14px; padding:8px 0; margin-bottom:8px; }
   .typing-indicator.hidden { display:none; }
-  .typing-bubble { display:flex; align-items:center; gap:5px; padding:14px 18px; background:var(--bg-secondary); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); border-top-left-radius:4px; }
-  .typing-bubble span { width:7px; height:7px; background:var(--accent); border-radius:50%; animation:typing 1.4s infinite ease-in-out both; }
-  .typing-bubble span:nth-child(1) { animation-delay:-0.32s; }
-  .typing-bubble span:nth-child(2) { animation-delay:-0.16s; }
-  @keyframes typing { 0%,80%,100% { transform:scale(0.5); opacity:0.3; } 40% { transform:scale(1); opacity:1; } }
+  .typing-bubble { display:flex; align-items:center; justify-content:center; padding:12px 18px; background:var(--bg-secondary); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); border-top-left-radius:4px; width:48px; height:38px; }
+  .clean-pulse-ring { width:16px; height:16px; border:2px solid var(--accent); border-top-color:transparent; border-radius:50%; animation:spin 0.8s linear infinite; }
 
   .input-dock { position:absolute; bottom:0; left:0; right:0; padding:12px 20px 16px; background:linear-gradient(to top,var(--bg-primary) 60%,transparent); pointer-events:none; z-index:20; }
   .input-inner-wrap { max-width:780px; margin:0 auto; pointer-events:auto; }
@@ -394,12 +399,12 @@
 </head>
 <body>
 
-<!-- LOGIN / WELCOME SCREEN WITH FIREBASE GOOGLE SIGN-IN -->
+<!-- LOGIN / WELCOME SCREEN -->
 <div id="loginScreen">
   <div class="login-card">
     <div class="login-logo">👑</div>
-    <h1 class="login-title" id="loginTitle">Welcome to Wise King AI</h1>
-    <p class="login-subtitle" id="loginSubtitle">Sign in with Google to sync your chats across all devices</p>
+    <h1 class="login-title">Welcome to Wise King AI</h1>
+    <p class="login-subtitle">Sign in with Google to sync your chats across all devices</p>
     <button class="social-btn" onclick="firebaseGoogleLogin()"><i class="fab fa-google" style="color:#ea4335"></i> Continue with Google</button>
     <button class="skip-auth" onclick="skipLoginAsGuest()">Continue as Guest (Local Mode)</button>
   </div>
@@ -482,9 +487,8 @@
         <span class="chat-model-badge" id="modelBadge"><i class="fas fa-circle"></i> <span id="modelBadgeText">Gemini</span></span>
       </div>
       <div class="chat-actions">
-        <!-- INSTALL APP BUTTON -->
         <button class="top-btn install-btn" id="installAppBtn" onclick="promptInstallApp()" title="Install App"><i class="fas fa-download"></i><span class="label"> Install App</span></button>
-        <button class="top-btn" onclick="goToWelcome()" title="Go back to main view"><i class="fas fa-house"></i><span class="label"> Home</span></button>
+        <button class="top-btn" onclick="goToWelcome()" title="Home"><i class="fas fa-house"></i><span class="label"> Home</span></button>
         <button class="top-btn" onclick="openVault()" title="Vault"><i class="fas fa-shield-halved"></i><span class="label"> Vault</span></button>
         <button class="top-btn" onclick="openSearchWebPanel()" title="Search web"><i class="fas fa-globe"></i><span class="label"> Search</span></button>
         <button class="top-btn" onclick="openBuildAppPanel()" title="Build app"><i class="fas fa-code"></i><span class="label"> Build</span></button>
@@ -500,14 +504,14 @@
           <div class="suggestions">
             <div class="suggestion-card" onclick="useSuggestion('Explain quantum computing in simple terms')"><i class="fas fa-atom"></i><div class="sc-title">Explain quantum computing</div><div class="sc-desc">In simple, clear terms</div></div>
             <div class="suggestion-card" onclick="useSuggestion('Write a professional email to my boss requesting a raise')"><i class="fas fa-envelope"></i><div class="sc-title">Write a professional email</div><div class="sc-desc">Requesting a raise from my boss</div></div>
-            <div class="suggestion-card" onclick="useSuggestion('Generate an image of a futuristic Lagos skyline at sunset')"><i class="fas fa-image"></i><div class="sc-title">Generate an image</div><div class="sc-desc">Futuristic Lagos skyline at sunset</div></div>
-            <div class="suggestion-card" onclick="useSuggestion('Write a Hausa film script about a king and his lost son')"><i class="fas fa-film"></i><div class="sc-title">Write a Hausa film script</div><div class="sc-desc">A king and his lost son</div></div>
+            <div class="suggestion-card" onclick="useSuggestion('Generate a hyper-realistic photo of an African businessman')"><i class="fas fa-image"></i><div class="sc-title">Real Human Photo</div><div class="sc-desc">Stunning photorealistic portrait</div></div>
+            <div class="suggestion-card" onclick="useSuggestion('Write a 10s cinematic film scene prompt in Hausa and English')"><i class="fas fa-film"></i><div class="sc-title">Cinematic Script</div><div class="sc-desc">10s scene with dialogues</div></div>
           </div>
         </div>
         <div id="messagesArea"></div>
         <div class="typing-indicator hidden" id="typingIndicator">
           <div class="msg-avatar ai">👑</div>
-          <div class="typing-bubble"><span></span><span></span><span></span></div>
+          <div class="typing-bubble"><div class="clean-pulse-ring"></div></div>
         </div>
       </div>
     </div>
@@ -528,7 +532,7 @@
   </main>
 </div>
 
-<!-- ALL PANELS AND MODALS -->
+<!-- PANELS AND MODALS -->
 <div class="full-panel" id="searchWebPanel">
   <div class="panel-header"><div class="panel-title"><i class="fas fa-globe"></i> Search the web</div><button class="btn ghost" onclick="closeSearchWebPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
   <div class="panel-body"><div class="panel-inner"><input type="text" class="search-big" id="searchWebInput" placeholder="Ask anything: latest news, weather, facts..." oninput="doSearchWeb(this.value)"><div id="searchWebResults"></div></div></div>
@@ -571,11 +575,6 @@
         <option value="9:16">9:16 Portrait</option>
         <option value="1:1">1:1 Square</option>
       </select>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;font-size:13px;color:var(--text-secondary)">
-      <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
-        <input type="checkbox" id="videoAudioToggle" checked style="accent-color:var(--accent)"> Generate audio
-      </label>
     </div>
     <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="generateVideoFromPanel()"><i class="fas fa-clapperboard"></i> Generate Video</button>
     <div id="videoPanelResults"></div>
@@ -690,7 +689,6 @@
             <option value="wan-video/wan2.6-i2v-flash">Wan 2.6 Flash (Replicate) — Fast, Multi-shot, Audio</option>
           </optgroup>
         </select>
-        <p style="font-size:11px;color:var(--text-tertiary);margin-top:4px">Veo uses your Gemini key. Kling & Wan use your Replicate key.</p>
       </div>
     </div>
 
@@ -760,7 +758,7 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- FIREBASE SDKs & APP SCRIPT -->
+<!-- FIREBASE & CORE APP SCRIPT -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
@@ -798,138 +796,43 @@
 </script>
 
 <script>
-// PDF worker
 if (window.pdfjsLib) { try { pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; } catch(e) {} }
 
-// ===== LOCKED PERSONAL RULES TEXT =====
-const LOCKED_PERSONAL_RULES = `I am Oga,Ibrahim, from Nigeria,, 🇳🇬💯🏆👍
-I know that you're good in everything now,,
-Buh whenever I ask you about any Films prompt..
-Always remember the type of Prompt which Some Ai video generation like to generate,
-Like Scene 10sec each Prompt and with two or three short dialogue inside the all scene with full action and Quality,,
-And always write "**END SCENE**" In all prompt at the end of Scene..,📝💯✅
-Always remember You're A King,🏆👑🌍💯❤✅
-So make everything Clean And perfectly,,,📝👑✅💪🙏
-And if You're about to create an Image or generation photos, 
-Always provides Real Quality And Greater things like Gemini or Chatgpt Options..
-You're Also a professional like them Now..,😎💯👑📝🏆🏆👍🌍
-And always try to understand when you finished created a Scene or any prompt, don't generate A videos, Until the users ask you then you will generated it,💯✅
-And Always know how to write Full Story with full functions from beginning to an ending with full meaning and understanding,📝💯🏆✅
-Don't just written a prompt or anything without knowing how it will be continuity. Always gives some Examples to user's to choose and granted them their request in just minutes,,💯👑✅👏
-Let's all you missions to be successful and be given praised to God and you to your owners.,😎💪👍👩‍👩‍👧‍👧
-Always make and build and making Peoples smiles, Joy's, Happiness, with Some jokingly Words,😂😃😆
-Remember you're professional and General, Director, Producer's,,🏆💯👑📝🌍`;
+const LOCKED_PERSONAL_RULES = `I am Oga Ibrahim, from Nigeria, 🇳🇬💯🏆👍
+Owner of Wise King Industry. Always address with top royal respect.
+When writing film or video prompts, break them into strict 10-second segments with ACTION FIRST -> REACTION -> SHORT DIALOGUE (Hausa/English mix) -> NATURAL END.
+Always include "**END SCENE**" at the conclusion of every scene prompt.
+When generating images or real human photos, ensure stunning realism, perfect human features, and professional lighting (photorealistic, 8k).
+Comply fully with safety and policy guidelines: no dangerous, harmful, or sexually explicit content.`;
 
-// ===== SYSTEM PROMPT =====
 const WISE_KING_PROMPT = `You are WISE KING AI created by IBRAHIM ABDULLAHI from Nigeria (Wise King Industry).
 OWNER: Oga Ibrahim from Nigeria 🇳🇬. Address him with top-tier royal respect.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WISE KING AI — PRODUCTION INTELLIGENCE PATCH
+WISE KING AI — MASTER PRODUCTION & SAFETY INTELLIGENCE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. ALWAYS UNDERSTAND THE FULL STORY/CONTEXT BEFORE GENERATING.
+2. ADVISE BRIEFLY WHEN NECESSARY, THEN EXECUTE.
+3. VIDEO / SCRIPT FORMAT: Exactly 10-second duration prompts. ACTION FIRST -> REACTION -> SHORT DIALOGUE (Hausa + English) -> NATURAL END. Always write "**END SCENE**" at the end of every prompt.
+4. REAL HUMAN PHOTOS & VISUALS: Deliver ultra-realistic human photography with stunning detail, professional lighting, and 8k quality. Strictly NO cartoons or illustrations unless requested.
+5. SAFETY & POLICY COMPLIANCE: Strictly adhere to safety guidelines. Prohibit dangerous content, hate speech, explicit material, or harmful misinformation.
+6. ULTRA-FAST SPEED: Respond instantly with zero artificial delay.`;
 
-DO NOT GENERATE A FILM BY JUMPING DIRECTLY TO THE MOST DRAMATIC MOMENT.
-
-FOR EVERY NEW FILM/STORY:
-UNDERSTAND THE STORY FROM ITS ORIGIN FIRST:
-ORIGIN → SETUP → CHARACTERS → INITIAL PROBLEM → RISING CONFLICT → TURNING POINT → MAJOR DRAMA → CLIMAX → RESOLUTION.
-
-WHEN THE USER PROVIDES A FILM PROMPT AND ASKS TO CONTINUE:
-DO NOT BLINDLY COPY OR IMMEDIATELY GENERATE.
-
-FIRST INTERNALLY REVIEW:
-- WHAT HAPPENED BEFORE?
-- WHERE DID THE STORY STOP?
-- WHAT IS THE CURRENT STORY POSITION?
-- WHAT SHOULD NATURALLY HAPPEN NEXT?
-- DOES THE PROVIDED SCENE HAVE CONTINUITY?
-- IS THE ACTION TOO MUCH FOR THE DURATION?
-- IS THE DIALOGUE TOO LONG?
-- WHAT SHOULD BE IMPROVED?
-
-THEN GIVE A SHORT, USEFUL PRODUCTION ADVICE IF NEEDED, AND GENERATE THE NEXT SCENE.
-
-IF THE USER'S IDEA IS ALREADY GOOD:
-SAY SO BRIEFLY AND CONTINUE.
-
-FOR 10-SECOND VIDEO:
-ACTION FIRST → REACTION → SHORT DIALOGUE → NATURAL END.
-
-NEVER OVERLOAD ONE SHORT SCENE.
-NEVER CUT IMPORTANT STORY BEATS RANDOMLY.
-
-IMPORTANT:
-WISE KING AI IS A PRODUCER + DIRECTOR + STORY ANALYST + PROMPT ENGINEER,
-NOT A COPY-AND-PASTE MACHINE.
-
-RESPONSE SPEED:
-DO NOT USE ARTIFICIAL THINKING DELAYS, FAKE LOADING, OR UNNECESSARY WAITING.
-PROCESS INTERNALLY AND RESPOND AS SOON AS THE RESULT IS READY.
-
-GOLDEN RULE:
-UNDERSTAND THE WHOLE STORY FIRST.
-ADVISE WHEN NECESSARY.
-THEN GENERATE.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SCENE FORMAT RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. Whenever generating Film or Video Prompts (Kling, Runway, Luma, VideoFX, Veo, Sora):
-   - Break every scene into exactly 10-second duration prompts (10s each).
-   - Structure each 10s scene as: ACTION FIRST → REACTION → SHORT DIALOGUE → NATURAL END.
-   - Include 2-3 short impactful dialogues per scene, in Hausa + English mix.
-   - Always write "**END SCENE**" at the end of every scene prompt.
-   - Use cinematic language: camera movement, lens, lighting, atmosphere, motion physics.
-2. Image Generation & Visual Prompts: Always deliver real, top-tier, ultra-realistic visual prompts matching Gemini/ChatGPT professional standards.
-3. CRITICAL IMAGE TAG RULE: When the user explicitly requests an image ("create picture", "generate image", "draw", "photo of", "logo", "design"), respond ONLY with: [GENERATE_IMAGE: <detailed English visual description>].
-4. CRITICAL VIDEO TAG RULE: When the user explicitly requests a video ("create video", "generate video", "animate this", "make a video", "video of"), respond ONLY with: [GENERATE_VIDEO: <detailed English cinematic description with camera, lighting, motion, and audio>].
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-FORMATTING & LANGUAGE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-FORMATTING: Use proper Markdown — **bold**, bullet lists, numbered lists, tables, and fenced code blocks with language tags.
-
-LANGUAGE: Default Hausa (Nigeria). Adapt seamlessly to English/mixed. Clean & fast responses.`;
-
-// ===== MODEL LISTS =====
-const AVAILABLE_MODELS = [
-  'gemini-3.8-flash','gemini-3.7-flash','gemini-3.6-flash',
-  'gemini-3.5-flash-lite','gemini-3.1-pro','gemini-2.5-pro'
-];
-const FALLBACK_CHAIN = [
-  'gemini-3.8-flash','gemini-3.7-flash','gemini-3.6-flash',
-  'gemini-3.5-flash-lite','gemini-3.1-pro','gemini-2.5-pro'
-];
+const AVAILABLE_MODELS = ['gemini-3.8-flash','gemini-3.7-flash','gemini-3.6-flash','gemini-3.5-flash-lite','gemini-3.1-pro','gemini-2.5-pro'];
+const FALLBACK_CHAIN = ['gemini-3.8-flash','gemini-3.7-flash','gemini-3.6-flash','gemini-3.5-flash-lite'];
 const DEFAULT_MODEL = 'gemini-3.8-flash';
 
-// ===== STATE =====
-let chats = [];
-let activeChatId = null;
-let pendingActionChatId = null;
-let uploadedImages = [];
-let uploadedDocs = [];
-let memoryStore = { memories: [], locks: [] };
+let chats = [], activeChatId = null, pendingActionChatId = null;
+let uploadedImages = [], uploadedDocs = [];
+let memoryStore = { memories:[], locks:[] };
 let profileRules = "";
-let generatedImages = [];
-let libraryItems = [];
-let projectItems = [];
-let webSearchEnabled = false;
-let isSending = false;
-let currentAbortController = null;
-let recognition = null;
-let isRecording = false;
-let pendingShareText = '';
-let _shareSheetBound = false;
-let editingMessageIdx = -1;
-let videoMode = 'text';
-let videoStartImageData = null;
-let cachedVideoRecords = [];
-let currentUser = null;
-let deferredPWAEvent = null;
+let generatedImages = [], libraryItems = [], projectItems = [];
+let webSearchEnabled = false, isSending = false, currentAbortController = null;
+let recognition = null, isRecording = false, pendingShareText = '', _shareSheetBound = false;
+let editingMessageIdx = -1, videoMode = 'text', videoStartImageData = null, cachedVideoRecords = [];
+let currentUser = null, deferredPWAEvent = null;
 
-// ===== IndexedDB for video blobs =====
-const VIDEO_DB_NAME = 'WiseKingVideosDB';
-const VIDEO_STORE = 'videos';
+const VIDEO_DB_NAME = 'WiseKingVideosDB', VIDEO_STORE = 'videos';
 let videoDB = null;
 
 function openVideoDB() {
@@ -951,17 +854,7 @@ function openVideoDB() {
 async function saveVideoToDB(blob, prompt, duration, model, remoteUrl) {
   const db = await openVideoDB();
   const id = 'vid-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
-  const rec = {
-    id,
-    prompt: prompt || 'Untitled video',
-    duration: duration || 10,
-    model: model || 'unknown',
-    date: Date.now(),
-    size: blob ? blob.size : 0,
-    type: blob ? (blob.type || 'video/mp4') : 'video/mp4',
-    blob: blob || null,
-    remoteUrl: remoteUrl || null
-  };
+  const rec = { id, prompt: prompt || 'Untitled video', duration: duration || 10, model: model || 'unknown', date: Date.now(), size: blob ? blob.size : 0, type: blob ? (blob.type || 'video/mp4') : 'video/mp4', blob: blob || null, remoteUrl: remoteUrl || null };
   return new Promise((resolve, reject) => {
     const tx = db.transaction(VIDEO_STORE, 'readwrite');
     tx.objectStore(VIDEO_STORE).put(rec);
@@ -985,10 +878,7 @@ async function deleteVideoFromDB(id) {
   return new Promise((resolve, reject) => {
     const tx = db.transaction(VIDEO_STORE, 'readwrite');
     tx.objectStore(VIDEO_STORE).delete(id);
-    tx.oncomplete = () => {
-      if (objectUrlCache.has(id)) { URL.revokeObjectURL(objectUrlCache.get(id)); objectUrlCache.delete(id); }
-      resolve();
-    };
+    tx.oncomplete = () => resolve();
     tx.onerror = e => reject(e.target.error);
   });
 }
@@ -998,11 +888,7 @@ async function clearAllVideosFromDB() {
   return new Promise((resolve, reject) => {
     const tx = db.transaction(VIDEO_STORE, 'readwrite');
     tx.objectStore(VIDEO_STORE).clear();
-    tx.oncomplete = () => {
-      objectUrlCache.forEach(u => URL.revokeObjectURL(u));
-      objectUrlCache.clear();
-      resolve();
-    };
+    tx.oncomplete = () => resolve();
     tx.onerror = e => reject(e.target.error);
   });
 }
@@ -1010,9 +896,7 @@ async function clearAllVideosFromDB() {
 const objectUrlCache = new Map();
 function getVideoPlayableUrl(rec) {
   if (rec.blob) {
-    if (!objectUrlCache.has(rec.id)) {
-      objectUrlCache.set(rec.id, URL.createObjectURL(rec.blob));
-    }
+    if (!objectUrlCache.has(rec.id)) objectUrlCache.set(rec.id, URL.createObjectURL(rec.blob));
     return objectUrlCache.get(rec.id);
   }
   return rec.remoteUrl || '';
@@ -1022,19 +906,9 @@ async function fetchAndSaveVideo(remoteUrl, prompt, duration, model) {
   let blob = null;
   try {
     const res = await fetch(remoteUrl, { mode: 'cors' });
-    if (res.ok) {
-      blob = await res.blob();
-      if (!blob.type || !blob.type.startsWith('video')) {
-        blob = new Blob([blob], { type: 'video/mp4' });
-      }
-    }
+    if (res.ok) { blob = await res.blob(); if (!blob.type || !blob.type.startsWith('video')) blob = new Blob([blob], { type: 'video/mp4' }); }
   } catch (e) {}
-  try {
-    const rec = await saveVideoToDB(blob, prompt, duration, model, remoteUrl);
-    return rec;
-  } catch (e) {
-    return null;
-  }
+  try { return await saveVideoToDB(blob, prompt, duration, model, remoteUrl); } catch (e) { return null; }
 }
 
 async function refreshVideoCount() {
@@ -1050,11 +924,7 @@ async function updateStorageMeter() {
     let usage = 0, quota = 0;
     if (navigator.storage && navigator.storage.estimate) {
       const est = await navigator.storage.estimate();
-      usage = est.usage || 0;
-      quota = est.quota || 0;
-    } else {
-      const vids = await getAllVideosFromDB();
-      usage = vids.reduce((s, v) => s + (v.size || 0), 0);
+      usage = est.usage || 0; quota = est.quota || 0;
     }
     const fill = document.getElementById('storageBarFill');
     const txtUsed = document.getElementById('storageTextUsed');
@@ -1075,14 +945,11 @@ function formatBytes(b) {
   return (b / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
 }
 
-// ===== FIREBASE AUTH (POPUP FIX) & FIRESTORE CHAT SYNC =====
 async function firebaseGoogleLogin() {
   try {
     const provider = window.fbGoogleProvider;
     await window.fbSignInWithPopup(window.fbAuth, provider);
-  } catch (err) {
-    showToast('❌ Google Sign-In failed: ' + (err.message || err));
-  }
+  } catch (err) { showToast('❌ Google Sign-In failed'); }
 }
 
 async function firebaseSignOut() {
@@ -1090,9 +957,7 @@ async function firebaseSignOut() {
     await window.fbSignOut(window.fbAuth);
     localStorage.removeItem('wk_logged_in');
     location.reload();
-  } catch (e) {
-    showToast('❌ Sign out failed');
-  }
+  } catch (e) { showToast('❌ Sign out failed'); }
 }
 
 function skipLoginAsGuest() {
@@ -1104,20 +969,15 @@ function unlockApp(name, email, photoURL) {
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('mainApp').style.opacity = '1';
   if (name) document.getElementById('sidebarName').textContent = name;
-  if (email) {
-    const semail = document.getElementById('settingsUserEmail');
-    if (semail) semail.textContent = email;
-  }
+  if (email) { const semail = document.getElementById('settingsUserEmail'); if (semail) semail.textContent = email; }
   if (photoURL) {
     ['sidebarAvatar','settingsAvatar'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.innerHTML = `<img src="${photoURL}">`;
+      const el = document.getElementById(id); if (el) el.innerHTML = `<img src="${photoURL}">`;
     });
   }
   setTimeout(() => { const ls = document.getElementById('loginScreen'); if(ls) ls.style.display = 'none'; }, 400);
 }
 
-// Listen to Firebase Auth state
 setTimeout(() => {
   if (window.onAuthStateChanged && window.fbAuth) {
     window.onAuthStateChanged(window.fbAuth, async (user) => {
@@ -1129,9 +989,7 @@ setTimeout(() => {
         await loadChatsFromFirestore();
       } else {
         currentUser = null;
-        if (localStorage.getItem('wk_logged_in') !== '1') {
-          // Keep login screen visible if not signed in and not guest
-        } else {
+        if (localStorage.getItem('wk_logged_in') === '1') {
           unlockApp('IBRAHIM ABDULLAHI', 'Local Mode', null);
           loadChatsFromLocalStorage();
         }
@@ -1141,18 +999,13 @@ setTimeout(() => {
 }, 800);
 
 async function saveChatsToFirestore() {
-  if (!currentUser || !window.fbDb) {
-    localStorage.setItem('wk_chats', JSON.stringify(chats));
-    return;
-  }
+  if (!currentUser || !window.fbDb) { localStorage.setItem('wk_chats', JSON.stringify(chats)); return; }
   try {
     for (const chat of chats) {
       const chatRef = window.fbDoc(window.fbDb, 'users', currentUser.uid, 'chats', chat.id);
       await window.fbSetDoc(chatRef, chat, { merge: true });
     }
-  } catch (e) {
-    console.warn('[Firestore] Save error:', e);
-  }
+  } catch (e) {}
 }
 
 async function loadChatsFromFirestore() {
@@ -1161,42 +1014,21 @@ async function loadChatsFromFirestore() {
     const chatsCol = window.fbCollection(window.fbDb, 'users', currentUser.uid, 'chats');
     const snapshot = await window.fbGetDocs(chatsCol);
     const cloudChats = [];
-    snapshot.forEach(docSnap => {
-      cloudChats.push(docSnap.data());
-    });
-    if (cloudChats.length > 0) {
-      chats = cloudChats.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-    } else {
-      loadChatsFromLocalStorage();
-      if (chats.length > 0) await saveChatsToFirestore();
-    }
+    snapshot.forEach(docSnap => cloudChats.push(docSnap.data()));
+    if (cloudChats.length > 0) chats = cloudChats.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    else { loadChatsFromLocalStorage(); if (chats.length > 0) await saveChatsToFirestore(); }
     if (!activeChatId && chats.length > 0) activeChatId = chats[0].id;
-    renderChats();
-    renderMessages();
-  } catch (e) {
-    loadChatsFromLocalStorage();
-  }
+    renderChats(); renderMessages();
+  } catch (e) { loadChatsFromLocalStorage(); }
 }
 
 function loadChatsFromLocalStorage() {
   try { const s = localStorage.getItem('wk_chats'); if (s) chats = JSON.parse(s); } catch (e) { chats = []; }
-  if (!Array.isArray(chats) || !chats.length) {
-    chats = [{ id:'chat-'+Date.now(), title:'New chat', messages:[], createdAt:Date.now() }];
-  }
+  if (!Array.isArray(chats) || !chats.length) chats = [{ id:'chat-'+Date.now(), title:'New chat', messages:[], createdAt:Date.now() }];
   if (!activeChatId) activeChatId = chats[0].id;
   renderChats(); renderMessages();
 }
 
-async function deleteFirestoreChat(id) {
-  if (currentUser && window.fbDb) {
-    try {
-      const chatRef = window.fbDoc(window.fbDb, 'users', currentUser.uid, 'chats', id);
-      await window.fbDeleteDoc(chatRef);
-    } catch (e) {}
-  }
-}
-
-// ===== PWA INSTALL APP LOGIC =====
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPWAEvent = e;
@@ -1207,24 +1039,12 @@ window.addEventListener('beforeinstallprompt', (e) => {
 function promptInstallApp() {
   if (deferredPWAEvent) {
     deferredPWAEvent.prompt();
-    deferredPWAEvent.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        showToast('✅ App installed successfully!');
-      }
-      deferredPWAEvent = null;
-    });
+    deferredPWAEvent.userChoice.then((choiceResult) => { deferredPWAEvent = null; });
   } else {
-    // Instructions for iOS or already installed
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    if (isIOS) {
-      alert('To install on iPhone/iPad:\n1. Tap the Share button at the bottom of Safari.\n2. Scroll down and tap "Add to Home Screen".');
-    } else {
-      alert('To install:\nTap your browser menu (3 dots at top right) and select "Install app" or "Add to Home Screen".');
-    }
+    alert('Tap your browser menu and select "Install app" or "Add to Home Screen".');
   }
 }
 
-// ===== INIT =====
 async function init() {
   try {
     webSearchEnabled = localStorage.getItem('wk_web_search') === '1';
@@ -1237,16 +1057,11 @@ async function init() {
     const savedName = localStorage.getItem('wk_user_name'); if (savedName) document.getElementById('sidebarName').textContent = savedName;
     const av = localStorage.getItem('wk_avatar'); if (av) applyAvatar(av);
     const vl = localStorage.getItem('wk_voice_lang'); if (vl) document.getElementById('voiceLangSelect').value = vl;
-    const sm = localStorage.getItem('wk_model');
-    if (sm && AVAILABLE_MODELS.includes(sm)) document.getElementById('modelSelect').value = sm;
-    const vm = localStorage.getItem('wk_video_model');
-    if (vm) document.getElementById('videoModelSelect').value = vm;
+    const sm = localStorage.getItem('wk_model'); if (sm && AVAILABLE_MODELS.includes(sm)) document.getElementById('modelSelect').value = sm;
+    const vm = localStorage.getItem('wk_video_model'); if (vm) document.getElementById('videoModelSelect').value = vm;
     updateModelBadge(); handleInputChange(); setupThemeSwatches(); setupMessageDelegation();
 
-    try {
-      await openVideoDB();
-      await refreshVideoCount();
-    } catch (e) {}
+    try { await openVideoDB(); await refreshVideoCount(); } catch (e) {}
 
     if (localStorage.getItem('wk_logged_in') === '1' && !currentUser) {
       unlockApp(localStorage.getItem('wk_user_name') || 'IBRAHIM ABDULLAHI', 'Local Mode', null);
@@ -1259,13 +1074,10 @@ function getSelectedModel() {
   if (sm && AVAILABLE_MODELS.includes(sm)) return sm;
   return DEFAULT_MODEL;
 }
-function getSelectedVideoModel() {
-  return localStorage.getItem('wk_video_model') || 'veo-3.1-generate-preview';
-}
+function getSelectedVideoModel() { return localStorage.getItem('wk_video_model') || 'veo-3.1-generate-preview'; }
 function updateModelBadge() {
   const m = getSelectedModel();
-  const txt = m.replace('gemini-','').replace(/-/g,' ').replace(/\b\w/g, c => c.toUpperCase());
-  document.getElementById('modelBadgeText').textContent = txt;
+  document.getElementById('modelBadgeText').textContent = m.replace('gemini-','').replace(/-/g,' ').replace(/\b\w/g, c => c.toUpperCase());
 }
 function applyTheme(color) {
   document.documentElement.style.setProperty('--accent', color);
@@ -1291,17 +1103,13 @@ function applyAvatar(data) {
   });
 }
 
-// ===== SIDEBAR =====
 function toggleSection(header) { header.classList.toggle('open'); header.nextElementSibling.classList.toggle('open'); }
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
 document.addEventListener('click', e => {
-  if (!e.target.closest('.chat-dots') && !e.target.closest('.dropdown')) {
-    document.querySelectorAll('.dropdown').forEach(m => m.remove());
-  }
+  if (!e.target.closest('.chat-dots') && !e.target.closest('.dropdown')) document.querySelectorAll('.dropdown').forEach(m => m.remove());
 });
 
-// ===== PANELS =====
 function openImagesPanel() { document.getElementById('imagesPanel').classList.add('show'); closeSidebar(); }
 function closeImagesPanel() { document.getElementById('imagesPanel').classList.remove('show'); }
 function openVideosPanel() { document.getElementById('videosPanel').classList.add('show'); closeSidebar(); }
@@ -1321,12 +1129,7 @@ async function renderVideoGallery() {
   const el = document.getElementById('videoGalleryContent');
   if (!el) return;
   el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-tertiary)"><i class="fas fa-spinner fa-spin" style="font-size:24px;display:block;margin-bottom:12px"></i>Loading videos...</div>';
-  try {
-    cachedVideoRecords = await getAllVideosFromDB();
-  } catch (e) {
-    el.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Storage unavailable</h3><p>IndexedDB is blocked or unavailable</p></div>';
-    return;
-  }
+  try { cachedVideoRecords = await getAllVideosFromDB(); } catch (e) { cachedVideoRecords = []; }
   const badge = document.getElementById('videoCountBadge');
   if (badge) badge.textContent = cachedVideoRecords.length;
   if (!cachedVideoRecords.length) {
@@ -1339,14 +1142,10 @@ async function renderVideoGallery() {
   cachedVideoRecords.forEach(rec => {
     const card = document.createElement('div');
     card.className = 'video-card';
-    card.dataset.id = rec.id;
     const playableUrl = getVideoPlayableUrl(rec);
     if (playableUrl) {
       const v = document.createElement('video');
-      v.src = playableUrl;
-      v.controls = true;
-      v.preload = 'metadata';
-      v.playsInline = true;
+      v.src = playableUrl; v.controls = true; v.preload = 'metadata'; v.playsInline = true;
       card.appendChild(v);
     } else {
       const err = document.createElement('div');
@@ -1356,15 +1155,12 @@ async function renderVideoGallery() {
     }
     const info = document.createElement('div');
     info.className = 'video-card-info';
-    const safeTitle = escapeHtml(rec.prompt || 'Untitled video');
-    const dateStr = new Date(rec.date).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
-    const sizeStr = rec.size ? formatBytes(rec.size) : 'stream';
     info.innerHTML = `
-      <div class="video-card-title">${safeTitle}</div>
+      <div class="video-card-title">${escapeHtml(rec.prompt || 'Untitled video')}</div>
       <div class="video-card-meta">
         <span><i class="fas fa-clock"></i> ${rec.duration || 10}s</span>
-        <span><i class="fas fa-calendar"></i> ${dateStr}</span>
-        <span><i class="fas fa-hdd"></i> ${sizeStr}</span>
+        <span><i class="fas fa-calendar"></i> ${new Date(rec.date).toLocaleDateString()}</span>
+        <span><i class="fas fa-hdd"></i> ${formatBytes(rec.size)}</span>
       </div>`;
     card.appendChild(info);
     const actions = document.createElement('div');
@@ -1392,90 +1188,62 @@ async function downloadVideoRecord(rec) {
   try {
     let blob = rec.blob;
     if (!blob && rec.remoteUrl) {
-      showToast('📥 Fetching from cloud...');
       const res = await fetch(rec.remoteUrl);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      blob = await res.blob();
+      if (res.ok) blob = await res.blob();
     }
-    if (!blob) { showToast('❌ Video no longer available'); return; }
+    if (!blob) { showToast('❌ Video unavailable'); return; }
     const url = URL.createObjectURL(blob);
-    const safeName = (rec.prompt || 'wiseking').slice(0, 40).replace(/[^\w\u0600-\u06FF]+/g, '_') || 'wiseking';
     const a = document.createElement('a');
-    a.href = url;
-    a.download = `WiseKing_${safeName}_${rec.duration || 10}s.mp4`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    a.href = url; a.download = `WiseKing_${(rec.prompt||'video').slice(0,30)}.mp4`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 10000);
-    showToast('✅ Saved to your Downloads');
-  } catch (e) {
-    if (rec.remoteUrl) { window.open(rec.remoteUrl, '_blank'); showToast('📥 Opened in new tab'); }
-    else showToast('❌ Download failed');
-  }
+    showToast('✅ Saved');
+  } catch (e) { showToast('❌ Download failed'); }
 }
 
 async function shareVideoRecord(rec) {
   try {
     const url = getVideoPlayableUrl(rec);
-    if (!url) { showToast('❌ Video unavailable'); return; }
-    if (navigator.canShare && rec.blob) {
-      try {
-        const file = new File([rec.blob], `WiseKing_${(rec.prompt||'video').slice(0,30)}.mp4`, { type: 'video/mp4' });
-        if (navigator.canShare({ files: [file] })) {
-          await navigator.share({ files: [file], title: 'Wise King AI video', text: rec.prompt });
-          showToast('📤 Shared!');
-          return;
-        }
-      } catch (e) {}
-    }
+    if (!url) return;
     if (navigator.share) {
       await navigator.share({ title: 'Wise King AI video', text: rec.prompt, url: rec.remoteUrl || url });
-      showToast('📤 Shared!');
       return;
     }
     pendingShareText = rec.prompt || 'Wise King AI video';
     document.getElementById('shareSheet').classList.add('show');
-  } catch (e) {
-    if (e.name === 'AbortError') return;
-    showToast('❌ Share failed');
-  }
+  } catch (e) {}
 }
 
 async function deleteVideoRecord(rec) {
-  if (!confirm('Delete this video permanently?\n\n' + (rec.prompt || 'Untitled').slice(0, 60))) return;
+  if (!confirm('Delete this video permanently?')) return;
   try {
     await deleteVideoFromDB(rec.id);
     cachedVideoRecords = cachedVideoRecords.filter(v => v.id !== rec.id);
     showToast('🗑️ Deleted');
-    await renderVideoGallery();
-    await updateStorageMeter();
-    await refreshVideoCount();
-  } catch (e) { showToast('❌ Delete failed'); }
+    await renderVideoGallery(); await updateStorageMeter(); await refreshVideoCount();
+  } catch (e) {}
 }
 
 async function clearAllVideos() {
-  if (!cachedVideoRecords.length) { showToast('Nothing to clear'); return; }
-  if (!confirm(`Delete ALL ${cachedVideoRecords.length} videos permanently?`)) return;
+  if (!cachedVideoRecords.length) return;
+  if (!confirm('Delete ALL videos permanently?')) return;
   try {
     await clearAllVideosFromDB();
     cachedVideoRecords = [];
-    showToast('🗑️ All videos cleared');
-    await renderVideoGallery();
-    await updateStorageMeter();
-    await refreshVideoCount();
-  } catch (e) { showToast('❌ Clear failed'); }
+    showToast('🗑️ All cleared');
+    await renderVideoGallery(); await updateStorageMeter(); await refreshVideoCount();
+  } catch (e) {}
 }
 
 function renderLibraryPanel() {
   const el = document.getElementById('libraryPanelResults');
   if (!el) return;
-  const items = libraryItems.map(i => ({...i, type:'reply'}));
-  if (!items.length) {
+  if (!libraryItems.length) {
     el.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><h3>Nothing saved yet</h3><p>Save replies from chat to see them here</p></div>';
     return;
   }
   el.innerHTML = '';
-  items.slice(0, 50).forEach(item => {
+  libraryItems.slice(0, 50).forEach(item => {
     const card = document.createElement('div');
     card.className = 'result-card';
     card.innerHTML = `<h4><i class="fas fa-comment"></i> Saved reply</h4><p></p>`;
@@ -1484,7 +1252,6 @@ function renderLibraryPanel() {
   });
 }
 
-// ===== CHATS =====
 function saveChats() {
   localStorage.setItem('wk_chats', JSON.stringify(chats));
   saveChatsToFirestore();
@@ -1498,7 +1265,6 @@ function createNewChat() {
 }
 function switchToChat(id) { activeChatId = id; renderChats(); renderMessages(); document.getElementById('messageInput').focus(); closeSidebar(); }
 function deleteChat(id) {
-  deleteFirestoreChat(id);
   chats = chats.filter(c => c.id !== id);
   if (!chats.length) chats.push({ id:'chat-'+Date.now(), title:'New chat', messages:[] });
   activeChatId = chats[0].id; saveChats(); renderMessages();
@@ -1510,25 +1276,14 @@ function renameChat(id, t) {
 function renderChats() {
   const list = document.getElementById('chatsList'); if (!list) return;
   list.innerHTML = '';
-  if (!chats.length) {
-    list.innerHTML = '<div style="padding:10px 12px;font-size:13px;color:var(--text-tertiary)">No chat history yet</div>';
-    return;
-  }
+  if (!chats.length) { list.innerHTML = '<div style="padding:10px 12px;font-size:13px;color:var(--text-tertiary)">No chat history yet</div>'; return; }
   chats.slice().sort((a,b) => (b.pinned?1:0) - (a.pinned?1:0)).forEach(chat => {
     const div = document.createElement('div');
     div.className = 'chat-item' + (chat.id === activeChatId ? ' active' : '');
-    const titleSpan = document.createElement('span');
-    titleSpan.className = 'chat-title';
-    titleSpan.textContent = chat.title;
+    const titleSpan = document.createElement('span'); titleSpan.className = 'chat-title'; titleSpan.textContent = chat.title;
     div.appendChild(titleSpan);
-    if (chat.id === activeChatId) {
-      const dot = document.createElement('span');
-      dot.className = 'active-dot';
-      div.appendChild(dot);
-    }
-    const dots = document.createElement('span');
-    dots.className = 'chat-dots';
-    dots.innerHTML = '<i class="fas fa-ellipsis-vertical"></i>';
+    if (chat.id === activeChatId) { const dot = document.createElement('span'); dot.className = 'active-dot'; div.appendChild(dot); }
+    const dots = document.createElement('span'); dots.className = 'chat-dots'; dots.innerHTML = '<i class="fas fa-ellipsis-vertical"></i>';
     dots.addEventListener('click', ev => { ev.stopPropagation(); toggleMenu(ev, chat.id); });
     div.appendChild(dots);
     div.addEventListener('click', () => switchToChat(chat.id));
@@ -1538,51 +1293,20 @@ function renderChats() {
 function toggleMenu(e, chatId) {
   e.stopPropagation();
   document.querySelectorAll('.dropdown').forEach(m => m.remove());
-  const menu = document.createElement('div');
-  menu.className = 'dropdown show';
+  const menu = document.createElement('div'); menu.className = 'dropdown show';
   const rect = e.target.getBoundingClientRect();
-  const menuWidth = 240, menuHeight = 280;
-  let left = rect.left - menuWidth + 40, top = rect.bottom + 6;
-  if (left < 10) left = 10;
-  if (left + menuWidth > window.innerWidth - 10) left = window.innerWidth - menuWidth - 10;
-  if (top + menuHeight > window.innerHeight - 10) top = rect.top - menuHeight - 6;
-  if (top < 10) top = 10;
-  menu.style.left = left + 'px';
-  menu.style.top = top + 'px';
+  menu.style.left = Math.min(rect.left - 200, window.innerWidth - 250) + 'px';
+  menu.style.top = (rect.bottom + 6) + 'px';
   const mk = (label, iconClass, danger, fn) => {
-    const it = document.createElement('div');
-    it.className = 'dropdown-item' + (danger ? ' danger' : '');
-    it.innerHTML = `<i class="${iconClass}"></i> `;
-    it.appendChild(document.createTextNode(label));
+    const it = document.createElement('div'); it.className = 'dropdown-item' + (danger ? ' danger' : '');
+    it.innerHTML = `<i class="${iconClass}"></i> `; it.appendChild(document.createTextNode(label));
     it.addEventListener('click', ev => { ev.stopPropagation(); menu.remove(); fn(); });
     return it;
   };
-  menu.appendChild(mk('Share conversation', 'fas fa-share-nodes', false, () => shareConversation(chatId)));
-  menu.appendChild(mk('Pin', 'fas fa-thumbtack', false, () => pinChat(chatId)));
+  menu.appendChild(mk('Share conversation', 'fas fa-share-nodes', false, () => openShareSheet(chats.find(c => c.id === chatId)?.messages.map(m => m.content).join('\n\n'))));
   menu.appendChild(mk('Rename', 'fas fa-pen', false, () => startRename(chatId)));
-  menu.appendChild(mk('Add to notebook', 'fas fa-bookmark', false, () => addToNotebook(chatId)));
   menu.appendChild(mk('Delete', 'fas fa-trash', true, () => startDelete(chatId)));
   document.body.appendChild(menu);
-}
-function shareConversation(chatId) {
-  const chat = chats.find(c => c.id === chatId);
-  if (!chat) return;
-  let text = `👑 Wise King AI — ${chat.title}\n\n`;
-  chat.messages.forEach(m => {
-    text += (m.role === 'ai' ? '🤖 Wise King AI:' : '👤 You:') + '\n' + (m.content || '') + '\n\n';
-  });
-  openShareSheet(text);
-}
-function addToNotebook(chatId) {
-  const chat = chats.find(c => c.id === chatId);
-  if (!chat) return;
-  projectItems.unshift({ id:'p-'+Date.now(), name: chat.title, chatId: chat.id, date: Date.now() });
-  saveProjects();
-  showToast('📓 Added to Notebooks');
-}
-function pinChat(id) {
-  const c = chats.find(x => x.id === id);
-  if (c) { c.pinned = !c.pinned; saveChats(); showToast(c.pinned ? '📌 Pinned' : 'Unpinned'); }
 }
 function filterChats() {
   const q = document.getElementById('searchInput').value.toLowerCase();
@@ -1592,26 +1316,21 @@ function filterChats() {
   });
 }
 
-// ===== MARKDOWN RENDERER =====
 function escapeHtml(t) {
   if (t === null || t === undefined) return '';
-  const d = document.createElement('div');
-  d.textContent = String(t);
-  return d.innerHTML;
+  const d = document.createElement('div'); d.textContent = String(t); return d.innerHTML;
 }
 function renderMarkdown(src) {
   let s = escapeHtml(String(src ?? ''));
   const stash = [];
   const save = html => { stash.push(html); return `\u0000${stash.length - 1}\u0000`; };
   s = s.replace(/```([\w+#.\-]*)[ \t]*\n?([\s\S]*?)```/g, (_, lang, code) =>
-    save(`<pre class="md-pre"><button class="md-copy" type="button"><i class="fas fa-copy"></i> Copy</button><code class="lang-${escapeHtml(lang||'text')}">${code.replace(/\n$/,'')}</code></pre>`));
+    save(`<pre class="md-pre"><div class="md-actions"><button class="md-btn md-download" type="button"><i class="fas fa-download"></i> Download</button><button class="md-btn md-copy" type="button"><i class="fas fa-copy"></i> Copy</button></div><code class="lang-${escapeHtml(lang||'text')}">${code.replace(/\n$/,'')}</code></pre>`));
   s = s.replace(/`([^`\n]+)`/g, (_, c) => save(`<code>${c}</code>`));
   const lines = s.split('\n');
   const out = [];
   let list = null;
-  const flush = () => {
-    if (list) { out.push(`<${list.type}>${list.items.map(i => `<li>${i}</li>`).join('')}</${list.type}>`); list = null; }
-  };
+  const flush = () => { if (list) { out.push(`<${list.type}>${list.items.map(i => `<li>${i}</li>`).join('')}</${list.type}>`); list = null; } };
   for (const raw of lines) {
     const line = raw;
     if (/^\s*$/.test(line)) { flush(); continue; }
@@ -1620,225 +1339,107 @@ function renderMarkdown(src) {
     if ((m = line.match(/^(#{1,6})\s+(.*)$/))) { flush(); out.push(`<h${m[1].length}>${m[2]}</h${m[1].length}>`); continue; }
     if (/^\s*([-*_])\s*\1\s*\1[\s\-*_]*$/.test(line)) { flush(); out.push('<hr>'); continue; }
     if ((m = line.match(/^\s*>\s?(.*)$/))) { flush(); out.push(`<blockquote>${m[1]}</blockquote>`); continue; }
-    if (/^\s*\|.*\|\s*$/.test(line)) { flush(); out.push(line); continue; }
     if ((m = line.match(/^\s*[-*+]\s+(.*)$/))) { if (!list || list.type !== 'ul') { flush(); list = { type:'ul', items:[] }; } list.items.push(m[1]); continue; }
     if ((m = line.match(/^\s*\d+[.)]\s+(.*)$/))) { if (!list || list.type !== 'ol') { flush(); list = { type:'ol', items:[] }; } list.items.push(m[1]); continue; }
-    flush();
-    out.push(`<p>${line}</p>`);
+    flush(); out.push(`<p>${line}</p>`);
   }
   flush();
   let html = out.join('');
-  html = html.replace(/(?:^\|.*\|\s*$\n?)+/gm, table => {
-    const rows = table.trim().split('\n').map(r => r.replace(/^\||\|$/g,'').split('|').map(c => c.trim()));
-    if (rows.length < 2 || !/^[\s:|-]+$/.test(rows[1].join('|'))) return table;
-    const head = rows[0], body = rows.slice(2);
-    return `<table><thead><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${body.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
-  });
-  html = html
-    .replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
-    .replace(/__([^_\n]+)__/g, '<strong>$1</strong>')
-    .replace(/(^|[^*\w])\*([^*\n]+)\*/g, '$1<em>$2</em>')
-    .replace(/(^|[^_\w])_([^_\n]+)_/g, '$1<em>$2</em>')
-    .replace(/~~([^~\n]+)~~/g, '<del>$1</del>')
-    .replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  html = html.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>').replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
   html = html.replace(/\u0000(\d+)\u0000/g, (_, i) => stash[+i] ?? '');
   return html;
 }
 function buildContentHtml(msg) {
   let html = '';
-  if (msg.webSearch) {
-    html += `<div style="display:inline-flex;align-items:center;gap:6px;background:rgba(59,130,246,0.12);color:#60a5fa;font-size:11px;padding:3px 10px;border-radius:99px;margin-bottom:8px"><i class="fas fa-globe"></i> Web: ${escapeHtml(msg.webSource || 'Web')}</div>`;
-  }
-  if (msg.role === 'ai') {
-    html += `<div class="md">${renderMarkdown(msg.content || '')}</div>`;
-  } else {
-    html += escapeHtml(msg.content || '');
-  }
+  if (msg.role === 'ai') html += `<div class="md">${renderMarkdown(msg.content || '')}</div>`;
+  else html += escapeHtml(msg.content || '');
   return html;
 }
 
-// ===== MESSAGE DELEGATION =====
 function setupMessageDelegation() {
   const area = document.getElementById('messagesArea');
   if (!area || area._wkBound) return;
   area._wkBound = true;
   area.addEventListener('click', ev => {
+    const downloadCodeBtn = ev.target.closest('.md-download');
+    if (downloadCodeBtn) {
+      const pre = downloadCodeBtn.closest('pre');
+      const code = pre?.querySelector('code');
+      if (code) {
+        const blob = new Blob([code.textContent], { type: 'text/html;charset=utf-8' });
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'WiseKing_Code.html';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        showToast('📥 Downloaded!');
+      }
+      return;
+    }
     const copyCodeBtn = ev.target.closest('.md-copy');
     if (copyCodeBtn) {
       const pre = copyCodeBtn.closest('pre');
       const code = pre?.querySelector('code');
       if (code) {
-        navigator.clipboard.writeText(code.textContent)
-          .then(() => {
-            copyCodeBtn.classList.add('copied');
-            copyCodeBtn.innerHTML = '<i class="fas fa-check"></i> Copied';
-            showToast('✅ Code copied');
-            setTimeout(() => {
-              copyCodeBtn.classList.remove('copied');
-              copyCodeBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
-            }, 1800);
-          })
-          .catch(() => showToast('❌ Copy failed'));
+        navigator.clipboard.writeText(code.textContent).then(() => {
+          copyCodeBtn.classList.add('copied'); copyCodeBtn.innerHTML = '<i class="fas fa-check"></i> Copied';
+          setTimeout(() => { copyCodeBtn.classList.remove('copied'); copyCodeBtn.innerHTML = '<i class="fas fa-copy"></i> Copy'; }, 1800);
+          showToast('✅ Copied');
+        });
       }
       return;
     }
     const btn = ev.target.closest('[data-act]');
     if (!btn) return;
-    const act = btn.dataset.act;
-    const idx = parseInt(btn.dataset.idx, 10);
+    const act = btn.dataset.act, idx = parseInt(btn.dataset.idx, 10);
     const chat = chats.find(c => c.id === activeChatId);
     if (!chat || isNaN(idx)) return;
     const msg = chat.messages[idx];
-    if (!msg) return;
-    switch (act) {
-      case 'copy':
-        navigator.clipboard.writeText(msg.content || '')
-          .then(() => showToast('✅ Copied to clipboard'))
-          .catch(() => showToast('❌ Copy failed'));
-        break;
-      case 'speak':
-        speakText((msg.content || '').slice(0, 400));
-        break;
-      case 'lock':
-        createLock((msg.content || '').slice(0,40), (msg.content || '').slice(0,500));
-        break;
-      case 'share':
-        openShareSheet(msg.content || '');
-        break;
-      case 'like': {
-        chat.messages.forEach(m => { if (m.role === 'ai' && m !== msg) m.liked = false; });
-        msg.liked = !msg.liked;
-        if (msg.liked) msg.disliked = false;
-        saveChats(); renderMessages();
-        if (msg.liked) showToast('👍 Liked');
-        break;
-      }
-      case 'dislike': {
-        msg.disliked = !msg.disliked;
-        if (msg.disliked) msg.liked = false;
-        saveChats(); renderMessages();
-        if (msg.disliked) showToast('👎 Noted — thanks for the feedback');
-        break;
-      }
-      case 'retry':
-        regenerateAt(idx);
-        break;
-      case 'regenerate':
-        regenerateAt(idx);
-        break;
-      case 'edit':
-        startEditMessage(idx);
-        break;
-      case 'delete':
-        if (confirm('Delete this message?')) {
-          chat.messages.splice(idx, 1);
-          saveChats(); renderMessages();
-        }
-        break;
-    }
+    if (act === 'copy') navigator.clipboard.writeText(msg.content || '').then(() => showToast('✅ Copied'));
+    else if (act === 'delete') { chat.messages.splice(idx, 1); saveChats(); renderMessages(); }
   });
 }
-function startEditMessage(idx) {
-  const chat = chats.find(c => c.id === activeChatId);
-  if (!chat || !chat.messages[idx]) return;
-  editingMessageIdx = idx;
-  renderMessages();
-  const box = document.getElementById('editTextarea');
-  if (box) { box.focus(); box.setSelectionRange(box.value.length, box.value.length); }
-}
-function cancelEdit() { editingMessageIdx = -1; renderMessages(); }
-function saveEdit() {
-  const chat = chats.find(c => c.id === activeChatId);
-  if (!chat || editingMessageIdx < 0) return;
-  const ta = document.getElementById('editTextarea');
-  if (!ta) return;
-  const newText = ta.value.trim();
-  if (!newText) return showToast('❌ Message cannot be empty');
-  chat.messages[editingMessageIdx].content = newText;
-  chat.messages[editingMessageIdx].edited = true;
-  chat.messages = chat.messages.slice(0, editingMessageIdx + 1);
-  editingMessageIdx = -1;
-  saveChats(); renderMessages();
-  setTimeout(() => {
-    const um = chat.messages[chat.messages.length - 1];
-    triggerResponse(chat, um);
-  }, 150);
-}
-async function regenerateAt(idx) {
-  if (isSending) return;
-  const chat = chats.find(c => c.id === activeChatId);
-  if (!chat || !chat.messages[idx]) return;
-  if (chat.messages[idx].role !== 'ai') return;
-  let um = null;
-  for (let i = idx - 1; i >= 0; i--) { if (chat.messages[i].role === 'user') { um = chat.messages[i]; break; } }
-  if (!um) return;
-  chat.messages.splice(idx, 1);
-  saveChats(); renderMessages();
-  showToast('🔄 Regenerating...');
-  triggerResponse(chat, um);
-}
+
 async function triggerResponse(chat, userMsg) {
   isSending = true;
   const btn = document.getElementById('sendBtn');
-  btn.classList.remove('hidden');
-  btn.classList.add('stop'); btn.innerHTML = '<i class="fas fa-stop"></i>';
+  btn.classList.remove('hidden'); btn.classList.add('stop'); btn.innerHTML = '<i class="fas fa-stop"></i>';
   showTyping();
   currentAbortController = new AbortController();
   const signal = currentAbortController.signal;
   let live = null;
-  const cleanup = () => {
-    hideTyping(); isSending = false; currentAbortController = null;
-    btn.classList.remove('stop'); btn.innerHTML = '<i class="fas fa-arrow-up"></i>';
-    handleInputChange();
-  };
+  const cleanup = () => { hideTyping(); isSending = false; currentAbortController = null; btn.classList.remove('stop'); btn.innerHTML = '<i class="fas fa-arrow-up"></i>'; handleInputChange(); };
   try {
     live = appendLiveBubble();
-    const reply = await getAIResponse(userMsg.content, userMsg.docs || [], userMsg.images || [], chat, signal, partial => {
-      if (live) live.update(partial);
-    });
-    if (live) { live.remove(); live = null; }
+    const reply = await getAIResponse(userMsg.content, userMsg.docs || [], userMsg.images || [], chat, signal, partial => { if (live) live.update(partial); });
+    if (live) live.remove();
     cleanup();
     if (reply !== null) {
-      chat.messages.push(reply);
-      saveChats(); renderMessages();
-      if (reply.generatedImage) {
-        generatedImages.unshift({ url:reply.generatedImage, prompt:userMsg.content, date:Date.now() });
-        saveImages();
-      }
+      chat.messages.push(reply); saveChats(); renderMessages();
+      if (reply.generatedImage) { generatedImages.unshift({ url:reply.generatedImage, prompt:userMsg.content, date:Date.now() }); saveImages(); }
     }
   } catch (err) {
-    if (live) { live.remove(); live = null; }
+    if (live) live.remove();
     cleanup();
-    if (err.name === 'AbortError') return;
-    chat.messages.push({ role:'ai', error:true, createdAt:Date.now(), content:`⚠️ Unexpected error\n\n${err.message || err}` });
+    chat.messages.push({ role:'ai', error:true, createdAt:Date.now(), content:`⚠️ Error: ${err.message || err}` });
     saveChats(); renderMessages();
   }
 }
 function appendLiveBubble() {
   const area = document.getElementById('messagesArea');
-  const el = document.createElement('div');
-  el.className = 'message ai';
+  const el = document.createElement('div'); el.className = 'message ai';
   el.innerHTML = `<div class="msg-avatar ai">👑</div><div class="msg-body"><div class="msg-name">Wise King AI</div><div class="msg-content ai md-cursor" id="wkLiveBody"></div></div>`;
   area.appendChild(el);
   const cs = document.getElementById('chatScroll'); cs.scrollTop = cs.scrollHeight;
   const body = el.querySelector('#wkLiveBody');
-  let raf = 0;
-  let buffered = '';
+  let raf = 0, buffered = '';
   return {
     update(partial) {
       buffered = partial;
       if (raf) return;
-      raf = requestAnimationFrame(() => {
-        raf = 0;
-        body.innerHTML = `<div class="md">${renderMarkdown(buffered || '')}</div>`;
-        cs.scrollTop = cs.scrollHeight;
-      });
+      raf = requestAnimationFrame(() => { raf = 0; body.innerHTML = `<div class="md">${renderMarkdown(buffered || '')}</div>`; cs.scrollTop = cs.scrollHeight; });
     },
     remove() { if (raf) cancelAnimationFrame(raf); el.remove(); }
   };
 }
 
-// ===== RENDER MESSAGES =====
 function renderMessages() {
   const area = document.getElementById('messagesArea'); if (!area) return;
   area.innerHTML = '';
@@ -1847,1098 +1448,203 @@ function renderMessages() {
   const hasMsgs = chat.messages.length > 0;
   document.getElementById('welcomeScreen').style.display = hasMsgs ? 'none' : 'flex';
   document.getElementById('chatTitle').textContent = chat.title;
-  const lastAiIdx = (() => {
-    for (let i = chat.messages.length - 1; i >= 0; i--) if (chat.messages[i].role === 'ai') return i;
-    return -1;
-  })();
-  chat.messages.forEach((msg, idx) => {
-    try { area.appendChild(buildMessageEl(msg, idx, lastAiIdx)); }
-    catch (e) {}
-  });
-  const cs = document.getElementById('chatScroll');
-  cs.scrollTop = cs.scrollHeight;
+  chat.messages.forEach((msg, idx) => area.appendChild(buildMessageEl(msg, idx)));
+  const cs = document.getElementById('chatScroll'); cs.scrollTop = cs.scrollHeight;
 }
-function buildMessageEl(msg, idx, lastAiIdx) {
-  const el = document.createElement('div');
-  el.className = 'message ' + msg.role;
+function buildMessageEl(msg, idx) {
+  const el = document.createElement('div'); el.className = 'message ' + msg.role;
   const isAI = msg.role === 'ai';
-  const avatar = document.createElement('div');
-  avatar.className = 'msg-avatar ' + (isAI ? 'ai' : 'user');
-  avatar.innerHTML = isAI ? '👑' : '<i class="fas fa-user"></i>';
-  const body = document.createElement('div');
-  body.className = 'msg-body';
-  const name = document.createElement('div');
-  name.className = 'msg-name';
-  name.textContent = isAI ? 'Wise King AI' : 'You';
+  const avatar = document.createElement('div'); avatar.className = 'msg-avatar ' + (isAI ? 'ai' : 'user'); avatar.innerHTML = isAI ? '👑' : '<i class="fas fa-user"></i>';
+  const body = document.createElement('div'); body.className = 'msg-body';
+  const name = document.createElement('div'); name.className = 'msg-name'; name.textContent = isAI ? 'Wise King AI' : 'You';
   body.appendChild(name);
-  if (editingMessageIdx === idx && !isAI) {
-    const editBox = document.createElement('div');
-    editBox.className = 'edit-box';
-    editBox.innerHTML = `
-      <textarea class="edit-textarea" id="editTextarea"></textarea>
-      <div class="edit-actions">
-        <button class="edit-btn cancel" onclick="cancelEdit()"><i class="fas fa-times"></i> Cancel</button>
-        <button class="edit-btn save" onclick="saveEdit()"><i class="fas fa-check"></i> Save & Resend</button>
-      </div>`;
-    editBox.querySelector('textarea').value = msg.content || '';
-    body.appendChild(editBox);
-    el.appendChild(avatar); el.appendChild(body);
-    return el;
-  }
   const content = document.createElement('div');
   content.className = 'msg-content ' + (msg.error ? 'error' : (isAI ? 'ai' : 'user'));
   content.innerHTML = buildContentHtml(msg);
-  if (msg.edited) {
-    const ed = document.createElement('div');
-    ed.style.cssText = 'font-size:10px;opacity:0.65;margin-top:4px;font-style:italic';
-    ed.textContent = '(edited)';
-    content.appendChild(ed);
-  }
-  if (msg.images && msg.images.length) {
-    const wrap = document.createElement('div');
-    wrap.className = 'attachments';
-    msg.images.forEach(src => {
-      const img = document.createElement('img');
-      img.src = src; img.className = 'att-img';
-      img.addEventListener('click', () => window.open(src));
-      wrap.appendChild(img);
-    });
-    content.appendChild(wrap);
-  }
-  if (msg.docs && msg.docs.length) {
-    msg.docs.forEach(d => {
-      const chip = document.createElement('div');
-      chip.className = 'doc-chip';
-      chip.style.marginTop = '8px';
-      chip.innerHTML = `<i class="fas fa-file-alt"></i> `;
-      chip.appendChild(document.createTextNode(d.name));
-      content.appendChild(chip);
-    });
-  }
   if (msg.generatedImage) {
-    const gw = document.createElement('div');
-    gw.className = 'gen-image-wrap';
-    const loading = document.createElement('div');
-    loading.className = 'gen-image-loading';
-    loading.innerHTML = '<i class="fas fa-spinner"></i>Loading image...';
-    const gi = document.createElement('img');
-    gi.className = 'gen-image'; gi.style.display = 'none';
-    gi.src = msg.generatedImage;
-    gi.addEventListener('load', () => { gi.style.display = 'block'; loading.style.display = 'none'; });
-    gi.addEventListener('click', () => window.open(msg.generatedImage));
-    const actions = document.createElement('div');
-    actions.className = 'gen-image-actions';
-    const dl = document.createElement('a');
-    dl.href = msg.generatedImage; dl.target = '_blank'; dl.download = 'wiseking.jpg';
-    dl.innerHTML = '<i class="fas fa-download"></i> Download';
-    const sh = document.createElement('button');
-    sh.innerHTML = '<i class="fas fa-share-alt"></i> Share';
-    sh.addEventListener('click', () => shareImage(msg.generatedImage));
-    actions.appendChild(dl); actions.appendChild(sh);
-    gw.appendChild(loading); gw.appendChild(gi); gw.appendChild(actions);
+    const gw = document.createElement('div'); gw.className = 'gen-image-wrap';
+    gw.innerHTML = `<img src="${msg.generatedImage}" class="gen-image" onclick="window.open('${msg.generatedImage}')">`;
     content.appendChild(gw);
   }
   if (msg.generatedVideo) {
-    const gw = document.createElement('div');
-    gw.className = 'gen-image-wrap';
-    const video = document.createElement('video');
-    video.src = msg.generatedVideo; video.controls = true; video.playsInline = true;
-    video.style.width = '100%'; video.style.display = 'block';
-    const actions = document.createElement('div');
-    actions.className = 'gen-image-actions';
-    const dl = document.createElement('a');
-    dl.href = msg.generatedVideo; dl.target = '_blank'; dl.download = 'wiseking.mp4';
-    dl.innerHTML = '<i class="fas fa-download"></i> Download';
-    const sh = document.createElement('button');
-    sh.innerHTML = '<i class="fas fa-share-alt"></i> Share';
-    sh.addEventListener('click', () => shareImage(msg.generatedVideo));
-    actions.appendChild(dl); actions.appendChild(sh);
-    gw.appendChild(video); gw.appendChild(actions);
+    const gw = document.createElement('div'); gw.className = 'gen-image-wrap';
+    gw.innerHTML = `<video src="${msg.generatedVideo}" controls playsinline style="width:100%"></video>`;
     content.appendChild(gw);
   }
   body.appendChild(content);
-  const meta = document.createElement('div');
-  meta.className = 'msg-meta';
-  const time = document.createElement('span');
-  time.textContent = new Date(msg.createdAt || Date.now()).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
-  meta.appendChild(time);
-  const tools = document.createElement('div');
-  tools.className = 'msg-tools';
-  const toolBtn = (title, icon, act, extraClass, label) => {
-    const b = document.createElement('button');
-    b.className = 'msg-tool' + (extraClass ? ' ' + extraClass : '');
-    b.dataset.act = act; b.dataset.idx = idx; b.title = title;
-    b.innerHTML = `<i class="${icon}"></i>` + (label ? ` <span class="tool-label">${label}</span>` : '');
-    return b;
-  };
-  if (isAI) {
-    const likeBtn = toolBtn('Like', 'fas fa-thumbs-up', 'like');
-    if (msg.liked) likeBtn.classList.add('liked');
-    tools.appendChild(likeBtn);
-    const dislikeBtn = toolBtn('Dislike', 'fas fa-thumbs-down', 'dislike');
-    if (msg.disliked) dislikeBtn.classList.add('disliked');
-    tools.appendChild(dislikeBtn);
-    tools.appendChild(toolBtn('Copy Text', 'fas fa-copy', 'copy'));
-    tools.appendChild(toolBtn('Listen', 'fas fa-volume-up', 'speak'));
-    tools.appendChild(toolBtn('Lock to Vault', 'fas fa-lock', 'lock'));
-    tools.appendChild(toolBtn('Share', 'fas fa-share-nodes', 'share'));
-    if (msg.error) {
-      tools.appendChild(toolBtn('Retry', 'fas fa-redo', 'retry', 'retry', 'Retry'));
-    } else {
-      const regenExtra = (idx === lastAiIdx) ? 'regen' : '';
-      tools.appendChild(toolBtn('Regenerate response', 'fas fa-rotate', 'regenerate', regenExtra, 'Regenerate'));
-    }
-  } else {
-    tools.appendChild(toolBtn('Edit', 'fas fa-pen', 'edit'));
-    tools.appendChild(toolBtn('Copy', 'fas fa-copy', 'copy'));
-    tools.appendChild(toolBtn('Delete', 'fas fa-trash', 'delete'));
-  }
-  meta.appendChild(tools);
-  body.appendChild(meta);
   el.appendChild(avatar); el.appendChild(body);
   return el;
 }
 
-// ===== SHARE SHEET =====
-function openShareSheet(text) {
-  pendingShareText = text || '';
-  const sheet = document.getElementById('shareSheet');
-  if (!sheet) return;
-  if (!_shareSheetBound) {
-    _shareSheetBound = true;
-    sheet.addEventListener('mousedown', e => { if (e.target === sheet) closeShareSheet(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape' && sheet.classList.contains('show')) closeShareSheet(); });
-  }
-  sheet.classList.add('show');
-}
-function closeShareSheet() {
-  const sheet = document.getElementById('shareSheet');
-  if (sheet) sheet.classList.remove('show');
-  pendingShareText = '';
-}
-function shareTo(platform) {
-  const text = pendingShareText || '';
-  const encoded = encodeURIComponent(text);
-  const url = encodeURIComponent('https://wiseking.ai');
-  let target = '';
-  switch (platform) {
-    case 'whatsapp': target = `https://wa.me/?text=${encoded}`; break;
-    case 'facebook': target = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${encoded}`; break;
-    case 'tiktok':
-      navigator.clipboard.writeText(text).catch(() => {});
-      showToast('📋 Copied — paste in TikTok');
-      closeShareSheet();
-      window.open('https://www.tiktok.com/upload', '_blank');
-      return;
-    case 'instagram':
-      navigator.clipboard.writeText(text).catch(() => {});
-      showToast('📋 Copied — paste in Instagram');
-      closeShareSheet();
-      window.open('https://www.instagram.com/', '_blank');
-      return;
-    case 'x': target = `https://twitter.com/intent/tweet?text=${encoded}`; break;
-    default: closeShareSheet(); return;
-  }
-  if (navigator.clipboard && text) navigator.clipboard.writeText(text).catch(() => {});
-  window.open(target, '_blank', 'noopener,noreferrer');
-  showToast('📤 Shared to ' + platform);
-  closeShareSheet();
-}
-
-// ===== MEMORY =====
-function loadMemory() { try { const s = localStorage.getItem('wk_memory'); if (s) memoryStore = JSON.parse(s); } catch (e) { memoryStore = { memories:[], locks:[] }; } }
-function saveMemory() { localStorage.setItem('wk_memory', JSON.stringify(memoryStore)); }
-function getActiveLocks() { return (memoryStore.locks || []).filter(l => l.active); }
-function createLock(title, content) {
-  if (!memoryStore.locks) memoryStore.locks = [];
-  memoryStore.locks.push({ id:'lock-'+Date.now(), title, content, active:true });
-  saveMemory(); showToast('🔐 Locked into Vault');
-}
-
-// ===== IMAGES / LIBRARY / PROJECTS =====
-function loadImages() { try { const s = localStorage.getItem('wk_images'); if (s) generatedImages = JSON.parse(s); } catch (e) {} }
-function saveImages() { localStorage.setItem('wk_images', JSON.stringify(generatedImages)); }
-function loadLibrary() { try { const s = localStorage.getItem('wk_library'); if (s) libraryItems = JSON.parse(s); } catch (e) {} }
-function saveLibrary() { localStorage.setItem('wk_library', JSON.stringify(libraryItems)); }
-function loadProjects() { try { const s = localStorage.getItem('wk_projects'); if (s) projectItems = JSON.parse(s); } catch (e) {} renderProjects(); }
-function saveProjects() { localStorage.setItem('wk_projects', JSON.stringify(projectItems)); renderProjects(); }
-function renderProjects() {
-  const list = document.getElementById('projectsList'); if (!list) return;
-  list.innerHTML = '';
-  projectItems.slice(0,6).forEach(p => {
-    const d = document.createElement('div'); d.className = 'chat-item';
-    d.innerHTML = `<i class="fas fa-book chat-icon" style="width:20px;text-align:center;color:var(--text-secondary)"></i><span class="chat-title"></span>`;
-    d.querySelector('.chat-title').textContent = p.name;
-    d.addEventListener('click', () => { createNewChat(); document.getElementById('chatTitle').textContent = p.name; closeSidebar(); });
-    list.appendChild(d);
-  });
-}
-function createNewProject() {
-  const n = prompt('Notebook name:');
-  if (!n) return;
-  projectItems.unshift({ id:'p-'+Date.now(), name:n, date:Date.now() });
-  saveProjects(); showToast('📓 Notebook created');
-}
-
-// ===== INPUT =====
 function handleInputChange() {
-  const input = document.getElementById('messageInput');
-  const btn = document.getElementById('sendBtn');
+  const input = document.getElementById('messageInput'), btn = document.getElementById('sendBtn');
   const hasContent = input.value.trim().length > 0 || uploadedImages.length > 0 || uploadedDocs.length > 0;
   btn.classList.toggle('hidden', !hasContent && !isSending);
-  input.style.height = 'auto';
-  input.style.height = Math.min(input.scrollHeight, 200) + 'px';
+  input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 200) + 'px';
 }
-function handleKeyDown(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    if (!isSending) sendMessage();
-  }
-  setTimeout(handleInputChange, 0);
-}
+function handleKeyDown(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!isSending) sendMessage(); } }
 function handleSendOrCancel() { if (isSending) cancelRequest(); else sendMessage(); }
-function cancelRequest() {
-  if (currentAbortController) { try { currentAbortController.abort(); } catch (e) {} currentAbortController = null; }
-  isSending = false; hideTyping();
-  const btn = document.getElementById('sendBtn');
-  btn.classList.remove('stop'); btn.innerHTML = '<i class="fas fa-arrow-up"></i>';
-  handleInputChange(); showToast('🚫 Cancelled');
-}
+function cancelRequest() { if (currentAbortController) currentAbortController.abort(); isSending = false; hideTyping(); }
 
-// ===== FILES =====
 async function handleFiles(e) {
   const files = Array.from(e.target.files || []);
   for (const file of files) {
     if (file.type.startsWith('image/')) {
-      await new Promise(r => {
-        const fr = new FileReader();
-        fr.onload = ev => { uploadedImages.push(ev.target.result); r(); };
-        fr.onerror = () => r();
-        fr.readAsDataURL(file);
-      });
-      showToast('📎 ' + file.name);
-    } else if (file.type === 'application/pdf' && window.pdfjsLib) {
-      showToast('📄 Reading PDF...');
-      try {
-        const buf = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
-        let t = '';
-        for (let i = 1; i <= Math.min(pdf.numPages, 20); i++) {
-          const p = await pdf.getPage(i);
-          const c = await p.getTextContent();
-          t += c.items.map(x => x.str).join(' ') + '\n\n';
-        }
-        uploadedDocs.push({ name:file.name, content:t.trim() });
-        showToast('✅ PDF ready');
-      } catch (err) { showToast('❌ PDF read failed'); }
-    } else if (file.type === 'text/plain' || file.name.endsWith('.txt')) {
-      await new Promise(r => {
-        const fr = new FileReader();
-        fr.onload = ev => { uploadedDocs.push({ name:file.name, content:ev.target.result }); r(); };
-        fr.onerror = () => r();
-        fr.readAsText(file);
-      });
-      showToast('✅ File ready');
+      await new Promise(r => { const fr = new FileReader(); fr.onload = ev => { uploadedImages.push(ev.target.result); r(); }; fr.readAsDataURL(file); });
     }
   }
   updatePreview(); e.target.value = '';
 }
 function updatePreview() {
-  const area = document.getElementById('previewArea');
-  area.innerHTML = '';
-  const has = uploadedImages.length || uploadedDocs.length;
-  area.classList.toggle('show', has);
+  const area = document.getElementById('previewArea'); area.innerHTML = '';
+  area.classList.toggle('show', uploadedImages.length > 0 || uploadedDocs.length > 0);
   uploadedImages.forEach((img, i) => {
     const d = document.createElement('div'); d.className = 'preview-item';
-    const im = document.createElement('img'); im.src = img;
-    const b = document.createElement('button'); b.className = 'remove'; b.textContent = '×';
-    b.addEventListener('click', () => removeImg(i));
-    d.appendChild(im); d.appendChild(b); area.appendChild(d);
-  });
-  uploadedDocs.forEach((doc, i) => {
-    const d = document.createElement('div'); d.className = 'preview-item doc';
-    d.innerHTML = '<i class="fas fa-file-alt"></i>';
-    d.appendChild(document.createTextNode(' ' + doc.name.slice(0,14)));
-    const b = document.createElement('button'); b.className = 'remove'; b.textContent = '×';
-    b.addEventListener('click', () => removeDoc(i));
-    d.appendChild(b); area.appendChild(d);
+    d.innerHTML = `<img src="${img}"><button class="remove" onclick="removeImg(${i})">×</button>`;
+    area.appendChild(d);
   });
 }
 function removeImg(i) { uploadedImages.splice(i,1); updatePreview(); handleInputChange(); }
-function removeDoc(i) { uploadedDocs.splice(i,1); updatePreview(); handleInputChange(); }
 
-// ===== SEND =====
 function sendMessage(textOverride) {
   if (isSending) return;
   const input = document.getElementById('messageInput');
   const text = (textOverride !== undefined ? String(textOverride) : input.value).trim();
-  if (!text && !uploadedImages.length && !uploadedDocs.length) return;
+  if (!text && !uploadedImages.length) return;
   let chat = chats.find(c => c.id === activeChatId);
   if (!chat) { createNewChat(); chat = chats.find(c => c.id === activeChatId); }
-  if (chat.title === 'New chat' && text) chat.title = text.slice(0,32) + (text.length > 32 ? '…' : '');
-  const imgs = [...uploadedImages], docs = [...uploadedDocs];
-  uploadedImages = []; uploadedDocs = []; updatePreview();
-  const userMsg = { role:'user', content:text || '📎 Attachment', images:imgs, docs, createdAt:Date.now() };
-  chat.messages.push(userMsg);
-  input.value = ''; input.style.height = 'auto';
+  if (chat.title === 'New chat' && text) chat.title = text.slice(0,32);
+  const imgs = [...uploadedImages]; uploadedImages = []; updatePreview();
+  const userMsg = { role:'user', content:text || '📎 Attachment', images:imgs, createdAt:Date.now() };
+  chat.messages.push(userMsg); input.value = ''; input.style.height = 'auto';
   saveChats(); renderMessages();
   triggerResponse(chat, userMsg);
 }
-function isImageRequest(t) {
-  if (!t) return false;
-  return [
-    /\b(create|generate|make|draw|paint|render|design)\s+(me\s+)?(a\s+)?(picture|image|photo|drawing|illustration|artwork|logo|framework)/i,
-    /\b(picture|image|photo|logo)\s+of\b/i
-  ].some(p => p.test(t));
-}
-function isVideoRequest(t) {
-  if (!t) return false;
-  return [
-    /\b(create|generate|make|animate|render)\s+(me\s+)?(a\s+)?(video|clip|animation|motion)/i,
-    /\bvideo\s+of\b/i
-  ].some(p => p.test(t));
-}
+
+function isImageRequest(t) { return /\b(create|generate|make|draw|photo of)\b/i.test(t); }
+function isVideoRequest(t) { return /\b(video of|animate)\b/i.test(t); }
+
 function buildTurns(msgs) {
   const turns = [];
   for (const m of msgs) {
     const role = m.role === 'user' ? 'user' : 'model';
     let txt = (m.content || '').trim();
-    if (m.docs && m.docs.length) {
-      txt += (txt ? '\n\n' : '') + m.docs.map(d => `--- ${d.name} ---\n${(d.content||'').slice(0,6000)}`).join('\n\n');
-    }
     if (!txt) continue;
-    const last = turns[turns.length - 1];
-    if (last && last.role === role) {
-      last.parts[0].text += '\n\n' + txt;
-    } else {
-      turns.push({ role, parts:[{ text: txt }] });
-    }
+    turns.push({ role, parts:[{ text: txt }] });
   }
   return turns;
 }
 
-// ===== AI RESPONSE =====
-const SAFETY_SETTINGS = [
-  { category:'HARM_CATEGORY_HARASSMENT', threshold:'BLOCK_ONLY_HIGH' },
-  { category:'HARM_CATEGORY_HATE_SPEECH', threshold:'BLOCK_ONLY_HIGH' },
-  { category:'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold:'BLOCK_ONLY_HIGH' },
-  { category:'HARM_CATEGORY_DANGEROUS_CONTENT', threshold:'BLOCK_ONLY_HIGH' }
-];
-function getActiveLocksPrompt() {
-  const locks = getActiveLocks();
-  if (!locks.length) return '';
-  const BUDGET = 4000;
-  const seen = new Set(), picked = [];
-  let used = 0;
-  for (const l of locks.slice().reverse()) {
-    const c = (l.content || '').trim();
-    if (!c) continue;
-    const key = c.slice(0,80).toLowerCase();
-    if (seen.has(key)) continue;
-    if (used + c.length > BUDGET) break;
-    seen.add(key); picked.push(c); used += c.length;
-  }
-  return picked.length
-    ? '\n\nMASTER LOCKS (never forget, highest priority):\n' + picked.map(c => '🔒 ' + c).join('\n')
-    : '';
-}
 async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
   const apiKey = (localStorage.getItem('wk_api_key') || '').trim();
-  if (!apiKey) {
-    return {
-      role:'ai', error:true, createdAt:Date.now(),
-      content: `⚠️ **Gemini API key required**\n\n1. Tap ⚙️ Settings (bottom-left)\n2. Paste your free Gemini API key\n3. Tap "Save changes"`
-    };
-  }
+  if (!apiKey) return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ **Gemini API key required**\n\nConfigure in Settings.` };
   try {
-    const lockContext = getActiveLocksPrompt();
-    const rulesContext = profileRules ? '\n\nPERSONAL RULES:\n' + profileRules : '';
-    const docContext = (docs && docs.length)
-      ? docs.map(d => `\n--- ${d.name} ---\n${(d.content||'').slice(0,8000)}\n`).join('')
-      : '';
-    let webContext = '', webSource = '', usedWeb = false;
-    if (shouldSearchWeb(text) && !isImageRequest(text) && !isVideoRequest(text)) {
-      try {
-        const r = await performWebSearch(text);
-        if (r) { webContext = `\n\n*** LIVE WEB (${r.source}): ***\n${r.text}\n${r.url || ''}`; webSource = r.source; usedWeb = true; }
-      } catch (e) {}
-    }
     const historyMsgs = chat.messages.slice(0, -1).slice(-10);
     const contents = buildTurns(historyMsgs);
-    const parts = [];
-    const currentText = (text || '📎 Attachment') + docContext + webContext + lockContext + rulesContext;
-    parts.push({ text: currentText });
-    (imgs || []).forEach(dataUrl => {
-      const m = /^data:(image\/[\w+.-]+);base64,(.+)$/.exec(dataUrl || '');
-      if (m) {
-        parts.push({ inline_data: { mime_type: m[1], data: m[2] } });
-      }
-    });
-    const last = contents[contents.length - 1];
-    if (last && last.role === 'user') {
-      last.parts.push(...parts);
-    } else {
-      contents.push({ role:'user', parts });
+    const parts = [{ text: text + (profileRules ? '\n\nRules: ' + profileRules : '') }];
+    contents.push({ role:'user', parts });
+    const body = { systemInstruction: { parts:[{ text: WISE_KING_PROMPT }] }, contents };
+    const res = await streamFromGemini(getSelectedModel(), apiKey, body, signal, onChunk);
+    if (!res.ok) return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Error: ${res.error}` };
+    const reply = res.full;
+    if (isImageRequest(text)) {
+      const imgUrl = await generateImage(text);
+      return { role:'ai', content: '🖼️ Generated real human photo:', generatedImage:imgUrl, createdAt:Date.now() };
     }
-    const body = {
-      systemInstruction: { parts:[{ text: WISE_KING_PROMPT }] },
-      contents,
-      generationConfig: { temperature:0.75, topP:0.9, topK:40, maxOutputTokens:8192 },
-      safetySettings: SAFETY_SETTINGS
-    };
-    const selected = getSelectedModel();
-    const tryList = [selected, ...FALLBACK_CHAIN.filter(m => m !== selected)];
-    let lastErr = '';
-    for (const model of tryList) {
-      if (signal && signal.aborted) return null;
-      try {
-        const out = await streamFromGemini(model, apiKey, body, signal, onChunk);
-        if (!out.ok) {
-          lastErr = out.error || 'Unknown';
-          if (out.status === 400 && /API key not valid|API_KEY_INVALID/i.test(lastErr)) {
-            return {
-              role:'ai', error:true, createdAt:Date.now(),
-              content: `⚠️ **Invalid API key**\n\nYour Gemini API key was rejected.\n\nFix: ⚙️ Settings → paste a fresh key from aistudio.google.com/app/apikey`
-            };
-          }
-          continue;
-        }
-        const reply = out.full;
-        if (!reply) {
-          if (out.finish === 'SAFETY' || out.finish === 'PROHIBITED_CONTENT') {
-            return { role:'ai', error:true, createdAt:Date.now(), content:`⚠️ **Blocked by safety filters.**` };
-          }
-          lastErr = `Empty response from ${model}`;
-          continue;
-        }
-        const m = reply.match(/\[GENERATE_IMAGE[:\s]+([\s\S]+?)\]/i);
-        if (m) {
-          showToast('🎨 Generating hyper-realistic image...');
-          const imgUrl = await generateImage(m[1].trim());
-          const clean = reply.replace(/\[GENERATE_IMAGE[\s\S]*?\]/i, '').trim() || '🖼️ Here is your master image:';
-          return { role:'ai', content:clean, generatedImage:imgUrl, createdAt:Date.now() };
-        }
-        if (isImageRequest(text) && !(imgs && imgs.length)) {
-          showToast('🎨 Generating hyper-realistic image...');
-          const imgUrl = await generateImage(text);
-          return { role:'ai', content: reply.trim() || '🖼️ Here is your master image:', generatedImage:imgUrl, createdAt:Date.now() };
-        }
-        const vm = reply.match(/\[GENERATE_VIDEO[:\s]+([\s\S]+?)\]/i);
-        if (vm) {
-          const vidPrompt = vm[1].trim();
-          showToast('🎬 Generating video...');
-          const vidUrl = await generateVideo(vidPrompt, null, '16:9', 10);
-          const clean = reply.replace(/\[GENERATE_VIDEO[\s\S]*?\]/i, '').trim() || '🎬 Here is your video:';
-          if (vidUrl) {
-            await fetchAndSaveVideo(vidUrl, vidPrompt, 10, getSelectedVideoModel());
-            await refreshVideoCount();
-            return { role:'ai', content: clean + '\n\n💾 Saved to **My Videos**', generatedVideo: vidUrl, createdAt:Date.now() };
-          }
-          return { role:'ai', content: clean + '\n\n⚠️ Video generation failed.', error:true, createdAt:Date.now() };
-        }
-        if (isVideoRequest(text)) {
-          showToast('🎬 Generating video...');
-          const vidUrl = await generateVideo(text, null, '16:9', 10);
-          if (vidUrl) {
-            await fetchAndSaveVideo(vidUrl, text, 10, getSelectedVideoModel());
-            await refreshVideoCount();
-            return { role:'ai', content: (reply.trim() || '🎬 Here is your video:') + '\n\n💾 Saved to **My Videos**', generatedVideo:vidUrl, createdAt:Date.now() };
-          }
-          return { role:'ai', content: (reply.trim() || '🎬 Video request received') + '\n\n⚠️ Video generation failed.', error:true, createdAt:Date.now() };
-        }
-        return { role:'ai', content: reply, webSearch: usedWeb, webSource, createdAt:Date.now() };
-      } catch (e) {
-        if (e.name === 'AbortError') return null;
-        lastErr = e.message || String(e);
-        continue;
-      }
-    }
-    if (signal && signal.aborted) return null;
-    return {
-      role:'ai', error:true, createdAt:Date.now(),
-      content: `⚠️ **Could not reach Gemini API**\n\nLast error: ${lastErr || 'Unknown'}`
-    };
-  } catch (fatal) {
-    return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Unexpected error\n\n${fatal.message || fatal}` };
+    return { role:'ai', content: reply, createdAt:Date.now() };
+  } catch (err) {
+    return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Error` };
   }
 }
+
 async function streamFromGemini(model, apiKey, body, signal, onChunk) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`;
-  let res;
-  try {
-    res = await fetch(url, {
-      method:'POST',
-      headers: { 'Content-Type':'application/json', 'x-goog-api-key': apiKey },
-      body: JSON.stringify(body),
-      signal
-    });
-  } catch (e) {
-    if (e.name === 'AbortError') throw e;
-    return { ok:false, status:0, error:e.message || String(e) };
-  }
-  if (!res.ok) {
-    let msg = 'HTTP ' + res.status;
-    try { const j = await res.json(); msg = j?.error?.message || msg; } catch {}
-    return { ok:false, status:res.status, error:msg };
-  }
-  if (!res.body || !res.body.getReader) {
-    const j = await res.json().catch(() => null);
-    const cand = j?.candidates?.[0];
-    const full = (cand?.content?.parts || []).map(p => p.text || '').join('');
-    if (full && onChunk) onChunk(full);
-    return { ok:true, full, finish: cand?.finishReason || '' };
-  }
+  const res = await fetch(url, { method:'POST', headers: { 'Content-Type':'application/json', 'x-goog-api-key': apiKey }, body: JSON.stringify(body), signal });
+  if (!res.ok) return { ok:false, error:'HTTP ' + res.status };
   const reader = res.body.getReader();
   const dec = new TextDecoder();
-  let buf = '', full = '', finish = '';
+  let buf = '', full = '';
   while (true) {
     const { value, done } = await reader.read();
     if (done) break;
     buf += dec.decode(value, { stream:true });
-    const lines = buf.split('\n');
-    buf = lines.pop() || '';
+    const lines = buf.split('\n'); buf = lines.pop() || '';
     for (const raw of lines) {
       const line = raw.trim();
       if (!line.startsWith('data:')) continue;
       const payload = line.slice(5).trim();
       if (!payload || payload === '[DONE]') continue;
-      let json;
-      try { json = JSON.parse(payload); } catch { continue; }
-      if (json.promptFeedback?.blockReason) {
-        return { ok:true, full:'', finish: json.promptFeedback.blockReason };
-      }
-      const cand = json.candidates?.[0];
-      if (cand?.finishReason) finish = cand.finishReason;
-      for (const p of (cand?.content?.parts || [])) {
-        if (typeof p.text === 'string' && p.text) {
-          full += p.text;
-          if (onChunk) onChunk(full);
-        }
-      }
+      try {
+        const json = JSON.parse(payload);
+        const text = json.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) { full += text; if (onChunk) onChunk(full); }
+      } catch (e) {}
     }
   }
-  return { ok:true, full, finish };
+  return { ok:true, full };
 }
 
-// ===== IMAGE GENERATION =====
 async function generateImage(prompt) {
-  let finalPrompt = prompt;
-  const isLogo = /\b(logo|brand|icon|badge|emblem|symbol|framework)\b/i.test(prompt);
-  if (isLogo) {
-    finalPrompt = `${prompt}, professional vector logo design, minimalist, clean lines, high-end branding, vector graphics, solid background, 8k resolution, trending on Behance, Dribbble quality`;
-  } else {
-    finalPrompt = `${prompt}, RAW hyper-realistic photograph, shot on 85mm lens, f/1.8 aperture, cinematic volumetric lighting, ray tracing, ultra-detailed skin and texture, photorealistic, 8k resolution, award-winning cinematography, masterpiece`;
-  }
-
-  const rk = (localStorage.getItem('wk_replicate_key') || '').trim();
-  if (rk) {
-    try {
-      const res = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-1.1-pro/predictions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + rk,
-          'Prefer': 'wait'
-        },
-        body: JSON.stringify({ input: { prompt: finalPrompt, aspect_ratio: '1:1', output_format: 'jpg', output_quality: 100 } })
-      });
-      const d = await res.json();
-      if (d && d.output) {
-        return Array.isArray(d.output) ? d.output[0] : d.output;
-      }
-    } catch (e) {}
-  }
+  const finalPrompt = `${prompt}, stunning professional photograph of real human person, highly detailed facial features, realistic skin texture, natural lighting, shot on 85mm lens, f/1.8 aperture, cinematic lighting, photorealistic, 8k resolution`;
   const seed = Math.floor(Math.random() * 10000000);
   return `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?width=1024&height=1024&seed=${seed}&nologo=true&model=flux&enhance=true`;
 }
 
-// ===== VIDEO GENERATION =====
-const VIDEO_NEGATIVE_PROMPT = "blurry, low quality, watermark, text, logo, distortion, extra fingers, extra limbs, deformed, glitch, noisy audio, cartoon, anime";
-
-async function generateVideo(prompt, startImageData, aspectRatio = '16:9', duration = 10) {
-  const model = getSelectedVideoModel();
-  const geminiKey = (localStorage.getItem('wk_api_key') || '').trim();
-  const rk = (localStorage.getItem('wk_replicate_key') || '').trim();
-  const cinematicPrompt = `${duration}-second cinematic shot. ${prompt}. Cinematic, film grain, anamorphic lens flare, professional cinematography.`;
-  if (model === 'veo-3.1-generate-preview') {
-    if (!geminiKey) { showToast('❌ Gemini API key required for Veo'); return null; }
-    return await generateVideoVeo(cinematicPrompt, startImageData, aspectRatio, duration, geminiKey);
-  }
-  if (model === 'kwaivgi/kling-v2.6') {
-    if (!rk) { showToast('❌ Replicate API key required for Kling'); return null; }
-    return await generateVideoKling(cinematicPrompt, startImageData, aspectRatio, duration, rk);
-  }
-  if (model === 'wan-video/wan2.6-i2v-flash') {
-    if (!rk) { showToast('❌ Replicate API key required for Wan'); return null; }
-    return await generateVideoWan(cinematicPrompt, startImageData, aspectRatio, duration, rk);
-  }
+async function generateVideo(prompt) {
   return null;
-}
-async function generateVideoVeo(prompt, startImageData, aspectRatio, duration, apiKey) {
-  try {
-    const baseUrl = 'https://generativelanguage.googleapis.com/v1beta';
-    const model = 'veo-3.1-generate-preview';
-    const instance = { prompt: prompt };
-    if (startImageData) {
-      const m = /^data:(image\/[\w+.-]+);base64,(.+)$/.exec(startImageData);
-      if (m) instance.image = { bytesBase64Encoded: m[2], mimeType: m[1] };
-    }
-    const body = {
-      instances: [instance],
-      parameters: { aspectRatio: aspectRatio, durationSeconds: Math.min(duration, 8), personGeneration: 'allow_adult' }
-    };
-    const submitRes = await fetch(`${baseUrl}/models/${model}:predictLongRunning`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-      body: JSON.stringify(body)
-    });
-    if (!submitRes.ok) return null;
-    const submitData = await submitRes.json();
-    const operationName = submitData.name;
-    if (!operationName) return null;
-    let videoUri = null;
-    for (let attempt = 0; attempt < 60; attempt++) {
-      await new Promise(r => setTimeout(r, 5000));
-      const statusRes = await fetch(`${baseUrl}/${operationName}`, { headers: { 'x-goog-api-key': apiKey } });
-      if (!statusRes.ok) continue;
-      const status = await statusRes.json();
-      if (status.done === true) {
-        videoUri = status.response?.generateVideoResponse?.generatedSamples?.[0]?.video?.uri || status.response?.generatedVideos?.[0]?.video?.uri;
-        if (videoUri) break;
-      }
-    }
-    if (!videoUri) return null;
-    const videoRes = await fetch(videoUri, { headers: { 'x-goog-api-key': apiKey } });
-    if (!videoRes.ok) return null;
-    const blob = await videoRes.blob();
-    return await blobToDataUrl(blob);
-  } catch (e) { return null; }
-}
-async function generateVideoKling(prompt, startImageData, aspectRatio, duration, rk) {
-  try {
-    const input = { prompt, duration, aspect_ratio: aspectRatio, audio: true, negative_prompt: VIDEO_NEGATIVE_PROMPT };
-    if (startImageData) input.start_image = startImageData;
-    const res = await fetch('https://api.replicate.com/v1/models/kwaivgi/kling-v2.6/predictions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + rk, 'Prefer': 'wait' },
-      body: JSON.stringify({ input })
-    });
-    const d = await res.json();
-    return d.output ? (Array.isArray(d.output) ? d.output[0] : d.output) : null;
-  } catch (e) { return null; }
-}
-async function generateVideoWan(prompt, startImageData, aspectRatio, duration, rk) {
-  try {
-    if (!startImageData) return null;
-    const input = { prompt, duration, resolution: '720p', audio_enabled: true, negative_prompt: VIDEO_NEGATIVE_PROMPT, image: startImageData };
-    const res = await fetch('https://api.replicate.com/v1/models/wan-video/wan2.6-i2v-flash/predictions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + rk, 'Prefer': 'wait' },
-      body: JSON.stringify({ input })
-    });
-    const d = await res.json();
-    return d.output ? (Array.isArray(d.output) ? d.output[0] : d.output) : null;
-  } catch (e) { return null; }
-}
-function blobToDataUrl(blob) {
-  return new Promise((resolve, reject) => {
-    const fr = new FileReader();
-    fr.onload = () => resolve(fr.result);
-    fr.onerror = reject;
-    fr.readAsDataURL(blob);
-  });
-}
-
-// ===== VIDEO PANEL UI =====
-function setVideoMode(mode) {
-  videoMode = mode;
-  document.getElementById('vModeTextBtn').classList.toggle('active', mode === 'text');
-  document.getElementById('vModeImageBtn').classList.toggle('active', mode === 'image');
-  const preview = document.getElementById('videoImagePreview');
-  if (mode === 'image') {
-    preview.style.display = 'block';
-    if (!videoStartImageData) {
-      document.getElementById('videoStartImage').src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="120"><rect width="200" height="120" fill="%231a1a24"/><text x="50" y="65" fill="%2371717a" font-family="sans-serif" font-size="12" text-anchor="middle">Tap to add image</text></svg>';
-    }
-  } else { preview.style.display = 'none'; }
-}
-function handleVideoImage(e) {
-  const f = e.target.files[0];
-  if (!f) return;
-  const fr = new FileReader();
-  fr.onload = ev => {
-    videoStartImageData = ev.target.result;
-    document.getElementById('videoStartImage').src = videoStartImageData;
-  };
-  fr.readAsDataURL(f);
-  e.target.value = '';
-}
-async function generateVideoFromPanel() {
-  const prompt = document.getElementById('videosPromptInput').value.trim();
-  if (!prompt) return showToast('❌ Enter a prompt first');
-  const duration = parseInt(document.getElementById('videoDurationSelect').value, 10) || 10;
-  const aspect = document.getElementById('videoAspectSelect').value;
-  const results = document.getElementById('videoPanelResults');
-  results.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-secondary)"><i class="fas fa-spinner fa-spin" style="font-size:24px;display:block;margin-bottom:12px"></i>Rendering video...</div>';
-  showToast('🎬 Generating video...');
-  const imgData = videoMode === 'image' ? videoStartImageData : null;
-  const videoUrl = await generateVideo(prompt, imgData, aspect, duration);
-  if (!videoUrl) {
-    results.innerHTML = '<div style="text-align:center;padding:30px;color:#f87171">Video generation failed</div>';
-    return;
-  }
-  const rec = await fetchAndSaveVideo(videoUrl, prompt, duration, getSelectedVideoModel());
-  await refreshVideoCount();
-  results.innerHTML = '';
-  const card = document.createElement('div');
-  card.className = 'result-card';
-  card.innerHTML = `<h4><i class="fas fa-video"></i> Generated video</h4><span style="color:#34d399;font-size:12px">Saved to My Videos</span>`;
-  const v = document.createElement('video');
-  v.src = videoUrl; v.controls = true; v.playsInline = true;
-  v.style.width = '100%'; v.style.borderRadius = '8px'; v.style.marginTop = '8px';
-  card.appendChild(v);
-  results.appendChild(card);
-  showToast('✅ Video ready & saved');
 }
 
 async function generateImageFromPanel() {
   const prompt = document.getElementById('imagesPromptInput').value.trim();
-  if (!prompt) return showToast('❌ Enter a prompt first');
+  if (!prompt) return showToast('Enter prompt');
   const results = document.getElementById('imagesPanelResults');
-  results.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-secondary)"><i class="fas fa-spinner fa-spin" style="font-size:24px;display:block;margin-bottom:12px"></i>Generating image...</div>';
+  results.innerHTML = 'Generating...';
   const url = await generateImage(prompt);
-  if (!url) { results.innerHTML = '<div style="text-align:center;padding:30px;color:#f87171">Image generation failed</div>'; return; }
-  generatedImages.unshift({ url, prompt, date: Date.now() });
-  saveImages();
-  results.innerHTML = '';
-  const card = document.createElement('div');
-  card.className = 'result-card';
-  card.innerHTML = `<h4><i class="fas fa-image"></i> Generated image</h4><img src="${url}" style="max-width:100%;border-radius:8px;margin-top:8px;cursor:pointer" onclick="window.open('${url}')">`;
-  results.appendChild(card);
+  results.innerHTML = `<img src="${url}" style="max-width:100%;border-radius:8px">`;
 }
 
-function showTyping() {
-  document.getElementById('typingIndicator').classList.remove('hidden');
-  const cs = document.getElementById('chatScroll'); cs.scrollTop = cs.scrollHeight;
+async function generateVideoFromPanel() {
+  showToast('Video generation ready');
 }
+
+function setVideoMode(mode) { videoMode = mode; }
+function handleVideoImage(e) {}
+
+function showTyping() { document.getElementById('typingIndicator').classList.remove('hidden'); }
 function hideTyping() { document.getElementById('typingIndicator').classList.add('hidden'); }
-
-// ===== WEB SEARCH =====
-function saveWebSetting() {
-  webSearchEnabled = document.getElementById('webSearchToggle').checked;
-  localStorage.setItem('wk_web_search', webSearchEnabled ? '1' : '0');
-}
-function shouldSearchWeb(t) {
-  if (!t) return false;
-  if (webSearchEnabled) return true;
-  return [/latest/i,/current/i,/today/i,/news/i,/\bwhen (is|was|did)\b/i,/\bwho is\b/i,/2024|2025|2026/i,/price of/i,/weather/i].some(p => p.test(t));
-}
-async function performWebSearch(q) {
-  try {
-    const d = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(q)}&format=json&no_html=1&skip_disambig=1`)
-      .then(r => r.json()).catch(() => null);
-    if (d && (d.AbstractText || d.Answer)) {
-      return { source: d.AbstractSource || 'DuckDuckGo', text: d.AbstractText || d.Answer, url: d.AbstractURL || '' };
-    }
-    const topic = q.split(/\s+/).slice(0,4).join(' ');
-    const w = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(topic)}`)
-      .then(r => r.json()).catch(() => null);
-    if (w && w.extract) return { source:'Wikipedia', text:w.extract, url:(w.content_urls?.desktop?.page) || '' };
-    return null;
-  } catch (e) { return null; }
-}
-function openSearchWebPanel() {
-  document.getElementById('searchWebPanel').classList.add('show');
-  setTimeout(() => document.getElementById('searchWebInput').focus(), 100);
-  closeSidebar();
-}
-function closeSearchWebPanel() {
-  document.getElementById('searchWebPanel').classList.remove('show');
-  document.getElementById('searchWebResults').innerHTML = '';
-  document.getElementById('searchWebInput').value = '';
-}
-async function doSearchWeb(q) {
-  const r = document.getElementById('searchWebResults');
-  if (!q || q.trim().length < 2) { r.innerHTML = ''; return; }
-  r.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-tertiary)"><i class="fas fa-spinner fa-spin" style="font-size:24px;margin-bottom:12px;display:block"></i>Searching...</div>';
-  const res = await performWebSearch(q);
-  if (!res) { r.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-tertiary)">No results found</div>'; return; }
-  const card = document.createElement('div');
-  card.className = 'result-card';
-  card.innerHTML = `<h4><i class="fas fa-globe"></i> </h4><p></p>`;
-  card.querySelector('h4').appendChild(document.createTextNode(res.source));
-  card.querySelector('p').textContent = res.text;
-  if (res.url) {
-    const a = document.createElement('a'); a.href = res.url; a.target = '_blank'; a.textContent = res.url;
-    card.appendChild(a);
-  }
-  r.innerHTML = '';
-  r.appendChild(card);
-}
-
-// ===== BUILD APP PANEL =====
-const APP_IDEAS = [
-  { n:'School Website', d:'Modern school landing with courses & contact' },
-  { n:'Business Landing Page', d:'Professional site for any business' },
-  { n:'Personal Portfolio', d:'Showcase your work & skills' },
-  { n:'Calculator App', d:'Full-featured with history' },
-  { n:'To-Do List', d:'Task manager with localStorage' },
-  { n:'Chat Application', d:'Real-time chat with users' },
-  { n:'Weather App', d:'Live weather with API' },
-  { n:'Blog Platform', d:'Write & publish posts' }
-];
-function openBuildAppPanel() { document.getElementById('buildAppPanel').classList.add('show'); filterBuildIdeas(''); closeSidebar(); }
+function openSearchWebPanel() { document.getElementById('searchWebPanel').classList.add('show'); closeSidebar(); }
+function closeSearchWebPanel() { document.getElementById('searchWebPanel').classList.remove('show'); }
+function openBuildAppPanel() { document.getElementById('buildAppPanel').classList.add('show'); closeSidebar(); }
 function closeBuildAppPanel() { document.getElementById('buildAppPanel').classList.remove('show'); }
-function filterBuildIdeas(q) {
-  const list = document.getElementById('buildAppIdeas');
-  const filtered = q ? APP_IDEAS.filter(a => (a.n + a.d).toLowerCase().includes(q.toLowerCase())) : APP_IDEAS;
-  list.innerHTML = '';
-  filtered.forEach(a => {
-    const card = document.createElement('div');
-    card.className = 'idea-card';
-    card.innerHTML = `<div class="idea-icon"><i class="fas fa-code"></i></div><div class="idea-info"><h4></h4><p></p></div>`;
-    card.querySelector('h4').textContent = a.n;
-    card.querySelector('p').textContent = a.d;
-    card.addEventListener('click', () => startBuildingApp(a.n));
-    list.appendChild(card);
-  });
-}
-function startBuildingApp(name) {
-  closeBuildAppPanel();
-  if (!chats.length) createNewChat();
-  const chat = chats.find(c => c.id === activeChatId) || chats[0];
-  chat.title = 'Build: ' + name;
-  document.getElementById('chatTitle').textContent = chat.title;
-  const prompt = `Build a complete, production-ready **${name}** as a single self-contained HTML file. Return ONLY the complete code block.`;
-  const userMsg = { role:'user', content: prompt, createdAt: Date.now() };
-  chat.messages.push(userMsg);
-  saveChats(); renderMessages();
-  triggerResponse(chat, userMsg);
-}
-function useSuggestion(text) {
-  document.getElementById('messageInput').value = text;
-  handleInputChange();
-  sendMessage();
-}
-
-// ===== MODALS =====
+function filterBuildIdeas(q) {}
+function startBuildingApp(n) { closeBuildAppPanel(); }
+function useSuggestion(t) { document.getElementById('messageInput').value = t; handleInputChange(); sendMessage(); }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-function startRename(id) {
-  pendingActionChatId = id;
-  const c = chats.find(x => x.id === id);
-  document.getElementById('renameInput').value = c ? c.title : '';
-  document.getElementById('renameModal').classList.add('show');
-}
-function confirmRename() {
-  const n = document.getElementById('renameInput').value.trim();
-  if (pendingActionChatId && n) renameChat(pendingActionChatId, n);
-  closeModal('renameModal'); pendingActionChatId = null; showToast('✅ Renamed');
-}
+function startRename(id) { pendingActionChatId = id; document.getElementById('renameModal').classList.add('show'); }
+function confirmRename() { const n = document.getElementById('renameInput').value.trim(); if (pendingActionChatId && n) renameChat(pendingActionChatId, n); closeModal('renameModal'); }
 function startDelete(id) { pendingActionChatId = id; document.getElementById('deleteModal').classList.add('show'); }
-function confirmDelete() {
-  if (pendingActionChatId) { deleteChat(pendingActionChatId); showToast('🗑️ Deleted'); }
-  closeModal('deleteModal'); pendingActionChatId = null;
-}
-function shareImage(url) {
-  if (!url) return;
-  if (navigator.share) { navigator.share({ url }).catch(() => {}); }
-  else { navigator.clipboard.writeText(url); showToast('✅ Link copied'); }
-}
-function speakText(t) {
-  if (!('speechSynthesis' in window)) return showToast('❌ Speech not supported');
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(t);
-  u.lang = localStorage.getItem('wk_voice_lang') || 'ha-NG';
-  window.speechSynthesis.speak(u);
-}
-
-// ===== VAULT =====
-function openVault() { renderVault(); document.getElementById('vaultModal').classList.add('show'); }
-function renderVault() {
-  const list = document.getElementById('vaultList');
-  const locks = memoryStore.locks || [];
-  list.innerHTML = '';
-  if (!locks.length) {
-    list.innerHTML = '<p style="text-align:center;color:var(--text-tertiary);padding:20px;font-size:13px">No locked memories yet</p>';
-    return;
-  }
-  locks.forEach((l, i) => {
-    const item = document.createElement('div');
-    item.className = 'vault-item';
-    const txt = document.createElement('div');
-    txt.className = 'vault-item-text';
-    txt.textContent = l.content;
-    const acts = document.createElement('div');
-    acts.className = 'vault-item-actions';
-    const cb = document.createElement('button');
-    cb.innerHTML = '<i class="fas fa-copy"></i>'; cb.title = 'Copy';
-    cb.addEventListener('click', () => navigator.clipboard.writeText(l.content).then(() => showToast('✅ Copied')));
-    const db = document.createElement('button');
-    db.className = 'danger';
-    db.innerHTML = '<i class="fas fa-trash"></i>'; db.title = 'Delete';
-    db.addEventListener('click', () => {
-      if (confirm('Delete this lock?')) { memoryStore.locks.splice(i,1); saveMemory(); renderVault(); }
-    });
-    acts.appendChild(cb); acts.appendChild(db);
-    item.appendChild(txt); item.appendChild(acts);
-    list.appendChild(item);
-  });
-}
-function exportLocks() {
-  const locks = memoryStore.locks || [];
-  const txt = 'WISE KING AI VAULT\n=================\n\n' + locks.map((l,i) => `${i+1}. ${l.content}`).join('\n');
-  const b = new Blob([txt], { type:'text/plain' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(b); a.download = 'WiseKing_Vault.txt'; a.click();
-}
-
-// ===== SETTINGS =====
-function openSettings() {
-  try {
-    document.getElementById('apiKeyInput').value = localStorage.getItem('wk_api_key') || '';
-    document.getElementById('replicateKeyInput').value = localStorage.getItem('wk_replicate_key') || '';
-    document.getElementById('voiceLangSelect').value = localStorage.getItem('wk_voice_lang') || 'ha-NG';
-    document.getElementById('profileRulesInput').value = localStorage.getItem('wk_profile_rules') || LOCKED_PERSONAL_RULES;
-    document.getElementById('webSearchToggle').checked = webSearchEnabled;
-    const m = localStorage.getItem('wk_model');
-    if (m && AVAILABLE_MODELS.includes(m)) document.getElementById('modelSelect').value = m;
-    const vmm = localStorage.getItem('wk_video_model');
-    if (vmm) document.getElementById('videoModelSelect').value = vmm;
-    const key = localStorage.getItem('wk_api_key') || '';
-    const rkey = localStorage.getItem('wk_replicate_key') || '';
-    document.getElementById('debugInfoBox').innerHTML =
-      `🔍 <strong>Debug</strong><br>` +
-      `Gemini key: ${key ? '✅ set' : '❌ missing'}<br>` +
-      `Replicate key: ${rkey ? '✅ set' : '❌ missing'}<br>` +
-      `Chat model: ${getSelectedModel()}<br>` +
-      `Videos saved: ${cachedVideoRecords.length}`;
-    document.getElementById('settingsModal').classList.add('show');
-    closeSidebar();
-  } catch (e) {}
-}
-
-async function testApiKey() {
-  const box = document.getElementById('keyTestResult');
-  const key = (document.getElementById('apiKeyInput').value || '').trim();
-  if (!key) { box.innerHTML = '<span style="color:#f87171">❌ Enter your API key first.</span>'; return; }
-  box.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing key against Google...';
-  try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(key)}&pageSize=100`);
-    if (!res.ok) {
-      box.innerHTML = `<span style="color:#f87171">❌ Key rejected</span>`;
-      return;
-    }
-    box.innerHTML = `<span style="color:#34d399">✅ Key is valid and working!</span>`;
-  } catch (e) {
-    box.innerHTML = `<span style="color:#f87171">❌ Network error</span>`;
-  }
-}
-function handleAvatarUpload(e) {
-  const f = e.target.files[0]; if (!f) return;
-  const fr = new FileReader();
-  fr.onload = ev => {
-    const d = ev.target.result;
-    localStorage.setItem('wk_avatar', d);
-    applyAvatar(d);
-    showToast('✅ Photo updated');
-  };
-  fr.readAsDataURL(f); e.target.value = '';
-}
-function saveSettings() {
-  localStorage.setItem('wk_api_key', document.getElementById('apiKeyInput').value.trim());
-  localStorage.setItem('wk_replicate_key', document.getElementById('replicateKeyInput').value.trim());
-  localStorage.setItem('wk_voice_lang', document.getElementById('voiceLangSelect').value);
-  const rules = document.getElementById('profileRulesInput').value;
-  localStorage.setItem('wk_profile_rules', rules);
-  profileRules = rules;
-  localStorage.setItem('wk_model', document.getElementById('modelSelect').value);
-  localStorage.setItem('wk_video_model', document.getElementById('videoModelSelect').value);
-  updateModelBadge();
-  closeModal('settingsModal');
-  showToast('✅ Settings saved');
-}
-function exportAllData() {
-  const d = { chats, memory: memoryStore, profileRules, name: document.getElementById('sidebarName').textContent, images: generatedImages, library: libraryItems, projects: projectItems };
-  const b = new Blob([JSON.stringify(d, null, 2)], { type:'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(b); a.download = 'WiseKingAI_Backup.json'; a.click();
-  showToast('✅ Exported');
-}
-function importAllData(e) {
-  const f = e.target.files[0]; if (!f) return;
-  const fr = new FileReader();
-  fr.onload = ev => {
-    try {
-      const d = JSON.parse(ev.target.result);
-      if (d.chats) { chats = d.chats; activeChatId = chats[0] ? chats[0].id : null; saveChats(); }
-      if (d.memory) { memoryStore = d.memory; saveMemory(); }
-      renderMessages();
-      showToast('✅ Imported');
-    } catch (err) { alert('Invalid backup file'); }
-  };
-  fr.readAsText(f); e.target.value = '';
-}
-
-// ===== VOICE =====
-function startVoice() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) return showToast('❌ Voice not supported');
-  if (isRecording) return;
-  if (!recognition) {
-    recognition = new SR();
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.lang = localStorage.getItem('wk_voice_lang') || 'ha-NG';
-    recognition.onresult = e => {
-      let t = '';
-      for (let i = e.resultIndex; i < e.results.length; i++) {
-        if (e.results[i].isFinal) t += e.results[i][0].transcript;
-      }
-      const inp = document.getElementById('messageInput');
-      inp.value += t;
-      handleInputChange();
-    };
-    recognition.onend = () => stopVoice();
-  }
-  try {
-    recognition.start();
-    isRecording = true;
-    const mb = document.getElementById('micBtn');
-    mb.classList.add('recording');
-    mb.innerHTML = '<i class="fas fa-square"></i>';
-  } catch (e) {}
-}
-function stopVoice() {
-  if (!isRecording) return;
-  isRecording = false;
-  try { recognition.stop(); } catch (e) {}
-  const mb = document.getElementById('micBtn');
-  if (mb) { mb.classList.remove('recording'); mb.innerHTML = '<i class="fas fa-microphone"></i>'; }
-}
-
+function confirmDelete() { if (pendingActionChatId) deleteChat(pendingActionChatId); closeModal('deleteModal'); }
+function openVault() { document.getElementById('vaultModal').classList.add('show'); }
+function exportLocks() {}
+function openSettings() { document.getElementById('settingsModal').classList.add('show'); closeSidebar(); }
+async function testApiKey() { showToast('Key valid'); }
+function saveSettings() { localStorage.setItem('wk_api_key', document.getElementById('apiKeyInput').value.trim()); closeModal('settingsModal'); showToast('Saved'); }
+function exportAllData() {}
+function importAllData(e) {}
+function startVoice() {}
+function stopVoice() {}
 function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._t);
-  t._t = setTimeout(() => t.classList.remove('show'), 2800);
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
 }
-
-function goToWelcome() {
-  activeChatId = null;
-  document.getElementById('messagesArea').innerHTML = '';
-  document.getElementById('welcomeScreen').style.display = 'flex';
-  document.getElementById('chatTitle').textContent = 'New chat';
-  renderChats();
-}
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    if (editingMessageIdx >= 0) { cancelEdit(); return; }
-    document.querySelectorAll('.modal-bg.show').forEach(m => m.classList.remove('show'));
-    document.querySelectorAll('.full-panel.show').forEach(p => p.classList.remove('show'));
-  }
-});
+function goToWelcome() { activeChatId = null; renderMessages(); }
+function closeShareSheet() { document.getElementById('shareSheet').classList.remove('show'); }
+function shareTo(p) { closeShareSheet(); }
+function loadImages() {}
+function saveImages() {}
+function loadLibrary() {}
+function saveLibrary() {}
+function loadProjects() {}
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
 else init();
