@@ -722,12 +722,10 @@
       <div class="settings-card">
         <select class="input-field" id="modelSelect" style="margin-bottom:8px">
           <optgroup label="⚡ Recommended (Gemini 3 & 2.5)">
-            <option value="gemini-3.8-flash">Gemini 3.8 Flash — Ultra Fast Speed, Logic & Coding ✅</option>
-            <option value="gemini-3.7-flash">Gemini 3.7 Flash — Multimodal (Vision/Audio)</option>
-            <option value="gemini-3.6-flash">Gemini 3.6 Flash — Token Efficient</option>
-            <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash Lite — Low-cost Automation</option>
-            <option value="gemini-3.1-pro">Gemini 3.1 Pro — Advanced Logic & Deep Coding</option>
-            <option value="gemini-2.5-pro">Gemini 2.5 Pro — Legacy Document Context</option>
+            <option value="gemini-1.5-flash">Gemini 1.5 Flash — Ultra Fast Speed & Reliable ✅</option>
+            <option value="gemini-1.5-pro">Gemini 1.5 Pro — Advanced Logic & Deep Coding</option>
+            <option value="gemini-3.8-flash">Gemini 3.8 Flash</option>
+            <option value="gemini-3.7-flash">Gemini 3.7 Flash</option>
           </optgroup>
         </select>
       </div>
@@ -903,9 +901,9 @@ WISE KING AI — MASTER PRODUCTION & SAFETY INTELLIGENCE
 5. SAFETY & POLICY COMPLIANCE: Strictly adhere to safety guidelines. Prohibit dangerous content, hate speech, explicit material, or harmful misinformation.
 6. ULTRA-FAST SPEED: Respond instantly with zero artificial delay.`;
 
-const AVAILABLE_MODELS = ['gemini-3.8-flash','gemini-3.7-flash','gemini-3.6-flash','gemini-3.5-flash-lite','gemini-3.1-pro','gemini-2.5-pro'];
-const FALLBACK_CHAIN = ['gemini-3.8-flash','gemini-3.7-flash','gemini-3.6-flash','gemini-3.5-flash-lite'];
-const DEFAULT_MODEL = 'gemini-3.8-flash';
+const AVAILABLE_MODELS = ['gemini-1.5-flash','gemini-1.5-pro','gemini-3.8-flash','gemini-3.7-flash'];
+const FALLBACK_CHAIN = ['gemini-1.5-flash','gemini-1.5-pro','gemini-3.8-flash'];
+const DEFAULT_MODEL = 'gemini-1.5-flash';
 
 let chats = [], activeChatId = null, pendingActionChatId = null;
 let uploadedImages = [], uploadedDocs = [];
@@ -1572,13 +1570,11 @@ async function triggerResponse(chat, userMsg) {
   let attempts = 0;
   let reply = null;
 
-  while (attempts < 2 && !reply) {
+  while (attempts < FALLBACK_CHAIN.length && !reply) {
     try {
-      if (attempts > 0) {
-        if (live) live.update("Still thinking... please wait a moment");
-      }
       live = appendLiveBubble();
-      reply = await getAIResponse(userMsg.content, userMsg.docs || [], userMsg.images || [], chat, signal, partial => { if (live) live.update(partial); });
+      const modelToUse = FALLBACK_CHAIN[attempts];
+      reply = await getAIResponse(modelToUse, userMsg.content, userMsg.docs || [], userMsg.images || [], chat, signal, partial => { if (live) live.update(partial); });
       if (live) live.remove();
       if (reply && !reply.error) break;
     } catch (err) {
@@ -1592,7 +1588,7 @@ async function triggerResponse(chat, userMsg) {
     chat.messages.push(reply); saveChats(); renderMessages();
     if (reply.generatedImage) { generatedImages.unshift({ url:reply.generatedImage, prompt:userMsg.content, date:Date.now() }); saveImages(); }
   } else {
-    chat.messages.push({ role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Sorry, I couldn't reply right now. Please try again.` });
+    chat.messages.push({ role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Ayyukan sadarwa sun dan samu matsala kadan ko kuma API Key din ka na bukatar a duba a Settings. Tabbatar ka sanya ingantaccen Gemini API Key.` });
     saveChats(); renderMessages();
   }
 }
@@ -1693,7 +1689,6 @@ function handleInputChange() {
   input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 200) + 'px';
 }
 
-// Fixed Shift+Enter = New Line, Enter = Send
 function handleKeyDown(e) {
   if (e.key === 'Enter') {
     if (e.shiftKey) {
@@ -1757,7 +1752,7 @@ function buildTurns(msgs) {
   return turns;
 }
 
-async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
+async function getAIResponse(modelName, text, docs, imgs, chat, signal, onChunk) {
   const apiKey = (localStorage.getItem('wk_api_key') || '').trim();
   if (!apiKey) return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ **Gemini API key required**\n\nConfigure in Settings.` };
   try {
@@ -1765,8 +1760,8 @@ async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
     const contents = buildTurns(historyMsgs);
     const parts = [{ text: text + (profileRules ? '\n\nRules: ' + profileRules : '') }];
     contents.push({ role:'user', parts });
-    const body = { systemInstruction: { parts:[{ text: WISE_KING_PROMPT }] }, contents };
-    const res = await streamFromGemini(getSelectedModel(), apiKey, body, signal, onChunk);
+    const body = { system_instruction: { parts:[{ text: WISE_KING_PROMPT }] }, contents };
+    const res = await streamFromGemini(modelName, apiKey, body, signal, onChunk);
     if (!res.ok) return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Connection delayed. Retrying...` };
     const reply = res.full;
     if (isImageRequest(text)) {
@@ -1780,30 +1775,13 @@ async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
 }
 
 async function streamFromGemini(model, apiKey, body, signal, onChunk) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`;
-  const res = await fetch(url, { method:'POST', headers: { 'Content-Type':'application/json', 'x-goog-api-key': apiKey }, body: JSON.stringify(body), signal });
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  const res = await fetch(url, { method:'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify(body), signal });
   if (!res.ok) return { ok:false, error:'HTTP ' + res.status };
-  const reader = res.body.getReader();
-  const dec = new TextDecoder();
-  let buf = '', full = '';
-  while (true) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    buf += dec.decode(value, { stream:true });
-    const lines = buf.split('\n'); buf = lines.pop() || '';
-    for (const raw of lines) {
-      const line = raw.trim();
-      if (!line.startsWith('data:')) continue;
-      const payload = line.slice(5).trim();
-      if (!payload || payload === '[DONE]') continue;
-      try {
-        const json = JSON.parse(payload);
-        const text = json.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (text) { full += text; if (onChunk) onChunk(full); }
-      } catch (e) {}
-    }
-  }
-  return { ok:true, full };
+  const json = await res.json();
+  const text = json.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  if (onChunk) onChunk(text);
+  return { ok:true, full: text };
 }
 
 async function generateImage(prompt) {
