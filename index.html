@@ -653,17 +653,6 @@
     </div>
 
     <div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-key"></i> API Keys <span style="color:#f87171;font-size:11px">(required)</span></div>
-      <div class="settings-card">
-        <input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (required)" autocomplete="off">
-        <input type="password" class="input-field" id="replicateKeyInput" placeholder="Replicate API key (optional, for images & video)" style="margin-bottom:0" autocomplete="off">
-        <p style="font-size:11px;color:var(--text-tertiary);margin-top:8px">Get free Gemini key: <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--accent-hover)">aistudio.google.com</a></p>
-        <button class="btn solid" style="width:100%;margin-top:10px;justify-content:center" onclick="testApiKey()"><i class="fas fa-vial"></i> Test key &amp; list models</button>
-        <div id="keyTestResult" style="margin-top:10px;font-size:12px;line-height:1.6;color:var(--text-secondary)"></div>
-      </div>
-    </div>
-
-    <div class="settings-group">
       <div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div>
       <div class="settings-card">
         <select class="input-field" id="modelSelect" style="margin-bottom:8px">
@@ -739,6 +728,28 @@
   </div>
 </div>
 
+<!-- FEEDBACK MODALS -->
+<div class="modal-bg" id="likeToastModal">
+  <div class="modal" style="text-align:center;max-width:300px;padding:32px 24px;">
+    <div style="font-size:40px;margin-bottom:12px;">💛</div>
+    <div style="font-size:15px;font-weight:600;">Thank you for your feedback!</div>
+  </div>
+</div>
+
+<div class="modal-bg" id="dislikeModal">
+  <div class="modal" style="max-width:360px;">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-thumbs-down" style="color:#f87171;"></i> What went wrong?</div><button class="modal-close" onclick="closeDislikeModal()"><i class="fas fa-times"></i></button></div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px;">
+      <button class="btn solid" style="justify-content:flex-start;padding:12px 16px;" onclick="submitDislike('Not helpful')">😕 Not helpful</button>
+      <button class="btn solid" style="justify-content:flex-start;padding:12px 16px;" onclick="submitDislike('Incorrect')">❌ Incorrect</button>
+      <button class="btn solid" style="justify-content:flex-start;padding:12px 16px;" onclick="submitDislike('Unsafe')">⚠️ Unsafe</button>
+      <button class="btn solid" style="justify-content:flex-start;padding:12px 16px;" onclick="submitDislike('Other')">💬 Other</button>
+    </div>
+    <div class="modal-actions"><button class="btn ghost" onclick="closeDislikeModal()">Cancel</button></div>
+  </div>
+</div>
+
+<!-- SHARE SHEET MODAL -->
 <div class="share-sheet-bg" id="shareSheet">
   <div class="share-sheet">
     <div class="share-sheet-head">
@@ -753,6 +764,15 @@
       <button class="share-target st-x" onclick="shareTo('x')"><span class="st-icon"><i class="fab fa-x-twitter"></i></span> X</button>
     </div>
     <button class="share-sheet-cancel" onclick="closeShareSheet()">Cancel</button>
+  </div>
+</div>
+
+<!-- COPY SHARE LINK DROPDOWN (Fallback) -->
+<div class="modal-bg" id="shareCopyModal">
+  <div class="modal" style="max-width:300px;text-align:center;">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-link"></i> Copy Link</div><button class="modal-close" onclick="closeModal('shareCopyModal')"><i class="fas fa-times"></i></button></div>
+    <p class="modal-text" style="font-size:13px;">Copied to clipboard!</p>
+    <div class="modal-actions" style="justify-content:center;"><button class="btn accent" onclick="closeModal('shareCopyModal')">OK</button></div>
   </div>
 </div>
 
@@ -1107,7 +1127,7 @@ function toggleSection(header) { header.classList.toggle('open'); header.nextEle
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
 document.addEventListener('click', e => {
-  if (!e.target.closest('.chat-dots') && !e.target.closest('.dropdown')) document.querySelectorAll('.dropdown').forEach(m => m.remove());
+  if (!e.target.closest('.chat-dots') && !e.target.closest('.dropdown') && !e.target.closest('.user-msg-dots') && !e.target.closest('.user-dropdown')) document.querySelectorAll('.dropdown').forEach(m => m.remove());
 });
 
 function openImagesPanel() { document.getElementById('imagesPanel').classList.add('show'); closeSidebar(); }
@@ -1346,7 +1366,7 @@ function renderMarkdown(src) {
   flush();
   let html = out.join('');
   html = html.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>').replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
-  html = html.replace(/\u0000(\d+)\u0000/g, (_, i) => stash[+i] ?? '');
+  html = html.replace(/\u0000(\d+)\u0000/g, (_, i) => stash[i] ?? '');
   return html;
 }
 function buildContentHtml(msg) {
@@ -1361,39 +1381,99 @@ function setupMessageDelegation() {
   if (!area || area._wkBound) return;
   area._wkBound = true;
   area.addEventListener('click', ev => {
-    const downloadCodeBtn = ev.target.closest('.md-download');
-    if (downloadCodeBtn) {
-      const pre = downloadCodeBtn.closest('pre');
-      const code = pre?.querySelector('code');
-      if (code) {
-        const blob = new Blob([code.textContent], { type: 'text/html;charset=utf-8' });
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'WiseKing_Code.html';
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        showToast('📥 Downloaded!');
+    // AI Message Actions
+    const aiBtn = ev.target.closest('[data-act]');
+    if (aiBtn) {
+      const act = aiBtn.dataset.act, idx = parseInt(aiBtn.dataset.idx, 10);
+      const chat = chats.find(c => c.id === activeChatId);
+      if (!chat || isNaN(idx)) return;
+      const msg = chat.messages[idx];
+
+      if (act === 'copy') {
+        navigator.clipboard.writeText(msg.content || '').then(() => showToast('✅ Copied'));
+      } else if (act === 'like') {
+        aiBtn.classList.add('liked'); aiBtn.classList.remove('disliked');
+        document.getElementById('likeToastModal').classList.add('show');
+        setTimeout(() => document.getElementById('likeToastModal').classList.remove('show'), 2000);
+      } else if (act === 'dislike') {
+        aiBtn.classList.add('disliked'); aiBtn.classList.remove('liked');
+        document.getElementById('dislikeModal').classList.add('show');
+      } else if (act === 'share') {
+        pendingShareText = msg.content || '';
+        document.getElementById('shareSheet').classList.add('show');
+      } else if (act === 'regen') {
+        if (chat.messages.length > 1) {
+          chat.messages.pop();
+          const lastUserMsg = chat.messages[chat.messages.length - 1];
+          if (lastUserMsg.role === 'user') {
+             triggerResponse(chat, lastUserMsg);
+          }
+        }
       }
       return;
     }
-    const copyCodeBtn = ev.target.closest('.md-copy');
-    if (copyCodeBtn) {
-      const pre = copyCodeBtn.closest('pre');
-      const code = pre?.querySelector('code');
-      if (code) {
-        navigator.clipboard.writeText(code.textContent).then(() => {
-          copyCodeBtn.classList.add('copied'); copyCodeBtn.innerHTML = '<i class="fas fa-check"></i> Copied';
-          setTimeout(() => { copyCodeBtn.classList.remove('copied'); copyCodeBtn.innerHTML = '<i class="fas fa-copy"></i> Copy'; }, 1800);
-          showToast('✅ Copied');
-        });
+
+    // User Message Actions
+    const userBtn = ev.target.closest('[data-uact]');
+    if (userBtn) {
+      const uact = userBtn.dataset.uact, idx = parseInt(userBtn.dataset.idx, 10);
+      const chat = chats.find(c => c.id === activeChatId);
+      if (!chat || isNaN(idx)) return;
+      const msg = chat.messages[idx];
+
+      if (uact === 'edit') {
+        // Show edit UI inline
+        const msgContentDiv = userBtn.closest('.msg-body').querySelector('.msg-content');
+        const originalText = msg.content;
+        msgContentDiv.style.display = 'none';
+        
+        // Check if edit box already exists
+        let editBox = userBtn.closest('.msg-body').querySelector('.edit-box');
+        if (!editBox) {
+          editBox = document.createElement('div');
+          editBox.className = 'edit-box';
+          editBox.innerHTML = `
+            <textarea class="edit-textarea"></textarea>
+            <div class="edit-actions">
+              <button class="edit-btn cancel" onclick="this.closest('.edit-box').remove(); this.closest('.msg-body').querySelector('.msg-content').style.display='';">Cancel</button>
+              <button class="edit-btn save">Save & Send</button>
+            </div>`;
+          editBox.querySelector('textarea').value = originalText;
+          userBtn.closest('.msg-body').appendChild(editBox);
+          
+          editBox.querySelector('.edit-btn.save').addEventListener('click', () => {
+            const newText = editBox.querySelector('textarea').value.trim();
+            if (newText) {
+              msg.content = newText;
+              // Remove subsequent messages (AI response, etc.)
+              const msgIndex = chat.messages.indexOf(msg);
+              if (msgIndex !== -1) {
+                chat.messages.splice(msgIndex + 1);
+              }
+              saveChats();
+              renderMessages();
+              triggerResponse(chat, msg);
+            }
+          });
+        }
+      } else if (uact === 'delete') {
+        if (confirm('Delete this message?')) {
+          const msgIndex = chat.messages.indexOf(msg);
+          if (msgIndex !== -1) {
+            chat.messages.splice(msgIndex, 1);
+            // Also remove the AI response immediately after if it exists
+            if (chat.messages[msgIndex] && chat.messages[msgIndex].role === 'ai') {
+              chat.messages.splice(msgIndex, 1);
+            }
+          }
+          saveChats();
+          renderMessages();
+        }
+      } else if (uact === 'copy') {
+        navigator.clipboard.writeText(msg.content || '').then(() => showToast('✅ Copied'));
       }
       return;
     }
-    const btn = ev.target.closest('[data-act]');
-    if (!btn) return;
-    const act = btn.dataset.act, idx = parseInt(btn.dataset.idx, 10);
-    const chat = chats.find(c => c.id === activeChatId);
-    if (!chat || isNaN(idx)) return;
-    const msg = chat.messages[idx];
-    if (act === 'copy') navigator.clipboard.writeText(msg.content || '').then(() => showToast('✅ Copied'));
-    else if (act === 'delete') { chat.messages.splice(idx, 1); saveChats(); renderMessages(); }
   });
 }
 
@@ -1418,7 +1498,7 @@ async function triggerResponse(chat, userMsg) {
   } catch (err) {
     if (live) live.remove();
     cleanup();
-    chat.messages.push({ role:'ai', error:true, createdAt:Date.now(), content:`⚠️ Error: ${err.message || err}` });
+    chat.messages.push({ role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Connecting... Please try again in a moment.` });
     saveChats(); renderMessages();
   }
 }
@@ -1451,6 +1531,7 @@ function renderMessages() {
   chat.messages.forEach((msg, idx) => area.appendChild(buildMessageEl(msg, idx)));
   const cs = document.getElementById('chatScroll'); cs.scrollTop = cs.scrollHeight;
 }
+
 function buildMessageEl(msg, idx) {
   const el = document.createElement('div'); el.className = 'message ' + msg.role;
   const isAI = msg.role === 'ai';
@@ -1458,9 +1539,11 @@ function buildMessageEl(msg, idx) {
   const body = document.createElement('div'); body.className = 'msg-body';
   const name = document.createElement('div'); name.className = 'msg-name'; name.textContent = isAI ? 'Wise King AI' : 'You';
   body.appendChild(name);
+  
   const content = document.createElement('div');
   content.className = 'msg-content ' + (msg.error ? 'error' : (isAI ? 'ai' : 'user'));
   content.innerHTML = buildContentHtml(msg);
+  
   if (msg.generatedImage) {
     const gw = document.createElement('div'); gw.className = 'gen-image-wrap';
     gw.innerHTML = `<img src="${msg.generatedImage}" class="gen-image" onclick="window.open('${msg.generatedImage}')">`;
@@ -1472,6 +1555,41 @@ function buildMessageEl(msg, idx) {
     content.appendChild(gw);
   }
   body.appendChild(content);
+  
+  // --- Toolbar ---
+  const meta = document.createElement('div');
+  meta.className = 'msg-meta';
+  
+  const tools = document.createElement('div');
+  tools.className = 'msg-tools';
+
+  if (isAI) {
+    // AI actions
+    if (!msg.error) {
+      tools.innerHTML = `
+        <button class="msg-tool" data-act="like" data-idx="${idx}" title="Good response"><i class="fas fa-thumbs-up"></i></button>
+        <button class="msg-tool" data-act="dislike" data-idx="${idx}" title="Bad response"><i class="fas fa-thumbs-down"></i></button>
+        <button class="msg-tool" data-act="share" data-idx="${idx}" title="Share"><i class="fas fa-share-nodes"></i></button>
+        <button class="msg-tool" data-act="copy" data-idx="${idx}" title="Copy"><i class="fas fa-copy"></i></button>
+        <button class="msg-tool regen" data-act="regen" data-idx="${idx}" title="Regenerate"><i class="fas fa-rotate-right"></i><span class="tool-label">Regenerate</span></button>
+      `;
+    } else {
+       tools.innerHTML = `
+        <button class="msg-tool" data-act="copy" data-idx="${idx}" title="Copy"><i class="fas fa-copy"></i></button>
+      `;
+    }
+  } else {
+    // User actions
+    tools.innerHTML = `
+      <button class="msg-tool" data-uact="edit" data-idx="${idx}" title="Edit"><i class="fas fa-pen"></i></button>
+      <button class="msg-tool" data-uact="delete" data-idx="${idx}" title="Delete"><i class="fas fa-trash"></i></button>
+      <button class="msg-tool" data-uact="copy" data-idx="${idx}" title="Copy"><i class="fas fa-copy"></i></button>
+    `;
+  }
+  
+  meta.appendChild(tools);
+  body.appendChild(meta);
+  
   el.appendChild(avatar); el.appendChild(body);
   return el;
 }
@@ -1536,16 +1654,17 @@ function buildTurns(msgs) {
 }
 
 async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
-  const apiKey = (localStorage.getItem('wk_api_key') || '').trim();
-  if (!apiKey) return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ **Gemini API key required**\n\nConfigure in Settings.` };
   try {
     const historyMsgs = chat.messages.slice(0, -1).slice(-10);
     const contents = buildTurns(historyMsgs);
     const parts = [{ text: text + (profileRules ? '\n\nRules: ' + profileRules : '') }];
     contents.push({ role:'user', parts });
     const body = { systemInstruction: { parts:[{ text: WISE_KING_PROMPT }] }, contents };
-    const res = await streamFromGemini(getSelectedModel(), apiKey, body, signal, onChunk);
-    if (!res.ok) return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Error: ${res.error}` };
+    
+    // Fetch from Cloudflare Worker Proxy instead of direct Gemini API
+    const res = await streamFromGemini(getSelectedModel(), body, signal, onChunk);
+    
+    if (!res.ok) return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Connecting... Please try again in a moment.` };
     const reply = res.full;
     if (isImageRequest(text)) {
       const imgUrl = await generateImage(text);
@@ -1553,15 +1672,25 @@ async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
     }
     return { role:'ai', content: reply, createdAt:Date.now() };
   } catch (err) {
-    return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Error` };
+    return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Connecting... Please try again in a moment.` };
   }
 }
 
-async function streamFromGemini(model, apiKey, body, signal, onChunk) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`;
-  const res = await fetch(url, { method:'POST', headers: { 'Content-Type':'application/json', 'x-goog-api-key': apiKey }, body: JSON.stringify(body), signal });
-  if (!res.ok) return { ok:false, error:'HTTP ' + res.status };
-  const reader = res.body.getReader();
+async function streamFromGemini(model, body, signal, onChunk) {
+  // Use the Cloudflare Worker endpoint. The worker securely injects the GEMINI_API_KEY.
+  // The model name is included in the body. The worker is configured to use a default model.
+  const response = await fetch('/api/gemini', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+    signal
+  });
+
+  if (!response.ok) {
+    return { ok: false, error: 'Network response was not ok' };
+  }
+
+  const reader = response.body.getReader();
   const dec = new TextDecoder();
   let buf = '', full = '';
   while (true) {
@@ -1628,7 +1757,7 @@ function openVault() { document.getElementById('vaultModal').classList.add('show
 function exportLocks() {}
 function openSettings() { document.getElementById('settingsModal').classList.add('show'); closeSidebar(); }
 async function testApiKey() { showToast('Key valid'); }
-function saveSettings() { localStorage.setItem('wk_api_key', document.getElementById('apiKeyInput').value.trim()); closeModal('settingsModal'); showToast('Saved'); }
+function saveSettings() { closeModal('settingsModal'); showToast('Saved'); }
 function exportAllData() {}
 function importAllData(e) {}
 function startVoice() {}
@@ -1638,8 +1767,31 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2800);
 }
 function goToWelcome() { activeChatId = null; renderMessages(); }
+
+function closeDislikeModal() { document.getElementById('dislikeModal').classList.remove('show'); }
+function submitDislike(reason) {
+  closeDislikeModal();
+  showToast('Thank you for helping us improve!');
+}
+
 function closeShareSheet() { document.getElementById('shareSheet').classList.remove('show'); }
-function shareTo(p) { closeShareSheet(); }
+function shareTo(platform) {
+  closeShareSheet();
+  const text = encodeURIComponent(pendingShareText || 'Check out this Wise King AI chat!');
+  let url = '';
+  if (platform === 'whatsapp') url = `https://wa.me/?text=${text}`;
+  else if (platform === 'facebook') url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${text}`;
+  else if (platform === 'x') url = `https://twitter.com/intent/tweet?text=${text}`;
+  else if (platform === 'tiktok') url = `https://www.tiktok.com/`;
+  else if (platform === 'instagram') url = `https://www.instagram.com/`;
+  else if (platform === 'copy') {
+    navigator.clipboard.writeText(pendingShareText || '').then(() => {
+      document.getElementById('shareCopyModal').classList.add('show');
+    });
+    return;
+  }
+  if (url) window.open(url, '_blank');
+}
 function loadImages() {}
 function saveImages() {}
 function loadLibrary() {}
