@@ -707,10 +707,10 @@
     </div>
 
     <div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-key"></i> API Keys <span style="color:#f87171;font-size:11px">(required)</span></div>
+      <div class="settings-group-title"><i class="fas fa-key"></i> API Keys <span style="color:#10b981;font-size:11px" id="keySavedStatus">Saved ✅</span></div>
       <div class="settings-card">
-        <input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (required)" autocomplete="off">
-        <input type="password" class="input-field" id="replicateKeyInput" placeholder="Replicate API key (optional, for images & video)" style="margin-bottom:0" autocomplete="off">
+        <input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (required)" autocomplete="off" oninput="saveApiKeyPermanent(this.value)">
+        <input type="password" class="input-field" id="replicateKeyInput" placeholder="Replicate API key (optional, for images & video)" style="margin-bottom:0" autocomplete="off" oninput="saveReplicateKeyPermanent(this.value)">
         <p style="font-size:11px;color:var(--text-tertiary);margin-top:8px">Get free Gemini key: <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--accent-hover)">aistudio.google.com</a></p>
         <button class="btn solid" style="width:100%;margin-top:10px;justify-content:center" onclick="testApiKey()"><i class="fas fa-vial"></i> Test key &amp; list models</button>
         <div id="keyTestResult" style="margin-top:10px;font-size:12px;line-height:1.6;color:var(--text-secondary)"></div>
@@ -720,12 +720,11 @@
     <div class="settings-group">
       <div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div>
       <div class="settings-card">
-        <select class="input-field" id="modelSelect" style="margin-bottom:8px">
-          <optgroup label="⚡ Recommended (Gemini 3 & 3.5)">
-            <option value="gemini-3.5-flash-lite">Gemini 3.6 Flash — Ultra Fast Speed & Reliable ✅</option>
-            <option value="gemini-3.6-pro">Gemini 3.6 Pro — Advanced Logic & Deep Coding</option>
-            <option value="gemini-3.8-flash">Gemini 3.8 Flash</option>
-            <option value="gemini-3.5-flash">Gemini 3.5 Flash-lite</option>
+        <select class="input-field" id="modelSelect" style="margin-bottom:8px" onchange="saveModelSetting(this.value)">
+          <optgroup label="⚡ Recommended (Ultra Fast & Reliable)">
+            <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-lite — Blazing Fast & Reliable ✅</option>
+            <option value="gemini-2.5-flash">Gemini 2.5 Flash — Instant Responses</option>
+            <option value="gemini-3.6-pro">Gemini 3.6 Pro — Advanced Logic</option>
           </optgroup>
         </select>
       </div>
@@ -901,8 +900,7 @@ WISE KING AI — MASTER PRODUCTION & SAFETY INTELLIGENCE
 5. SAFETY & POLICY COMPLIANCE: Strictly adhere to safety guidelines. Prohibit dangerous content, hate speech, explicit material, or harmful misinformation.
 6. ULTRA-FAST SPEED: Respond instantly with zero artificial delay.`;
 
-const AVAILABLE_MODELS = ['gemini-2.5-flash','gemini-3.6-pro','gemini-3.5-flash-lite','gemini-3.5-flash'];
-const FALLBACK_CHAIN = ['gemini-3.5-flash','gemini-3.6-pro','gemini-2.5-flash'];
+const AVAILABLE_MODELS = ['gemini-3.5-flash-lite','gemini-2.5-flash','gemini-3.6-pro','gemini-3.5-flash'];
 const DEFAULT_MODEL = 'gemini-3.5-flash-lite';
 
 let chats = [], activeChatId = null, pendingActionChatId = null;
@@ -983,15 +981,6 @@ function getVideoPlayableUrl(rec) {
     return objectUrlCache.get(rec.id);
   }
   return rec.remoteUrl || '';
-}
-
-async function fetchAndSaveVideo(remoteUrl, prompt, duration, model) {
-  let blob = null;
-  try {
-    const res = await fetch(remoteUrl, { mode: 'cors' });
-    if (res.ok) { blob = await res.blob(); if (!blob.type || !blob.type.startsWith('video')) blob = new Blob([blob], { type: 'video/mp4' }); }
-  } catch (e) {}
-  try { return await saveVideoToDB(blob, prompt, duration, model, remoteUrl); } catch (e) { return null; }
 }
 
 async function refreshVideoCount() {
@@ -1146,6 +1135,19 @@ async function init() {
     const savedName = localStorage.getItem('wk_user_name'); if (savedName) document.getElementById('sidebarName').textContent = savedName;
     const av = localStorage.getItem('wk_avatar'); if (av) applyAvatar(av);
     const vl = localStorage.getItem('wk_voice_lang'); if (vl) document.getElementById('voiceLangSelect').value = vl;
+    
+    // API KEY PERMANENT AUTO-FILL & UI UPDATE
+    const savedApiKey = localStorage.getItem('wk_api_key') || '';
+    if (savedApiKey) {
+      document.getElementById('apiKeyInput').value = savedApiKey;
+      const statusEl = document.getElementById('keySavedStatus');
+      if (statusEl) statusEl.textContent = 'API Key Saved ✅';
+    }
+    const savedReplKey = localStorage.getItem('wk_replicate_key') || '';
+    if (savedReplKey) {
+      document.getElementById('replicateKeyInput').value = savedReplKey;
+    }
+
     const sm = localStorage.getItem('wk_model'); if (sm && AVAILABLE_MODELS.includes(sm)) document.getElementById('modelSelect').value = sm;
     const vm = localStorage.getItem('wk_video_model'); if (vm) document.getElementById('videoModelSelect').value = vm;
     updateModelBadge(); handleInputChange(); setupThemeSwatches(); setupMessageDelegation();
@@ -1156,6 +1158,26 @@ async function init() {
       unlockApp(localStorage.getItem('wk_user_name') || 'IBRAHIM ABDULLAHI', 'kingnice314@gmail.com', null);
     }
   } catch (e) {}
+}
+
+function saveApiKeyPermanent(val) {
+  const clean = val.trim();
+  localStorage.setItem('wk_api_key', clean);
+  const statusEl = document.getElementById('keySavedStatus');
+  if (statusEl) {
+    statusEl.textContent = clean ? 'API Key Saved ✅' : 'Required ⚠️';
+    statusEl.style.color = clean ? '#10b981' : '#f87171';
+  }
+}
+
+function saveReplicateKeyPermanent(val) {
+  localStorage.setItem('wk_replicate_key', val.trim());
+}
+
+function saveModelSetting(val) {
+  localStorage.setItem('wk_model', val);
+  updateModelBadge();
+  showToast('⚡ Model updated');
 }
 
 function getSelectedModel() {
@@ -1567,20 +1589,14 @@ async function triggerResponse(chat, userMsg) {
   let live = null;
   const cleanup = () => { hideTyping(); isSending = false; currentAbortController = null; btn.classList.remove('stop'); btn.innerHTML = '<i class="fas fa-arrow-up"></i>'; handleInputChange(); };
   
-  let attempts = 0;
   let reply = null;
-
-  while (attempts < FALLBACK_CHAIN.length && !reply) {
-    try {
-      live = appendLiveBubble();
-      const modelToUse = FALLBACK_CHAIN[attempts];
-      reply = await getAIResponse(modelToUse, userMsg.content, userMsg.docs || [], userMsg.images || [], chat, signal, partial => { if (live) live.update(partial); });
-      if (live) live.remove();
-      if (reply && !reply.error) break;
-    } catch (err) {
-      if (live) live.remove();
-    }
-    attempts++;
+  try {
+    live = appendLiveBubble();
+    const modelToUse = getSelectedModel();
+    reply = await getAIResponse(modelToUse, userMsg.content, userMsg.docs || [], userMsg.images || [], chat, signal, partial => { if (live) live.update(partial); });
+    if (live) live.remove();
+  } catch (err) {
+    if (live) live.remove();
   }
 
   cleanup();
@@ -1739,7 +1755,6 @@ function sendMessage(textOverride) {
 }
 
 function isImageRequest(t) { return /\b(create|generate|make|draw|photo of)\b/i.test(t); }
-function isVideoRequest(t) { return /\b(video of|animate)\b/i.test(t); }
 
 function buildTurns(msgs) {
   const turns = [];
@@ -1762,7 +1777,7 @@ async function getAIResponse(modelName, text, docs, imgs, chat, signal, onChunk)
     contents.push({ role:'user', parts });
     const body = { system_instruction: { parts:[{ text: WISE_KING_PROMPT }] }, contents };
     const res = await streamFromGemini(modelName, apiKey, body, signal, onChunk);
-    if (!res.ok) return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Connection delayed. Retrying...` };
+    if (!res.ok) return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Connection delayed. Please check your API key in Settings.` };
     const reply = res.full;
     if (isImageRequest(text)) {
       const imgUrl = await generateImage(text);
@@ -1770,7 +1785,7 @@ async function getAIResponse(modelName, text, docs, imgs, chat, signal, onChunk)
     }
     return { role:'ai', content: reply, createdAt:Date.now() };
   } catch (err) {
-    return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Connection delayed. Retrying...` };
+    return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Connection error. Please verify your API key.` };
   }
 }
 
@@ -1788,10 +1803,6 @@ async function generateImage(prompt) {
   const finalPrompt = `${prompt}, stunning professional photograph of real human person, highly detailed facial features, realistic skin texture, natural lighting, shot on 85mm lens, f/1.8 aperture, cinematic lighting, photorealistic, 8k resolution`;
   const seed = Math.floor(Math.random() * 10000000);
   return `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?width=1024&height=1024&seed=${seed}&nologo=true&model=flux&enhance=true`;
-}
-
-async function generateVideo(prompt) {
-  return null;
 }
 
 async function generateImageFromPanel() {
@@ -1827,8 +1838,28 @@ function confirmDelete() { if (pendingActionChatId) deleteChat(pendingActionChat
 function openVault() { document.getElementById('vaultModal').classList.add('show'); }
 function exportLocks() {}
 function openSettings() { document.getElementById('settingsModal').classList.add('show'); closeSidebar(); }
-async function testApiKey() { showToast('Key valid'); }
-function saveSettings() { localStorage.setItem('wk_api_key', document.getElementById('apiKeyInput').value.trim()); closeModal('settingsModal'); showToast('Saved'); }
+async function testApiKey() { 
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if (!key) { showToast('⚠️ Enter key first'); return; }
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
+    if (res.ok) {
+      showToast('✅ API Key is Valid!');
+      document.getElementById('keyTestResult').innerHTML = '<span style="color:#10b981">Connection successful! Key is working properly.</span>';
+    } else {
+      showToast('❌ Invalid API Key');
+      document.getElementById('keyTestResult').innerHTML = '<span style="color:#f87171">API Key verification failed. Please check your key.</span>';
+    }
+  } catch(e) {
+    showToast('❌ Connection error');
+  }
+}
+function saveSettings() { 
+  const k = document.getElementById('apiKeyInput').value.trim();
+  if (k) localStorage.setItem('wk_api_key', k);
+  closeSettings(); 
+  showToast('Settings saved ✅'); 
+}
 function exportAllData() {}
 function importAllData(e) {}
 function startVoice() {}
