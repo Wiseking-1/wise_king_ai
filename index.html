@@ -653,6 +653,17 @@
     </div>
 
     <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-key"></i> API Keys <span style="color:#f87171;font-size:11px">(required)</span></div>
+      <div class="settings-card">
+        <input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (required)" autocomplete="off">
+        <input type="password" class="input-field" id="replicateKeyInput" placeholder="Replicate API key (optional, for images & video)" style="margin-bottom:0" autocomplete="off">
+        <p style="font-size:11px;color:var(--text-tertiary);margin-top:8px">Get free Gemini key: <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--accent-hover)">aistudio.google.com</a></p>
+        <button class="btn solid" style="width:100%;margin-top:10px;justify-content:center" onclick="testApiKey()"><i class="fas fa-vial"></i> Test key &amp; list models</button>
+        <div id="keyTestResult" style="margin-top:10px;font-size:12px;line-height:1.6;color:var(--text-secondary)"></div>
+      </div>
+    </div>
+
+    <div class="settings-group">
       <div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div>
       <div class="settings-card">
         <select class="input-field" id="modelSelect" style="margin-bottom:8px">
@@ -1498,7 +1509,7 @@ async function triggerResponse(chat, userMsg) {
   } catch (err) {
     if (live) live.remove();
     cleanup();
-    chat.messages.push({ role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Connecting... Please try again in a moment.` });
+    chat.messages.push({ role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Sorry, I couldn't reply right now. Please try again.` });
     saveChats(); renderMessages();
   }
 }
@@ -1654,17 +1665,16 @@ function buildTurns(msgs) {
 }
 
 async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
+  const apiKey = (localStorage.getItem('wk_api_key') || '').trim();
+  if (!apiKey) return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ **Gemini API key required**\n\nConfigure in Settings.` };
   try {
     const historyMsgs = chat.messages.slice(0, -1).slice(-10);
     const contents = buildTurns(historyMsgs);
     const parts = [{ text: text + (profileRules ? '\n\nRules: ' + profileRules : '') }];
     contents.push({ role:'user', parts });
     const body = { systemInstruction: { parts:[{ text: WISE_KING_PROMPT }] }, contents };
-    
-    // Fetch from Cloudflare Worker Proxy instead of direct Gemini API
-    const res = await streamFromGemini(getSelectedModel(), body, signal, onChunk);
-    
-    if (!res.ok) return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Connecting... Please try again in a moment.` };
+    const res = await streamFromGemini(getSelectedModel(), apiKey, body, signal, onChunk);
+    if (!res.ok) return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Sorry, I couldn't reply right now. Please try again.` };
     const reply = res.full;
     if (isImageRequest(text)) {
       const imgUrl = await generateImage(text);
@@ -1672,25 +1682,15 @@ async function getAIResponse(text, docs, imgs, chat, signal, onChunk) {
     }
     return { role:'ai', content: reply, createdAt:Date.now() };
   } catch (err) {
-    return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Connecting... Please try again in a moment.` };
+    return { role:'ai', error:true, createdAt:Date.now(), content: `⚠️ Sorry, I couldn't reply right now. Please try again.` };
   }
 }
 
-async function streamFromGemini(model, body, signal, onChunk) {
-  // Use the Cloudflare Worker endpoint. The worker securely injects the GEMINI_API_KEY.
-  // The model name is included in the body. The worker is configured to use a default model.
-  const response = await fetch('/api/gemini', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-    signal
-  });
-
-  if (!response.ok) {
-    return { ok: false, error: 'Network response was not ok' };
-  }
-
-  const reader = response.body.getReader();
+async function streamFromGemini(model, apiKey, body, signal, onChunk) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`;
+  const res = await fetch(url, { method:'POST', headers: { 'Content-Type':'application/json', 'x-goog-api-key': apiKey }, body: JSON.stringify(body), signal });
+  if (!res.ok) return { ok:false, error:'HTTP ' + res.status };
+  const reader = res.body.getReader();
   const dec = new TextDecoder();
   let buf = '', full = '';
   while (true) {
@@ -1757,7 +1757,7 @@ function openVault() { document.getElementById('vaultModal').classList.add('show
 function exportLocks() {}
 function openSettings() { document.getElementById('settingsModal').classList.add('show'); closeSidebar(); }
 async function testApiKey() { showToast('Key valid'); }
-function saveSettings() { closeModal('settingsModal'); showToast('Saved'); }
+function saveSettings() { localStorage.setItem('wk_api_key', document.getElementById('apiKeyInput').value.trim()); closeModal('settingsModal'); showToast('Saved'); }
 function exportAllData() {}
 function importAllData(e) {}
 function startVoice() {}
