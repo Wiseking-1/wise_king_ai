@@ -729,24 +729,42 @@
       </div>
     </div>
 
-div class="settings-group">
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-key"></i> API Keys <span style="color:#f87171;font-size:11px">(required)</span></div>
+      <div class="settings-card">
+        <input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (required)" autocomplete="off">
+        <input type="password" class="input-field" id="replicateKeyInput" placeholder="Replicate API key (optional, for images & video)" style="margin-bottom:0" autocomplete="off">
+        <p style="font-size:11px;color:var(--text-tertiary);margin-top:8px">Get free Gemini key: <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--accent-hover)">aistudio.google.com</a></p>
+        <button class="btn solid" style="width:100%;margin-top:10px;justify-content:center" onclick="testApiKey()"><i class="fas fa-vial"></i> Test key &amp; list models</button>
+        <div id="keyTestResult" style="margin-top:10px;font-size:12px;line-height:1.6;color:var(--text-secondary)"></div>
+      </div>
+    </div>
+
+    <div class="settings-group">
       <div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div>
       <div class="settings-card">
-        <select class="input-field" id="modelSelect" style="margin-bottom:0" onchange="saveModelSetting(this.value)">
-          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-lite — Blazing Fast & Reliable ✅</option>
+        <select class="input-field" id="modelSelect" style="margin-bottom:8px">
+          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-lite — Blazing Fast &amp; Reliable ✅</option>
           <option value="gemini-2.5-flash">Gemini 2.5 Flash — Instant Responses</option>
-          <option value="gemini-3.6-pro">Gemini 3.6 Pro — Advanced Logic</option>
+          <option value="gemini-3.6-pro">Gemini 3.6 Pro — Advanced Logic &amp; Intelligence</option>
         </select>
-      </di div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-video"></i> Video Generation Model</div>
       <div class="settings-card">
-        <select class="input-field" id="modelSelect" style="margin-bottom:0" onchange="saveModelSetting(this.value)">
-          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-lite — Blazing Fast & Reliable ✅</option>
-          <option value="gemini-2.5-flash">Gemini 2.5 Flash — Instant Responses</option>
-          <option value="gemini-3.6-pro">Gemini 3.6 Pro — Advanced Logic</option>
+        <select class="input-field" id="videoModelSelect" style="margin-bottom:8px">
+          <optgroup label="🎬 Video Models">
+            <option value="veo-3.1-generate-preview">Google Veo 3.1 (Gemini) — Cinematic, 1080p, Audio ✅</option>
+            <option value="kwaivgi/kling-v2.6">Kling 2.6 Pro (Replicate) — 1080p, Lip-sync, 10s</option>
+            <option value="wan-video/wan2.6-i2v-flash">Wan 2.6 Flash (Replicate) — Fast, Multi-shot, Audio</option>
+          </optgroup>
         </select>
-      </di
-  <div class="settings-group">
+      </div>
+    </div>
+
+    <div class="settings-group">
       <div class="settings-group-title"><i class="fas fa-palette"></i> Accent color</div>
       <div class="settings-card">
         <div class="theme-swatches" id="themeSwatches">
@@ -898,9 +916,9 @@ WISE KING AI — MASTER PRODUCTION & SAFETY INTELLIGENCE
 5. SAFETY & POLICY COMPLIANCE: Strictly adhere to safety guidelines. Prohibit dangerous content, hate speech, explicit material, or harmful misinformation.
 6. ULTRA-FAST SPEED: Respond instantly with zero artificial delay.`;
 
-const AVAILABLE_MODELS = ['gemini-3.8-flash','gemini-3.7-flash','gemini-3.6-flash','gemini-3.5-flash-lite','gemini-3.1-pro','gemini-2.5-pro'];
-const FALLBACK_CHAIN = ['gemini-3.8-flash','gemini-3.7-flash','gemini-3.6-flash','gemini-3.5-flash-lite'];
-const DEFAULT_MODEL = 'gemini-3.8-flash';
+const AVAILABLE_MODELS = ['gemini-3.5-flash-lite','gemini-2.5-flash','gemini-3.6-pro'];
+const FALLBACK_CHAIN = ['gemini-3.5-flash-lite','gemini-2.5-flash','gemini-3.6-pro'];
+const DEFAULT_MODEL = 'gemini-3.5-flash-lite';
 
 let chats = [], activeChatId = null, pendingActionChatId = null;
 let uploadedImages = [], uploadedDocs = [];
@@ -1973,8 +1991,11 @@ function openSettings() { document.getElementById('settingsModal').classList.add
 async function testApiKey() { showToast('Key valid'); }
 function saveSettings() { 
   localStorage.setItem('wk_api_key', document.getElementById('apiKeyInput').value.trim()); 
+  localStorage.setItem('wk_model', document.getElementById('modelSelect').value);
+  localStorage.setItem('wk_video_model', document.getElementById('videoModelSelect').value);
   closeModal('settingsModal'); 
   showToast('Saved'); 
+  updateModelBadge();
 }
 function exportAllData() {}
 function importAllData(e) {}
