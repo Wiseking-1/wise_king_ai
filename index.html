@@ -2073,8 +2073,77 @@ function saveSettings() {
 
 function exportAllData() {}
 function importAllData(e) {}
-function startVoice() {}
-function stopVoice() {}
+
+// --- Voice input (press & hold) with robust recognition ---
+let voiceTargetText = '';
+
+function startVoice() {
+  if (isRecording) return;
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) { showToast('❌ Voice input not supported'); return; }
+
+  const langSelect = document.getElementById('voiceLangSelect');
+  const lang = langSelect ? langSelect.value : 'en-US';
+
+  recognition = new SpeechRecognition();
+  recognition.lang = lang;
+  recognition.interimResults = true;
+  recognition.continuous = false;
+  recognition.maxAlternatives = 1;
+
+  const input = document.getElementById('messageInput');
+  voiceTargetText = input.value;   // existing text remains, we append
+
+  recognition.onstart = () => {
+    isRecording = true;
+    const micBtn = document.getElementById('micBtn');
+    if (micBtn) micBtn.classList.add('recording');
+  };
+
+  recognition.onresult = (event) => {
+    let interim = '';
+    let final = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const transcript = event.results[i][0].transcript;
+      if (event.results[i].isFinal) final += transcript;
+      else interim += transcript;
+    }
+    // Show live preview inside the input box (append to existing text)
+    const combined = voiceTargetText + (final || interim);
+    input.value = combined;
+    handleInputChange();
+  };
+
+  recognition.onerror = (event) => {
+    if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+      showToast('❌ Microphone access denied');
+    } else if (event.error !== 'aborted') {
+      showToast('❌ Voice error: try again');
+    }
+    stopVoice();
+  };
+
+  recognition.onend = () => {
+    stopVoice();
+  };
+
+  try {
+    recognition.start();
+  } catch (e) {
+    showToast('❌ Could not start voice');
+  }
+}
+
+function stopVoice() {
+  if (recognition && isRecording) {
+    try { recognition.stop(); } catch(e) {}
+  }
+  isRecording = false;
+  recognition = null;
+  const micBtn = document.getElementById('micBtn');
+  if (micBtn) micBtn.classList.remove('recording');
+  // Final text remains in the input; user can edit before sending.
+}
 
 function showToast(msg) {
   const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
