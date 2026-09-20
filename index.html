@@ -187,7 +187,6 @@
   .send-btn.stop{background:var(--danger)}
   .send-btn.hidden{display:none}
   .input-hint{text-align:center;font-size:11px;color:var(--text-tertiary);margin-top:6px}
-  /* IN-CHAT SEARCH BAR */
   .chat-search-bar{display:none;padding:8px 20px;background:var(--bg-secondary);border-bottom:1px solid var(--border-subtle);gap:8px;align-items:center}
   .chat-search-bar.show{display:flex}
   .chat-search-bar input{flex:1;padding:8px 12px;background:var(--bg-input);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-primary);font-size:13.5px;outline:none;font-family:inherit}
@@ -867,11 +866,9 @@ function deleteMemoryItem(i) {
 async function extractMemoryFromChat(chat) {
   if (!getMemoryEnabled()) return;
   if (!chat || chat.messages.length < 4) return;
-  // Only extract from chats that have meaningful content
   const userTexts = chat.messages.filter(m => m.role === 'user' && m.content && m.content.length > 10).map(m => m.content).slice(-10);
   if (userTexts.length < 2) return;
   const combined = userTexts.join('\n');
-  // Skip if we already extracted from this chat
   if (!chat.memoryExtracted) {
     try {
       const apiKey = (localStorage.getItem('wk_api_key') || '').trim() || ENV_GEMINI_KEY;
