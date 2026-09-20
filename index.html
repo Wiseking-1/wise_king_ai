@@ -49,25 +49,39 @@
   .section-header:not(.open) .arrow{transform:rotate(-90deg)}
   .section-body{max-height:0;overflow:hidden;transition:max-height var(--transition-smooth)}
   .section-body.open{max-height:900px;overflow-y:auto}
-  .chat-item{display:flex;align-items:center;gap:8px;padding:10px 8px 10px 12px;border-radius:var(--radius-full);margin:2px 0;cursor:pointer;font-size:15px;transition:background var(--transition-fast);position:relative}
+
+  /* CHAT ITEM — 3-dot button ALWAYS visible (mobile-friendly) */
+  .chat-item{display:flex;align-items:center;gap:6px;padding:8px 6px 8px 12px;border-radius:var(--radius-full);margin:2px 0;cursor:pointer;font-size:15px;transition:background var(--transition-fast);position:relative}
   .chat-item:hover,.chat-item.active{background:var(--bg-elevated)}
-  .chat-item .chat-title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .chat-item .chat-title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
   .chat-item .active-dot{width:8px;height:8px;border-radius:50%;background:#3b82f6;flex-shrink:0;box-shadow:0 0 8px #3b82f6}
-  .chat-item .chat-menu-btn{background:transparent;border:none;color:var(--text-secondary);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;opacity:0;transition:opacity var(--transition-fast),background var(--transition-fast)}
-  .chat-item:hover .chat-menu-btn,.chat-item.menu-open .chat-menu-btn{opacity:1}
-  .chat-menu-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
-  .chat-item.pinned .chat-menu-btn{opacity:1}
+  .chat-item .chat-menu-btn{
+    background:transparent;border:none;color:var(--text-secondary);
+    width:36px;height:36px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;flex-shrink:0;
+    opacity:1 !important;
+    transition:background var(--transition-fast),color var(--transition-fast);
+    -webkit-tap-highlight-color:rgba(99,102,241,0.25)
+  }
+  .chat-item .chat-menu-btn:hover,
+  .chat-item .chat-menu-btn:focus{background:var(--bg-hover);color:var(--text-primary)}
+  .chat-item .chat-menu-btn i{font-size:15px}
   .chat-item.pinned::before{content:'📌';position:absolute;left:-2px;top:50%;transform:translateY(-50%);font-size:11px}
-  .popup-menu{position:fixed;background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:var(--radius-md);box-shadow:0 10px 40px rgba(0,0,0,0.6);z-index:3000;display:none;flex-direction:column;padding:6px;min-width:180px;animation:menuIn 0.15s cubic-bezier(0.4,0,0.2,1)}
+  .chat-item.menu-open .chat-menu-btn{background:var(--bg-hover);color:var(--text-primary)}
+
+  /* Popup menu — slightly larger touch targets */
+  .popup-menu{position:fixed;background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:var(--radius-md);box-shadow:0 10px 40px rgba(0,0,0,0.6);z-index:3000;display:none;flex-direction:column;padding:6px;min-width:200px;animation:menuIn 0.15s cubic-bezier(0.4,0,0.2,1)}
   .popup-menu.show{display:flex}
   @keyframes menuIn{from{opacity:0;transform:scale(0.95) translateY(-4px)}to{opacity:1;transform:scale(1) translateY(0)}}
-  .popup-menu-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius-sm);background:transparent;border:none;color:var(--text-primary);font-size:13.5px;font-family:inherit;cursor:pointer;text-align:left;width:100%;transition:background var(--transition-fast)}
+  .popup-menu-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--radius-sm);background:transparent;border:none;color:var(--text-primary);font-size:14.5px;font-family:inherit;cursor:pointer;text-align:left;width:100%;transition:background var(--transition-fast)}
   .popup-menu-item:hover{background:var(--bg-hover)}
-  .popup-menu-item i{width:18px;text-align:center;font-size:14px;color:var(--text-secondary)}
+  .popup-menu-item i{width:20px;text-align:center;font-size:15px;color:var(--text-secondary)}
   .popup-menu-item.pin-item i{color:var(--pin-red)}
   .popup-menu-item.danger{color:#f87171}
   .popup-menu-item.danger i{color:#f87171}
   .popup-menu-divider{height:1px;background:var(--border-subtle);margin:4px 8px}
+
   .sidebar-footer{border-top:1px solid var(--border-subtle);padding:12px;display:flex;align-items:center;gap:10px}
   .user-chip{display:flex;align-items:center;gap:12px;flex:1;cursor:pointer;padding:6px 8px;border-radius:var(--radius-full)}
   .user-chip:hover{background:var(--bg-elevated)}
@@ -143,51 +157,41 @@
   .msg-content.ai{background:var(--bg-secondary);border:1px solid var(--border-subtle);border-top-left-radius:4px}
   .msg-content.user{background:var(--accent-gradient);color:white;border-top-right-radius:4px;box-shadow:var(--shadow-sm)}
   .msg-content.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);color:#fca5a5}
-  
-  /* NEW: MESSAGE ACTION BARS */
-  .msg-action-bar {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 8px;
-    flex-wrap: wrap;
+
+  /* LOADING / THINKING STATE — clean, single crown */
+  .msg-content.thinking{
+    display:flex;align-items:center;gap:10px;
+    padding:14px 18px;
+    min-height:44px;
+    background:var(--bg-secondary);
+    border:1px solid var(--border-subtle);
+    border-top-left-radius:4px;
   }
-  .message.user .msg-action-bar {
-    justify-content: flex-end;
+  .thinking-label{
+    font-size:13.5px;color:var(--text-secondary);font-weight:500;
+    display:inline-flex;align-items:center;gap:8px;
   }
-  .msg-action-btn {
-    background: transparent;
-    border: 1px solid var(--border-subtle);
-    color: var(--text-secondary);
-    font-size: 11px;
-    font-weight: 500;
-    padding: 4px 8px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    transition: all var(--transition-fast);
-    font-family: inherit;
+  .thinking-dots{display:inline-flex;gap:4px;align-items:center}
+  .thinking-dots span{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--accent);
+    display:inline-block;
+    animation:thinkBounce 1.2s infinite ease-in-out;
   }
-  .msg-action-btn:hover {
-    background: var(--bg-elevated);
-    color: var(--text-primary);
-    border-color: var(--border-strong);
+  .thinking-dots span:nth-child(2){animation-delay:0.15s}
+  .thinking-dots span:nth-child(3){animation-delay:0.3s}
+  @keyframes thinkBounce{
+    0%,80%,100%{transform:scale(0.6);opacity:0.45}
+    40%{transform:scale(1);opacity:1}
   }
-  .msg-action-btn.active {
-    background: rgba(99,102,241,0.15);
-    color: var(--accent-hover);
-    border-color: var(--accent);
-  }
-  .msg-action-btn.danger {
-    color: #f87171;
-  }
-  .msg-action-btn.danger:hover {
-    background: rgba(239,68,68,0.1);
-    border-color: #f87171;
-  }
-  /* END NEW */
+
+  .msg-action-bar{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
+  .message.user .msg-action-bar{justify-content:flex-end}
+  .msg-action-btn{background:transparent;border:1px solid var(--border-subtle);color:var(--text-secondary);font-size:11px;font-weight:500;padding:4px 8px;border-radius:var(--radius-sm);cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all var(--transition-fast);font-family:inherit}
+  .msg-action-btn:hover{background:var(--bg-elevated);color:var(--text-primary);border-color:var(--border-strong)}
+  .msg-action-btn.active{background:rgba(99,102,241,0.15);color:var(--accent-hover);border-color:var(--accent)}
+  .msg-action-btn.danger{color:#f87171}
+  .msg-action-btn.danger:hover{background:rgba(239,68,68,0.1);border-color:#f87171}
 
   .md p{margin:0 0 10px}.md p:last-child{margin-bottom:0}
   .md h1,.md h2,.md h3,.md h4{margin:16px 0 8px;font-weight:700;line-height:1.3}
@@ -202,11 +206,6 @@
   .md pre{background:#1a1a24;padding:10px;border-radius:8px;overflow-x:auto;margin:8px 0}
   .streaming-cursor{display:inline-block;width:2px;height:1.1em;background:var(--accent);vertical-align:text-bottom;margin-left:2px;animation:blink 0.8s infinite}
   @keyframes blink{50%{opacity:0}}
-  .typing-indicator{display:flex;gap:14px;padding:8px 0;margin-bottom:8px}
-  .typing-indicator.hidden{display:none}
-  .typing-bubble{display:flex;align-items:center;justify-content:center;padding:12px 18px;background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);border-top-left-radius:4px;width:48px;height:38px}
-  .clean-pulse-ring{width:16px;height:16px;border:2px solid var(--accent);border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
   .input-dock{position:absolute;bottom:0;left:0;right:0;padding:12px 20px 16px;background:linear-gradient(to top,var(--bg-primary) 60%,transparent);pointer-events:none;z-index:20}
   .input-inner-wrap{max-width:780px;margin:0 auto;pointer-events:auto}
   .preview-area{display:none;gap:8px;flex-wrap:wrap;padding:8px 0}
@@ -227,7 +226,6 @@
   .send-btn.stop{background:var(--danger)}
   .send-btn.hidden{display:none}
   .input-hint{text-align:center;font-size:11px;color:var(--text-tertiary);margin-top:6px}
-  /* IN-CHAT SEARCH BAR */
   .chat-search-bar{display:none;padding:8px 20px;background:var(--bg-secondary);border-bottom:1px solid var(--border-subtle);gap:8px;align-items:center}
   .chat-search-bar.show{display:flex}
   .chat-search-bar input{flex:1;padding:8px 12px;background:var(--bg-input);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-primary);font-size:13.5px;outline:none;font-family:inherit}
@@ -240,12 +238,12 @@
   mark{background:rgba(251,191,36,0.4);color:inherit;padding:0 2px;border-radius:3px}
   .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:2000;padding:20px}
   .modal-bg.show{display:flex}
-  .modal{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-xl);max-width:480px;width:100%;max-height:88vh;overflow-y:auto;padding:24px;box-shadow:var(--shadow-lg);animation:modalIn 0.25s}
+  .modal{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-xl);max-width:480px;width:100%;max-height:88vh;overflow-y:auto;padding:24px;box-shadow:var(--shadow-lg);animation:modalIn 0.25s;position:relative}
   @keyframes modalIn{from{opacity:0;transform:scale(0.96)}to{opacity:1;transform:scale(1)}}
-  .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-  .modal-title{font-size:17px;font-weight:600;display:flex;align-items:center;gap:10px}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px}
+  .modal-title{font-size:17px;font-weight:600;display:flex;align-items:center;gap:10px;min-width:0}
   .modal-title i{color:var(--accent-hover)}
-  .modal-close{width:30px;height:30px;border-radius:var(--radius-sm);background:transparent;border:none;color:var(--text-secondary);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+  .modal-close{width:36px;height:36px;border-radius:var(--radius-sm);background:transparent;border:none;color:var(--text-secondary);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
   .modal-close:hover{background:var(--bg-elevated);color:var(--text-primary)}
   .modal-text{font-size:14px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6}
   .input-field{width:100%;padding:11px 14px;background:var(--bg-input);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-primary);font-size:14px;outline:none;font-family:inherit;margin-bottom:14px}
@@ -308,11 +306,11 @@
   .memory-item .mi-del{background:transparent;border:none;color:#f87171;cursor:pointer;font-size:12px;padding:2px;flex-shrink:0}
   #sharePopup{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:4000;padding:20px}
   #sharePopup.show{display:flex}
-  .share-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-xl);max-width:420px;width:100%;padding:24px;box-shadow:var(--shadow-lg);animation:modalIn 0.25s}
-  .share-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+  .share-card{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-xl);max-width:420px;width:100%;padding:24px;box-shadow:var(--shadow-lg);animation:modalIn 0.25s;position:relative}
+  .share-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px}
   .share-title{font-size:18px;font-weight:600;display:flex;align-items:center;gap:10px}
   .share-title i{color:var(--accent-hover)}
-  .share-close{background:transparent;border:none;color:var(--text-secondary);font-size:18px;cursor:pointer;padding:4px;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center}
+  .share-close{background:transparent;border:none;color:var(--text-secondary);font-size:18px;cursor:pointer;padding:4px;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
   .share-close:hover{background:var(--bg-elevated);color:var(--text-primary)}
   .share-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
   .share-platform{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:10px 4px;border-radius:var(--radius-md);transition:background var(--transition-fast);background:transparent;border:none;font-family:inherit;color:var(--text-primary)}
@@ -431,7 +429,6 @@
       </div>
     </div>
 
-    <!-- IN-CHAT SEARCH BAR -->
     <div class="chat-search-bar" id="chatSearchBar">
       <i class="fas fa-magnifying-glass" style="color:var(--text-secondary);font-size:13px"></i>
       <input type="text" id="chatSearchInput" placeholder="Search in this chat..." oninput="doChatSearch()" onkeydown="if(event.key==='Enter'){event.preventDefault();nextSearchMatch();}">
@@ -455,10 +452,6 @@
           </div>
         </div>
         <div id="messagesArea"></div>
-        <div class="typing-indicator hidden" id="typingIndicator">
-          <div class="msg-avatar ai">👑</div>
-          <div class="typing-bubble"><div class="clean-pulse-ring"></div></div>
-        </div>
       </div>
     </div>
 
@@ -550,7 +543,6 @@
   </div>
 </div>
 
-<!-- NEW: DISLIKE FEEDBACK MODAL -->
 <div class="modal-bg" id="dislikeModal">
   <div class="modal" style="max-width:400px">
     <div class="modal-head"><div class="modal-title"><i class="fas fa-thumbs-down"></i> Tell us more</div><button class="modal-close" onclick="closeModal('dislikeModal')"><i class="fas fa-times"></i></button></div>
@@ -614,7 +606,6 @@
   <div class="panel-body"><div class="panel-inner"><div id="libraryPanelResults"></div></div></div>
 </div>
 
-<!-- MEMORY PANEL -->
 <div class="full-panel" id="memoryPanel">
   <div class="panel-header"><div class="panel-title"><i class="fas fa-brain"></i> Cross-Chat Memory</div><button class="btn ghost" onclick="closeMemoryPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
   <div class="panel-body"><div class="panel-inner">
@@ -780,7 +771,7 @@ let isSending = false, currentAbortController = null;
 let recognition = null, isRecording = false;
 let currentUser = null;
 let vaultMemories = [];
-let crossChatMemory = []; // NEW
+let crossChatMemory = [];
 let library = [];
 let deferredInstallPrompt = null;
 let editingMessageIdx = -1;
@@ -789,7 +780,6 @@ let renamingChatId = null;
 let deletingChatId = null;
 let popupMenuChatId = null;
 let currentShareTarget = null;
-// Search state
 let searchMatches = [];
 let searchCurrentIdx = -1;
 
@@ -863,7 +853,7 @@ function getVaultContext() {
 }
 
 // ============================================================
-// CROSS-CHAT MEMORY (NEW)
+// CROSS-CHAT MEMORY
 // ============================================================
 function loadCrossChatMemory() {
   try { crossChatMemory = JSON.parse(localStorage.getItem('wk_cross_memory') || '[]'); } catch(e) { crossChatMemory = []; }
@@ -902,16 +892,12 @@ function deleteMemoryItem(i) {
   renderMemoryPanel();
   showToast('Memory deleted');
 }
-
-// Automatically extract memory from a completed chat
 async function extractMemoryFromChat(chat) {
   if (!getMemoryEnabled()) return;
   if (!chat || chat.messages.length < 4) return;
-  // Only extract from chats that have meaningful content
   const userTexts = chat.messages.filter(m => m.role === 'user' && m.content && m.content.length > 10).map(m => m.content).slice(-10);
   if (userTexts.length < 2) return;
   const combined = userTexts.join('\n');
-  // Skip if we already extracted from this chat
   if (!chat.memoryExtracted) {
     try {
       const apiKey = (localStorage.getItem('wk_api_key') || '').trim() || ENV_GEMINI_KEY;
@@ -1161,47 +1147,71 @@ function renderChats() {
   sorted.forEach(chat => {
     const div = document.createElement('div');
     div.className = 'chat-item' + (chat.id === activeChatId ? ' active' : '') + (chat.pinned ? ' pinned' : '');
+    div.dataset.chatId = chat.id;
     div.innerHTML = `
       <span class="chat-title">${escapeHtml(chat.title)}</span>
       ${chat.id === activeChatId ? '<span class="active-dot"></span>' : ''}
-      <button class="chat-menu-btn" title="Options"><i class="fas fa-ellipsis-vertical"></i></button>
+      <button class="chat-menu-btn" title="Options" aria-label="Chat options"><i class="fas fa-ellipsis-vertical"></i></button>
     `;
     div.querySelector('.chat-title').addEventListener('click', () => switchToChat(chat.id));
     div.querySelector('.active-dot')?.addEventListener('click', () => switchToChat(chat.id));
-    div.querySelector('.chat-menu-btn').addEventListener('click', (e) => { e.stopPropagation(); openChatMenu(e, chat.id); });
+    div.querySelector('.chat-menu-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      // Toggle: if this chat's menu is already open → close it
+      if (popupMenuChatId === chat.id && document.getElementById('chatPopupMenu').classList.contains('show')) {
+        closeChatMenu();
+        return;
+      }
+      openChatMenu(e, chat.id);
+    });
     list.appendChild(div);
   });
 }
 
 function openChatMenu(e, chatId) {
   e.stopPropagation();
+  // Close any previous menu first (only one open at a time)
+  closeChatMenu();
   popupMenuChatId = chatId;
   const menu = document.getElementById('chatPopupMenu');
   document.querySelectorAll('.chat-item').forEach(el => el.classList.remove('menu-open'));
-  e.currentTarget.closest('.chat-item').classList.add('menu-open');
+  e.currentTarget.closest('.chat-item')?.classList.add('menu-open');
   const chat = chats.find(c => c.id === chatId);
   const pinLabel = document.getElementById('chatPinLabel');
   const pinIcon = document.querySelector('#chatPinBtn i');
   if (chat && chat.pinned) {
     pinLabel.textContent = 'Unpin chat';
-    pinIcon.style.color = 'var(--pin-red)';
   } else {
     pinLabel.textContent = 'Pin chat';
-    pinIcon.style.color = 'var(--pin-red)';
   }
+  if (pinIcon) pinIcon.style.color = 'var(--pin-red)';
+
+  // Position menu, keeping it inside the viewport on mobile
   const rect = e.currentTarget.getBoundingClientRect();
-  const menuW = 190;
+  const menuW = 210;
+  menu.style.visibility = 'hidden';
+  menu.classList.add('show');
+  const menuH = menu.offsetHeight || 240;
+
   let left = rect.right - menuW;
+  if (left < 8) left = 8;
+  if (left + menuW > window.innerWidth - 8) left = window.innerWidth - menuW - 8;
+
   let top = rect.bottom + 6;
-  if (left < 10) left = 10;
-  if (top + 260 > window.innerHeight) top = rect.top - 260;
+  if (top + menuH > window.innerHeight - 8) {
+    top = rect.top - menuH - 6;
+  }
+  if (top < 8) top = 8;
+
   menu.style.left = left + 'px';
   menu.style.top = top + 'px';
-  menu.classList.add('show');
+  menu.style.visibility = 'visible';
 }
 function closeChatMenu() {
-  document.getElementById('chatPopupMenu').classList.remove('show');
+  const menu = document.getElementById('chatPopupMenu');
+  if (menu) menu.classList.remove('show');
   document.querySelectorAll('.chat-item').forEach(el => el.classList.remove('menu-open'));
+  popupMenuChatId = null;
 }
 function togglePinCurrentChat() {
   const chat = chats.find(c => c.id === popupMenuChatId);
@@ -1260,6 +1270,15 @@ function shareCurrentChat() {
   openSharePopup();
 }
 
+// Close chat menu on outside click / scroll
+document.addEventListener('click', (e) => {
+  const menu = document.getElementById('chatPopupMenu');
+  if (!menu || !menu.classList.contains('show')) return;
+  if (e.target.closest('#chatPopupMenu')) return;
+  if (e.target.closest('.chat-menu-btn')) return;
+  closeChatMenu();
+}, true);
+
 // ============================================================
 // SHARE
 // ============================================================
@@ -1286,7 +1305,7 @@ function shareTo(platform) {
 }
 
 // ============================================================
-// IN-CHAT SEARCH (NEW)
+// IN-CHAT SEARCH
 // ============================================================
 function toggleChatSearch() {
   const bar = document.getElementById('chatSearchBar');
@@ -1393,7 +1412,7 @@ function handleInputChange() {
 }
 function handleKeyDown(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!isSending) sendMessage(); } }
 function handleSendOrCancel() { if (isSending) cancelRequest(); else sendMessage(); }
-function cancelRequest() { if (currentAbortController) currentAbortController.abort(); isSending = false; hideTyping(); }
+function cancelRequest() { if (currentAbortController) currentAbortController.abort(); isSending = false; }
 async function handleFiles(e) {
   const files = Array.from(e.target.files || []);
   for (const file of files) {
@@ -1417,7 +1436,7 @@ function insertQuickPrompt(t) { document.getElementById('messageInput').value = 
 function useSuggestion(t) { insertQuickPrompt(t); }
 
 // ============================================================
-// NEW: MESSAGE ACTIONS (BUTTONS)
+// MESSAGE ACTIONS
 // ============================================================
 function handleLikeMessage(idx) {
   const chat = chats.find(c => c.id === activeChatId);
@@ -1427,7 +1446,6 @@ function handleLikeMessage(idx) {
   saveChats(); renderMessages();
   showToast('Thank you for your feedback! ✅');
 }
-
 function handleDislikeMessage(idx) {
   const chat = chats.find(c => c.id === activeChatId);
   if (!chat || !chat.messages[idx]) return;
@@ -1437,40 +1455,26 @@ function handleDislikeMessage(idx) {
   document.getElementById('dislikeFeedbackInput').value = '';
   document.getElementById('dislikeModal').classList.add('show');
 }
-
 function submitDislikeFeedback() {
   const text = document.getElementById('dislikeFeedbackInput').value.trim();
   closeModal('dislikeModal');
-  if (text) {
-    console.log('[WiseKing] Dislike feedback:', text);
-  }
+  if (text) console.log('[WiseKing] Dislike feedback:', text);
   showToast('👎 Noted. Thank you for your feedback!');
 }
-
 function handleRegenerateMessage(chatId, msgIdx) {
   const chat = chats.find(c => c.id === chatId);
   if (!chat) return;
-  if (isSending) return; // Prevent concurrent
-  // Find the user message before this AI message
+  if (isSending) return;
   let userMsgIdx = -1;
   for (let i = msgIdx - 1; i >= 0; i--) {
-    if (chat.messages[i].role === 'user') {
-      userMsgIdx = i;
-      break;
-    }
+    if (chat.messages[i].role === 'user') { userMsgIdx = i; break; }
   }
-  if (userMsgIdx === -1) {
-    showToast('Cannot regenerate without a user message.');
-    return;
-  }
+  if (userMsgIdx === -1) { showToast('Cannot regenerate without a user message.'); return; }
   const userMsg = chat.messages[userMsgIdx];
-  // Remove the current AI message
   chat.messages.splice(msgIdx, 1);
   saveChats(); renderMessages();
-  // Trigger a new response for the same user message
   triggerResponse(chat, userMsg);
 }
-
 function handleCopyMessage(idx) {
   const chat = chats.find(c => c.id === activeChatId);
   if (!chat || !chat.messages[idx]) return;
@@ -1483,7 +1487,6 @@ function handleCopyMessage(idx) {
     ta.remove();
   });
 }
-
 function handleShareMessage(idx) {
   const chat = chats.find(c => c.id === activeChatId);
   if (!chat || !chat.messages[idx]) return;
@@ -1491,7 +1494,6 @@ function handleShareMessage(idx) {
   currentShareTarget = { type: 'message', idx, text: msg.content || '' };
   openSharePopup();
 }
-
 function handleEditMessage(idx) {
   const chat = chats.find(c => c.id === activeChatId);
   if (!chat || !chat.messages[idx]) return;
@@ -1502,16 +1504,10 @@ function handleEditMessage(idx) {
   document.getElementById('editMessageModal').classList.add('show');
   setTimeout(() => document.getElementById('editMessageInput').focus(), 100);
 }
-
 function handleDeleteMessage(idx) {
   deletingMessageIdx = idx;
   document.getElementById('deleteMessageModal').classList.add('show');
 }
-// ============================================================
-
-// ============================================================
-// MESSAGE ACTIONS (for Modal SAVE)
-// ============================================================
 function saveEditedMessage() {
   if (editingMessageIdx < 0) return;
   const chat = chats.find(c => c.id === activeChatId); if (!chat) return;
@@ -1698,7 +1694,6 @@ function sendMessage(textOverride) {
     generateImageInChat(chat, prompt, null);
     return;
   }
-  // Vision: send image with text
   triggerResponse(chat, userMsg);
 }
 
@@ -1715,7 +1710,6 @@ function renderMessages() {
   document.getElementById('chatTitle').textContent = chat.title;
   chat.messages.forEach((msg, idx) => area.appendChild(buildMessageEl(msg, idx, chat.id)));
   const cs = document.getElementById('chatScroll'); cs.scrollTop = cs.scrollHeight;
-  // Re-apply search highlights if active
   if (document.getElementById('chatSearchBar').classList.contains('show')) {
     setTimeout(doChatSearch, 50);
   }
@@ -1725,6 +1719,7 @@ function buildMessageEl(msg, idx, chatId) {
   const el = document.createElement('div'); el.className = 'message ' + msg.role;
   el.dataset.msgIdx = idx;
   const isAI = msg.role === 'ai';
+  const isThinking = isAI && msg.streaming === true && !msg.content;
   const avatar = document.createElement('div'); avatar.className = 'msg-avatar ' + (isAI ? 'ai' : 'user');
   avatar.innerHTML = isAI ? '👑' : '<i class="fas fa-user"></i>';
   const body = document.createElement('div'); body.className = 'msg-body';
@@ -1735,6 +1730,20 @@ function buildMessageEl(msg, idx, chatId) {
   const contentWrap = document.createElement('div'); contentWrap.className = 'msg-content-wrap';
   const content = document.createElement('div'); content.className = 'msg-content ' + (isAI ? 'ai' : 'user') + (msg.error ? ' error' : '');
   content.dataset.contentIdx = idx;
+
+  if (isThinking) {
+    // CLEAN loading state: one crown (via avatar above) + dots + label
+    content.classList.add('thinking');
+    content.innerHTML = `
+      <div class="thinking-label">
+        <span class="thinking-dots"><span></span><span></span><span></span></span>
+        Wise King is thinking...
+      </div>`;
+    contentWrap.appendChild(content);
+    body.appendChild(contentWrap);
+    el.appendChild(avatar); el.appendChild(body);
+    return el;
+  }
 
   if (msg.type === 'image-loading') {
     content.innerHTML = `<div class="image-loading"><div class="ring"></div><div>${escapeHtml(msg.content || 'Generating...')}</div></div>`;
@@ -1760,12 +1769,11 @@ function buildMessageEl(msg, idx, chatId) {
   contentWrap.appendChild(content);
   body.appendChild(contentWrap);
 
-  // NEW: ADD ACTION BARS
-  if (msg.type !== 'image-loading') {
+  // Action bar only for finished messages (not thinking, not loading)
+  if (msg.type !== 'image-loading' && !isThinking) {
     const actionBar = document.createElement('div');
     actionBar.className = 'msg-action-bar';
     if (isAI) {
-      // AI Message Actions
       actionBar.innerHTML = `
         <button class="msg-action-btn ${msg.feedback === 'up' ? 'active' : ''}" onclick="handleLikeMessage(${idx})" title="Like"><i class="fas fa-thumbs-up"></i> Like</button>
         <button class="msg-action-btn ${msg.feedback === 'down' ? 'active' : ''}" onclick="handleDislikeMessage(${idx})" title="Dislike"><i class="fas fa-thumbs-down"></i> Dislike</button>
@@ -1774,7 +1782,6 @@ function buildMessageEl(msg, idx, chatId) {
         <button class="msg-action-btn" onclick="handleShareMessage(${idx})" title="Share"><i class="fas fa-share"></i> Share</button>
       `;
     } else {
-      // User Message Actions
       actionBar.innerHTML = `
         <button class="msg-action-btn" onclick="handleEditMessage(${idx})" title="Edit"><i class="fas fa-pen"></i> Edit</button>
         <button class="msg-action-btn" onclick="handleCopyMessage(${idx})" title="Copy"><i class="fas fa-copy"></i> Copy</button>
@@ -1783,7 +1790,6 @@ function buildMessageEl(msg, idx, chatId) {
     }
     body.appendChild(actionBar);
   }
-  // END NEW
 
   el.appendChild(avatar); el.appendChild(body);
   return el;
@@ -1814,11 +1820,11 @@ async function triggerResponse(chat, userMsg) {
   isSending = true;
   const btn = document.getElementById('sendBtn');
   btn.classList.remove('hidden'); btn.classList.add('stop'); btn.innerHTML = '<i class="fas fa-stop"></i>';
-  showTyping();
   currentAbortController = new AbortController();
   const signal = currentAbortController.signal;
 
-  // Create a live AI message
+  // Single AI message lifecycle: starts as "thinking" (empty content),
+  // then transitions to real content as streaming arrives.
   const aiMsg = { role:'ai', content:'', createdAt: Date.now(), streaming: true };
   chat.messages.push(aiMsg);
   renderMessages();
@@ -1833,13 +1839,11 @@ async function triggerResponse(chat, userMsg) {
   }
 
   aiMsg.streaming = false;
-  hideTyping();
   isSending = false; currentAbortController = null;
   btn.classList.remove('stop'); btn.innerHTML = '<i class="fas fa-arrow-up"></i>';
   handleInputChange();
   saveChats(); renderMessages();
 
-  // Extract cross-chat memory
   if (getMemoryEnabled() && chat.messages.length >= 4) {
     setTimeout(() => extractMemoryFromChat(chat), 1000);
   }
@@ -1855,26 +1859,48 @@ async function streamAIResponse(text, chat, signal, aiMsg) {
   const webSearchEnabled = getWebSearchEnabled();
   const streamingEnabled = getStreamingEnabled();
 
-  // Get the last user message with images (for vision)
-  const lastUserMsg = [...chat.messages].reverse().find(m => m.role === 'user' && m.content);
-  const parts = [{ text: text }];
-  if (lastUserMsg && lastUserMsg.images && lastUserMsg.images.length > 0) {
-    for (const imgDataUrl of lastUserMsg.images) {
-      const match = imgDataUrl.match(/^data:(image\/[^;]+);base64,(.+)$/);
-      if (match) {
-        parts.push({ inline_data: { mime_type: match[1], data: match[2] } });
+  // ------------------------------------------------------------
+  // FULL CONVERSATION CONTEXT (memory restoration patch preserved)
+  // ------------------------------------------------------------
+  const history = chat.messages.filter(m => m !== aiMsg);
+  const contents = [];
+
+  for (let i = 0; i < history.length; i++) {
+    const m = history[i];
+    if (!m || m.streaming) continue;
+    if (m.type === 'image-loading') continue;
+    if (m.type === 'image') {
+      contents.push({ role: 'model', parts: [{ text: `[Image generated]: ${m.content || m.prompt || ''}` }] });
+      continue;
+    }
+    if (m.error) continue;
+
+    const role = m.role === 'ai' ? 'model' : 'user';
+    const parts = [];
+    const textContent = (m.content || '').trim();
+    if (textContent) parts.push({ text: textContent });
+
+    if (m.role === 'user' && Array.isArray(m.images) && m.images.length) {
+      for (const imgDataUrl of m.images) {
+        const match = String(imgDataUrl).match(/^data:(image\/[^;]+);base64,(.+)$/);
+        if (match) parts.push({ inline_data: { mime_type: match[1], data: match[2] } });
       }
     }
+    if (parts.length === 0) continue;
+    contents.push({ role, parts });
+  }
+
+  if (contents.length && contents[0].role === 'model') {
+    contents.unshift({ role: 'user', parts: [{ text: '(continuing conversation)' }] });
   }
 
   const body = {
     systemInstruction: { parts: [{ text: systemPrompt }] },
-    contents: [{ role: 'user', parts: parts }]
+    contents: contents
   };
   if (webSearchEnabled) body.tools = [{ google_search: {} }];
 
   if (!streamingEnabled) {
-    // Non-streaming mode
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
     const res = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body), signal });
     if (!res.ok) { aiMsg.error = true; aiMsg.content = '⚠️ Service busy. Try again.'; return; }
@@ -1891,11 +1917,9 @@ async function streamAIResponse(text, chat, signal, aiMsg) {
     return;
   }
 
-  // STREAMING MODE
   const streamUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
   const res = await fetch(streamUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body), signal });
   if (!res.ok) {
-    // Fallback to non-streaming
     const fbUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${encodeURIComponent(apiKey)}`;
     const fbRes = await fetch(fbUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ systemInstruction: body.systemInstruction, contents: body.contents }), signal });
     if (!fbRes.ok) { aiMsg.error = true; aiMsg.content = '⚠️ Service busy.'; return; }
@@ -1909,11 +1933,11 @@ async function streamAIResponse(text, chat, signal, aiMsg) {
   let buffer = '';
   let fullText = '';
   let allChunks = [];
+  let firstChunkReceived = false;
 
-  // Detect owner greeting
   if (ownerMode && chat.messages.length <= 3) {
     fullText = `Barka dai, Ranka ya dade, Oga Ibrahim! 🙏 All hail the supreme Commander! 👑\n\n`;
-    updateStreamingMessage(chat, aiMsg, fullText);
+    updateStreamingMessage(chat, aiMsg, fullText, true);
   }
 
   while (true) {
@@ -1933,7 +1957,13 @@ async function streamAIResponse(text, chat, signal, aiMsg) {
         const textPart = candidate?.content?.parts?.[0]?.text || '';
         if (textPart) {
           fullText += textPart;
-          updateStreamingMessage(chat, aiMsg, fullText);
+          // On the first real chunk, switch from "thinking" to streaming view
+          if (!firstChunkReceived) {
+            firstChunkReceived = true;
+            updateStreamingMessage(chat, aiMsg, fullText, true);
+          } else {
+            updateStreamingMessage(chat, aiMsg, fullText, false);
+          }
         }
         if (candidate?.groundingMetadata?.groundingChunks) {
           allChunks = candidate.groundingMetadata.groundingChunks;
@@ -1942,7 +1972,6 @@ async function streamAIResponse(text, chat, signal, aiMsg) {
     }
   }
 
-  // Append sources if available
   if (allChunks.length > 0) {
     const sources = allChunks.map(c => c.web ? `• [${c.web.title || 'Source'}](${c.web.uri})` : '').filter(Boolean).slice(0, 5).join('\n');
     if (sources) fullText += `\n\n🌐 **Sources**\n${sources}`;
@@ -1952,9 +1981,11 @@ async function streamAIResponse(text, chat, signal, aiMsg) {
   aiMsg.streaming = false;
 }
 
-function updateStreamingMessage(chat, aiMsg, text) {
+// Update the streaming AI message in-place.
+// When still "thinking" (no text yet), renders the clean thinking state
+// into the SAME message element. Once text arrives, renders markdown + cursor.
+function updateStreamingMessage(chat, aiMsg, text, transitionFromThinking) {
   aiMsg.content = text;
-  // Find the message element and update content directly for performance
   const idx = chat.messages.indexOf(aiMsg);
   if (idx < 0) return;
   const area = document.getElementById('messagesArea');
@@ -1963,13 +1994,13 @@ function updateStreamingMessage(chat, aiMsg, text) {
   if (!el) return;
   const contentEl = el.querySelector('.msg-content');
   if (!contentEl) return;
+
+  contentEl.classList.remove('thinking');
   contentEl.innerHTML = buildContentHtml({ content: text }) + '<span class="streaming-cursor"></span>';
+
   const cs = document.getElementById('chatScroll');
   cs.scrollTop = cs.scrollHeight;
 }
-
-function showTyping() { document.getElementById('typingIndicator').classList.remove('hidden'); }
-function hideTyping() { document.getElementById('typingIndicator').classList.add('hidden'); }
 
 // ============================================================
 // SEARCH WEB PANEL
@@ -2047,7 +2078,7 @@ function filterBuildIdeas(q) {
   box.innerHTML = list.map(i => {
     const e = i.t.replace(/'/g, "\\'");
     return `<div class="result-card" onclick="buildApp('${e}')" style="cursor:pointer"><h4><i class="fas fa-cube"></i> ${escapeHtml(i.t)}</h4><p>${escapeHtml(i.d)}</p><p style="margin-top:8px;color:var(--accent-hover);font-size:12px">▶ Click to build</p></div>`;
-  }).join('') || `<div class="result-card"><p>No matching ideas.</p></div>`;
+  }).join('') || `<div class="result-card"><p>No options available.</p><div style="margin-top:12px"><button class="btn ghost" onclick="closeBuildAppPanel()">Close</button></div></div>`;
 }
 function buildApp(name) { closeBuildAppPanel(); insertQuickPrompt(`Build a complete single-file HTML app: ${name}. Include full working code with modern styling, responsive layout, and clear comments.`); }
 
@@ -2113,7 +2144,10 @@ async function generateVideoFromPanel() {
 // ============================================================
 function renderLibrary() {
   const box = document.getElementById('libraryPanelResults'); if (!box) return;
-  if (!library.length) { box.innerHTML = '<div class="result-card"><p>No saved items yet.</p></div>'; return; }
+  if (!library.length) {
+    box.innerHTML = '<div class="result-card"><p>No options available.</p><div style="margin-top:12px"><button class="btn ghost" onclick="closeLibraryPanel()">Close</button></div></div>';
+    return;
+  }
   box.innerHTML = library.map(item => `
     <div class="result-card">
       <h4><i class="fas fa-${item.type==='video'?'video':'image'}"></i> ${escapeHtml((item.prompt||'').slice(0,80))}</h4>
@@ -2125,7 +2159,10 @@ function renderVideoGallery() {
   const box = document.getElementById('videoGalleryContent'); if (!box) return;
   const vids = library.filter(i => i.type === 'video');
   const badge = document.getElementById('videoCountBadge'); if (badge) badge.textContent = vids.length;
-  if (!vids.length) { box.innerHTML = '<div class="result-card"><p>No videos yet.</p></div>'; return; }
+  if (!vids.length) {
+    box.innerHTML = '<div class="result-card"><p>No options available.</p><div style="margin-top:12px"><button class="btn ghost" onclick="closeVideoGallery()">Close</button></div></div>';
+    return;
+  }
   box.innerHTML = vids.map(v => `<div class="result-card"><h4>${escapeHtml((v.prompt||'').slice(0,80))}</h4>${v.url ? `<video src="${v.url}" controls style="max-width:100%;border-radius:8px;margin-top:8px"></video>` : ''}</div>`).join('');
 }
 
