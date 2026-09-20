@@ -21,7 +21,6 @@
   .login-logo{width:56px;height:56px;border-radius:var(--radius-lg);background:var(--accent-gradient);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;box-shadow:var(--shadow-glow)}
   .login-title{font-size:26px;font-weight:700;letter-spacing:-0.02em;margin-bottom:6px}
   .login-subtitle{color:var(--text-secondary);font-size:14px;margin-bottom:24px}
-  /* AUTH TABS */
   .auth-tabs{display:flex;background:var(--bg-elevated);border-radius:var(--radius-md);padding:4px;margin-bottom:20px;gap:4px}
   .auth-tab{flex:1;padding:9px;border-radius:var(--radius-sm);background:transparent;border:none;color:var(--text-secondary);font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:all var(--transition-fast)}
   .auth-tab.active{background:var(--accent-gradient);color:white;box-shadow:var(--shadow-sm)}
@@ -45,7 +44,6 @@
   .auth-error.show{display:block}
   .auth-success{background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);color:#6ee7b7;font-size:12.5px;padding:10px 12px;border-radius:var(--radius-sm);margin-bottom:8px;display:none;text-align:left}
   .auth-success.show{display:block}
-
   .app{display:flex;height:100vh;height:100dvh;width:100vw;overflow:hidden}
   .sidebar{width:var(--sidebar-width);min-width:var(--sidebar-width);background:var(--bg-secondary);border-right:1px solid var(--border-subtle);display:flex;flex-direction:column;height:100dvh;transition:transform var(--transition-smooth);z-index:40}
   .sidebar-header{padding:14px 16px;border-bottom:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:space-between}
@@ -71,26 +69,15 @@
   .section-header:not(.open) .arrow{transform:rotate(-90deg)}
   .section-body{max-height:0;overflow:hidden;transition:max-height var(--transition-smooth)}
   .section-body.open{max-height:900px;overflow-y:auto}
-
   .chat-item{display:flex;align-items:center;gap:6px;padding:8px 6px 8px 12px;border-radius:var(--radius-full);margin:2px 0;cursor:pointer;font-size:15px;transition:background var(--transition-fast);position:relative}
   .chat-item:hover,.chat-item.active{background:var(--bg-elevated)}
   .chat-item .chat-title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
   .chat-item .active-dot{width:8px;height:8px;border-radius:50%;background:#3b82f6;flex-shrink:0;box-shadow:0 0 8px #3b82f6}
-  .chat-item .chat-menu-btn{
-    background:transparent;border:none;color:var(--text-secondary);
-    width:36px;height:36px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;flex-shrink:0;
-    opacity:1 !important;
-    transition:background var(--transition-fast),color var(--transition-fast);
-    -webkit-tap-highlight-color:rgba(99,102,241,0.25)
-  }
-  .chat-item .chat-menu-btn:hover,
-  .chat-item .chat-menu-btn:focus{background:var(--bg-hover);color:var(--text-primary)}
+  .chat-item .chat-menu-btn{background:transparent;border:none;color:var(--text-secondary);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;opacity:1 !important;transition:background var(--transition-fast),color var(--transition-fast);-webkit-tap-highlight-color:rgba(99,102,241,0.25)}
+  .chat-item .chat-menu-btn:hover,.chat-item .chat-menu-btn:focus{background:var(--bg-hover);color:var(--text-primary)}
   .chat-item .chat-menu-btn i{font-size:15px}
   .chat-item.pinned::before{content:'📌';position:absolute;left:-2px;top:50%;transform:translateY(-50%);font-size:11px}
   .chat-item.menu-open .chat-menu-btn{background:var(--bg-hover);color:var(--text-primary)}
-
   .popup-menu{position:fixed;background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:var(--radius-md);box-shadow:0 10px 40px rgba(0,0,0,0.6);z-index:3000;display:none;flex-direction:column;padding:6px;min-width:200px;animation:menuIn 0.15s cubic-bezier(0.4,0,0.2,1)}
   .popup-menu.show{display:flex}
   @keyframes menuIn{from{opacity:0;transform:scale(0.95) translateY(-4px)}to{opacity:1;transform:scale(1) translateY(0)}}
@@ -100,7 +87,6 @@
   .popup-menu-item.pin-item i{color:var(--pin-red)}
   .popup-menu-item.danger{color:#f87171}
   .popup-menu-item.danger i{color:#f87171}
-
   .sidebar-footer{border-top:1px solid var(--border-subtle);padding:12px;display:flex;align-items:center;gap:10px}
   .user-chip{display:flex;align-items:center;gap:12px;flex:1;cursor:pointer;padding:6px 8px;border-radius:var(--radius-full)}
   .user-chip:hover{background:var(--bg-elevated)}
@@ -176,21 +162,13 @@
   .msg-content.ai{background:var(--bg-secondary);border:1px solid var(--border-subtle);border-top-left-radius:4px}
   .msg-content.user{background:var(--accent-gradient);color:white;border-top-right-radius:4px;box-shadow:var(--shadow-sm)}
   .msg-content.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);color:#fca5a5}
-
-  .msg-content.thinking{
-    display:flex;align-items:center;gap:10px;
-    padding:14px 18px;min-height:44px;
-    background:var(--bg-secondary);
-    border:1px solid var(--border-subtle);
-    border-top-left-radius:4px;
-  }
+  .msg-content.thinking{display:flex;align-items:center;gap:10px;padding:14px 18px;min-height:44px;background:var(--bg-secondary);border:1px solid var(--border-subtle);border-top-left-radius:4px}
   .thinking-label{font-size:13.5px;color:var(--text-secondary);font-weight:500;display:inline-flex;align-items:center;gap:8px}
   .thinking-dots{display:inline-flex;gap:4px;align-items:center}
   .thinking-dots span{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;animation:thinkBounce 1.2s infinite ease-in-out}
   .thinking-dots span:nth-child(2){animation-delay:0.15s}
   .thinking-dots span:nth-child(3){animation-delay:0.3s}
   @keyframes thinkBounce{0%,80%,100%{transform:scale(0.6);opacity:0.45}40%{transform:scale(1);opacity:1}}
-
   .msg-action-bar{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
   .message.user .msg-action-bar{justify-content:flex-end}
   .msg-action-btn{background:transparent;border:1px solid var(--border-subtle);color:var(--text-secondary);font-size:11px;font-weight:500;padding:4px 8px;border-radius:var(--radius-sm);cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all var(--transition-fast);font-family:inherit}
@@ -198,8 +176,6 @@
   .msg-action-btn.active{background:rgba(99,102,241,0.15);color:var(--accent-hover);border-color:var(--accent)}
   .msg-action-btn.danger{color:#f87171}
   .msg-action-btn.danger:hover{background:rgba(239,68,68,0.1);border-color:#f87171}
-
-  /* COPY-FIRST PROMPT CARD */
   .wk-prompt-card{display:flex;flex-direction:column;gap:10px}
   .wk-prompt-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:8px 10px;background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:var(--radius-md)}
   .wk-prompt-badge{font-size:11.5px;font-weight:700;letter-spacing:0.06em;color:var(--accent-hover);display:inline-flex;align-items:center;gap:6px}
@@ -213,17 +189,11 @@
   .wk-block-label{font-size:11px;font-weight:700;letter-spacing:0.05em;color:var(--accent-hover);margin-bottom:8px}
   .wk-block-label.muted{color:var(--text-secondary)}
   .wk-block-body{font-size:14.5px;line-height:1.7}
-  .wk-prompt-block.wk-collapsed .wk-block-body,
-  .wk-expl-block.wk-collapsed .wk-block-body{max-height:340px;overflow:hidden;-webkit-mask-image:linear-gradient(to bottom, #000 60%, transparent 100%);mask-image:linear-gradient(to bottom, #000 60%, transparent 100%)}
+  .wk-prompt-block.wk-collapsed .wk-block-body,.wk-expl-block.wk-collapsed .wk-block-body{max-height:340px;overflow:hidden;-webkit-mask-image:linear-gradient(to bottom, #000 60%, transparent 100%);mask-image:linear-gradient(to bottom, #000 60%, transparent 100%)}
   .wk-expand-row{display:flex;justify-content:center;padding-top:4px}
   .wk-expand-btn{background:transparent;border:1px solid var(--border-default);color:var(--accent-hover);font-size:12.5px;font-weight:600;padding:7px 16px;border-radius:var(--radius-full);cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px}
   .wk-expand-btn:hover{background:var(--bg-elevated)}
-  @media (max-width: 480px){
-    .wk-prompt-head{flex-direction:column;align-items:stretch}
-    .wk-prompt-actions{justify-content:stretch}
-    .wk-copy-btn{flex:1;justify-content:center}
-  }
-
+  @media (max-width: 480px){.wk-prompt-head{flex-direction:column;align-items:stretch}.wk-prompt-actions{justify-content:stretch}.wk-copy-btn{flex:1;justify-content:center}}
   .md p{margin:0 0 10px}.md p:last-child{margin-bottom:0}
   .md h1,.md h2,.md h3,.md h4{margin:16px 0 8px;font-weight:700;line-height:1.3}
   .md h1{font-size:1.45em}.md h2{font-size:1.28em}.md h3{font-size:1.13em}.md h4{font-size:1em}
@@ -381,70 +351,39 @@
 </head>
 <body>
 
-<!-- ============ LOGIN SCREEN ============ -->
 <div id="loginScreen">
   <div class="login-card">
     <div class="login-logo">👑</div>
     <h1 class="login-title">Welcome to Wise King AI</h1>
     <p class="login-subtitle">Your conversations, memories, and creations — synced forever.</p>
-
     <div class="auth-error" id="authError"></div>
     <div class="auth-success" id="authSuccess"></div>
-
     <button class="social-btn" onclick="firebaseGoogleLogin()"><i class="fab fa-google" style="color:#ea4335"></i> Continue with Google</button>
-
     <div class="auth-divider">OR</div>
-
     <div class="auth-tabs">
       <button class="auth-tab active" id="tabSignIn" onclick="switchAuthTab('signin')">Sign In</button>
       <button class="auth-tab" id="tabSignUp" onclick="switchAuthTab('signup')">Sign Up</button>
     </div>
-
-    <!-- SIGN IN -->
     <div class="auth-panel active" id="panelSignIn">
-      <div class="auth-input-wrap">
-        <i class="fas fa-envelope"></i>
-        <input type="email" class="auth-input" id="signInEmail" placeholder="Email address" autocomplete="email">
-      </div>
-      <div class="auth-input-wrap">
-        <i class="fas fa-lock"></i>
-        <input type="password" class="auth-input" id="signInPassword" placeholder="Password" autocomplete="current-password">
-      </div>
+      <div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" class="auth-input" id="signInEmail" placeholder="Email address" autocomplete="email"></div>
+      <div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" class="auth-input" id="signInPassword" placeholder="Password" autocomplete="current-password"></div>
       <button class="auth-link" style="align-self:flex-end;margin-bottom:4px" onclick="showResetPasswordForm()">Forgot password?</button>
       <button class="auth-submit" id="signInBtn" onclick="emailSignIn()"><i class="fas fa-right-to-bracket"></i> Sign In</button>
     </div>
-
-    <!-- SIGN UP -->
     <div class="auth-panel" id="panelSignUp">
-      <div class="auth-input-wrap">
-        <i class="fas fa-user"></i>
-        <input type="text" class="auth-input" id="signUpName" placeholder="Full name" autocomplete="name">
-      </div>
-      <div class="auth-input-wrap">
-        <i class="fas fa-envelope"></i>
-        <input type="email" class="auth-input" id="signUpEmail" placeholder="Email address" autocomplete="email">
-      </div>
-      <div class="auth-input-wrap">
-        <i class="fas fa-lock"></i>
-        <input type="password" class="auth-input" id="signUpPassword" placeholder="Password (min 6 chars)" autocomplete="new-password">
-      </div>
+      <div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" class="auth-input" id="signUpName" placeholder="Full name" autocomplete="name"></div>
+      <div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" class="auth-input" id="signUpEmail" placeholder="Email address" autocomplete="email"></div>
+      <div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" class="auth-input" id="signUpPassword" placeholder="Password (min 6 chars)" autocomplete="new-password"></div>
       <button class="auth-submit" id="signUpBtn" onclick="emailSignUp()"><i class="fas fa-user-plus"></i> Create Account</button>
     </div>
-
-    <!-- RESET PASSWORD -->
     <div class="auth-panel" id="panelReset">
-      <div class="auth-input-wrap">
-        <i class="fas fa-envelope"></i>
-        <input type="email" class="auth-input" id="resetEmail" placeholder="Your email address" autocomplete="email">
-      </div>
+      <div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" class="auth-input" id="resetEmail" placeholder="Your email address" autocomplete="email"></div>
       <button class="auth-submit" id="resetBtn" onclick="sendPasswordReset()"><i class="fas fa-paper-plane"></i> Send Reset Link</button>
       <button class="auth-link" onclick="switchAuthTab('signin')">Back to sign in</button>
     </div>
-
     <button class="skip-auth" onclick="skipLoginAsGuest()">Continue as Guest (Local Mode)</button>
   </div>
 </div>
-<!-- ============ END LOGIN ============ -->
 
 <div class="app" id="mainApp" style="opacity:0;transition:opacity .4s">
   <aside class="sidebar" id="sidebar">
@@ -820,7 +759,6 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- ============ FIREBASE ============ -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
   import {
@@ -841,8 +779,6 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
-
-  // Persistent session across browser closes
   setPersistence(auth, browserLocalPersistence).catch(() => {});
 
   window.fbAuth = auth;
@@ -973,9 +909,7 @@ function setAuthBtnLoading(btnId, loading, label) {
   const b = document.getElementById(btnId);
   if (!b) return;
   b.disabled = loading;
-  b.innerHTML = loading
-    ? '<i class="fas fa-circle-notch fa-spin"></i> Please wait...'
-    : label;
+  b.innerHTML = loading ? '<i class="fas fa-circle-notch fa-spin"></i> Please wait...' : label;
 }
 function friendlyAuthError(err) {
   const code = err?.code || '';
@@ -1019,7 +953,6 @@ async function firebaseGoogleLogin() {
     showAuthError(friendlyAuthError(err));
   }
 }
-
 async function emailSignUp() {
   clearAuthMessages();
   const name = document.getElementById('signUpName').value.trim();
@@ -1028,7 +961,6 @@ async function emailSignUp() {
   if (!name) return showAuthError('Please enter your full name.');
   if (!email) return showAuthError('Please enter your email address.');
   if (!password || password.length < 6) return showAuthError('Password must be at least 6 characters.');
-
   setAuthBtnLoading('signUpBtn', true);
   try {
     const cred = await window.fbCreateUser(window.fbAuth, email, password);
@@ -1047,14 +979,12 @@ async function emailSignUp() {
     setAuthBtnLoading('signUpBtn', false, '<i class="fas fa-user-plus"></i> Create Account');
   }
 }
-
 async function emailSignIn() {
   clearAuthMessages();
   const email = document.getElementById('signInEmail').value.trim();
   const password = document.getElementById('signInPassword').value;
   if (!email) return showAuthError('Please enter your email address.');
   if (!password) return showAuthError('Please enter your password.');
-
   setAuthBtnLoading('signInBtn', true);
   try {
     const cred = await window.fbSignInEmail(window.fbAuth, email, password);
@@ -1072,7 +1002,6 @@ async function emailSignIn() {
     setAuthBtnLoading('signInBtn', false, '<i class="fas fa-right-to-bracket"></i> Sign In');
   }
 }
-
 async function sendPasswordReset() {
   clearAuthMessages();
   const email = document.getElementById('resetEmail').value.trim();
@@ -1088,7 +1017,6 @@ async function sendPasswordReset() {
     setAuthBtnLoading('resetBtn', false, '<i class="fas fa-paper-plane"></i> Send Reset Link');
   }
 }
-
 function skipLoginAsGuest() {
   clearAuthMessages();
   isGuest = true; currentUser = null;
@@ -1099,7 +1027,6 @@ function skipLoginAsGuest() {
   loadChatsFromLocalStorage();
   showToast('👤 Welcome, Guest');
 }
-
 function unlockApp(name, email, photoURL) {
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('mainApp').style.opacity = '1';
@@ -1111,33 +1038,26 @@ function unlockApp(name, email, photoURL) {
     document.getElementById('settingsUserEmail').textContent = email;
     document.getElementById('pmEmail').textContent = email;
   }
-  // Auth provider label
   const providerEl = document.getElementById('settingsAuthProvider');
   if (providerEl) {
-    if (isGuest) {
-      providerEl.textContent = 'Local only — sign in to sync across devices';
-    } else if (currentUser?.providerData?.length) {
+    if (isGuest) providerEl.textContent = 'Local only — sign in to sync across devices';
+    else if (currentUser?.providerData?.length) {
       const providers = currentUser.providerData.map(p => p.providerId.replace('.com','')).join(', ');
       providerEl.textContent = 'Signed in via: ' + providers;
-    } else {
-      providerEl.textContent = '';
-    }
+    } else providerEl.textContent = '';
   }
   const savedAvatar = localStorage.getItem('wk_user_avatar') || photoURL;
   if (savedAvatar) applyAvatar(savedAvatar);
   setTimeout(() => { const ls = document.getElementById('loginScreen'); if(ls) ls.style.display = 'none'; }, 400);
 }
-
 function openSignOutModal() {
   closeTopProfileMenu();
   document.getElementById('settingsModal').classList.remove('show');
   document.getElementById('signOutModal').classList.add('show');
 }
-
 async function confirmSignOut() {
   document.getElementById('signOutModal').classList.remove('show');
   try { if (window.fbAuth) await window.fbSignOut(window.fbAuth); } catch(e){}
-  // Clear ALL user data
   localStorage.removeItem('wk_logged_in');
   localStorage.removeItem('wk_user_email');
   localStorage.removeItem('wk_user_name');
@@ -1150,17 +1070,12 @@ async function confirmSignOut() {
   location.reload();
 }
 
-// ============================================================
-// AUTH STATE LISTENER (fires on load + every change)
-// ============================================================
 function initAuthListener() {
   if (!window.onAuthStateChanged || !window.fbAuth) return;
   window.onAuthStateChanged(window.fbAuth, async (user) => {
     authStateResolved = true;
     if (user) {
-      // Real signed-in user
-      currentUser = user;
-      isGuest = false;
+      currentUser = user; isGuest = false;
       localStorage.setItem('wk_logged_in', '1');
       localStorage.removeItem('wk_guest_mode');
       localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
@@ -1168,16 +1083,13 @@ function initAuthListener() {
       unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
       await loadChatsFromFirestore();
     } else {
-      // No Firebase user — check if we have a guest session
       const wasGuest = localStorage.getItem('wk_guest_mode') === '1';
       const wasLoggedIn = localStorage.getItem('wk_logged_in') === '1';
       if (wasGuest && wasLoggedIn) {
-        // Restore guest session silently
         isGuest = true;
         unlockApp('Guest', 'Guest Mode (not synced)', null);
         loadChatsFromLocalStorage();
       } else if (wasLoggedIn) {
-        // Stale flag — show login
         localStorage.removeItem('wk_logged_in');
         localStorage.removeItem('wk_user_email');
         localStorage.removeItem('wk_user_name');
@@ -1190,7 +1102,7 @@ function initAuthListener() {
 }
 
 // ============================================================
-// FIRESTORE SYNC (per-user, isolated)
+// FIRESTORE SYNC
 // ============================================================
 async function saveChatsToFirestore() {
   if (isGuest || !currentUser || !window.fbDb) {
@@ -1204,7 +1116,6 @@ async function saveChatsToFirestore() {
     }
   } catch(e){ console.warn('Firestore save failed', e); }
 }
-
 async function loadChatsFromFirestore() {
   if (isGuest || !currentUser || !window.fbDb) return;
   try {
@@ -1212,20 +1123,18 @@ async function loadChatsFromFirestore() {
     const snap = await window.fbGetDocs(col);
     const cloud = [];
     snap.forEach(d => cloud.push(d.data()));
-    if (cloud.length > 0) {
-      chats = cloud.sort((a,b) => (b.createdAt||0)-(a.createdAt||0));
-    } else {
+    if (cloud.length > 0) chats = cloud.sort((a,b) => (b.createdAt||0)-(a.createdAt||0));
+    else {
       loadChatsFromLocalStorage();
       if (chats.length && chats.some(c => c.messages?.length)) await saveChatsToFirestore();
     }
     if (!activeChatId && chats.length) activeChatId = chats[0].id;
     renderChats(); renderMessages();
   } catch(e) {
-    console.warn('Firestore load failed, using local', e);
+    console.warn('Firestore load failed', e);
     loadChatsFromLocalStorage();
   }
 }
-
 function loadChatsFromLocalStorage() {
   try { const s = localStorage.getItem('wk_chats'); if (s) chats = JSON.parse(s); } catch(e) { chats = []; }
   if (!Array.isArray(chats) || !chats.length) chats = [{ id:'chat-'+Date.now(), title:'New chat', messages:[], createdAt:Date.now() }];
@@ -1239,17 +1148,15 @@ function loadChatsFromLocalStorage() {
 function getWebSearchEnabled() { return localStorage.getItem('wk_web_search') !== '0'; }
 function setWebSearchEnabled(e) { localStorage.setItem('wk_web_search', e ? '1' : '0'); document.getElementById('webSearchToggle')?.classList.toggle('on', e); }
 function toggleWebSearchSetting() { const n = !getWebSearchEnabled(); setWebSearchEnabled(n); showToast(n ? '🌐 Web Search ON' : '🚫 Web Search OFF'); }
-
 function getMemoryEnabled() { return localStorage.getItem('wk_memory_on') !== '0'; }
 function setMemoryEnabled(e) { localStorage.setItem('wk_memory_on', e ? '1' : '0'); document.getElementById('memoryToggle')?.classList.toggle('on', e); }
 function toggleMemorySetting() { const n = !getMemoryEnabled(); setMemoryEnabled(n); showToast(n ? '🧠 Memory ON' : '🚫 Memory OFF'); }
-
 function getStreamingEnabled() { return localStorage.getItem('wk_streaming_on') !== '0'; }
 function setStreamingEnabled(e) { localStorage.setItem('wk_streaming_on', e ? '1' : '0'); document.getElementById('streamingToggle')?.classList.toggle('on', e); }
 function toggleStreamingSetting() { const n = !getStreamingEnabled(); setStreamingEnabled(n); showToast(n ? '⚡ Streaming ON' : '🚫 Streaming OFF'); }
 
 // ============================================================
-// PWA INSTALL
+// PWA
 // ============================================================
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault(); deferredInstallPrompt = e;
@@ -1316,11 +1223,7 @@ function getMemoryContext() {
   if (!getMemoryEnabled() || !crossChatMemory.length) return '';
   return `\n\n===== LONG-TERM MEMORY (facts you know about this user) =====\n${crossChatMemory.map((m, i) => `${i+1}. ${m}`).join('\n')}\n===== END MEMORY =====\n`;
 }
-function openMemoryPanel() {
-  document.getElementById('memoryPanel').classList.add('show');
-  closeSidebar();
-  renderMemoryPanel();
-}
+function openMemoryPanel() { document.getElementById('memoryPanel').classList.add('show'); closeSidebar(); renderMemoryPanel(); }
 function closeMemoryPanel() { document.getElementById('memoryPanel').classList.remove('show'); }
 function renderMemoryPanel() {
   const box = document.getElementById('memoryPanelResults'); if (!box) return;
@@ -1371,9 +1274,7 @@ async function extractMemoryFromChat(chat) {
 async function extractMemoryNow() {
   showToast('🧠 Analyzing all chats...');
   for (const chat of chats) {
-    if (!chat.memoryExtracted && chat.messages.length >= 4) {
-      await extractMemoryFromChat(chat);
-    }
+    if (!chat.memoryExtracted && chat.messages.length >= 4) await extractMemoryFromChat(chat);
   }
   renderMemoryPanel();
   showToast('✅ Memory updated');
@@ -1439,12 +1340,10 @@ function init() {
     setStreamingEnabled(getStreamingEnabled());
     updateModelBadge(); handleInputChange(); updateReplicateStatus();
 
-    // Enter key submits auth forms
     document.getElementById('signInPassword')?.addEventListener('keydown', e => { if (e.key === 'Enter') emailSignIn(); });
     document.getElementById('signUpPassword')?.addEventListener('keydown', e => { if (e.key === 'Enter') emailSignUp(); });
     document.getElementById('resetEmail')?.addEventListener('keydown', e => { if (e.key === 'Enter') sendPasswordReset(); });
 
-    // Firebase auth listener handles session restore
     initAuthListener();
   } catch(e){ console.warn(e); }
 }
@@ -1533,7 +1432,6 @@ function renderChats() {
     list.appendChild(div);
   });
 }
-
 function openChatMenu(e, chatId) {
   e.stopPropagation();
   closeChatMenu();
@@ -1553,15 +1451,12 @@ function openChatMenu(e, chatId) {
   menu.style.visibility = 'hidden';
   menu.classList.add('show');
   const menuH = menu.offsetHeight || 240;
-
   let left = rect.right - menuW;
   if (left < 8) left = 8;
   if (left + menuW > window.innerWidth - 8) left = window.innerWidth - menuW - 8;
-
   let top = rect.bottom + 6;
   if (top + menuH > window.innerHeight - 8) top = rect.top - menuH - 6;
   if (top < 8) top = 8;
-
   menu.style.left = left + 'px';
   menu.style.top = top + 'px';
   menu.style.visibility = 'visible';
@@ -1616,7 +1511,6 @@ function confirmDeleteChat() {
       activeChatId = id;
     }
   }
-  // Also delete from Firestore if signed in
   if (!isGuest && currentUser && window.fbDb && deletingChatId) {
     try {
       const ref = window.fbDoc(window.fbDb, 'users', currentUser.uid, 'chats', deletingChatId);
@@ -1635,7 +1529,6 @@ function shareCurrentChat() {
   closeChatMenu();
   openSharePopup();
 }
-
 document.addEventListener('click', (e) => {
   const menu = document.getElementById('chatPopupMenu');
   if (!menu || !menu.classList.contains('show')) return;
@@ -1659,9 +1552,7 @@ function shareTo(platform) {
     case 'whatsapp': shareUrl = `https://wa.me/?text=${enc(text + '\n' + url)}`; break;
     case 'facebook': shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${enc(url)}&quote=${enc(text)}`; break;
     case 'tiktok': shareUrl = `https://www.tiktok.com/upload?lang=en`; break;
-    case 'instagram':
-      navigator.clipboard.writeText(text + '\n' + url).catch(()=>{});
-      showToast('📋 Copied! Paste in Instagram'); closeSharePopup(); return;
+    case 'instagram': navigator.clipboard.writeText(text + '\n' + url).catch(()=>{}); showToast('📋 Copied! Paste in Instagram'); closeSharePopup(); return;
     case 'telegram': shareUrl = `https://t.me/share/url?url=${enc(url)}&text=${enc(text)}`; break;
     case 'x': shareUrl = `https://twitter.com/intent/tweet?text=${enc(text)}&url=${enc(url)}`; break;
   }
@@ -1713,8 +1604,7 @@ function highlightCurrentMatch() {
   const msgEls = area.querySelectorAll('.message');
   msgEls.forEach(el => el.classList.remove('search-current'));
   if (searchCurrentIdx < 0 || searchCurrentIdx >= searchMatches.length) return;
-  const idx = searchMatches[searchCurrentIdx];
-  const el = msgEls[idx];
+  const el = msgEls[searchMatches[searchCurrentIdx]];
   if (el) { el.classList.add('search-current'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
 }
 function nextSearchMatch() {
@@ -1885,7 +1775,6 @@ function confirmDeleteMessage() {
 // COPY-FIRST HELPERS
 // ============================================================
 const LONG_RESPONSE_THRESHOLD = 1200;
-
 function splitPromptAndExplanation(content) {
   const src = String(content || '');
   const promptRe = /===\s*FULL PROMPT\s*\/?\s*INSTRUCTION\s*===([\s\S]*?)(?====\s*EXPLANATION\s*\/?\s*NOTES\s*===|$)/i;
@@ -1893,29 +1782,21 @@ function splitPromptAndExplanation(content) {
   const pMatch = src.match(promptRe);
   const eMatch = src.match(explRe);
   if (!pMatch) return null;
-  return {
-    promptBlock: pMatch[1].trim(),
-    explanationBlock: eMatch ? eMatch[1].trim() : '',
-    full: src
-  };
+  return { promptBlock: pMatch[1].trim(), explanationBlock: eMatch ? eMatch[1].trim() : '', full: src };
 }
-
 function wkCopyToClipboard(text) {
   return new Promise((resolve) => {
     try {
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(text).then(() => resolve(true)).catch(() => resolve(fallbackCopy(text)));
-      } else {
-        resolve(fallbackCopy(text));
-      }
+      } else resolve(fallbackCopy(text));
     } catch (e) { resolve(fallbackCopy(text)); }
   });
 }
 function fallbackCopy(text) {
   try {
     const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed'; ta.style.top = '-1000px';
+    ta.value = text; ta.style.position = 'fixed'; ta.style.top = '-1000px';
     document.body.appendChild(ta); ta.select();
     const ok = document.execCommand('copy');
     ta.remove();
@@ -2005,23 +1886,55 @@ function buildImageUrl(prompt, seed) {
   const s = seed || Math.floor(Math.random() * 1000000);
   return `https://image.pollinations.ai/prompt/${encodeURIComponent(enhanced)}?width=1024&height=1024&seed=${s}&nologo=true&enhance=true`;
 }
+
+// ⚡ FIXED: Replicate runner with proper error surfacing + polling
 async function replicateRun(modelOwner, modelName, input, apiKey) {
   const createRes = await fetch(`https://api.replicate.com/v1/models/${modelOwner}/${modelName}/predictions`, {
     method: 'POST',
-    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json', 'Prefer': 'wait' },
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify({ input })
   });
-  if (!createRes.ok) throw new Error(`Replicate error: ${createRes.status}`);
+
+  if (!createRes.ok) {
+    let errText = '';
+    try { const j = await createRes.json(); errText = j.detail || j.error || JSON.stringify(j); }
+    catch(e){ errText = await createRes.text().catch(()=>''); }
+    throw new Error(`Replicate ${createRes.status}: ${errText || 'create failed'}`);
+  }
+
   let pred = await createRes.json();
   let tries = 0;
-  while (pred.status !== 'succeeded' && pred.status !== 'failed' && pred.status !== 'canceled' && tries < 120) {
+  const MAX_TRIES = 150;
+  while (pred.status !== 'succeeded' && pred.status !== 'failed' && pred.status !== 'canceled' && tries < MAX_TRIES) {
     await new Promise(r => setTimeout(r, 2000));
-    const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${pred.id}`, { headers: { 'Authorization': `Bearer ${apiKey}` } });
-    pred = await pollRes.json(); tries++;
+    try {
+      const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${pred.id}`, {
+        headers: { 'Authorization': `Bearer ${apiKey}` }
+      });
+      if (pollRes.ok) pred = await pollRes.json();
+    } catch(e) { /* keep polling on transient network error */ }
+    tries++;
   }
-  if (pred.status !== 'succeeded') throw new Error(`Replicate ${pred.status}`);
-  return pred.output;
+
+  if (pred.status !== 'succeeded') {
+    const errDetail = pred.error || pred.detail || pred.status;
+    throw new Error(`Replicate ${pred.status}: ${errDetail}`);
+  }
+
+  const out = pred.output;
+  if (Array.isArray(out)) return out[out.length - 1];
+  if (typeof out === 'string') return out;
+  if (out && typeof out === 'object') {
+    if (out.url) return out.url;
+    if (out[0]) return out[0];
+  }
+  throw new Error('Replicate returned no output');
 }
+
+// ⚡ FIXED: chat image generation with real error display + auto fallback
 async function generateImageInChat(chat, prompt, sourceImageDataUrl) {
   const repKey = (localStorage.getItem('wk_replicate_key') || '').trim();
   const placeholder = {
@@ -2033,35 +1946,55 @@ async function generateImageInChat(chat, prompt, sourceImageDataUrl) {
   try {
     let imageUrl;
     if (repKey) {
-      if (sourceImageDataUrl) {
-        const output = await replicateRun('timothybrooks', 'instruct-pix2pix', {
-          image: sourceImageDataUrl, prompt, num_inference_steps: 30, image_guidance_scale: 1.5, guidance_scale: 7
-        }, repKey);
-        imageUrl = Array.isArray(output) ? output[output.length - 1] : output;
-      } else {
-        const output = await replicateRun('black-forest-labs', 'flux-schnell', {
-          prompt: prompt + ', ultra realistic, 8k, cinematic', num_outputs: 1, aspect_ratio: '1:1', output_format: 'png', output_quality: 95
-        }, repKey);
-        imageUrl = Array.isArray(output) ? output[0] : output;
+      try {
+        if (sourceImageDataUrl) {
+          imageUrl = await replicateRun('timothybrooks', 'instruct-pix2pix', {
+            image: sourceImageDataUrl, prompt, num_inference_steps: 30, image_guidance_scale: 1.5, guidance_scale: 7
+          }, repKey);
+        } else {
+          imageUrl = await replicateRun('black-forest-labs', 'flux-schnell', {
+            prompt: prompt + ', ultra realistic, 8k, cinematic',
+            num_outputs: 1,
+            aspect_ratio: '1:1',
+            output_format: 'png',
+            output_quality: 95,
+            go_fast: true
+          }, repKey);
+        }
+      } catch (replicateErr) {
+        console.warn('[WiseKing] Replicate failed:', replicateErr.message);
+        placeholder.content = `⚠️ Replicate: ${replicateErr.message}\n\n⏳ Trying free generator...`;
+        renderMessages();
+        await new Promise(r => setTimeout(r, 800));
+        imageUrl = buildImageUrl(prompt);
+        await new Promise((resolve) => {
+          const img = new Image();
+          img.onload = resolve; img.onerror = resolve;
+          img.src = imageUrl;
+          setTimeout(resolve, 20000);
+        });
       }
     } else {
       imageUrl = buildImageUrl(prompt);
-      await new Promise((resolve) => { const img = new Image(); img.onload = resolve; img.onerror = resolve; img.src = imageUrl; setTimeout(resolve, 15000); });
+      await new Promise((resolve) => {
+        const img = new Image();
+        img.onload = resolve; img.onerror = resolve;
+        img.src = imageUrl;
+        setTimeout(resolve, 20000);
+      });
     }
+
+    if (!imageUrl) throw new Error('No image URL returned');
+
     placeholder.type = 'image';
     placeholder.content = sourceImageDataUrl ? `Styled: "${prompt}"` : `Image: "${prompt}"`;
-    placeholder.imageUrl = imageUrl; placeholder.prompt = prompt;
+    placeholder.imageUrl = imageUrl;
+    placeholder.prompt = prompt;
     saveToLibrary({ type:'image', prompt, url: imageUrl, createdAt: Date.now() });
   } catch (err) {
-    if (repKey) {
-      try {
-        const fallbackUrl = buildImageUrl(prompt);
-        await new Promise((resolve) => { const img = new Image(); img.onload = resolve; img.onerror = resolve; img.src = fallbackUrl; setTimeout(resolve, 15000); });
-        placeholder.type = 'image'; placeholder.content = `Fallback: "${prompt}"`;
-        placeholder.imageUrl = fallbackUrl; placeholder.prompt = prompt;
-        saveToLibrary({ type:'image', prompt, url: fallbackUrl, createdAt: Date.now() });
-      } catch(e) { placeholder.type = 'error'; placeholder.content = '⚠️ Failed. Try again.'; }
-    } else { placeholder.type = 'error'; placeholder.content = '⚠️ Failed. Try again.'; }
+    console.error('[WiseKing] Image gen failed:', err);
+    placeholder.type = 'error';
+    placeholder.content = `⚠️ Failed: ${err.message || 'unknown error'}\n\n💡 Check your Replicate key in Settings.`;
   }
   saveChats(); renderMessages();
 }
@@ -2143,7 +2076,6 @@ function renderMessages() {
     setTimeout(doChatSearch, 50);
   }
 }
-
 function buildMessageEl(msg, idx, chatId) {
   const el = document.createElement('div'); el.className = 'message ' + msg.role;
   el.dataset.msgIdx = idx;
@@ -2189,11 +2121,8 @@ function buildMessageEl(msg, idx, chatId) {
       </div>`;
   } else {
     const split = isAI ? splitPromptAndExplanation(msg.content) : null;
-    if (split) {
-      content.innerHTML = buildCopyFirstHtml(split, msg, idx);
-    } else {
-      content.innerHTML = buildContentHtml(msg);
-    }
+    if (split) content.innerHTML = buildCopyFirstHtml(split, msg, idx);
+    else content.innerHTML = buildContentHtml(msg);
     if (msg.images && msg.images.length > 0) {
       const imgHtml = msg.images.map(src => `<img src="${src}" style="max-width:220px;border-radius:10px;margin-top:8px;display:block">`).join('');
       content.innerHTML = imgHtml + content.innerHTML;
@@ -2226,7 +2155,6 @@ function buildMessageEl(msg, idx, chatId) {
   el.appendChild(avatar); el.appendChild(body);
   return el;
 }
-
 function closeImageResult(idx) {
   const chat = chats.find(c => c.id === activeChatId); if (!chat) return;
   if (chat.messages[idx]) {
@@ -2246,7 +2174,7 @@ async function shareImage(url) {
 }
 
 // ============================================================
-// STREAMING AI RESPONSE + VISION
+// STREAMING AI RESPONSE
 // ============================================================
 async function triggerResponse(chat, userMsg) {
   isSending = true;
@@ -2278,7 +2206,6 @@ async function triggerResponse(chat, userMsg) {
     setTimeout(() => extractMemoryFromChat(chat), 1000);
   }
 }
-
 async function streamAIResponse(text, chat, signal, aiMsg) {
   const userKey = (localStorage.getItem('wk_api_key') || '').trim();
   const apiKey = userKey || ENV_GEMINI_KEY;
@@ -2291,7 +2218,6 @@ async function streamAIResponse(text, chat, signal, aiMsg) {
 
   const history = chat.messages.filter(m => m !== aiMsg);
   const contents = [];
-
   for (let i = 0; i < history.length; i++) {
     const m = history[i];
     if (!m || m.streaming) continue;
@@ -2301,12 +2227,10 @@ async function streamAIResponse(text, chat, signal, aiMsg) {
       continue;
     }
     if (m.error) continue;
-
     const role = m.role === 'ai' ? 'model' : 'user';
     const parts = [];
     const textContent = (m.content || '').trim();
     if (textContent) parts.push({ text: textContent });
-
     if (m.role === 'user' && Array.isArray(m.images) && m.images.length) {
       for (const imgDataUrl of m.images) {
         const match = String(imgDataUrl).match(/^data:(image\/[^;]+);base64,(.+)$/);
@@ -2316,15 +2240,10 @@ async function streamAIResponse(text, chat, signal, aiMsg) {
     if (parts.length === 0) continue;
     contents.push({ role, parts });
   }
-
   if (contents.length && contents[0].role === 'model') {
     contents.unshift({ role: 'user', parts: [{ text: '(continuing conversation)' }] });
   }
-
-  const body = {
-    systemInstruction: { parts: [{ text: systemPrompt }] },
-    contents: contents
-  };
+  const body = { systemInstruction: { parts: [{ text: systemPrompt }] }, contents };
   if (webSearchEnabled) body.tools = [{ google_search: {} }];
 
   if (!streamingEnabled) {
@@ -2360,12 +2279,10 @@ async function streamAIResponse(text, chat, signal, aiMsg) {
   let buffer = '';
   let fullText = '';
   let allChunks = [];
-
   if (ownerMode && chat.messages.length <= 3) {
     fullText = `Barka dai, Ranka ya dade, Oga Ibrahim! 🙏 All hail the supreme Commander! 👑\n\n`;
     updateStreamingMessage(chat, aiMsg, fullText);
   }
-
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
@@ -2381,26 +2298,18 @@ async function streamAIResponse(text, chat, signal, aiMsg) {
         const parsed = JSON.parse(dataStr);
         const candidate = parsed.candidates?.[0];
         const textPart = candidate?.content?.parts?.[0]?.text || '';
-        if (textPart) {
-          fullText += textPart;
-          updateStreamingMessage(chat, aiMsg, fullText);
-        }
-        if (candidate?.groundingMetadata?.groundingChunks) {
-          allChunks = candidate.groundingMetadata.groundingChunks;
-        }
+        if (textPart) { fullText += textPart; updateStreamingMessage(chat, aiMsg, fullText); }
+        if (candidate?.groundingMetadata?.groundingChunks) allChunks = candidate.groundingMetadata.groundingChunks;
       } catch(e) {}
     }
   }
-
   if (allChunks.length > 0) {
     const sources = allChunks.map(c => c.web ? `• [${c.web.title || 'Source'}](${c.web.uri})` : '').filter(Boolean).slice(0, 5).join('\n');
     if (sources) fullText += `\n\n🌐 **Sources**\n${sources}`;
   }
-
   aiMsg.content = fullText;
   aiMsg.streaming = false;
 }
-
 function updateStreamingMessage(chat, aiMsg, text) {
   aiMsg.content = text;
   const idx = chat.messages.indexOf(aiMsg);
@@ -2498,7 +2407,7 @@ function filterBuildIdeas(q) {
 function buildApp(name) { closeBuildAppPanel(); insertQuickPrompt(`Build a complete single-file HTML app: ${name}. Include full working code with modern styling, responsive layout, and clear comments.`); }
 
 // ============================================================
-// IMAGES PANEL
+// IMAGES PANEL ⚡ FIXED
 // ============================================================
 async function generateImageFromPanel() {
   const prompt = document.getElementById('imagesPromptInput').value.trim();
@@ -2509,14 +2418,37 @@ async function generateImageFromPanel() {
   try {
     let url;
     if (repKey) {
-      const output = await replicateRun('black-forest-labs', 'flux-schnell', {
-        prompt: prompt + ', ultra realistic, 8k, cinematic', num_outputs: 1, aspect_ratio: '1:1', output_format: 'png', output_quality: 95
-      }, repKey);
-      url = Array.isArray(output) ? output[0] : output;
+      try {
+        url = await replicateRun('black-forest-labs', 'flux-schnell', {
+          prompt: prompt + ', ultra realistic, 8k, cinematic',
+          num_outputs: 1,
+          aspect_ratio: '1:1',
+          output_format: 'png',
+          output_quality: 95,
+          go_fast: true
+        }, repKey);
+      } catch (repErr) {
+        console.warn('[WiseKing] Replicate failed:', repErr.message);
+        results.innerHTML = `<div class="gen-image-loading"><i class="fas fa-exclamation-triangle" style="color:#f59e0b"></i>Replicate: ${escapeHtml(repErr.message)}<br><br>⏳ Trying free generator...</div>`;
+        await new Promise(r => setTimeout(r, 1500));
+        url = buildImageUrl(prompt);
+        await new Promise((res) => {
+          const img = new Image();
+          img.onload = res; img.onerror = res;
+          img.src = url;
+          setTimeout(res, 20000);
+        });
+      }
     } else {
       url = buildImageUrl(prompt);
-      await new Promise((res) => { const img = new Image(); img.onload = res; img.onerror = res; img.src = url; setTimeout(res, 15000); });
+      await new Promise((res) => {
+        const img = new Image();
+        img.onload = res; img.onerror = res;
+        img.src = url;
+        setTimeout(res, 20000);
+      });
     }
+    if (!url) throw new Error('No image URL returned');
     results.innerHTML = `
       <div class="result-card"><h4><i class="fas fa-check-circle"></i> Image ready</h4>
       <img src="${url}" style="max-width:100%;border-radius:12px;box-shadow:var(--shadow-lg)">
@@ -2525,7 +2457,10 @@ async function generateImageFromPanel() {
         <button class="btn solid" onclick="shareImage('${url.replace(/'/g,"\\'")}')"><i class="fas fa-share"></i> Share</button>
       </div></div>`;
     saveToLibrary({ type:'image', prompt, url, createdAt: Date.now() });
-  } catch (err) { results.innerHTML = '<div class="result-card"><p>⚠️ Failed.</p></div>'; }
+  } catch (err) {
+    console.error('[WiseKing] Panel image failed:', err);
+    results.innerHTML = `<div class="result-card"><p>⚠️ Failed: ${escapeHtml(err.message || 'unknown error')}</p></div>`;
+  }
 }
 
 // ============================================================
