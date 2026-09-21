@@ -332,9 +332,6 @@
   .share-cancel{width:100%;padding:12px;border-radius:var(--radius-md);background:var(--bg-elevated);border:1px solid var(--border-default);color:var(--text-primary);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
   .share-cancel:hover{background:var(--bg-hover)}
 
-  /* ============================================================
-     LIGHT MODE (Day Theme)
-     ============================================================ */
   body.light-mode {
     --bg-primary: #f9f9fb;
     --bg-secondary: #ffffff;
@@ -352,20 +349,17 @@
   body.light-mode .msg-content.user { color: #ffffff; }
   body.light-mode .msg-content.ai { background: #f2f2f7; border-color: rgba(0,0,0,0.08); }
   body.light-mode .chat-topbar { background: rgba(249,249,251,0.9); }
-  body.light-mode .input-dock { background: linear-gradient(to top, var(--bg-primary) 60%, transparent); }
   body.light-mode .profile-menu-popup { background: #ffffff; }
   body.light-mode .popup-menu { background: #ffffff; }
 
-  /* DASHBOARD */
   .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
-  .stat-card { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 20px; transition: all var(--transition-fast); cursor: default; }
+  .stat-card { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 20px; transition: all var(--transition-fast); }
   .stat-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(99,102,241,0.15); }
   .stat-card .stat-icon { width: 42px; height: 42px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 14px; color: white; }
   .stat-card .stat-value { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 4px; }
   .stat-card .stat-label { font-size: 12.5px; color: var(--text-secondary); font-weight: 500; }
   .stat-card .stat-trend { font-size: 11px; color: var(--success); margin-top: 6px; font-weight: 600; }
 
-  /* PROJECTS */
   .project-card { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 18px; margin-bottom: 12px; transition: all var(--transition-fast); cursor: pointer; }
   .project-card:hover { border-color: var(--accent); transform: translateX(4px); }
   .project-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; gap: 12px; }
@@ -378,7 +372,6 @@
   .project-meta { display: flex; gap: 16px; font-size: 11.5px; color: var(--text-tertiary); padding-top: 10px; border-top: 1px solid var(--border-subtle); flex-wrap: wrap; }
   .project-meta span { display: inline-flex; align-items: center; gap: 4px; }
 
-  /* LANGUAGE */
   .lang-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
   .lang-option { padding: 12px 14px; background: var(--bg-input); border: 1px solid var(--border-default); border-radius: var(--radius-md); cursor: pointer; font-size: 13.5px; font-family: inherit; color: var(--text-primary); display: flex; align-items: center; gap: 10px; transition: all var(--transition-fast); }
   .lang-option:hover { background: var(--bg-hover); border-color: var(--border-strong); }
@@ -428,12 +421,10 @@
       <div class="brand"><div class="brand-logo">👑</div><div class="brand-name">Wise King Ai 👑</div></div>
       <button class="sidebar-close-btn" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
     </div>
-    
     <div class="sidebar-fixed-top">
       <button class="nav-btn" onclick="createNewChat()"><span class="nav-icon"><i class="fas fa-pen-to-square"></i></span>New chat</button>
       <div class="sidebar-search"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search chats" oninput="filterChats()"></div>
     </div>
-
     <div class="sidebar-scrollable">
       <button class="nav-btn" onclick="openImagesPanel()"><span class="nav-icon gradient-1"><i class="fas fa-image"></i></span>Images</button>
       <button class="nav-btn" onclick="openVideosPanel()"><span class="nav-icon gradient-2"><i class="fas fa-video"></i></span>Videos</button>
@@ -450,7 +441,6 @@
         <div class="section-body open"><div id="chatsList"></div></div>
       </div>
     </div>
-
     <div class="sidebar-footer">
       <div class="user-chip" onclick="openSettings()">
         <div class="avatar" id="sidebarAvatar">WK</div>
@@ -574,6 +564,30 @@
   </div>
 </div>
 
+<div class="modal-bg" id="editMessageModal">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Edit message</div><button class="modal-close" onclick="closeModal('editMessageModal')"><i class="fas fa-times"></i></button></div>
+    <p class="modal-text">Editing this message will regenerate the AI's response.</p>
+    <textarea class="input-field" id="editMessageInput" rows="4" style="min-height:120px;max-height:40vh;font-size:14.5px;line-height:1.6;font-family:inherit;resize:vertical"></textarea>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal('editMessageModal')">Cancel</button>
+      <button class="btn accent" onclick="saveEditedMessage()"><i class="fas fa-check"></i> Save & Regenerate</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="deleteMessageModal">
+  <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px">
+    <div style="font-size:36px;margin-bottom:12px">🗑️</div>
+    <div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete this message?</div>
+    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">This action cannot be undone.</p>
+    <div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0">
+      <button class="btn ghost" style="flex:1" onclick="closeModal('deleteMessageModal')">Cancel</button>
+      <button class="btn danger" style="flex:1" onclick="confirmDeleteMessage()">Delete</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-bg" id="renameChatModal">
   <div class="modal" style="max-width:420px">
     <div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Rename chat</div><button class="modal-close" onclick="closeModal('renameChatModal')"><i class="fas fa-times"></i></button></div>
@@ -660,7 +674,7 @@
 <div class="full-panel" id="memoryPanel">
   <div class="panel-header"><div class="panel-title"><i class="fas fa-brain"></i> Cross-Chat Memory</div><button class="btn ghost" onclick="closeMemoryPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
   <div class="panel-body"><div class="panel-inner">
-    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">Wise King automatically learns facts from your chats. Delete any memory you don't want.</p>
+    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">Wise King automatically learns facts from your chats.</p>
     <button class="btn solid" style="width:100%;justify-content:center;margin-bottom:16px" onclick="extractMemoryNow()"><i class="fas fa-wand-magic-sparkles"></i> Extract Memory from All Chats</button>
     <div id="memoryPanelResults"></div>
   </div></div>
@@ -671,13 +685,11 @@
     <div class="panel-title"><i class="fas fa-chart-line"></i> Dashboard</div>
     <button class="btn ghost" onclick="closeDashboard()"><i class="fas fa-arrow-left"></i> Back</button>
   </div>
-  <div class="panel-body">
-    <div class="panel-inner">
+  <div class="panel-body"><div class="panel-inner">
       <h2 style="font-size:20px;font-weight:700;margin-bottom:6px">Welcome back, Oga Ibrahim! 👑</h2>
       <p style="color:var(--text-secondary);font-size:13.5px;margin-bottom:24px">Here's a quick overview of your Wise King AI activity.</p>
       <div class="dashboard-grid" id="dashboardGrid"></div>
-    </div>
-  </div>
+  </div></div>
 </div>
 
 <div class="full-panel" id="projectsPanel">
@@ -776,8 +788,8 @@
       <div class="settings-card">
         <select class="input-field" id="modelSelect" style="margin-bottom:0">
           <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-lite — Blazing Fast ✅</option>
-          <option value="gemini-3.1-flash">Gemini 3.1 Flash — Best for Web Search 🔍</option>
           <option value="gemini-2.5-flash">Gemini 2.5 Flash — Instant Responses</option>
+          <option value="gemini-2.0-flash">Gemini 2.0 Flash — Reliable</option>
         </select>
       </div>
     </div>
@@ -910,6 +922,8 @@ let crossChatMemory = [];
 let library = [];
 let projects = [];
 let deferredInstallPrompt = null;
+let editingMessageIdx = -1;
+let deletingMessageIdx = -1;
 let renamingChatId = null;
 let deletingChatId = null;
 let popupMenuChatId = null;
@@ -976,18 +990,8 @@ function initHoldToSpeak() {
 // ============================================================
 // AUTH UI
 // ============================================================
-function showAuthError(msg) {
-  const el = document.getElementById('authError');
-  if (!el) return;
-  el.textContent = msg; el.classList.add('show');
-  clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 6000);
-}
-function showAuthSuccess(msg) {
-  const el = document.getElementById('authSuccess');
-  if (!el) return;
-  el.textContent = msg; el.classList.add('show');
-  clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 6000);
-}
+function showAuthError(msg) { const el = document.getElementById('authError'); if (!el) return; el.textContent = msg; el.classList.add('show'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 6000); }
+function showAuthSuccess(msg) { const el = document.getElementById('authSuccess'); if (!el) return; el.textContent = msg; el.classList.add('show'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 6000); }
 function unlockApp(name, email, photoURL) {
   const ls = document.getElementById('loginScreen');
   if (ls) { ls.classList.add('hidden'); ls.style.display = 'none'; }
@@ -1136,7 +1140,7 @@ function applyAvatar(data) { ['sidebarAvatar','settingsAvatar','topProfileAvatar
 function handleProfilePhotoUpload(e) { const f = e.target.files[0]; if (!f) return; const fr = new FileReader(); fr.onload = ev => { localStorage.setItem('wk_user_avatar', ev.target.result); applyAvatar(ev.target.result); showToast('Photo updated'); }; fr.readAsDataURL(f); }
 function openSettings() { document.getElementById('settingsModal').classList.add('show'); closeSidebar(); const k1 = localStorage.getItem('wk_api_key'); if (k1) document.getElementById('apiKeyInput').value = k1; const k2 = localStorage.getItem('wk_replicate_key'); if (k2) document.getElementById('replicateKeyInput').value = k2; }
 function saveSettings() { const g = document.getElementById('apiKeyInput').value.trim(); if (g) localStorage.setItem('wk_api_key', g); else localStorage.removeItem('wk_api_key'); const r = document.getElementById('replicateKeyInput').value.trim(); if (r) localStorage.setItem('wk_replicate_key', r); else localStorage.removeItem('wk_replicate_key'); const m = document.getElementById('modelSelect').value; localStorage.setItem('wk_model', m); updateModelBadge(); closeModal('settingsModal'); showToast('✅ Saved'); }
-function updateModelBadge() { const m = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite'; let label = 'Gemini 3.5 Flash-lite'; if (m.includes('3.1-flash')) label = 'Gemini 3.1 Flash'; else if (m.includes('2.5-flash')) label = 'Gemini 2.5 Flash'; document.getElementById('modelBadgeText').textContent = label; }
+function updateModelBadge() { const m = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite'; let label = 'Gemini 3.5 Flash-lite'; if (m.includes('2.5-flash')) label = 'Gemini 2.5 Flash'; else if (m.includes('2.0-flash')) label = 'Gemini 2.0 Flash'; document.getElementById('modelBadgeText').textContent = label; }
 function applyTheme(color) { document.documentElement.style.setProperty('--accent', color); document.querySelectorAll('.theme-swatch').forEach(s => s.classList.toggle('active', s.dataset.color === color)); }
 
 // ============================================================
@@ -1172,7 +1176,7 @@ function openMemoryPanel() { document.getElementById('memoryPanel').classList.ad
 function closeMemoryPanel() { document.getElementById('memoryPanel').classList.remove('show'); }
 function renderMemoryPanel() { const box = document.getElementById('memoryPanelResults'); if (!box) return; if (!crossChatMemory.length) { box.innerHTML = '<div class="result-card"><p>No memories yet. Start chatting and Wise King will automatically learn about you.</p></div>'; return; } box.innerHTML = crossChatMemory.map((m, i) => `<div class="memory-item"><div class="mi-text">${escapeHtml(m)}</div><button class="mi-del" onclick="deleteMemoryItem(${i})"><i class="fas fa-trash"></i></button></div>`).join(''); }
 function deleteMemoryItem(i) { crossChatMemory.splice(i, 1); saveCrossChatMemory(); renderMemoryPanel(); showToast('Memory deleted'); }
-async function extractMemoryFromChat(chat) { if (!getMemoryEnabled()) return; if (!chat || chat.messages.length < 4) return; const userTexts = chat.messages.filter(m => m.role === 'user' && m.content && m.content.length > 10).map(m => m.content).slice(-10); if (userTexts.length < 2) return; const combined = userTexts.join('\n'); if (!chat.memoryExtracted) { try { const apiKey = (localStorage.getItem('wk_api_key') || '').trim() || ENV_GEMINI_KEY; const prompt = `Extract 1-3 short facts about the user. Return as bullet list or "NONE":\n\n${combined}`; const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${encodeURIComponent(apiKey)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: prompt }] }] }) }); if (!res.ok) return; const data = await res.json(); const text = data.candidates?.[0]?.content?.parts?.[0]?.text || ''; if (!text || text.trim().toUpperCase() === 'NONE') { chat.memoryExtracted = true; saveChats(); return; } const facts = text.split('\n').map(l => l.replace(/^[-*•\d.\s]+/, '').trim()).filter(f => f.length > 5 && f.length < 200); for (const fact of facts.slice(0, 3)) { if (!crossChatMemory.includes(fact)) crossChatMemory.unshift(fact); } chat.memoryExtracted = true; saveCrossChatMemory(); saveChats(); } catch(e) {} } }
+async function extractMemoryFromChat(chat) { if (!getMemoryEnabled()) return; if (!chat || chat.messages.length < 4) return; const userTexts = chat.messages.filter(m => m.role === 'user' && m.content && m.content.length > 10).map(m => m.content).slice(-10); if (userTexts.length < 2) return; const combined = userTexts.join('\n'); if (!chat.memoryExtracted) { try { const apiKey = (localStorage.getItem('wk_api_key') || '').trim() || ENV_GEMINI_KEY; const prompt = `Extract 1-3 short facts about the user. Return as bullet list or "NONE":\n\n${combined}`; const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: prompt }] }] }) }); if (!res.ok) return; const data = await res.json(); const text = data.candidates?.[0]?.content?.parts?.[0]?.text || ''; if (!text || text.trim().toUpperCase() === 'NONE') { chat.memoryExtracted = true; saveChats(); return; } const facts = text.split('\n').map(l => l.replace(/^[-*•\d.\s]+/, '').trim()).filter(f => f.length > 5 && f.length < 200); for (const fact of facts.slice(0, 3)) { if (!crossChatMemory.includes(fact)) crossChatMemory.unshift(fact); } chat.memoryExtracted = true; saveCrossChatMemory(); saveChats(); } catch(e) {} } }
 async function extractMemoryNow() { showToast('🧠 Analyzing all chats...'); for (const chat of chats) { if (!chat.memoryExtracted && chat.messages.length >= 4) await extractMemoryFromChat(chat); } renderMemoryPanel(); showToast('✅ Memory updated'); }
 
 // ============================================================
@@ -1228,13 +1232,13 @@ function loadTheme() { if (localStorage.getItem('wk_light_mode') === '1') { docu
 // ============================================================
 const LANGUAGES = { en: 'English', ha: 'Hausa', ar: 'العربية', fr: 'Français', es: 'Español', yo: 'Yorùbá', ig: 'Igbo' };
 const TRANSLATIONS = {
-  en: { newChat: 'New chat', searchChats: 'Search chats', welcome: 'How can I help you today?' },
-  ha: { newChat: 'Sabon hira', searchChats: 'Nemo hira', welcome: 'Yaya zan taimake ka yau?' },
-  ar: { newChat: 'محادثة جديدة', searchChats: 'بحث في المحادثات', welcome: 'كيف يمكنني مساعدتك اليوم؟' },
-  fr: { newChat: 'Nouveau chat', searchChats: 'Rechercher', welcome: 'Comment puis-je vous aider aujourd\'hui ?' },
-  es: { newChat: 'Nuevo chat', searchChats: 'Buscar chats', welcome: '¿Cómo puedo ayudarte hoy?' },
-  yo: { newChat: 'Ìjíròrò tuntun', searchChats: 'Wá ìjíròrò', welcome: 'Báwo ni mo lè ràn yín lọ́wọ́ lónìí?' },
-  ig: { newChat: 'Mkparịta ụka ọhụrụ', searchChats: 'Chọọ mkparịta ụka', welcome: 'Kedu ka m ga-enyere gị aka taa?' }
+  en: { searchChats: 'Search chats', welcome: 'How can I help you today?' },
+  ha: { searchChats: 'Nemo hira', welcome: 'Yaya zan taimake ka yau?' },
+  ar: { searchChats: 'بحث في المحادثات', welcome: 'كيف يمكنني مساعدتك اليوم؟' },
+  fr: { searchChats: 'Rechercher', welcome: 'Comment puis-je vous aider aujourd\'hui ?' },
+  es: { searchChats: 'Buscar chats', welcome: '¿Cómo puedo ayudarte hoy?' },
+  yo: { searchChats: 'Wá ìjíròrò', welcome: 'Báwo ni mo lè ràn yín lọ́wọ́ lónìí?' },
+  ig: { searchChats: 'Chọọ mkparịta ụka', welcome: 'Kedu ka m ga-enyere gị aka taa?' }
 };
 function setLanguage(lang) { localStorage.setItem('wk_language', lang); applyLanguage(lang); document.querySelectorAll('.lang-option').forEach(el => el.classList.toggle('active', el.dataset.lang === lang)); showToast('🌐 ' + LANGUAGES[lang]); }
 function applyLanguage(lang) { const t = TRANSLATIONS[lang] || TRANSLATIONS.en; const si = document.getElementById('searchInput'); if (si) si.placeholder = t.searchChats; const wh = document.querySelector('.welcome h1'); if (wh) wh.textContent = t.welcome; }
@@ -1266,7 +1270,7 @@ function renderVideoGallery() { const box = document.getElementById('videoGaller
 function updateReplicateStatus() { const el = document.getElementById('replicateStatus'); if (!el) return; const key = localStorage.getItem('wk_replicate_key'); el.textContent = key ? '✅ Replicate connected' : '💡 Add a Replicate key for hyper-realistic images.'; }
 
 // ============================================================
-// SEND MESSAGE (INSTANT)
+// SEND MESSAGE
 // ============================================================
 function sendMessage(textOverride) {
   if (isSending) return;
@@ -1288,7 +1292,7 @@ function sendMessage(textOverride) {
 }
 
 // ============================================================
-// RENDER MESSAGES
+// RENDER MESSAGES (WITH LIKE/DISLIKE AND EDIT/DELETE)
 // ============================================================
 function renderMessages() {
   const area = document.getElementById('messagesArea'); if (!area) return;
@@ -1309,31 +1313,117 @@ function buildMessageEl(msg, idx, chatId) {
   avatar.innerHTML = isAI ? '👑' : '<i class="fas fa-user"></i>';
   const body = document.createElement('div'); body.className = 'msg-body';
   const name = document.createElement('div'); name.className = 'msg-name';
-  name.innerHTML = isAI ? 'Wise King AI' : 'You';
+  const hasVision = msg.images && msg.images.length > 0 && msg.role === 'user';
+  name.innerHTML = (isAI ? 'Wise King AI' : 'You') + (msg.edited ? ' <span class="edited-tag">(edited)</span>' : '') + (hasVision ? ' <span class="vision-tag"><i class="fas fa-eye"></i> Photo</span>' : '');
   body.appendChild(name);
   const contentWrap = document.createElement('div'); contentWrap.className = 'msg-content-wrap';
   const content = document.createElement('div'); content.className = 'msg-content ' + (isAI ? 'ai' : 'user') + (msg.error ? ' error' : '');
-  if (isThinking) { content.classList.add('thinking'); content.innerHTML = `<div class="thinking-label"><span class="thinking-dots"><span></span><span></span><span></span></span>Thinking...</div>`; contentWrap.appendChild(content); body.appendChild(contentWrap); el.appendChild(avatar); el.appendChild(body); return el; }
+  if (isThinking) { content.classList.add('thinking'); content.innerHTML = `<div class="thinking-label"><span class="thinking-dots"><span></span><span></span><span></span></span>Wise King is thinking...</div>`; contentWrap.appendChild(content); body.appendChild(contentWrap); el.appendChild(avatar); el.appendChild(body); return el; }
   if (msg.type === 'image-loading') { content.innerHTML = `<div class="image-loading"><div class="ring"></div><div>${escapeHtml(msg.content || 'Generating...')}</div></div>`; }
-  else if (msg.type === 'image' && msg.imageUrl) { const urlEsc = (msg.imageUrl || '').replace(/'/g, "\\'"); content.innerHTML = `<div>${escapeHtml(msg.content || 'Image:')}</div><div class="image-result"><img src="${msg.imageUrl}" alt="Generated"><div class="image-result-actions"><a class="btn accent" href="${msg.imageUrl}" download="wiseking-${Date.now()}.png"><i class="fas fa-download"></i> Download</a><button class="btn solid" onclick="shareImage('${urlEsc}')"><i class="fas fa-share"></i> Share</button></div></div>`; }
+  else if (msg.type === 'image' && msg.imageUrl) { const urlEsc = (msg.imageUrl || '').replace(/'/g, "\\'"); content.innerHTML = `<div>${escapeHtml(msg.content || 'Here is your image:')}</div><div class="image-result"><img src="${msg.imageUrl}" alt="Generated" loading="lazy"><div class="image-result-actions"><a class="btn accent" href="${msg.imageUrl}" download="wiseking-${Date.now()}.png"><i class="fas fa-download"></i> Download</a><button class="btn solid" onclick="shareImage('${urlEsc}')"><i class="fas fa-share"></i> Share</button></div></div>`; }
   else { content.innerHTML = buildContentHtml(msg); if (msg.images && msg.images.length > 0) { const imgHtml = msg.images.map(src => `<img src="${src}" style="max-width:220px;border-radius:10px;margin-top:8px;display:block">`).join(''); content.innerHTML = imgHtml + content.innerHTML; } }
   contentWrap.appendChild(content); body.appendChild(contentWrap);
+
   if (msg.type !== 'image-loading' && !isThinking) {
     const actionBar = document.createElement('div'); actionBar.className = 'msg-action-bar';
-    if (isAI) { actionBar.innerHTML = `<button class="msg-action-btn" onclick="handleCopyMessage(${idx})"><i class="fas fa-copy"></i> Copy</button><button class="msg-action-btn" onclick="handleRegenerateMessage('${chatId}', ${idx})"><i class="fas fa-sync-alt"></i> Regenerate</button><button class="msg-action-btn" onclick="handleShareMessage(${idx})"><i class="fas fa-share"></i> Share</button>`; }
-    else { actionBar.innerHTML = `<button class="msg-action-btn" onclick="handleCopyMessage(${idx})"><i class="fas fa-copy"></i> Copy</button><button class="msg-action-btn danger" onclick="handleDeleteMessage(${idx})"><i class="fas fa-trash"></i> Delete</button>`; }
+    if (isAI) {
+      // AI MESSAGE: Like, Dislike, Copy, Regenerate, Share
+      actionBar.innerHTML = `
+        <button class="msg-action-btn ${msg.feedback === 'up' ? 'active' : ''}" onclick="handleLikeMessage(${idx})" title="Like"><i class="fas fa-thumbs-up"></i> Like</button>
+        <button class="msg-action-btn ${msg.feedback === 'down' ? 'active' : ''}" onclick="handleDislikeMessage(${idx})" title="Dislike"><i class="fas fa-thumbs-down"></i> Dislike</button>
+        <button class="msg-action-btn" onclick="handleCopyMessage(${idx})" title="Copy"><i class="fas fa-copy"></i> Copy</button>
+        <button class="msg-action-btn" onclick="handleRegenerateMessage('${chatId}', ${idx})" title="Regenerate"><i class="fas fa-sync-alt"></i> Regenerate</button>
+        <button class="msg-action-btn" onclick="handleShareMessage(${idx})" title="Share"><i class="fas fa-share"></i> Share</button>`;
+    } else {
+      // USER MESSAGE: Edit, Copy, Delete
+      actionBar.innerHTML = `
+        <button class="msg-action-btn" onclick="handleEditMessage(${idx})" title="Edit"><i class="fas fa-pen"></i> Edit</button>
+        <button class="msg-action-btn" onclick="handleCopyMessage(${idx})" title="Copy"><i class="fas fa-copy"></i> Copy</button>
+        <button class="msg-action-btn danger" onclick="handleDeleteMessage(${idx})" title="Delete"><i class="fas fa-trash"></i> Delete</button>`;
+    }
     body.appendChild(actionBar);
   }
   el.appendChild(avatar); el.appendChild(body); return el;
 }
+
+// ============================================================
+// LIKE / DISLIKE
+// ============================================================
+function handleLikeMessage(idx) {
+  const chat = chats.find(c => c.id === activeChatId);
+  if (!chat || !chat.messages[idx]) return;
+  chat.messages[idx].feedback = 'up';
+  saveChats(); renderMessages();
+  showToast('✅ Thank you for your feedback!');
+}
+function handleDislikeMessage(idx) {
+  const chat = chats.find(c => c.id === activeChatId);
+  if (!chat || !chat.messages[idx]) return;
+  chat.messages[idx].feedback = 'down';
+  saveChats(); renderMessages();
+  document.getElementById('dislikeFeedbackInput').value = '';
+  document.getElementById('dislikeModal').classList.add('show');
+}
+function submitDislikeFeedback() {
+  const text = document.getElementById('dislikeFeedbackInput').value.trim();
+  closeModal('dislikeModal');
+  if (text) console.log('[WiseKing] Dislike feedback:', text);
+  showToast('👎 Noted. Thank you for your feedback!');
+}
+
+// ============================================================
+// EDIT / DELETE MESSAGE
+// ============================================================
+function handleEditMessage(idx) {
+  const chat = chats.find(c => c.id === activeChatId);
+  if (!chat || !chat.messages[idx]) return;
+  const msg = chat.messages[idx];
+  if (msg.role !== 'user') return;
+  editingMessageIdx = idx;
+  document.getElementById('editMessageInput').value = msg.content || '';
+  document.getElementById('editMessageModal').classList.add('show');
+  setTimeout(() => document.getElementById('editMessageInput').focus(), 100);
+}
+function saveEditedMessage() {
+  if (editingMessageIdx < 0) return;
+  const chat = chats.find(c => c.id === activeChatId); if (!chat) return;
+  const newText = document.getElementById('editMessageInput').value.trim();
+  if (!newText) return showToast('Message cannot be empty');
+  const msg = chat.messages[editingMessageIdx];
+  msg.content = newText; msg.edited = true;
+  if (chat.messages[editingMessageIdx + 1] && chat.messages[editingMessageIdx + 1].role === 'ai') { chat.messages.splice(editingMessageIdx + 1, 1); }
+  closeModal('editMessageModal');
+  editingMessageIdx = -1;
+  saveChats(); renderMessages();
+  triggerResponse(chat, msg);
+}
+function handleDeleteMessage(idx) {
+  deletingMessageIdx = idx;
+  document.getElementById('deleteMessageModal').classList.add('show');
+}
+function confirmDeleteMessage() {
+  if (deletingMessageIdx < 0) return;
+  const chat = chats.find(c => c.id === activeChatId); if (!chat) return;
+  const msg = chat.messages[deletingMessageIdx];
+  if (!msg) { closeModal('deleteMessageModal'); deletingMessageIdx = -1; return; }
+  if (msg.role === 'user' && chat.messages[deletingMessageIdx + 1] && chat.messages[deletingMessageIdx + 1].role === 'ai') { chat.messages.splice(deletingMessageIdx, 2); }
+  else { chat.messages.splice(deletingMessageIdx, 1); }
+  closeModal('deleteMessageModal');
+  deletingMessageIdx = -1;
+  saveChats(); renderMessages();
+  showToast('🗑️ Message deleted');
+}
+
+// ============================================================
+// COPY / SHARE / REGENERATE
+// ============================================================
 function handleCopyMessage(idx) { const chat = chats.find(c => c.id === activeChatId); if (!chat || !chat.messages[idx]) return; const text = chat.messages[idx].content || ''; if (!text) return; navigator.clipboard.writeText(text).then(() => showToast('📋 Copied!')).catch(() => showToast('⚠️ Copy failed')); }
 function handleShareMessage(idx) { const chat = chats.find(c => c.id === activeChatId); if (!chat || !chat.messages[idx]) return; currentShareTarget = { type: 'message', text: chat.messages[idx].content || '' }; openSharePopup(); }
 function handleRegenerateMessage(chatId, msgIdx) { const chat = chats.find(c => c.id === chatId); if (!chat || isSending) return; let userMsgIdx = -1; for (let i = msgIdx - 1; i >= 0; i--) { if (chat.messages[i].role === 'user') { userMsgIdx = i; break; } } if (userMsgIdx === -1) return; const userMsg = chat.messages[userMsgIdx]; chat.messages.splice(msgIdx, 1); saveChats(); renderMessages(); triggerResponse(chat, userMsg); }
-function handleDeleteMessage(idx) { const chat = chats.find(c => c.id === activeChatId); if (!chat) return; chat.messages.splice(idx, 1); saveChats(); renderMessages(); showToast('🗑️ Deleted'); }
 async function shareImage(url) { try { if (navigator.share) await navigator.share({ title: 'Wise King AI Image', url }); else { await navigator.clipboard.writeText(url); showToast('✅ Link copied!'); } } catch(e) { try { await navigator.clipboard.writeText(url); showToast('✅ Copied'); } catch(e2) {} } }
 
 // ============================================================
-// STREAMING AI RESPONSE (INSTANT)
+// STREAMING AI RESPONSE (WITH AUTO-RETRY)
 // ============================================================
 async function triggerResponse(chat, userMsg) {
   isSending = true;
@@ -1344,7 +1434,7 @@ async function triggerResponse(chat, userMsg) {
   const aiMsg = { role:'ai', content:'', createdAt: Date.now(), streaming: true };
   chat.messages.push(aiMsg); renderMessages();
   try { await streamAIResponse(userMsg.content, chat, signal, aiMsg, userMsg); }
-  catch (err) { if (err.name !== 'AbortError') { aiMsg.error = true; aiMsg.content = aiMsg.content || '⚠️ Connection error.'; } }
+  catch (err) { if (err.name !== 'AbortError') { aiMsg.error = true; aiMsg.content = aiMsg.content || '⚠️ Connection error. Please try again.'; } }
   aiMsg.streaming = false; isSending = false; currentAbortController = null;
   btn.classList.remove('stop'); btn.innerHTML = '<i class="fas fa-arrow-up"></i>';
   handleInputChange(); saveChats(); renderMessages();
@@ -1378,25 +1468,67 @@ async function streamAIResponse(text, chat, signal, aiMsg, userMsg) {
   if (contents.length && contents[0].role === 'model') contents.unshift({ role: 'user', parts: [{ text: '(continuing)' }] });
   const body = { systemInstruction: { parts: [{ text: turnSystemPrompt }] }, contents };
   if (webSearchEnabled) body.tools = [{ google_search: {} }];
-  const modelId = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite';
-  const modelName = (modelId === 'gemini-3.5-flash-lite') ? 'gemini-2.0-flash' : modelId;
-  const streamUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
-  const res = await fetch(streamUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body), signal });
-  if (!res.ok) { const fbUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${encodeURIComponent(apiKey)}`; const fbRes = await fetch(fbUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ systemInstruction: body.systemInstruction, contents: body.contents }), signal }); if (!fbRes.ok) { aiMsg.error = true; aiMsg.content = '⚠️ Service busy.'; return; } const fbData = await fbRes.json(); aiMsg.content = fbData.candidates?.[0]?.content?.parts?.[0]?.text || 'Ready.'; return; }
-  const reader = res.body.getReader(); const decoder = new TextDecoder(); let buffer = ''; let fullText = ''; let allChunks = [];
-  while (true) {
-    const { done, value } = await reader.read(); if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    const lines = buffer.split('\n'); buffer = lines.pop();
-    for (const line of lines) {
-      const trimmed = line.trim(); if (!trimmed.startsWith('data:')) continue;
-      const dataStr = trimmed.slice(5).trim(); if (dataStr === '[DONE]') continue;
-      try { const parsed = JSON.parse(dataStr); const candidate = parsed.candidates?.[0]; const textPart = candidate?.content?.parts?.[0]?.text || ''; if (textPart) { fullText += textPart; updateStreamingMessage(chat, aiMsg, fullText); } if (candidate?.groundingMetadata?.groundingChunks) allChunks = candidate.groundingMetadata.groundingChunks; } catch(e) {}
+
+  // Try multiple models in sequence for reliability
+  const modelList = ['gemini-2.0-flash', 'gemini-2.5-flash', 'gemini-1.5-flash'];
+  let lastError = null;
+
+  for (const modelName of modelList) {
+    try {
+      const streamUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
+      const res = await fetch(streamUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body), signal });
+
+      if (!res.ok) {
+        // Fallback to non-streaming
+        const fbUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`;
+        const fbRes = await fetch(fbUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body), signal });
+        if (!fbRes.ok) { lastError = new Error('Model ' + modelName + ' failed'); continue; }
+        const fbData = await fbRes.json();
+        const replyText = fbData.candidates?.[0]?.content?.parts?.[0]?.text || 'Ready.';
+        aiMsg.content = replyText;
+        return;
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      let fullText = '';
+      let allChunks = [];
+      while (true) {
+        const { done, value } = await reader.read(); if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n'); buffer = lines.pop();
+        for (const line of lines) {
+          const trimmed = line.trim(); if (!trimmed.startsWith('data:')) continue;
+          const dataStr = trimmed.slice(5).trim(); if (dataStr === '[DONE]') continue;
+          try {
+            const parsed = JSON.parse(dataStr);
+            const candidate = parsed.candidates?.[0];
+            const textPart = candidate?.content?.parts?.[0]?.text || '';
+            if (textPart) { fullText += textPart; updateStreamingMessage(chat, aiMsg, fullText); }
+            if (candidate?.groundingMetadata?.groundingChunks) allChunks = candidate.groundingMetadata.groundingChunks;
+          } catch(e) {}
+        }
+      }
+      if (allChunks.length > 0) {
+        const sources = allChunks.map(c => c.web ? `• [${c.web.title || 'Source'}](${c.web.uri})` : '').filter(Boolean).slice(0, 5).join('\n');
+        if (sources) fullText += `\n\n🌐 **Sources**\n${sources}`;
+      }
+      aiMsg.content = fullText;
+      aiMsg.streaming = false;
+      return; // Success!
+    } catch (err) {
+      if (err.name === 'AbortError') throw err;
+      lastError = err;
+      continue;
     }
   }
-  if (allChunks.length > 0) { const sources = allChunks.map(c => c.web ? `• [${c.web.title || 'Source'}](${c.web.uri})` : '').filter(Boolean).slice(0, 5).join('\n'); if (sources) fullText += `\n\n🌐 **Sources**\n${sources}`; }
-  aiMsg.content = fullText; aiMsg.streaming = false;
+  // If all models failed
+  aiMsg.error = true;
+  aiMsg.content = '⚠️ Service busy. Please try again in a moment.';
+  aiMsg.streaming = false;
 }
+
 function updateStreamingMessage(chat, aiMsg, text) { aiMsg.content = text; const idx = chat.messages.indexOf(aiMsg); if (idx < 0) return; const area = document.getElementById('messagesArea'); const msgEls = area.querySelectorAll('.message'); const el = msgEls[idx]; if (!el) return; const contentEl = el.querySelector('.msg-content'); if (!contentEl) return; contentEl.classList.remove('thinking'); contentEl.innerHTML = buildContentHtml({ content: text }) + '<span class="streaming-cursor"></span>'; const cs = document.getElementById('chatScroll'); cs.scrollTop = cs.scrollHeight; }
 
 // ============================================================
@@ -1418,30 +1550,121 @@ function filterBuildIdeas(q) { const box = document.getElementById('buildAppIdea
 function buildApp(name) { closeBuildAppPanel(); insertQuickPrompt(`Build a complete single-file HTML app: ${name}.`); }
 
 // ============================================================
-// IMAGE GENERATION
+// IMAGE GENERATION (FIXED)
 // ============================================================
-function buildImageUrl(prompt, seed) { const enhanced = prompt + ', hyper-realistic, 8k, photorealistic, cinematic lighting'; const s = seed || Math.floor(Math.random() * 1000000); return `https://image.pollinations.ai/prompt/${encodeURIComponent(enhanced)}?width=1024&height=1024&seed=${s}&nologo=true&enhance=true`; }
+function buildImageUrl(prompt, seed) {
+  const enhanced = prompt + ', hyper-realistic, 8k, photorealistic, professional photography, cinematic lighting, ultra-detailed, sharp focus';
+  const s = seed || Math.floor(Math.random() * 1000000);
+  return `https://image.pollinations.ai/prompt/${encodeURIComponent(enhanced)}?width=1024&height=1024&seed=${s}&nologo=true&enhance=true&model=flux`;
+}
 function detectLogoIntent(text) { if (!text) return false; const l = text.toLowerCase(); return /\b(logo|brandmark|emblem|monogram|branding)\b/.test(l); }
 function buildEnhancedPrompt(rawPrompt, mode) { const p = String(rawPrompt || '').trim(); if (mode === 'logo') return `Professional minimalist vector logo of ${p}, flat design, clean background, branding, high-quality vector, centered composition, scalable`; return `${p}, hyper-realistic, 8k resolution, photorealistic, professional photography, cinematic lighting, ultra-detailed, sharp focus, shot on DSLR, award-winning photography`; }
 function isImageRequest(text) { if (!text) return false; const l = text.toLowerCase().trim(); if (/\b(prompt|script|scene|story|text|poem|essay|code|email|song|lyrics)\b/.test(l) && !/\b(image|picture|photo|logo)\b/.test(l)) return false; return /^(please\s+)?(can you\s+|could you\s+)?(create|generate|make|draw|paint|render|design|show me|give me)\s+(an?\s+)?(image|picture|photo|artwork|illustration|drawing|painting|portrait|wallpaper|logo)/i.test(l) || /^(please\s+)?(create|generate|make|draw|paint|render|design)\s+(me\s+)?(an?\s+)?/i.test(l) || /\b(image|picture|photo|logo)\s+of\b/i.test(l); }
 function isBgRemoval(text) { return text && /remove\s+(the\s+)?background|background\s+removal|remove\s+bg|cut\s+out|transparent\s+background/i.test(text); }
 function extractImagePrompt(text) { let t = text.trim(); t = t.replace(/^(please\s+)?(can you\s+|could you\s+)?(create|generate|make|draw|paint|render|design|show me|give me)\s+(me\s+)?(an?\s+)?(image|picture|photo|artwork|illustration|drawing|painting|portrait|wallpaper|logo)\s*(of\s+)?/i, ''); return t.trim() || text; }
+
 async function generateImageInChat(chat, prompt, sourceImageDataUrl) {
-  const repKey = (localStorage.getItem('wk_replicate_key') || '').trim();
   const isLogo = detectLogoIntent(prompt);
   const enhancedPrompt = buildEnhancedPrompt(prompt, isLogo ? 'logo' : 'photo');
   const placeholder = { role:'ai', content: isLogo ? '🎨 Designing logo...' : '🎨 Generating image...', type:'image-loading', createdAt: Date.now() };
   chat.messages.push(placeholder); saveChats(); renderMessages();
   try {
     let imageUrl = buildImageUrl(enhancedPrompt);
-    await new Promise((resolve) => { const img = new Image(); img.onload = resolve; img.onerror = resolve; img.src = imageUrl; setTimeout(resolve, 20000); });
-    placeholder.type = 'image'; placeholder.content = isLogo ? `Logo: "${prompt}"` : `Image: "${prompt}"`; placeholder.imageUrl = imageUrl; placeholder.prompt = prompt;
+    // Preload to verify
+    const loaded = await new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = imageUrl;
+      setTimeout(() => resolve(false), 25000);
+    });
+    if (!loaded) throw new Error('Image failed to load');
+    placeholder.type = 'image';
+    placeholder.content = isLogo ? `Logo: "${prompt}"` : `Image: "${prompt}"`;
+    placeholder.imageUrl = imageUrl;
+    placeholder.prompt = prompt;
     saveToLibrary({ type:'image', prompt, url: imageUrl, createdAt: Date.now() });
-  } catch (err) { placeholder.type = 'error'; placeholder.content = '⚠️ Failed to generate.'; }
+  } catch (err) {
+    placeholder.type = 'error';
+    placeholder.content = '⚠️ Image generation failed. Please try again.';
+  }
   saveChats(); renderMessages();
 }
-async function handleBgRemovalInChat(chat, imageDataUrl) { const placeholder = { role:'ai', content:'✂️ Removing background...', type:'image-loading', createdAt: Date.now() }; chat.messages.push(placeholder); saveChats(); renderMessages(); try { if (!window.removeBackground) throw new Error('Not loaded'); const blob = await fetch(imageDataUrl).then(r => r.blob()); const resultBlob = await window.removeBackground(blob); const url = URL.createObjectURL(resultBlob); placeholder.type = 'image'; placeholder.content = '✅ Background removed:'; placeholder.imageUrl = url; } catch (err) { placeholder.type = 'error'; placeholder.content = '⚠️ Failed.'; } saveChats(); renderMessages(); }
-async function generateImageFromPanel() { const prompt = document.getElementById('imagesPromptInput').value.trim(); if (!prompt) return showToast('Enter description'); const results = document.getElementById('imagesPanelResults'); const isLogo = detectLogoIntent(prompt); const enhancedPrompt = buildEnhancedPrompt(prompt, isLogo ? 'logo' : 'photo'); results.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Generating...</div>`; try { const url = buildImageUrl(enhancedPrompt); await new Promise((res) => { const img = new Image(); img.onload = res; img.onerror = res; img.src = url; setTimeout(res, 20000); }); results.innerHTML = `<div class="result-card"><h4><i class="fas fa-check-circle"></i> Ready</h4><img src="${url}" style="max-width:100%;border-radius:12px"><div class="image-result-actions"><a class="btn accent" href="${url}" download="wiseking-${Date.now()}.png"><i class="fas fa-download"></i> Download</a></div></div>`; saveToLibrary({ type:'image', prompt, url, createdAt: Date.now() }); } catch (err) { results.innerHTML = `<div class="result-card"><p>⚠️ Failed.</p></div>`; } }
+
+async function handleBgRemovalInChat(chat, imageDataUrl) {
+  const placeholder = { role:'ai', content:'✂️ Removing background...', type:'image-loading', createdAt: Date.now() };
+  chat.messages.push(placeholder); saveChats(); renderMessages();
+  try {
+    if (!window.removeBackground) throw new Error('Not loaded');
+    const blob = await fetch(imageDataUrl).then(r => r.blob());
+    const resultBlob = await window.removeBackground(blob);
+    const url = URL.createObjectURL(resultBlob);
+    placeholder.type = 'image';
+    placeholder.content = '✅ Background removed:';
+    placeholder.imageUrl = url;
+  } catch (err) {
+    placeholder.type = 'error';
+    placeholder.content = '⚠️ Background removal failed.';
+  }
+  saveChats(); renderMessages();
+}
+
+async function generateImageFromPanel() {
+  const prompt = document.getElementById('imagesPromptInput').value.trim();
+  if (!prompt) return showToast('Please enter a description');
+  const results = document.getElementById('imagesPanelResults');
+  const isLogo = detectLogoIntent(prompt);
+  const enhancedPrompt = buildEnhancedPrompt(prompt, isLogo ? 'logo' : 'photo');
+  results.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>${isLogo ? 'Designing logo...' : 'Generating image...'}</div>`;
+  try {
+    const url = buildImageUrl(enhancedPrompt);
+    const loaded = await new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = url;
+      setTimeout(() => resolve(false), 25000);
+    });
+    if (!loaded) throw new Error('Image failed to load');
+    results.innerHTML = `
+      <div class="result-card">
+        <h4><i class="fas fa-check-circle"></i> ${isLogo ? 'Logo ready' : 'Image ready'}</h4>
+        <img src="${url}" style="max-width:100%;border-radius:12px;box-shadow:var(--shadow-lg)">
+        <div class="image-result-actions">
+          <a class="btn accent" href="${url}" download="wiseking-${Date.now()}.png"><i class="fas fa-download"></i> Download</a>
+          <button class="btn solid" onclick="shareImage('${url.replace(/'/g,"\\'")}')"><i class="fas fa-share"></i> Share</button>
+        </div>
+      </div>`;
+    saveToLibrary({ type:'image', prompt, url, createdAt: Date.now() });
+  } catch (err) {
+    results.innerHTML = `<div class="result-card"><p>⚠️ Failed: ${escapeHtml(err.message || 'unknown')}. Please try again.</p><button class="btn accent" style="margin-top:12px" onclick="generateImageFromPanel()"><i class="fas fa-sync-alt"></i> Try Again</button></div>`;
+  }
+}
+
+async function generateVideoFromPanel() {
+  const prompt = document.getElementById('videosPromptInput').value.trim();
+  if (!prompt) return showToast('Describe the video scene');
+  const repKey = (localStorage.getItem('wk_replicate_key') || '').trim();
+  const results = document.getElementById('videoPanelResults');
+  if (!repKey) { results.innerHTML = '<div class="result-card"><h4><i class="fas fa-info-circle"></i> Replicate key required</h4><p>Add a Replicate API key in Settings.</p></div>'; return; }
+  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Generating video...</div>';
+  try {
+    const createRes = await fetch(`https://api.replicate.com/v1/models/lucataco/animate-diff/predictions`, { method: 'POST', headers: { 'Authorization': `Bearer ${repKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ input: { prompt, num_frames: 16, num_inference_steps: 25, guidance_scale: 7.5 } }) });
+    if (!createRes.ok) throw new Error('Replicate failed');
+    let pred = await createRes.json();
+    let tries = 0;
+    while (pred.status !== 'succeeded' && pred.status !== 'failed' && tries < 120) {
+      await new Promise(r => setTimeout(r, 2000));
+      const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${pred.id}`, { headers: { 'Authorization': `Bearer ${repKey}` } });
+      if (pollRes.ok) pred = await pollRes.json();
+      tries++;
+    }
+    if (pred.status !== 'succeeded') throw new Error('Video failed');
+    const videoUrl = Array.isArray(pred.output) ? pred.output[0] : pred.output;
+    results.innerHTML = `<div class="result-card"><h4><i class="fas fa-film"></i> Video ready</h4><video src="${videoUrl}" controls style="max-width:100%;border-radius:12px"></video><div class="image-result-actions"><a class="btn accent" href="${videoUrl}" download="wiseking-video-${Date.now()}.mp4"><i class="fas fa-download"></i> Download</a></div></div>`;
+    saveToLibrary({ type:'video', prompt, url: videoUrl, createdAt: Date.now() });
+  } catch (err) { results.innerHTML = `<div class="result-card"><p>⚠️ Video failed: ${escapeHtml(String(err.message || err))}</p></div>`; }
+}
 
 // ============================================================
 // INIT
