@@ -822,14 +822,24 @@
 <div class="toast" id="toast"></div>
 
 <!-- ==============================================
-     FIREBASE AUTH
+     FIREBASE AUTH — POWERFUL, DIRECT, NO REDIRECT
      ============================================== -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
   import { 
-    getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence
+    getAuth, 
+    signInWithPopup, 
+    GoogleAuthProvider, 
+    signOut, 
+    onAuthStateChanged,
+    setPersistence,
+    browserLocalPersistence,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    sendPasswordResetEmail
   } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
+  // === YOUR FIREBASE CONFIG ===
   const firebaseConfig = {
     apiKey: "AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU",
     authDomain: "wise-king-ai-259fc.firebaseapp.com",
@@ -839,45 +849,196 @@
     appId: "1:19851699752:web:6735280bf59561e8ffb71d"
   };
 
+  // === INITIALIZE ===
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  setPersistence(auth, browserLocalPersistence).catch(e => console.warn(e));
+  // ==============================================
+  // ✅ FIX 1 — SET LOGIN PERSISTENCE (STAY SIGNED IN)
+  // ==============================================
+  setPersistence(auth, browserLocalPersistence)
+    .then(() => { console.log("✅ Auth persistence set to LOCAL"); })
+    .catch((error) => { console.warn("Persistence note:", error.message); });
+
+  // ==============================================
+  // ✅ FIX 2 — AUTO CHECK IF USER IS ALREADY LOGGED IN
+  // ==============================================
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      console.log("User signed in:", user.email);
+      // ✅ ALREADY LOGGED IN → UNLOCK APP DIRECTLY
+      console.log("✅ User already signed in:", user.email);
       unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
       loadChatsFromFirestore();
+    } else {
+      console.log("No user signed in — show login");
     }
   });
 
+  // ==============================================
+  // ✅ FIX 3 — GOOGLE SIGN IN WITH POPUP (NO REDIRECT = NO ERROR)
+  // ==============================================
   window.signInWithGoogle = function() {
+    console.log("🔄 Starting Google Sign-In...");
+    
+    // Clear old session to prevent "missing initial state" error
     sessionStorage.clear();
-    signInWithPopup(auth, provider).then((result) => {
-      const user = result.user;
-      localStorage.setItem('wk_logged_in', '1');
-      localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
-      localStorage.setItem('wk_user_email', user.email || '');
-      localStorage.removeItem('wk_guest_mode');
-      unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
-      loadChatsFromFirestore();
-      showToast(`Welcome, ${user.displayName || 'Wise King User'}! 🎉`);
-    }).catch((error) => {
-      if (error.code !== "auth/cancelled-popup-request" && error.code !== "auth/popup-closed-by-user") {
-        showAuthError("Login failed: " + error.message);
-      }
-    });
+
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // ✅ LOGIN SUCCESS → DIRECTLY UNLOCK APP
+        const user = result.user;
+        console.log("✅ Login successful:", user.email);
+        
+        // Save user info locally
+        localStorage.setItem('wk_logged_in', '1');
+        localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
+        localStorage.setItem('wk_user_email', user.email || '');
+        localStorage.removeItem('wk_guest_mode');
+        
+        // Unlock the app instantly
+        unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
+        loadChatsFromFirestore();
+        showToast(`Welcome, ${user.displayName || 'Wise King User'}! 🎉`);
+      })
+      .catch((error) => {
+        // ❌ HANDLE ERROR NICELY
+        console.error("❌ Login error:", error.code, error.message);
+        
+        if (error.code !== "auth/cancelled-popup-request" && 
+            error.code !== "auth/popup-closed-by-user") {
+          showAuthError("Login failed: " + error.message + " Please try again.");
+        }
+      });
   };
 
+  // ==============================================
+  // ✅ FIX 4 — EMAIL & PASSWORD SIGN IN (DIRECT)
+  // ==============================================
+  window.emailSignIn = function() {
+    const email = document.getElementById('signInEmail').value.trim();
+    const password = document.getElementById('signInPassword').value.trim();
+    
+    if (!email || !password) {
+      showAuthError("Please enter both email and password.");
+      return;
+    }
+
+    const btn = document.getElementById('signInBtn');
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        localStorage.setItem('wk_logged_in', '1');
+        localStorage.setItem('wk_user_name', user.displayName || email.split('@')[0]);
+        localStorage.setItem('wk_user_email', user.email);
+        localStorage.removeItem('wk_guest_mode');
+        
+        unlockApp(user.displayName || email.split('@')[0], user.email, null);
+        loadChatsFromFirestore();
+        showToast(`Welcome back! 🎉`);
+      })
+      .catch((error) => {
+        let msg = "Login failed. ";
+        if (error.code === 'auth/user-not-found') msg += "No account found with this email.";
+        else if (error.code === 'auth/wrong-password') msg += "Incorrect password.";
+        else msg += error.message;
+        showAuthError(msg);
+        btn.disabled = false; btn.innerHTML = '<i class="fas fa-right-to-bracket"></i> Sign In';
+      });
+  };
+
+  // ==============================================
+  // ✅ FIX 5 — EMAIL & PASSWORD SIGN UP (AUTO LOGIN)
+  // ==============================================
+  window.emailSignUp = function() {
+    const name = document.getElementById('signUpName').value.trim();
+    const email = document.getElementById('signUpEmail').value.trim();
+    const password = document.getElementById('signUpPassword').value.trim();
+    
+    if (!name || !email || !password) {
+      showAuthError("Please fill in all fields.");
+      return;
+    }
+    if (password.length < 6) {
+      showAuthError("Password must be at least 6 characters.");
+      return;
+    }
+
+    const btn = document.getElementById('signUpBtn');
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        localStorage.setItem('wk_logged_in', '1');
+        localStorage.setItem('wk_user_name', name);
+        localStorage.setItem('wk_user_email', user.email);
+        localStorage.removeItem('wk_guest_mode');
+        
+        unlockApp(name, user.email, null);
+        loadChatsFromFirestore();
+        showToast(`Account created! Welcome, ${name} 🎉`);
+      })
+      .catch((error) => {
+        let msg = "Sign up failed. ";
+        if (error.code === 'auth/email-already-in-use') msg += "This email is already registered.";
+        else if (error.code === 'auth/invalid-email') msg += "Invalid email format.";
+        else if (error.code === 'auth/weak-password') msg += "Password is too weak.";
+        else msg += error.message;
+        showAuthError(msg);
+        btn.disabled = false; btn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+      });
+  };
+
+  // ==============================================
+  // ✅ FIX 6 — FORGOT PASSWORD
+  // ==============================================
+  window.sendPasswordReset = function() {
+    const email = document.getElementById('resetEmail').value.trim();
+    if (!email) { showAuthError("Please enter your email."); return; }
+    
+    const btn = document.getElementById('resetBtn');
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        showAuthSuccess("Password reset email sent! Check your inbox.");
+        btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Reset Link';
+      })
+      .catch((error) => {
+        showAuthError("Error: " + error.message);
+        btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Reset Link';
+      });
+  };
+
+  // ==============================================
+  // ✅ FIX 7 — SIGN OUT WITH CONFIRMATION
+  // ==============================================
   window.signOutUser = function() {
     if (confirm("Are you sure you want to sign out?")) {
-      signOut(auth).then(() => {
-        localStorage.clear();
-        location.reload();
-      }).catch(e => showToast("Sign out failed: " + e.message));
+      signOut(auth)
+        .then(() => {
+          console.log("✅ Signed out successfully");
+          localStorage.removeItem('wk_logged_in');
+          localStorage.removeItem('wk_user_email');
+          localStorage.removeItem('wk_user_name');
+          localStorage.removeItem('wk_guest_mode');
+          localStorage.removeItem('wk_user_avatar');
+          localStorage.removeItem('wk_chats');
+          localStorage.removeItem('wk_vault');
+          localStorage.removeItem('wk_cross_memory');
+          localStorage.removeItem('wk_library');
+          location.reload();
+        })
+        .catch((error) => {
+          showToast("Sign out failed: " + error.message);
+        });
     }
   };
+
+  // Store globally for other scripts
   window.fbAuth = auth;
   window.fbProvider = provider;
 </script>
@@ -1024,12 +1185,12 @@ WISE KING AI — ADVANCED STORY, SCRIPT & PROJECT ARCHITECT
    - **DO NOT** provide an English translation in brackets `*( )*`. 
    - **DO NOT** translate the Hausa words. 
    - **DO NOT** change names or places (e.g., do not change "Moscow" to "America", do not change "Nijar" to "Nigeria"). 
-   - Just write the mixed dialogue directly. The Hausa and English must flow together naturally, like "Kai, where are you going?" or "So, when are you back ina jiranku"
+   - Just write the mixed dialogue directly. The Hausa and English must flow together naturally, like "Kai, where are you going?" or "So, when you came back kasanar dani"
    - **Example of the EXACT format required:**
-     * Major General Aliyu Dan-Kano: "(Stepping forward, voice deep and commanding)* "Wannan shine secure din kasar mu, babu wanda zaiyi interrupted it"
-     * Dr. Zainab Bello: "(Typing furiously on a glass tablet, panic in her voice)* "General! Ba wani abu bane na al'ada... it was just an hacking from homes"
-     * Major General Aliyu Dan-Kano: OK, Zainab find the solution akai yanzu..
-     * Dr. Zainab Bello:Yes Sir, An gama...
+     * Major General Aliyu Dan-Kano: "(Stepping forward, voice deep and commanding)* "Wannan shine garkuwar kasar mu, Nobody will interrupted it."
+     * Dr. Zainab Bello: "(Typing furiously on a glass tablet, panic in her voice)* "General! Ba wani abu bane na al'ada... it was just hacking from inside country!"
+     * User: "Kai, where are going? 
+     * User: "So, when you came back kasanar dani"
 
 5. REAL HUMAN PHOTOS & VISUALS:
    - Ultra-realistic human photography with stunning detail, professional lighting, 8k quality. Strictly NO cartoons unless requested.
