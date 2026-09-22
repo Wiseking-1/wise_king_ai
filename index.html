@@ -1172,13 +1172,7 @@ async function firebaseGoogleLogin() {
     const result = await window.fbSignInWithPopup(window.fbAuth, window.fbGoogleProvider);
     const user = result.user;
     if (user) {
-      currentUser = user; isGuest = false;
-      localStorage.setItem('wk_logged_in', '1');
-      localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
-      localStorage.setItem('wk_user_email', user.email || '');
-      localStorage.removeItem('wk_guest_mode');
-      unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
-      await loadChatsFromFirestore();
+      // UI unlock handled by onAuthStateChanged listener
       showToast('✅ Signed in with Google');
     }
   } catch (err) { showAuthError(friendlyAuthError(err)); }
@@ -1195,13 +1189,7 @@ async function emailSignUp() {
   try {
     const cred = await window.fbCreateUser(window.fbAuth, email, password);
     try { await window.fbUpdateProfile(cred.user, { displayName: name }); } catch(e){}
-    currentUser = cred.user; isGuest = false;
-    localStorage.setItem('wk_logged_in', '1');
-    localStorage.setItem('wk_user_name', name);
-    localStorage.setItem('wk_user_email', email);
-    localStorage.removeItem('wk_guest_mode');
-    unlockApp(name, email, null);
-    await loadChatsFromFirestore();
+    // UI unlock handled by onAuthStateChanged listener
     showToast('🎉 Account created!');
   } catch (err) { showAuthError(friendlyAuthError(err)); }
   finally { setAuthBtnLoading('signUpBtn', false, '<i class="fas fa-user-plus"></i> Create Account'); }
@@ -1215,13 +1203,7 @@ async function emailSignIn() {
   setAuthBtnLoading('signInBtn', true);
   try {
     const cred = await window.fbSignInEmail(window.fbAuth, email, password);
-    currentUser = cred.user; isGuest = false;
-    localStorage.setItem('wk_logged_in', '1');
-    localStorage.setItem('wk_user_name', cred.user.displayName || 'Wise King User');
-    localStorage.setItem('wk_user_email', cred.user.email || '');
-    localStorage.removeItem('wk_guest_mode');
-    unlockApp(cred.user.displayName || 'Wise King User', cred.user.email, cred.user.photoURL);
-    await loadChatsFromFirestore();
+    // UI unlock handled by onAuthStateChanged listener
     showToast('✅ Welcome back!');
   } catch (err) { showAuthError(friendlyAuthError(err)); }
   finally { setAuthBtnLoading('signInBtn', false, '<i class="fas fa-right-to-bracket"></i> Sign In'); }
@@ -1250,6 +1232,7 @@ function skipLoginAsGuest() {
 }
 function unlockApp(name, email, photoURL) {
   document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('mainApp').style.opacity = '1';
   if (name) { document.getElementById('sidebarName').textContent = name; document.getElementById('pmName').textContent = name; }
   if (email) { document.getElementById('settingsUserEmail').textContent = email; document.getElementById('pmEmail').textContent = email; }
@@ -1263,7 +1246,6 @@ function unlockApp(name, email, photoURL) {
   }
   const savedAvatar = localStorage.getItem('wk_user_avatar') || photoURL;
   if (savedAvatar) applyAvatar(savedAvatar);
-  setTimeout(() => { const ls = document.getElementById('loginScreen'); if(ls) ls.style.display = 'none'; }, 400);
 }
 function openSignOutModal() {
   closeTopProfileMenu();
@@ -2151,7 +2133,7 @@ async function triggerResponse(chat, userMsg) {
 async function streamAIResponse(text, chat, signal, aiMsg, userMsg) {
   const userKey = (localStorage.getItem('wk_api_key') || '').trim();
   const apiKey = userKey || ENV_GEMINI_KEY;
-  const userEmail = localStorage.getItem('wk_user_email'] || (currentUser ? currentUser.email : '');
+  const userEmail = localStorage.getItem('wk_user_email') || (currentUser ? currentUser.email : '');
   const ownerMode = isUserOwner(userEmail);
   const basePrompt = ownerMode ? OWNER_SYSTEM_PROMPT : NORMAL_USER_SYSTEM_PROMPT;
   const systemPrompt = basePrompt + getVaultContext() + getMemoryContext();
