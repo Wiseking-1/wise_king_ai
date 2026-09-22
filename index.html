@@ -315,11 +315,6 @@
   .sp-telegram{background:linear-gradient(135deg,#229ED9,#0088cc)}
   .sp-x{background:linear-gradient(135deg,#000,#1a1a1a)}
   .share-cancel{width:100%;padding:12px;border-radius:var(--radius-md);background:var(--bg-elevated);border:1px solid var(--border-default);color:var(--text-primary);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
-  .dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
-  .stat-card{background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:20px}
-  .stat-card .stat-icon{width:42px;height:42px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:14px;color:white}
-  .stat-card .stat-value{font-size:26px;font-weight:700;margin-bottom:4px}
-  .stat-card .stat-label{font-size:12.5px;color:var(--text-secondary);font-weight:500}
   @media(max-width:900px){.suggestions{grid-template-columns:1fr}}
   @media(max-width:768px){
     .sidebar{position:fixed;top:0;left:0;bottom:0;transform:translateX(-100%);box-shadow:var(--shadow-lg)}
@@ -495,7 +490,7 @@
           </div>
         </div>
         <input type="file" id="fileInput" accept="image/*,.pdf,.txt,.doc,.docx" style="display:none" multiple onchange="handleFiles(event)">
-        <div class="input-hint">Wise King Ai can make mistake,please-double-check-information</div>
+        <div class="input-hint">Wise King Ai can make mistake, please double check information</div>
       </div>
     </div>
   </main>
@@ -1398,7 +1393,7 @@ async function generateImageFromPanel() {
 async function generateVideoFromPanel() { const prompt = document.getElementById('videosPromptInput').value.trim(); if (!prompt) return showToast('Describe the video'); const repKey = (localStorage.getItem('wk_replicate_key') || '').trim(); const results = document.getElementById('videoPanelResults'); if (!repKey) { results.innerHTML = '<div class="result-card"><h4><i class="fas fa-info-circle"></i> Replicate key required</h4><p>Add a Replicate API key in Settings.</p></div>'; return; } results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Generating video...</div>'; try { const output = await replicateRun('lucataco', 'animate-diff', { prompt, num_frames: 16, num_inference_steps: 25, guidance_scale: 7.5 }, repKey); const videoUrl = Array.isArray(output) ? output[0] : output; results.innerHTML = `<div class="result-card"><h4><i class="fas fa-film"></i> Video ready</h4><video src="${videoUrl}" controls style="max-width:100%;border-radius:12px"></video><div class="image-result-actions"><a class="btn accent" href="${videoUrl}" download="wiseking-${Date.now()}.mp4"><i class="fas fa-download"></i> Download</a></div></div>`; saveToLibrary({ type:'video', prompt, url: videoUrl, createdAt: Date.now() }); } catch (err) { results.innerHTML = `<div class="result-card"><p>⚠️ Video failed: ${escapeHtml(String(err.message || err))}</p></div>`; } }
 
 // ============================================================
-// STREAMING AI RESPONSE
+// STREAMING AI RESPONSE (OPTIMIZED FOR SPEED & STABILITY)
 // ============================================================
 async function triggerResponse(chat, userMsg) {
   isSending = true;
@@ -1415,43 +1410,59 @@ async function triggerResponse(chat, userMsg) {
   handleInputChange(); saveChats(); renderMessages();
   if (getMemoryEnabled() && chat.messages.length >= 4) setTimeout(() => extractMemoryFromChat(chat), 1000);
 }
+
 async function streamAIResponse(text, chat, signal, aiMsg, userMsg) {
   const userKey = (localStorage.getItem('wk_api_key') || '').trim();
   const apiKey = userKey || ENV_GEMINI_KEY;
-  const userEmail = localStorage.getItem('wk_user_email') || '';
-  const ownerMode = isUserOwner(userEmail);
+  const userEmail = localStorage.getItem('wk_user_email'] || '';
   const systemPrompt = SYSTEM_PROMPT + getVaultContext() + getMemoryContext();
   let turnSystemPrompt = systemPrompt;
   if (userMsg && userMsg.thinkMode) { turnSystemPrompt += `\n\nDEEP THINKING MODE ACTIVE: Reason carefully step by step internally before answering. Then give the best possible answer.`; }
   const webSearchEnabled = getWebSearchEnabled() || (userMsg && userMsg.searchMode);
+  
   const history = chat.messages.filter(m => m !== aiMsg);
   const contents = [];
   for (const m of history) {
-    if (!m || m.streaming) continue;
-    if (m.type === 'image-loading') continue;
+    if (!m || m.streaming || m.type === 'image-loading' || m.error) continue;
     if (m.type === 'image') { contents.push({ role: 'model', parts: [{ text: `[Image generated]: ${m.content || m.prompt || ''}` }] }); continue; }
-    if (m.error) continue;
     const role = m.role === 'ai' ? 'model' : 'user';
     const parts = [];
     const textContent = (m.content || '').trim();
     if (textContent) parts.push({ text: textContent });
-    if (m.role === 'user' && Array.isArray(m.images) && m.images.length) { for (const imgDataUrl of m.images) { const match = String(imgDataUrl).match(/^data:(image\/[^;]+);base64,(.+)$/); if (match) parts.push({ inline_data: { mime_type: match[1], data: match[2] } }); } }
-    if (parts.length === 0) continue;
-    contents.push({ role, parts });
+    if (m.role === 'user' && Array.isArray(m.images) && m.images.length) { 
+      for (const imgDataUrl of m.images) { 
+        const match = String(imgDataUrl).match(/^data:(image\/[^;]+);base64,(.+)$/); 
+        if (match) parts.push({ inline_data: { mime_type: match[1], data: match[2] } }); 
+      } 
+    }
+    if (parts.length > 0) contents.push({ role, parts });
   }
   if (contents.length && contents[0].role === 'model') contents.unshift({ role: 'user', parts: [{ text: '(continuing)' }] });
+  
   const body = { systemInstruction: { parts: [{ text: turnSystemPrompt }] }, contents };
   if (webSearchEnabled) body.tools = [{ google_search: {} }];
+  
   const modelId = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite';
-  const modelName = (modelId === 'gemini-3.5-flash-lite') ? 'gemini-2.0-flash' : modelId;
+  const modelName = (modelId === 'gemini-3.5-flash-lite') ? 'gemini-2.5-flash' : modelId;
   const streamUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
+  
   const res = await fetch(streamUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body), signal });
-  if (!res.ok) { const fbUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${encodeURIComponent(apiKey)}`; const fbRes = await fetch(fbUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ systemInstruction: body.systemInstruction, contents: body.contents }), signal }); if (!fbRes.ok) { aiMsg.error = true; aiMsg.content = '⚠️ Service busy.'; return; } const fbData = await fbRes.json(); aiMsg.content = fbData.candidates?.[0]?.content?.parts?.[0]?.text || 'Ready.'; return; }
+  if (!res.ok) { 
+    // Instant fallback to 2.0-flash if primary encounters an issue
+    const fbUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`; 
+    const fbRes = await fetch(fbUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ systemInstruction: body.systemInstruction, contents: body.contents }), signal }); 
+    if (!fbRes.ok) { aiMsg.error = true; aiMsg.content = '⚠️ Service busy. Please try again.'; return; } 
+    const fbData = await fbRes.json(); 
+    aiMsg.content = fbData.candidates?.[0]?.content?.parts?.[0]?.text || 'Ready.'; 
+    return; 
+  }
+  
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   let buffer = '';
   let fullText = '';
   let allChunks = [];
+  
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
@@ -1463,14 +1474,40 @@ async function streamAIResponse(text, chat, signal, aiMsg, userMsg) {
       if (!trimmed.startsWith('data:')) continue;
       const dataStr = trimmed.slice(5).trim();
       if (dataStr === '[DONE]') continue;
-      try { const parsed = JSON.parse(dataStr); const candidate = parsed.candidates?.[0]; const textPart = candidate?.content?.parts?.[0]?.text || ''; if (textPart) { fullText += textPart; updateStreamingMessage(chat, aiMsg, fullText); } if (candidate?.groundingMetadata?.groundingChunks) allChunks = candidate.groundingMetadata.groundingChunks; } catch(e) {}
+      try { 
+        const parsed = JSON.parse(dataStr); 
+        const candidate = parsed.candidates?.[0]; 
+        const textPart = candidate?.content?.parts?.[0]?.text || ''; 
+        if (textPart) { 
+          fullText += textPart; 
+          updateStreamingMessage(chat, aiMsg, fullText); 
+        } 
+        if (candidate?.groundingMetadata?.groundingChunks) allChunks = candidate.groundingMetadata.groundingChunks; 
+      } catch(e) {}
     }
   }
-  if (allChunks.length > 0) { const sources = allChunks.map(c => c.web ? `• [${c.web.title || 'Source'}](${c.web.uri})` : '').filter(Boolean).slice(0, 5).join('\n'); if (sources) fullText += `\n\n🌐 **Sources**\n${sources}`; }
+  if (allChunks.length > 0) { 
+    const sources = allChunks.map(c => c.web ? `• [${c.web.title || 'Source'}](${c.web.uri})` : '').filter(Boolean).slice(0, 5).join('\n'); 
+    if (sources) fullText += `\n\n🌐 **Sources**\n${sources}`; 
+  }
   aiMsg.content = fullText;
   aiMsg.streaming = false;
 }
-function updateStreamingMessage(chat, aiMsg, text) { aiMsg.content = text; const idx = chat.messages.indexOf(aiMsg); if (idx < 0) return; const msgEls = document.getElementById('messagesArea').querySelectorAll('.message'); const el = msgEls[idx]; if (!el) return; const contentEl = el.querySelector('.msg-content'); if (!contentEl) return; contentEl.classList.remove('thinking'); contentEl.innerHTML = buildContentHtml({ content: text }) + '<span class="streaming-cursor"></span>'; const cs = document.getElementById('chatScroll'); cs.scrollTop = cs.scrollHeight; }
+
+function updateStreamingMessage(chat, aiMsg, text) { 
+  aiMsg.content = text; 
+  const idx = chat.messages.indexOf(aiMsg); 
+  if (idx < 0) return; 
+  const msgEls = document.getElementById('messagesArea').querySelectorAll('.message'); 
+  const el = msgEls[idx]; 
+  if (!el) return; 
+  const contentEl = el.querySelector('.msg-content'); 
+  if (!contentEl) return; 
+  contentEl.classList.remove('thinking'); 
+  contentEl.innerHTML = buildContentHtml({ content: text }) + '<span class="streaming-cursor"></span>'; 
+  const cs = document.getElementById('chatScroll'); 
+  cs.scrollTop = cs.scrollHeight; 
+}
 
 // ============================================================
 // SEARCH WEB PANEL
