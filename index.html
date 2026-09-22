@@ -460,12 +460,12 @@
         <div class="welcome" id="welcomeScreen">
           <div class="welcome-logo">👑</div>
           <h1>How can I help you today?</h1>
-          <p>I'm <strong>Wise King AI</strong>. I can see photos, remember our conversations, and reason across any task.</p>
+          <p>I'm <strong>Wise King AI</strong>. Ready to write cinematic scripts, compose Afrobeat songs, build apps, and execute tasks instantly.</p>
           <div class="suggestions">
-            <div class="suggestion-card" onclick="useSuggestion('Explain quantum computing in simple terms')"><i class="fas fa-atom"></i><div class="sc-title">Explain quantum computing</div><div class="sc-desc">In simple, clear terms</div></div>
-            <div class="suggestion-card" onclick="useSuggestion('Write me an Afrobeat song about Kano city')"><i class="fas fa-music"></i><div class="sc-title">Write an Afrobeat song</div><div class="sc-desc">Full lyrics with structure</div></div>
-            <div class="suggestion-card" onclick="useSuggestion('What is the latest news in Nigeria today?')"><i class="fas fa-globe"></i><div class="sc-title">Latest Nigeria news</div><div class="sc-desc">Live search with sources</div></div>
-            <div class="suggestion-card" onclick="useSuggestion('Create a hyper-realistic image of a majestic African lion at sunset')"><i class="fas fa-image"></i><div class="sc-title">Generate an image</div><div class="sc-desc">Hyper-realistic, 8k quality</div></div>
+            <div class="suggestion-card" onclick="useSuggestion('Write an Afrobeat song script about Kano city life and hustle')"><i class="fas fa-music"></i><div class="sc-title">Write Afrobeat Song</div><div class="sc-desc">Full lyrics & rhythm layout</div></div>
+            <div class="suggestion-card" onclick="useSuggestion('Create a cinematic movie script scene for an action epic')"><i class="fas fa-film"></i><div class="sc-title">Cinematic Script</div><div class="sc-desc">Multi-character dialogue</div></div>
+            <div class="suggestion-card" onclick="useSuggestion('Build a full HTML5 mini financial calculator app code')"><i class="fas fa-code"></i><div class="sc-title">Build App Code</div><div class="sc-desc">Single-file ready to run</div></div>
+            <div class="suggestion-card" onclick="useSuggestion('Generate a hyper-realistic image of a futuristic African cyber-city at night')"><i class="fas fa-image"></i><div class="sc-title">Hyper-Realistic Image</div><div class="sc-desc">8k resolution design</div></div>
           </div>
         </div>
         <div id="messagesArea"></div>
@@ -496,26 +496,28 @@
   </main>
 </div>
 
+<!-- POPUP MENU (Sidebar Chat 3-dot Menu) -->
 <div class="popup-menu" id="chatPopupMenu">
   <button class="popup-menu-item pin-item" id="chatPinBtn" onclick="togglePinCurrentChat()"><i class="fas fa-thumbtack"></i> <span id="chatPinLabel">Pin chat</span></button>
   <button class="popup-menu-item" onclick="renameCurrentChat()"><i class="fas fa-pen"></i> Rename</button>
-  <button class="popup-menu-item" onclick="deleteCurrentChat()"><i class="fas fa-trash"></i> Delete</button>
-  <button class="popup-menu-item" onclick="shareCurrentChat()"><i class="fas fa-share"></i> Share</button>
+  <button class="popup-menu-item" onclick="deleteCurrentChat()"><i class="fas fa-trash"></i> Delete (Are you sure?)</button>
+  <button class="popup-menu-item" onclick="shareCurrentChatFromMenu()"><i class="fas fa-share"></i> Share</button>
 </div>
 
+<!-- SHARE POPUP MODAL -->
 <div id="sharePopup">
-  <div class="share-card">
+  <div class="share-card" onclick="event.stopPropagation()">
     <div class="share-head">
-      <div class="share-title"><i class="fas fa-share-nodes"></i> Share to</div>
+      <div class="share-title"><i class="fas fa-share-nodes"></i> Share via</div>
       <button class="share-close" onclick="closeSharePopup()"><i class="fas fa-times"></i></button>
     </div>
     <div class="share-grid">
-      <button class="share-platform" onclick="shareTo('whatsapp')"><div class="sp-icon sp-whatsapp"><i class="fab fa-whatsapp"></i></div><div class="sp-name">WhatsApp</div></button>
-      <button class="share-platform" onclick="shareTo('facebook')"><div class="sp-icon sp-facebook"><i class="fab fa-facebook-f"></i></div><div class="sp-name">Facebook</div></button>
-      <button class="share-platform" onclick="shareTo('tiktok')"><div class="sp-icon sp-tiktok"><i class="fab fa-tiktok"></i></div><div class="sp-name">TikTok</div></button>
-      <button class="share-platform" onclick="shareTo('instagram')"><div class="sp-icon sp-instagram"><i class="fab fa-instagram"></i></div><div class="sp-name">Instagram</div></button>
-      <button class="share-platform" onclick="shareTo('telegram')"><div class="sp-icon sp-telegram"><i class="fab fa-telegram-plane"></i></div><div class="sp-name">Telegram</div></button>
-      <button class="share-platform" onclick="shareTo('x')"><div class="sp-icon sp-x"><i class="fab fa-x-twitter"></i></div><div class="sp-name">X</div></button>
+      <button class="share-platform" onclick="executeShare('facebook')"><div class="sp-icon sp-facebook"><i class="fab fa-facebook-f"></i></div><div class="sp-name">Facebook</div></button>
+      <button class="share-platform" onclick="executeShare('tiktok')"><div class="sp-icon sp-tiktok"><i class="fab fa-tiktok"></i></div><div class="sp-name">TikTok</div></button>
+      <button class="share-platform" onclick="executeShare('instagram')"><div class="sp-icon sp-instagram"><i class="fab fa-instagram"></i></div><div class="sp-name">Instagram</div></button>
+      <button class="share-platform" onclick="executeShare('whatsapp')"><div class="sp-icon sp-whatsapp"><i class="fab fa-whatsapp"></i></div><div class="sp-name">WhatsApp</div></button>
+      <button class="share-platform" onclick="executeShare('x')"><div class="sp-icon sp-x"><i class="fab fa-x-twitter"></i></div><div class="sp-name">X</div></button>
+      <button class="share-platform" onclick="executeShare('telegram')"><div class="sp-icon sp-telegram"><i class="fab fa-telegram-plane"></i></div><div class="sp-name">Telegram</div></button>
     </div>
     <button class="share-cancel" onclick="closeSharePopup()">Cancel</button>
   </div>
@@ -547,7 +549,7 @@
 <div class="modal-bg" id="deleteChatModal">
   <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px">
     <div style="font-size:36px;margin-bottom:12px">🗑️</div>
-    <div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete this chat?</div>
+    <div style="font-size:17px;font-weight:600;margin-bottom:8px">Are you sure you want to delete this chat?</div>
     <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">This action cannot be undone.</p>
     <div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0">
       <button class="btn ghost" style="flex:1" onclick="closeModal('deleteChatModal')">Cancel</button>
@@ -957,11 +959,23 @@ function loadTheme() {
 }
 
 // ============================================================
-// MODES
+// MODES & SPEECH
 // ============================================================
 function toggleThinkMode() { thinkMode = !thinkMode; document.getElementById('chipThink').classList.toggle('active', thinkMode); showToast(thinkMode ? '🧠 Deep thinking ON' : '🧠 OFF'); }
 function toggleSearchMode() { searchMode = !searchMode; document.getElementById('chipSearch').classList.toggle('active', searchMode); showToast(searchMode ? '🌐 Search ON' : '🌐 OFF'); }
 function toggleVoiceMode() { voiceMode = !voiceMode; const box = document.getElementById('gkInputBox'); if (voiceMode) box.classList.add('voice-mode'); else { box.classList.remove('voice-mode'); document.getElementById('messageInput').focus(); } }
+
+function speakText(text) {
+  if (!('speechSynthesis' in window)) { showToast('Speech not supported'); return; }
+  window.speechSynthesis.cancel();
+  const clean = text.replace(/[*#_`\[\]]/g, '');
+  const utterance = new SpeechSynthesisUtterance(clean);
+  utterance.lang = 'en-NG';
+  utterance.rate = 1.0;
+  window.speechSynthesis.speak(utterance);
+  showToast('🔊 Speaking...');
+}
+
 function initHoldToSpeak() {
   const pill = document.getElementById('gkHoldPill');
   const label = document.getElementById('gkHoldLabel');
@@ -1099,8 +1113,78 @@ function confirmDeleteChat() {
   if (activeChatId === deletingChatId) { activeChatId = chats.length > 0 ? chats[0].id : null; if (!activeChatId) { const id = 'chat-' + Date.now(); chats.unshift({ id, title:'New chat', messages:[], createdAt:Date.now() }); activeChatId = id; } }
   saveChats(); renderMessages(); closeModal('deleteChatModal'); deletingChatId = null; showToast('🗑️ Deleted');
 }
-function shareCurrentChat() { const chat = chats.find(c => c.id === popupMenuChatId); if (!chat) return; currentShareTarget = { type: 'chat', title: chat.title, text: `Check out this chat: "${chat.title}"` }; closeChatMenu(); openSharePopup(); }
-document.addEventListener('click', (e) => { const menu = document.getElementById('chatPopupMenu'); if (!menu || !menu.classList.contains('show')) return; if (e.target.closest('#chatPopupMenu')) return; if (e.target.closest('.chat-menu-btn')) return; closeChatMenu(); }, true);
+
+// ============================================================
+// SHARE HANDLERS (POPUP & SOCIAL SHARE)
+// ============================================================
+function shareCurrentChatFromMenu() {
+  const chat = chats.find(c => c.id === popupMenuChatId);
+  if (!chat) return;
+  closeChatMenu();
+  currentShareTarget = { type: 'chat', text: `Check out this Wise King AI chat: "${chat.title}"` };
+  openSharePopup();
+}
+
+function handleShareMessage(idx) {
+  const chat = chats.find(c => c.id === activeChatId);
+  if (!chat || !chat.messages[idx]) return;
+  currentShareTarget = { type: 'message', text: chat.messages[idx].content || '' };
+  openSharePopup();
+}
+
+function openSharePopup() {
+  const popup = document.getElementById('sharePopup');
+  if (popup) popup.classList.add('show');
+}
+
+function closeSharePopup() {
+  const popup = document.getElementById('sharePopup');
+  if (popup) popup.classList.remove('show');
+  currentShareTarget = null;
+}
+
+function executeShare(platform) {
+  const textToShare = currentShareTarget ? currentShareTarget.text : "Check out Wise King AI!";
+  const appUrl = window.location.href;
+  const encodedText = encodeURIComponent(textToShare + "\n\n" + appUrl);
+  let shareUrl = '';
+
+  switch(platform) {
+    case 'whatsapp':
+      shareUrl = `https://api.whatsapp.com/send?text=${encodedText}`;
+      break;
+    case 'facebook':
+      shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(appUrl)}`;
+      break;
+    case 'telegram':
+      shareUrl = `https://t.me/share/url?url=${encodeURIComponent(appUrl)}&text=${encodeURIComponent(textToShare)}`;
+      break;
+    case 'x':
+      shareUrl = `https://twitter.com/intent/tweet?text=${encodedText}`;
+      break;
+    case 'instagram':
+    case 'tiktok':
+      wkCopyToClipboard(textToShare + " " + appUrl).then(() => {
+        showToast(`📋 Link copied for ${platform}! Paste inside the app.`);
+      });
+      closeSharePopup();
+      return;
+    default:
+      shareUrl = `https://api.whatsapp.com/send?text=${encodedText}`;
+  }
+
+  if (shareUrl) {
+    window.open(shareUrl, '_blank', 'noopener,noreferrer');
+  }
+  closeSharePopup();
+}
+
+document.addEventListener('click', (e) => { 
+  const menu = document.getElementById('chatPopupMenu'); 
+  if (!menu || !menu.classList.contains('show')) return; 
+  if (e.target.closest('#chatPopupMenu') || e.target.closest('.chat-menu-btn')) return; 
+  closeChatMenu(); 
+}, true);
 
 // ============================================================
 // HELPERS
@@ -1291,6 +1375,7 @@ function buildMessageEl(msg, idx, chatId) {
         <button class="msg-action-btn ${msg.feedback === 'up' ? 'active' : ''}" onclick="handleLikeMessage(${idx})" title="Like"><i class="fas fa-thumbs-up"></i> Like</button>
         <button class="msg-action-btn ${msg.feedback === 'down' ? 'active' : ''}" onclick="handleDislikeMessage(${idx})" title="Dislike"><i class="fas fa-thumbs-down"></i> Dislike</button>
         <button class="msg-action-btn" onclick="handleCopyMessage(${idx})" title="Copy"><i class="fas fa-copy"></i> Copy</button>
+        <button class="msg-action-btn" onclick="speakText(chats.find(c=>c.id==='${chatId}').messages[${idx}].content)" title="Listen"><i class="fas fa-volume-high"></i> Listen</button>
         <button class="msg-action-btn" onclick="handleRegenerateMessage('${chatId}', ${idx})" title="Regenerate"><i class="fas fa-sync-alt"></i> Regenerate</button>
         <button class="msg-action-btn" onclick="handleShareMessage(${idx})" title="Share"><i class="fas fa-share"></i> Share</button>
       `;
@@ -1317,7 +1402,6 @@ function handleDislikeMessage(idx) { const chat = chats.find(c => c.id === activ
 function submitDislikeFeedback() { const text = document.getElementById('dislikeFeedbackInput').value.trim(); closeModal('dislikeModal'); if (text) console.log('[WiseKing] Dislike feedback:', text); showToast('👎 Noted. Thank you!'); }
 function handleRegenerateMessage(chatId, msgIdx) { const chat = chats.find(c => c.id === chatId); if (!chat || isSending) return; let userMsgIdx = -1; for (let i = msgIdx - 1; i >= 0; i--) { if (chat.messages[i].role === 'user') { userMsgIdx = i; break; } } if (userMsgIdx === -1) return; const userMsg = chat.messages[userMsgIdx]; chat.messages.splice(msgIdx, 1); saveChats(); renderMessages(); triggerResponse(chat, userMsg); }
 function handleCopyMessage(idx) { const chat = chats.find(c => c.id === activeChatId); if (!chat || !chat.messages[idx]) return; const text = chat.messages[idx].content || ''; if (!text) return showToast('Nothing to copy'); wkCopyToClipboard(text).then(ok => showToast(ok ? '📋 Copied!' : '⚠️ Copy failed')); }
-function handleShareMessage(idx) { const chat = chats.find(c => c.id === activeChatId); if (!chat || !chat.messages[idx]) return; currentShareTarget = { type: 'message', idx, text: chat.messages[idx].content || '' }; openSharePopup(); }
 function handleEditMessage(idx) { const chat = chats.find(c => c.id === activeChatId); if (!chat || !chat.messages[idx]) return; const msg = chat.messages[idx]; if (msg.role !== 'user') return; editingMessageIdx = idx; document.getElementById('editMessageInput').value = msg.content || ''; document.getElementById('editMessageModal').classList.add('show'); setTimeout(() => document.getElementById('editMessageInput').focus(), 100); }
 function handleDeleteMessage(idx) { deletingMessageIdx = idx; document.getElementById('deleteMessageModal').classList.add('show'); }
 function saveEditedMessage() { if (editingMessageIdx < 0) return; const chat = chats.find(c => c.id === activeChatId); if (!chat) return; const newText = document.getElementById('editMessageInput').value.trim(); if (!newText) return showToast('Message required'); const msg = chat.messages[editingMessageIdx]; msg.content = newText; msg.edited = true; if (chat.messages[editingMessageIdx + 1] && chat.messages[editingMessageIdx + 1].role === 'ai') { chat.messages.splice(editingMessageIdx + 1, 1); } closeModal('editMessageModal'); editingMessageIdx = -1; saveChats(); renderMessages(); triggerResponse(chat, msg); }
@@ -1393,7 +1477,7 @@ async function generateImageFromPanel() {
 async function generateVideoFromPanel() { const prompt = document.getElementById('videosPromptInput').value.trim(); if (!prompt) return showToast('Describe the video'); const repKey = (localStorage.getItem('wk_replicate_key') || '').trim(); const results = document.getElementById('videoPanelResults'); if (!repKey) { results.innerHTML = '<div class="result-card"><h4><i class="fas fa-info-circle"></i> Replicate key required</h4><p>Add a Replicate API key in Settings.</p></div>'; return; } results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Generating video...</div>'; try { const output = await replicateRun('lucataco', 'animate-diff', { prompt, num_frames: 16, num_inference_steps: 25, guidance_scale: 7.5 }, repKey); const videoUrl = Array.isArray(output) ? output[0] : output; results.innerHTML = `<div class="result-card"><h4><i class="fas fa-film"></i> Video ready</h4><video src="${videoUrl}" controls style="max-width:100%;border-radius:12px"></video><div class="image-result-actions"><a class="btn accent" href="${videoUrl}" download="wiseking-${Date.now()}.mp4"><i class="fas fa-download"></i> Download</a></div></div>`; saveToLibrary({ type:'video', prompt, url: videoUrl, createdAt: Date.now() }); } catch (err) { results.innerHTML = `<div class="result-card"><p>⚠️ Video failed: ${escapeHtml(String(err.message || err))}</p></div>`; } }
 
 // ============================================================
-// STREAMING AI RESPONSE (OPTIMIZED FOR SPEED & STABILITY)
+// STREAMING AI RESPONSE (FAST RESPONSE & AUTO-RETRY)
 // ============================================================
 async function triggerResponse(chat, userMsg) {
   isSending = true;
@@ -1403,8 +1487,25 @@ async function triggerResponse(chat, userMsg) {
   const signal = currentAbortController.signal;
   const aiMsg = { role:'ai', content:'', createdAt: Date.now(), streaming: true };
   chat.messages.push(aiMsg); renderMessages();
-  try { await streamAIResponse(userMsg.content, chat, signal, aiMsg, userMsg); }
-  catch (err) { if (err.name !== 'AbortError') { aiMsg.error = true; aiMsg.content = aiMsg.content || '⚠️ Connection error. Please try again.'; } }
+  
+  let success = false;
+  let attempts = 0;
+  while (!success && attempts < 2) {
+    attempts++;
+    try { 
+      await streamAIResponse(userMsg.content, chat, signal, aiMsg, userMsg); 
+      success = true;
+    } catch (err) { 
+      if (err.name === 'AbortError') break;
+      if (attempts >= 2) { 
+        aiMsg.error = true; 
+        aiMsg.content = aiMsg.content || '⚠️ Service busy. Please try again.'; 
+      } else {
+        await new Promise(r => setTimeout(r, 600));
+      }
+    }
+  }
+
   aiMsg.streaming = false; isSending = false; currentAbortController = null;
   btn.classList.remove('stop'); btn.innerHTML = '<i class="fas fa-arrow-up"></i>';
   handleInputChange(); saveChats(); renderMessages();
@@ -1414,7 +1515,6 @@ async function triggerResponse(chat, userMsg) {
 async function streamAIResponse(text, chat, signal, aiMsg, userMsg) {
   const userKey = (localStorage.getItem('wk_api_key') || '').trim();
   const apiKey = userKey || ENV_GEMINI_KEY;
-  const userEmail = localStorage.getItem('wk_user_email'] || '';
   const systemPrompt = SYSTEM_PROMPT + getVaultContext() + getMemoryContext();
   let turnSystemPrompt = systemPrompt;
   if (userMsg && userMsg.thinkMode) { turnSystemPrompt += `\n\nDEEP THINKING MODE ACTIVE: Reason carefully step by step internally before answering. Then give the best possible answer.`; }
@@ -1448,10 +1548,9 @@ async function streamAIResponse(text, chat, signal, aiMsg, userMsg) {
   
   const res = await fetch(streamUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body), signal });
   if (!res.ok) { 
-    // Instant fallback to 2.0-flash if primary encounters an issue
     const fbUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`; 
     const fbRes = await fetch(fbUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ systemInstruction: body.systemInstruction, contents: body.contents }), signal }); 
-    if (!fbRes.ok) { aiMsg.error = true; aiMsg.content = '⚠️ Service busy. Please try again.'; return; } 
+    if (!fbRes.ok) throw new Error('Service busy'); 
     const fbData = await fbRes.json(); 
     aiMsg.content = fbData.candidates?.[0]?.content?.parts?.[0]?.text || 'Ready.'; 
     return; 
