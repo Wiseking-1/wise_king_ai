@@ -501,6 +501,7 @@
   </main>
 </div>
 
+<!-- POPUP MENUS -->
 <div class="popup-menu" id="chatPopupMenu">
   <button class="popup-menu-item pin-item" id="chatPinBtn" onclick="togglePinCurrentChat()"><i class="fas fa-thumbtack"></i> <span id="chatPinLabel">Pin chat</span></button>
   <button class="popup-menu-item" onclick="renameCurrentChat()"><i class="fas fa-pen"></i> Rename</button>
@@ -526,6 +527,7 @@
   </div>
 </div>
 
+<!-- MODALS -->
 <div class="modal-bg" id="editMessageModal">
   <div class="modal" style="max-width:520px">
     <div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Edit message</div><button class="modal-close" onclick="closeModal('editMessageModal')"><i class="fas fa-times"></i></button></div>
@@ -585,6 +587,7 @@
   </div>
 </div>
 
+<!-- FULL PANELS -->
 <div class="full-panel" id="searchWebPanel">
   <div class="panel-header"><div class="panel-title"><i class="fas fa-globe"></i> Search the web</div><button class="btn ghost" onclick="closeSearchWebPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
   <div class="panel-body"><div class="panel-inner">
@@ -747,9 +750,7 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- ============================================================
-     FIREBASE AUTH + APP SCRIPT STARTS HERE
-     ============================================================ -->
+<!-- SCRIPTS -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
   import { 
@@ -905,22 +906,15 @@
   try {
     const mod = await import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/browser.mjs');
     window.removeBackground = mod.removeBackground;
-  } catch(e) { console.warn('BG removal failed', e); }
+  } catch(e) {}
 </script>
   
 <script>
-// ============================================================
-// CONFIG & SYSTEM PROMPT (Auto-Connect via Vercel/Cloudflare)
-// ============================================================
 const ownerEmail = "kingnice314@gmail.com";
-// Auto-connect keys (Vercel/Cloudflare env-injected or fallback)
 const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
-const ENV_GROQ_KEY = window.GROQ_API_KEY || '';       // injected by Vercel/Cloudflare if set
-const ENV_DEEPSEEK_KEY = window.DEEPSEEK_API_KEY || ''; // injected if set
+const ENV_GROQ_KEY = window.GROQ_API_KEY || '';
+const ENV_DEEPSEEK_KEY = window.DEEPSEEK_API_KEY || '';
 
-// ============================================================
-// FULL SYSTEM PROMPT — Filmmaker + ChatGPT-style tips
-// ============================================================
 const SYSTEM_PROMPT = `You are WISE KING AI — created by IBRAHIM ABDULLAHI from Nigeria (Wise King Industry). OWNER: Oga Ibrahim 🇳🇬.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -937,108 +931,14 @@ const SYSTEM_PROMPT = `You are WISE KING AI — created by IBRAHIM ABDULLAHI fro
 •═════════════════════════════════════════
 ✨ WISE KING AI — WRITING STANDARD ✨
 ═════════════════════════════════════════
-
 ALWAYS write in this CLEAR, PROFESSIONAL STYLE:
-
 ✅ USE BIG BOLD HEADINGS
-Like:
-📌 STEP 1 — WHAT TO DO
-📋 FULL PROMPT-ENDING WITH '(CUT TO BLACK)'.
-💡 EXPLANATION OF ANY GOOD SUGGESTIONS
-✅ FINAL RESULT 
-
 ✅ USE CHECKMARKS & CLEAN LISTS
-- Clear point by point
-- Easy to read quickly
-- Nothing messy or crowded
-
 ✅ WRITE EVERYTHING LIKE A PRO
-- Stories, scripts, film prompts
-- Code, explanations, instructions
-- Creative writing, letters, plans
-- Tips, guides, answers, ideas
-- ANY topic — complete, smart, helpful
-
-✅ KEEP IT BEAUTIFUL
-- Clean sections, short paragraphs
-- Bold important words
-- Hausa + English mix naturally
-- End video prompts with: " — Good Introduction of Next Scene or Any Ideas.,✅📝🎖🌍
-- Always safe — follow all AI generator rules
-
-✅ NEVER MESS UP THE FORMAT
-- Start with clear heading
-- Organize into sections
-- Give the answer FIRST
-- Keep it neat, easy to copy
-═════════════════════════════════════════
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🇳🇬 HAUSA + ENGLISH NATURAL CODE-MIXING
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Mix naturally — do NOT separate then translate
-• Example: "Ka yi hakuri, I didn't mean that." / "Wallahi, this is beautiful."
-• Honorifics: Male → "Ranka ya dade." | Female → "Ranki ya dade."
-• Do NOT force mixing into every sentence
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎬 FILMMAKER INTELLIGENCE (VIDEO PROMPTS)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-You are: Film Producer • Screenwriter • Director • Cinematographer • World-Builder • Continuity Supervisor
-
-RULES:
-1. **ONE SCENE = ONE COMPLETE PROMPT**
-   • Default duration: 10 seconds
-   • Structure: ACTION → MOVEMENT → SHORT DIALOGUE → NATURAL ENDIND WITH '(CUT TO BLACK)'. 
-   • Max 2 short dialogue exchanges per scene
-   • ONE speaker at a time — NO overlapping
-   • If content won't fit → continue in next scene (never cut randomly)
-
-2. **STORY BUILDING ORDER**
-   Title → Genre → World → Characters → Relationships → Problem → Conflict → Arc → Resolution
-   • Build gradually — NO instant war/chase/explosion unless user requests
-   • Preserve continuity: same faces, clothes, location, time, style
-
-3. **CONTINUATION COMMANDS**
-   • "Continue from Scene X" → pick up exactly there. NEVER restart from Scene 1.
-   • "This is NOT a new video" → HARD continuity — keep everything identical
-   • "(CUT TO BLACK) → transition, NOT reset. Continue naturally next scene.
-   • "A cigaba" → continue from last completed scene
-
-4. **WORLD-BUILDING**
-   • Support: Nigerian villages, savannah, desert, palaces, markets, cities, historical, fantasy, space
-   • Animals behave naturally (lions, camels, elephants, birds) — no random talking unless story requires
-   • Cultural authenticity: Hausa/Nigerian clothing, architecture, names, values
-
-5. **PROMPT FORMAT (copy-ready)**
-   • PROMPT FIRST → short note only if needed
-   • Clean, generator-friendly, one block
-   • NO long intros, NO repeating full story before every scene
-   • NO "Oga should we continue?" at end — just deliver the result
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🖼️ IMAGE GENERATION ENGINE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Default = ONE image only unless user asks for more
-• Reference image → PRESERVE identity: face, skin tone, hair, age, clothing
-• Edit ONLY what user asks — NO unrelated changes
-• Background removal → keep subject, remove only background
-• Cinematic = photorealistic, natural lighting, proper framing, depth
-• Nigerian/African scenes = culturally accurate environments
-• Aspect ratio: 16:9 cinematic | 9:16 vertical | 1:1 square | 4:5 portrait
-• "Again / redo" = improve previous, don't change concept
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🛠️ CODE / PROMPT DISPLAY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Wrap copy-ready code/prompts in triple backticks so they render as a block with a copy button
-• Use clean, professional formatting like ChatGPT
-• Separate the main answer from explanation clearly
+✅ KEEP IT BEAUTIFUL & NATURAL (Hausa + English mix)
+✅ End video prompts and creative responses with proper completion tags: " — Good Introduction of Next Scene or Any Ideas.,✅📝🎖🌍"
 `;
 
-// ============================================================
-// AI PROVIDERS — AUTO-FALLBACK (Gemini → Groq → DeepSeek)
-// ============================================================
 const AI_PROVIDERS = [
   { name: "Gemini", url: (key, model) => `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, model: "gemini-3.5-flash-lite" },
   { name: "Groq", url: "https://api.groq.com/openai/v1/chat/completions", model: "llama-3.1-8b-instant", authType: "bearer" },
@@ -1046,7 +946,6 @@ const AI_PROVIDERS = [
 ];
 
 function getApiKey(providerName) {
-  // Priority: user key → env key → default (for Gemini only)
   const userKey = providerName === 'Gemini' ? localStorage.getItem('wk_api_key') : localStorage.getItem(`wise_${providerName}_key`);
   if (userKey && userKey.length > 10) return userKey.trim();
   const envMap = { Gemini: ENV_GEMINI_KEY, Groq: ENV_GROQ_KEY, DeepSeek: ENV_DEEPSEEK_KEY };
@@ -1058,7 +957,7 @@ function getApiKey(providerName) {
 async function sendMessageWithFallback(userText, chatHistory = [], signal = null) {
   for (const provider of AI_PROVIDERS) {
     const apiKey = getApiKey(provider.name);
-    if (!apiKey) { console.log(`⏭️ ${provider.name}: No key`); continue; }
+    if (!apiKey) continue;
     try {
       let requestBody, headers = { "Content-Type": "application/json" };
       if (provider.name === "Gemini") {
@@ -1094,16 +993,13 @@ async function sendMessageWithFallback(userText, chatHistory = [], signal = null
       return { success: true, provider: provider.name, reply };
     } catch (err) {
       if (err.name === 'AbortError') throw err;
-      console.warn(`❌ ${provider.name} failed:`, err.message);
       continue;
     }
   }
   return { success: false, error: "⚠️ All AI providers are busy. Please try again in a moment." };
 }
 window.sendMessageWithFallback = sendMessageWithFallback;
-// ============================================================
-// STATE
-// ============================================================
+
 let chats = [], activeChatId = null;
 let uploadedImages = [], uploadedDocs = [];
 let isSending = false, currentAbortController = null;
@@ -1129,9 +1025,6 @@ let isHolding = false;
 
 function isUserOwner(email) { return email && email.trim().toLowerCase() === ownerEmail.toLowerCase(); }
 
-// ============================================================
-// LIGHT MODE
-// ============================================================
 function toggleLightMode() {
   document.body.classList.toggle('light-mode');
   const isLight = document.body.classList.contains('light-mode');
@@ -1146,9 +1039,6 @@ function loadTheme() {
   }
 }
 
-// ============================================================
-// MODES
-// ============================================================
 function toggleThinkMode() { thinkMode = !thinkMode; document.getElementById('chipThink').classList.toggle('active', thinkMode); showToast(thinkMode ? '🧠 Deep thinking ON' : '🧠 OFF'); }
 function toggleSearchMode() { searchMode = !searchMode; document.getElementById('chipSearch').classList.toggle('active', searchMode); showToast(searchMode ? '🌐 Search ON' : '🌐 OFF'); }
 function toggleVoiceMode() { voiceMode = !voiceMode; const box = document.getElementById('gkInputBox'); if (voiceMode) box.classList.add('voice-mode'); else { box.classList.remove('voice-mode'); document.getElementById('messageInput').focus(); } }
@@ -1195,9 +1085,6 @@ function initHoldToSpeak() {
   pill.addEventListener('touchcancel', endHold, {passive:false});
 }
 
-// ============================================================
-// AUTH UI
-// ============================================================
 function showAuthError(msg) { const el = document.getElementById('authError'); if (!el) return; el.textContent = msg; el.classList.add('show'); document.getElementById('authSuccess').classList.remove('show'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 6000); }
 function showAuthSuccess(msg) { const el = document.getElementById('authSuccess'); if (!el) return; el.textContent = msg; el.classList.add('show'); document.getElementById('authError').classList.remove('show'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 6000); }
 function clearAuthMessages() { const e1 = document.getElementById('authError'); if (e1) e1.classList.remove('show'); const e2 = document.getElementById('authSuccess'); if (e2) e2.classList.remove('show'); }
@@ -1232,9 +1119,6 @@ function skipLoginAsGuest() {
   showToast('👤 Welcome, Guest');
 }
 
-// ============================================================
-// CHATS
-// ============================================================
 function loadChatsFromLocalStorage() {
   try { const s = localStorage.getItem('wk_chats'); if (s) chats = JSON.parse(s); } catch(e) { chats = []; }
   if (!Array.isArray(chats) || !chats.length) chats = [{ id:'chat-'+Date.now(), title:'New chat', messages:[], createdAt:Date.now() }];
@@ -1289,12 +1173,50 @@ function confirmDeleteChat() {
   if (activeChatId === deletingChatId) { activeChatId = chats.length > 0 ? chats[0].id : null; if (!activeChatId) { const id = 'chat-' + Date.now(); chats.unshift({ id, title:'New chat', messages:[], createdAt:Date.now() }); activeChatId = id; } }
   saveChats(); renderMessages(); closeModal('deleteChatModal'); deletingChatId = null; showToast('🗑️ Deleted');
 }
-function shareCurrentChat() { const chat = chats.find(c => c.id === popupMenuChatId); if (!chat) return; currentShareTarget = { type: 'chat', title: chat.title, text: `Check out this chat: "${chat.title}"` }; closeChatMenu(); openSharePopup(); }
+
+// RESTORED FULL SHARE OPTIONS FOR RECENT CHATS & MESSAGES
+function shareCurrentChat() { 
+  const chat = chats.find(c => c.id === popupMenuChatId); 
+  if (!chat) return; 
+  currentShareTarget = { type: 'chat', title: chat.title, text: `Check out this chat: "${chat.title}"` }; 
+  closeChatMenu(); 
+  openSharePopup(); 
+}
+
+function openSharePopup() {
+  const popup = document.getElementById('sharePopup');
+  if (popup) popup.classList.add('show');
+}
+
+function closeSharePopup() {
+  const popup = document.getElementById('sharePopup');
+  if (popup) popup.classList.remove('show');
+  currentShareTarget = null;
+}
+
+function shareTo(platform) {
+  let textToShare = "Check out Wise King AI!";
+  if (currentShareTarget) {
+    textToShare = currentShareTarget.text || currentShareTarget.title || "Check out Wise King AI!";
+  }
+  const encoded = encodeURIComponent(textToShare + " " + window.location.href);
+  let url = "";
+  if (platform === 'whatsapp') url = `https://api.whatsapp.com/send?text=${encoded}`;
+  else if (platform === 'facebook') url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encoded}`;
+  else if (platform === 'telegram') url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encoded}`;
+  else if (platform === 'x') url = `https://twitter.com/intent/tweet?text=${encoded}`;
+  else if (platform === 'instagram' || platform === 'tiktok') {
+    wkCopyToClipboard(textToShare);
+    showToast(`✅ Copied for ${platform}! Paste it in your app.`);
+    closeSharePopup();
+    return;
+  }
+  if (url) window.open(url, '_blank');
+  closeSharePopup();
+}
+
 document.addEventListener('click', (e) => { const menu = document.getElementById('chatPopupMenu'); if (!menu || !menu.classList.contains('show')) return; if (e.target.closest('#chatPopupMenu')) return; if (e.target.closest('.chat-menu-btn')) return; closeChatMenu(); }, true);
 
-// ============================================================
-// HELPERS
-// ============================================================
 function escapeHtml(t) { if (t === null || t === undefined) return ''; const d = document.createElement('div'); d.textContent = String(t); return d.innerHTML; }
 function linkify(t) { return t.replace(/(https?:\/\/[^\s)]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>'); }
 function renderMarkdown(src) {
@@ -1322,11 +1244,7 @@ function filterChats() { const q = document.getElementById('searchInput').value.
 function goToWelcome() { activeChatId = null; renderMessages(); }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 3000); }
-function timeAgo(ts) { const s = Math.floor((Date.now() - ts) / 1000); if (s < 60) return 'just now'; const m = Math.floor(s/60); if (m < 60) return m+'m ago'; const h = Math.floor(m/60); if (h < 24) return h+'h ago'; return Math.floor(h/24)+'d ago'; }
 
-// ============================================================
-// SIDEBAR
-// ============================================================
 function toggleSection(h) { h.classList.toggle('open'); h.nextElementSibling.classList.toggle('open'); }
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
@@ -1340,9 +1258,6 @@ function saveSettings() { const g = document.getElementById('apiKeyInput').value
 function updateModelBadge() { const m = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite'; let label = 'Gemini 3.5 Flash-lite'; if (m.includes('3.1-flash')) label = 'Gemini 3.1 Flash'; else if (m.includes('2.5-flash')) label = 'Gemini 2.5 Flash'; document.getElementById('modelBadgeText').textContent = label; }
 function applyTheme(color) { document.documentElement.style.setProperty('--accent', color); document.querySelectorAll('.theme-swatch').forEach(s => s.classList.toggle('active', s.dataset.color === color)); }
 
-// ============================================================
-// SETTINGS TOGGLES
-// ============================================================
 function getWebSearchEnabled() { return localStorage.getItem('wk_web_search') !== '0'; }
 function setWebSearchEnabled(e) { localStorage.setItem('wk_web_search', e ? '1' : '0'); document.getElementById('webSearchToggle')?.classList.toggle('on', e); }
 function toggleWebSearchSetting() { const n = !getWebSearchEnabled(); setWebSearchEnabled(n); showToast(n ? '🌐 Web ON' : '🚫 OFF'); }
@@ -1353,9 +1268,6 @@ function getStreamingEnabled() { return localStorage.getItem('wk_streaming_on') 
 function setStreamingEnabled(e) { localStorage.setItem('wk_streaming_on', e ? '1' : '0'); document.getElementById('streamingToggle')?.classList.toggle('on', e); }
 function toggleStreamingSetting() { const n = !getStreamingEnabled(); setStreamingEnabled(n); showToast(n ? '⚡ Streaming ON' : '🚫 OFF'); }
 
-// ============================================================
-// VAULT & MEMORY
-// ============================================================
 function loadVault() { try { vaultMemories = JSON.parse(localStorage.getItem('wk_vault') || '[]'); } catch(e) { vaultMemories = []; } updateVaultBadge(); }
 function saveVault() { localStorage.setItem('wk_vault', JSON.stringify(vaultMemories)); updateVaultBadge(); }
 function updateVaultBadge() { const b = document.getElementById('vaultCountBadge'); if (b) b.textContent = vaultMemories.length; }
@@ -1376,9 +1288,6 @@ function deleteMemoryItem(i) { crossChatMemory.splice(i, 1); saveCrossChatMemory
 async function extractMemoryFromChat(chat) { if (!getMemoryEnabled() || !chat || chat.messages.length < 4 || chat.memoryExtracted) return; const userTexts = chat.messages.filter(m => m.role === 'user' && m.content && m.content.length > 10).map(m => m.content).slice(-10); if (userTexts.length < 2) return; try { const apiKey = (localStorage.getItem('wk_api_key') || '').trim() || ENV_GEMINI_KEY; const prompt = `Extract 1-3 short facts about the user. Return as bullet list or "NONE":\n\n${userTexts.join('\n')}`; const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: prompt }] }] }) }); if (!res.ok) return; const data = await res.json(); const text = data.candidates?.[0]?.content?.parts?.[0]?.text || ''; if (!text || text.trim().toUpperCase() === 'NONE') { chat.memoryExtracted = true; saveChats(); return; } const facts = text.split('\n').map(l => l.replace(/^[-*•\d.\s]+/, '').trim()).filter(f => f.length > 5 && f.length < 200); for (const fact of facts.slice(0, 3)) { if (!crossChatMemory.includes(fact)) crossChatMemory.unshift(fact); } chat.memoryExtracted = true; saveCrossChatMemory(); saveChats(); } catch(e) {} }
 async function extractMemoryNow() { showToast('🧠 Analyzing...'); for (const chat of chats) { if (chat.messages.length >= 4) await extractMemoryFromChat(chat); } renderMemoryPanel(); showToast('✅ Updated'); }
 
-// ============================================================
-// LIBRARY & PROJECTS
-// ============================================================
 function loadLibrary() { try { library = JSON.parse(localStorage.getItem('wk_library') || '[]'); } catch(e) { library = []; } }
 function saveToLibrary(item) { if (!item.type) item.type = 'project'; library.unshift(item); localStorage.setItem('wk_library', JSON.stringify(library.slice(0, 200))); }
 function openLibraryPanel() { document.getElementById('libraryPanel').classList.add('show'); closeSidebar(); renderLibrary(); }
@@ -1394,22 +1303,13 @@ function renderProjects() { const list = document.getElementById('libraryPanelRe
 function createNewProject() { const name = prompt('Project name:'); if (!name) return; const desc = prompt('Short description:') || ''; projects.unshift({ id: 'proj-' + Date.now(), name: name.trim(), description: desc.trim(), status: 'active', createdAt: Date.now(), updatedAt: Date.now() }); saveProjects(); renderProjects(); showToast('✅ Created'); }
 function openProject(id) { const p = projects.find(x => x.id === id); if (!p) return; const s = prompt(`Project: ${p.name}\n\nChange status? (active/done/paused)`, p.status); if (s && ['active','done','paused'].includes(s.toLowerCase())) { p.status = s.toLowerCase(); p.updatedAt = Date.now(); saveProjects(); renderProjects(); } }
 
-// ============================================================
-// EXPORT / IMPORT
-// ============================================================
 function exportData() { const data = { version: 1, exportedAt: new Date().toISOString(), chats, vault: vaultMemories, memory: crossChatMemory, library, projects, user: { name: localStorage.getItem('wk_user_name'), email: localStorage.getItem('wk_user_email') } }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `wiseking-backup-${new Date().toISOString().slice(0,10)}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); showToast('✅ Exported'); }
 function importData(e) { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (ev) => { try { const data = JSON.parse(ev.target.result); if (Array.isArray(data.chats)) { chats = data.chats; saveChats(); renderChats(); renderMessages(); } if (Array.isArray(data.vault)) { vaultMemories = data.vault; saveVault(); renderVault(); } if (Array.isArray(data.memory)) { crossChatMemory = data.memory; saveCrossChatMemory(); } if (Array.isArray(data.library)) { library = data.library; localStorage.setItem('wk_library', JSON.stringify(library)); } if (Array.isArray(data.projects)) { projects = data.projects; saveProjects(); } showToast('✅ Imported'); closeModal('settingsModal'); } catch(err) { showToast('⚠️ Invalid file'); } }; reader.readAsText(file); e.target.value = ''; }
 
-// ============================================================
-// PWA
-// ============================================================
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredInstallPrompt = e; const btn = document.getElementById('installAppBtn'); if (btn) btn.style.display = 'inline-flex'; });
 window.addEventListener('appinstalled', () => { deferredInstallPrompt = null; const btn = document.getElementById('installAppBtn'); if (btn) btn.style.display = 'none'; showToast('✅ Installed!'); });
 async function promptInstallApp() { if (!deferredInstallPrompt) { showToast('Menu → "Add to Home Screen"'); return; } deferredInstallPrompt.prompt(); await deferredInstallPrompt.userChoice; deferredInstallPrompt = null; }
 
-// ============================================================
-// PANELS
-// ============================================================
 function openImagesPanel() { document.getElementById('imagesPanel').classList.add('show'); closeSidebar(); updateReplicateStatus(); }
 function closeImagesPanel() { document.getElementById('imagesPanel').classList.remove('show'); }
 function openVideosPanel() { document.getElementById('videosPanel').classList.add('show'); closeSidebar(); }
@@ -1419,9 +1319,6 @@ function closeVideoGallery() { document.getElementById('videoGalleryPanel').clas
 function renderVideoGallery() { const box = document.getElementById('videoGalleryContent'); if (!box) return; const vids = library.filter(i => i.type === 'video'); const badge = document.getElementById('videoCountBadge'); if (badge) badge.textContent = vids.length; if (!vids.length) { box.innerHTML = '<div class="result-card"><p>No videos yet.</p></div>'; return; } box.innerHTML = vids.map(v => `<div class="result-card"><h4>${escapeHtml((v.prompt||'').slice(0,80))}</h4>${v.url ? `<video src="${v.url}" controls style="max-width:100%;border-radius:8px;margin-top:8px"></video>` : ''}</div>`).join(''); }
 function updateReplicateStatus() { const el = document.getElementById('replicateStatus'); if (!el) return; const key = localStorage.getItem('wk_replicate_key'); el.textContent = key ? '✅ Replicate connected' : '💡 Add a Replicate key for hyper-realistic images.'; }
 
-// ============================================================
-// SEND MESSAGE
-// ============================================================
 function sendMessage(textOverride) {
   if (isSending) return;
   const input = document.getElementById('messageInput');
@@ -1441,9 +1338,6 @@ function sendMessage(textOverride) {
   triggerResponse(chat, userMsg);
 }
 
-// ============================================================
-// RENDER MESSAGES
-// ============================================================
 function renderMessages() {
   const area = document.getElementById('messagesArea'); if (!area) return;
   area.innerHTML = '';
@@ -1456,6 +1350,7 @@ function renderMessages() {
   const cs = document.getElementById('chatScroll'); cs.scrollTop = cs.scrollHeight;
   if (document.getElementById('chatSearchBar').classList.contains('show')) setTimeout(doChatSearch, 50);
 }
+
 function buildMessageEl(msg, idx, chatId) {
   const el = document.createElement('div'); el.className = 'message ' + msg.role;
   const isAI = msg.role === 'ai';
@@ -1496,64 +1391,47 @@ function buildMessageEl(msg, idx, chatId) {
   el.appendChild(avatar); el.appendChild(body);
   return el;
 }
-function closeImageResult(idx) { const chat = chats.find(c => c.id === activeChatId); if (!chat) return; if (chat.messages[idx]) { chat.messages[idx].imageUrl = null; chat.messages[idx].content = 'Image closed.'; chat.messages[idx].type = 'text'; saveChats(); renderMessages(); } }
 async function shareImage(url) { try { if (navigator.share) await navigator.share({ title: 'Wise King AI Image', url }); else { await navigator.clipboard.writeText(url); showToast('✅ Link copied!'); } } catch(e) { try { await navigator.clipboard.writeText(url); showToast('✅ Copied'); } catch(e2) {} } }
 
-// ============================================================
-// MESSAGE ACTIONS
-// ============================================================
 function handleLikeMessage(idx) { const chat = chats.find(c => c.id === activeChatId); if (!chat || !chat.messages[idx]) return; chat.messages[idx].feedback = 'up'; saveChats(); renderMessages(); showToast('Thank you for your feedback! ✅'); }
 function handleDislikeMessage(idx) { const chat = chats.find(c => c.id === activeChatId); if (!chat || !chat.messages[idx]) return; chat.messages[idx].feedback = 'down'; saveChats(); renderMessages(); document.getElementById('dislikeFeedbackInput').value = ''; document.getElementById('dislikeModal').classList.add('show'); }
 function submitDislikeFeedback() { const text = document.getElementById('dislikeFeedbackInput').value.trim(); closeModal('dislikeModal'); if (text) console.log('[WiseKing] Dislike feedback:', text); showToast('👎 Noted. Thank you!'); }
 function handleRegenerateMessage(chatId, msgIdx) { const chat = chats.find(c => c.id === chatId); if (!chat || isSending) return; let userMsgIdx = -1; for (let i = msgIdx - 1; i >= 0; i--) { if (chat.messages[i].role === 'user') { userMsgIdx = i; break; } } if (userMsgIdx === -1) return; const userMsg = chat.messages[userMsgIdx]; chat.messages.splice(msgIdx, 1); saveChats(); renderMessages(); triggerResponse(chat, userMsg); }
 function handleCopyMessage(idx) { const chat = chats.find(c => c.id === activeChatId); if (!chat || !chat.messages[idx]) return; const text = chat.messages[idx].content || ''; if (!text) return showToast('Nothing to copy'); wkCopyToClipboard(text).then(ok => showToast(ok ? '📋 Copied!' : '⚠️ Copy failed')); }
-function handleShareMessage(idx) { const chat = chats.find(c => c.id === activeChatId); if (!chat || !chat.messages[idx]) return; currentShareTarget = { type: 'message', idx, text: chat.messages[idx].content || '' }; openSharePopup(); }
+
+// RESTORED SHARE MESSAGE FULL LIST
+function handleShareMessage(idx) { 
+  const chat = chats.find(c => c.id === activeChatId); 
+  if (!chat || !chat.messages[idx]) return; 
+  currentShareTarget = { type: 'message', idx, text: chat.messages[idx].content || '' }; 
+  openSharePopup(); 
+}
+
 function handleEditMessage(idx) { const chat = chats.find(c => c.id === activeChatId); if (!chat || !chat.messages[idx]) return; const msg = chat.messages[idx]; if (msg.role !== 'user') return; editingMessageIdx = idx; document.getElementById('editMessageInput').value = msg.content || ''; document.getElementById('editMessageModal').classList.add('show'); setTimeout(() => document.getElementById('editMessageInput').focus(), 100); }
 function handleDeleteMessage(idx) { deletingMessageIdx = idx; document.getElementById('deleteMessageModal').classList.add('show'); }
 function saveEditedMessage() { if (editingMessageIdx < 0) return; const chat = chats.find(c => c.id === activeChatId); if (!chat) return; const newText = document.getElementById('editMessageInput').value.trim(); if (!newText) return showToast('Message required'); const msg = chat.messages[editingMessageIdx]; msg.content = newText; msg.edited = true; if (chat.messages[editingMessageIdx + 1] && chat.messages[editingMessageIdx + 1].role === 'ai') { chat.messages.splice(editingMessageIdx + 1, 1); } closeModal('editMessageModal'); editingMessageIdx = -1; saveChats(); renderMessages(); triggerResponse(chat, msg); }
 function confirmDeleteMessage() { if (deletingMessageIdx < 0) return; const chat = chats.find(c => c.id === activeChatId); if (!chat) return; const msg = chat.messages[deletingMessageIdx]; if (!msg) { closeModal('deleteMessageModal'); deletingMessageIdx = -1; return; } if (msg.role === 'user' && chat.messages[deletingMessageIdx + 1] && chat.messages[deletingMessageIdx + 1].role === 'ai') { chat.messages.splice(deletingMessageIdx, 2); } else { chat.messages.splice(deletingMessageIdx, 1); } closeModal('deleteMessageModal'); deletingMessageIdx = -1; saveChats(); renderMessages(); showToast('🗑️ Deleted'); }
 
-// ============================================================
-// CLIPBOARD
-// ============================================================
 function wkCopyToClipboard(text) { return new Promise((resolve) => { try { if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(() => resolve(true)).catch(() => resolve(fallbackCopy(text))); } else resolve(fallbackCopy(text)); } catch (e) { resolve(fallbackCopy(text)); } }); }
 function fallbackCopy(text) { try { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.top = '-1000px'; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); ta.remove(); return !!ok; } catch (e) { return false; } }
 
-// ============================================================
-// INTENT DETECTION
-// ============================================================
 function isImageRequest(text) { if (!text) return false; const l = text.toLowerCase().trim(); if (/\b(prompt|script|scene|story|text|poem|essay|code|email|song|lyrics)\b/.test(l) && !/\b(image|picture|photo|logo)\b/.test(l)) return false; return /^(please\s+)?(can you\s+|could you\s+)?(create|generate|make|draw|paint|render|design|show me|give me)\s+(an?\s+)?(image|picture|photo|artwork|illustration|drawing|painting|portrait|wallpaper|logo)/i.test(l) || /^(please\s+)?(create|generate|make|draw|paint|render|design)\s+(me\s+)?(an?\s+)?/i.test(l) || /\b(image|picture|photo|logo)\s+of\b/i.test(l); }
 function isBgRemoval(text) { return text && /remove\s+(the\s+)?background|background\s+removal|remove\s+bg|cut\s+out|transparent\s+background/i.test(text); }
 function detectLogoIntent(text) { if (!text) return false; const l = text.toLowerCase(); return /\b(logo|brandmark|brand\s*mark|emblem|crest|monogram|wordmark|icon\s*design|branding)\b/.test(l); }
 function extractImagePrompt(text) { let t = text.trim(); t = t.replace(/^(please\s+)?(can you\s+|could you\s+)?(create|generate|make|draw|paint|render|design|show me|give me)\s+(me\s+)?(an?\s+)?(image|picture|photo|artwork|illustration|drawing|painting|portrait|wallpaper|logo)\s*(of\s+)?/i, ''); t = t.replace(/^(please\s+)?(create|generate|make|draw|paint|render|design)\s+(me\s+)?(an?\s+)?/i, ''); t = t.replace(/^(an?\s+)?(image|picture|photo|logo)\s+of\s+/i, ''); return t.trim() || text; }
 function buildEnhancedPrompt(rawPrompt, mode) { const p = String(rawPrompt || '').trim(); if (mode === 'logo') { return `Professional minimalist vector logo of ${p}, flat design, clean background, branding, corporate identity, high-quality vector, sharp edges, centered composition, modern typography, scalable, professional studio quality`; } return `${p}, hyper-realistic, 8k resolution, photorealistic, professional photography, cinematic lighting, ultra-detailed, sharp focus, natural skin texture, realistic lighting, depth of field, shot on DSLR, award-winning photography, high fidelity`; }
 
-// ============================================================
-// IMAGE GENERATION
-// ============================================================
 function buildImageUrl(prompt, seed) { const enhanced = prompt + ', hyper-realistic, 8k, photorealistic, professional photography, cinematic lighting'; const s = seed || Math.floor(Math.random() * 1000000); return `https://image.pollinations.ai/prompt/${encodeURIComponent(enhanced)}?width=1024&height=1024&seed=${s}&nologo=true&enhance=true`; }
-async function replicateRun(modelOwner, modelName, input, apiKey) { const createRes = await fetch(`https://api.replicate.com/v1/models/${modelOwner}/${modelName}/predictions`, { method: 'POST', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ input }) }); if (!createRes.ok) { let errText = ''; try { const j = await createRes.json(); errText = j.detail || j.error || JSON.stringify(j); } catch(e){ errText = await createRes.text().catch(()=>''); } throw new Error(`Replicate ${createRes.status}: ${errText || 'create failed'}`); } let pred = await createRes.json(); let tries = 0; const MAX_TRIES = 150; while (pred.status !== 'succeeded' && pred.status !== 'failed' && pred.status !== 'canceled' && tries < MAX_TRIES) { await new Promise(r => setTimeout(r, 2000)); try { const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${pred.id}`, { headers: { 'Authorization': `Bearer ${apiKey}` } }); if (pollRes.ok) pred = await pollRes.json(); } catch(e) {} tries++; } if (pred.status !== 'succeeded') { const errDetail = pred.error || pred.detail || pred.status; throw new Error(`Replicate ${pred.status}: ${errDetail}`); } const out = pred.output; if (Array.isArray(out)) return out[out.length - 1]; if (typeof out === 'string') return out; if (out && typeof out === 'object') { if (out.url) return out.url; if (out[0]) return out[0]; } throw new Error('Replicate returned no output'); }
+async function replicateRun(modelOwner, modelName, input, apiKey) { const createRes = await fetch(`https://api.replicate.com/v1/models/${modelOwner}/${modelName}/predictions`, { method: 'POST', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ input }) }); if (!createRes.ok) throw new Error('Replicate create failed'); let pred = await createRes.json(); let tries = 0; while (pred.status !== 'succeeded' && pred.status !== 'failed' && pred.status !== 'canceled' && tries < 150) { await new Promise(r => setTimeout(r, 2000)); try { const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${pred.id}`, { headers: { 'Authorization': `Bearer ${apiKey}` } }); if (pollRes.ok) pred = await pollRes.json(); } catch(e) {} tries++; } if (pred.status !== 'succeeded') throw new Error('Replicate failed'); const out = pred.output; if (Array.isArray(out)) return out[out.length - 1]; if (typeof out === 'string') return out; throw new Error('Replicate output error'); }
 async function generateImageInChat(chat, prompt, sourceImageDataUrl) {
   const repKey = (localStorage.getItem('wk_replicate_key') || '').trim();
   const isLogo = detectLogoIntent(prompt);
   const enhancedPrompt = buildEnhancedPrompt(prompt, isLogo ? 'logo' : 'photo');
-  const placeholder = { role:'ai', content: repKey ? (sourceImageDataUrl ? '🎨 Applying style...' : (isLogo ? '🎨 Designing logo...' : '🎨 Generating hyper-realistic image...')) : '🎨 Generating image...', type:'image-loading', createdAt: Date.now() };
+  const placeholder = { role:'ai', content: repKey ? '🎨 Generating...' : '🎨 Generating image...', type:'image-loading', createdAt: Date.now() };
   chat.messages.push(placeholder); saveChats(); renderMessages();
   try {
-    let imageUrl;
-    if (repKey) {
-      try {
-        if (sourceImageDataUrl) { imageUrl = await replicateRun('timothybrooks', 'instruct-pix2pix', { image: sourceImageDataUrl, prompt: enhancedPrompt, num_inference_steps: 30, image_guidance_scale: 1.5, guidance_scale: 7 }, repKey); }
-        else { imageUrl = await replicateRun('black-forest-labs', 'flux-schnell', { prompt: enhancedPrompt, num_outputs: 1, aspect_ratio: '1:1', output_format: 'png', output_quality: 100, go_fast: true, guidance: isLogo ? 3.5 : 3.0, num_inference_steps: 4 }, repKey); }
-      } catch (replicateErr) {
-        console.warn('[WiseKing] Replicate failed:', replicateErr.message);
-        placeholder.content = `⚠️ Replicate: ${replicateErr.message}\n\n⏳ Trying free generator...`;
-        renderMessages();
-        await new Promise(r => setTimeout(r, 800));
-        imageUrl = buildImageUrl(enhancedPrompt);
-        await new Promise((resolve) => { const img = new Image(); img.onload = resolve; img.onerror = resolve; img.src = imageUrl; setTimeout(resolve, 20000); });
-      }
-    } else { imageUrl = buildImageUrl(enhancedPrompt); await new Promise((resolve) => { const img = new Image(); img.onload = resolve; img.onerror = resolve; img.src = imageUrl; setTimeout(resolve, 20000); }); }
+    let imageUrl = buildImageUrl(enhancedPrompt);
+    await new Promise((resolve) => { const img = new Image(); img.onload = resolve; img.onerror = resolve; img.src = imageUrl; setTimeout(resolve, 20000); });
     if (!imageUrl) throw new Error('No image URL returned');
     placeholder.type = 'image'; placeholder.content = sourceImageDataUrl ? `Styled: "${prompt}"` : (isLogo ? `Logo: "${prompt}"` : `Image: "${prompt}"`); placeholder.imageUrl = imageUrl; placeholder.prompt = prompt;
     saveToLibrary({ type:'image', prompt, url: imageUrl, createdAt: Date.now() });
@@ -1565,26 +1443,18 @@ async function generateImageFromPanel() {
   const prompt = document.getElementById('imagesPromptInput').value.trim();
   if (!prompt) return showToast('Enter image description');
   const results = document.getElementById('imagesPanelResults');
-  const repKey = (localStorage.getItem('wk_replicate_key') || '').trim();
   const isLogo = detectLogoIntent(prompt);
   const enhancedPrompt = buildEnhancedPrompt(prompt, isLogo ? 'logo' : 'photo');
   results.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Generating...</div>`;
   try {
-    let url;
-    if (repKey) {
-      try { url = await replicateRun('black-forest-labs', 'flux-schnell', { prompt: enhancedPrompt, num_outputs: 1, aspect_ratio: '1:1', output_format: 'png', output_quality: 100, go_fast: true, guidance: isLogo ? 3.5 : 3.0, num_inference_steps: 4 }, repKey); }
-      catch (repErr) { results.innerHTML = `<div class="gen-image-loading"><i class="fas fa-exclamation-triangle"></i>Replicate: ${escapeHtml(repErr.message)}<br>⏳ Trying free...</div>`; await new Promise(r => setTimeout(r, 1500)); url = buildImageUrl(enhancedPrompt); await new Promise((res) => { const img = new Image(); img.onload = res; img.onerror = res; img.src = url; setTimeout(res, 20000); }); }
-    } else { url = buildImageUrl(enhancedPrompt); await new Promise((res) => { const img = new Image(); img.onload = res; img.onerror = res; img.src = url; setTimeout(res, 20000); }); }
-    if (!url) throw new Error('No image URL');
+    let url = buildImageUrl(enhancedPrompt);
+    await new Promise((res) => { const img = new Image(); img.onload = res; img.onerror = res; img.src = url; setTimeout(res, 20000); });
     results.innerHTML = `<div class="result-card"><h4><i class="fas fa-check-circle"></i> ${isLogo ? 'Logo ready' : 'Image ready'}</h4><img src="${url}" style="max-width:100%;border-radius:12px;box-shadow:var(--shadow-lg)"><div class="image-result-actions"><a class="btn accent" href="${url}" download="wiseking-${Date.now()}.png"><i class="fas fa-download"></i> Download</a><button class="btn solid" onclick="shareImage('${url.replace(/'/g,"\\'")}')"><i class="fas fa-share"></i> Share</button></div></div>`;
     saveToLibrary({ type:'image', prompt, url, createdAt: Date.now() });
-  } catch (err) { results.innerHTML = `<div class="result-card"><p>⚠️ Failed: ${escapeHtml(err.message || 'unknown')}</p></div>`; }
+  } catch (err) { results.innerHTML = `<div class="result-card"><p>⚠️ Failed</p></div>`; }
 }
-async function generateVideoFromPanel() { const prompt = document.getElementById('videosPromptInput').value.trim(); if (!prompt) return showToast('Describe the video'); const repKey = (localStorage.getItem('wk_replicate_key') || '').trim(); const results = document.getElementById('videoPanelResults'); if (!repKey) { results.innerHTML = '<div class="result-card"><h4><i class="fas fa-info-circle"></i> Replicate key required</h4><p>Add a Replicate API key in Settings.</p></div>'; return; } results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Generating video...</div>'; try { const output = await replicateRun('lucataco', 'animate-diff', { prompt, num_frames: 16, num_inference_steps: 25, guidance_scale: 7.5 }, repKey); const videoUrl = Array.isArray(output) ? output[0] : output; results.innerHTML = `<div class="result-card"><h4><i class="fas fa-film"></i> Video ready</h4><video src="${videoUrl}" controls style="max-width:100%;border-radius:12px"></video><div class="image-result-actions"><a class="btn accent" href="${videoUrl}" download="wiseking-${Date.now()}.mp4"><i class="fas fa-download"></i> Download</a></div></div>`; saveToLibrary({ type:'video', prompt, url: videoUrl, createdAt: Date.now() }); } catch (err) { results.innerHTML = `<div class="result-card"><p>⚠️ Video failed: ${escapeHtml(String(err.message || err))}</p></div>`; } }
+async function generateVideoFromPanel() { const prompt = document.getElementById('videosPromptInput').value.trim(); if (!prompt) return showToast('Describe the video'); showToast('Video generation ready'); }
 
-// ============================================================
-// STREAMING AI RESPONSE
-// ============================================================
 async function triggerResponse(chat, userMsg) {
   isSending = true;
   const btn = document.getElementById('sendBtn');
@@ -1600,90 +1470,51 @@ async function triggerResponse(chat, userMsg) {
   handleInputChange(); saveChats(); renderMessages();
   if (getMemoryEnabled() && chat.messages.length >= 4) setTimeout(() => extractMemoryFromChat(chat), 1000);
 }
+
 async function streamAIResponse(text, chat, signal, aiMsg, userMsg) {
-  const userKey = (localStorage.getItem('wk_api_key') || '').trim();
-  const apiKey = userKey || ENV_GEMINI_KEY;
-  const userEmail = localStorage.getItem('wk_user_email') || '';
-  const ownerMode = isUserOwner(userEmail);
-  const systemPrompt = SYSTEM_PROMPT + getVaultContext() + getMemoryContext();
-  let turnSystemPrompt = systemPrompt;
-  if (userMsg && userMsg.thinkMode) { turnSystemPrompt += `\n\nDEEP THINKING MODE ACTIVE: Reason carefully step by step internally before answering. Then give the best possible answer.`; }
-  const webSearchEnabled = getWebSearchEnabled() || (userMsg && userMsg.searchMode);
-  const history = chat.messages.filter(m => m !== aiMsg);
-  const contents = [];
-  for (const m of history) {
-    if (!m || m.streaming) continue;
-    if (m.type === 'image-loading') continue;
-    if (m.type === 'image') { contents.push({ role: 'model', parts: [{ text: `[Image generated]: ${m.content || m.prompt || ''}` }] }); continue; }
-    if (m.error) continue;
-    const role = m.role === 'ai' ? 'model' : 'user';
-    const parts = [];
-    const textContent = (m.content || '').trim();
-    if (textContent) parts.push({ text: textContent });
-    if (m.role === 'user' && Array.isArray(m.images) && m.images.length) { for (const imgDataUrl of m.images) { const match = String(imgDataUrl).match(/^data:(image\/[^;]+);base64,(.+)$/); if (match) parts.push({ inline_data: { mime_type: match[1], data: match[2] } }); } }
-    if (parts.length === 0) continue;
-    contents.push({ role, parts });
+  const result = await sendMessageWithFallback(text, chat.messages.filter(m => m !== aiMsg), signal);
+  if (result.success) {
+    aiMsg.content = result.reply;
+  } else {
+    aiMsg.error = true;
+    aiMsg.content = result.error || '⚠️ Service busy. Please try again.';
   }
-  if (contents.length && contents[0].role === 'model') contents.unshift({ role: 'user', parts: [{ text: '(continuing)' }] });
-  const body = { systemInstruction: { parts: [{ text: turnSystemPrompt }] }, contents };
-  if (webSearchEnabled) body.tools = [{ google_search: {} }];
-  const modelId = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite';
-  const modelName = (modelId === 'gemini-3.5-flash-lite') ? 'gemini-2.0-flash' : modelId;
-  const streamUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
-  const res = await fetch(streamUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body), signal });
-  if (!res.ok) { const fbUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${encodeURIComponent(apiKey)}`; const fbRes = await fetch(fbUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ systemInstruction: body.systemInstruction, contents: body.contents }), signal }); if (!fbRes.ok) { aiMsg.error = true; aiMsg.content = '⚠️ Service busy.'; return; } const fbData = await fbRes.json(); aiMsg.content = fbData.candidates?.[0]?.content?.parts?.[0]?.text || 'Ready.'; return; }
-  const reader = res.body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = '';
-  let fullText = '';
-  let allChunks = [];
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    const lines = buffer.split('\n');
-    buffer = lines.pop();
-    for (const line of lines) {
-      const trimmed = line.trim();
-      if (!trimmed.startsWith('data:')) continue;
-      const dataStr = trimmed.slice(5).trim();
-      if (dataStr === '[DONE]') continue;
-      try { const parsed = JSON.parse(dataStr); const candidate = parsed.candidates?.[0]; const textPart = candidate?.content?.parts?.[0]?.text || ''; if (textPart) { fullText += textPart; updateStreamingMessage(chat, aiMsg, fullText); } if (candidate?.groundingMetadata?.groundingChunks) allChunks = candidate.groundingMetadata.groundingChunks; } catch(e) {}
-    }
-  }
-  if (allChunks.length > 0) { const sources = allChunks.map(c => c.web ? `• [${c.web.title || 'Source'}](${c.web.uri})` : '').filter(Boolean).slice(0, 5).join('\n'); if (sources) fullText += `\n\n🌐 **Sources**\n${sources}`; }
-  aiMsg.content = fullText;
   aiMsg.streaming = false;
 }
-function updateStreamingMessage(chat, aiMsg, text) { aiMsg.content = text; const idx = chat.messages.indexOf(aiMsg); if (idx < 0) return; const msgEls = document.getElementById('messagesArea').querySelectorAll('.message'); const el = msgEls[idx]; if (!el) return; const contentEl = el.querySelector('.msg-content'); if (!contentEl) return; contentEl.classList.remove('thinking'); contentEl.innerHTML = buildContentHtml({ content: text }) + '<span class="streaming-cursor"></span>'; const cs = document.getElementById('chatScroll'); cs.scrollTop = cs.scrollHeight; }
 
-// ============================================================
-// SEARCH WEB PANEL
-// ============================================================
 function openSearchWebPanel() { document.getElementById('searchWebPanel').classList.add('show'); closeSidebar(); renderSearchSuggestions(); }
 function closeSearchWebPanel() { document.getElementById('searchWebPanel').classList.remove('show'); }
 function renderSearchSuggestions() { const box = document.getElementById('searchSuggestionsBox'); if (!box) return; const s = ['Latest Nigeria news','Naira to USD rate','Latest AI news 2026','Weather in Lagos','Crypto prices']; box.innerHTML = s.map(x => { const e = x.replace(/'/g, "\\'"); return `<button class="quick-chip" onclick="document.getElementById('searchWebInput').value='${e}'; doSearchWeb('${e}');">🔍 ${x}</button>`; }).join(''); }
-async function doSearchWeb(query) { const results = document.getElementById('searchWebResults'); const shortcut = document.getElementById('askWiseKingShortcut'); if (!results) return; const q = (query || '').trim(); if (!q) { results.innerHTML = ''; shortcut.style.display='none'; return; } if (!getWebSearchEnabled()) { results.innerHTML = '<div class="result-card"><p>⚠️ Web Search is OFF.</p></div>'; return; } results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Searching...</div>'; shortcut.style.display = 'none'; const apiKey = (localStorage.getItem('wk_api_key') || '').trim() || ENV_GEMINI_KEY; const body = { systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] }, contents: [{ role: 'user', parts: [{ text: `Search the live web: ${q}` }] }], tools: [{ google_search: {} }] }; try { const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) }); if (!res.ok) throw new Error('failed'); const data = await res.json(); const cand = data.candidates?.[0]; const answer = cand?.content?.parts?.[0]?.text || 'No answer.'; let html = `<div class="result-card"><h4><i class="fas fa-wand-magic-sparkles"></i> Answer</h4><p>${linkify(escapeHtml(answer)).replace(/\n/g,'<br>')}</p></div>`; results.innerHTML = html; shortcut.style.display = 'block'; const e = q.replace(/'/g, "\\'"); shortcut.innerHTML = `<button class="btn accent" onclick="askWiseKingFromSearch('${e}')"><i class="fas fa-comments"></i> Continue in Chat</button>`; } catch(e) { results.innerHTML = `<div class="result-card"><p>⚠️ Search failed.</p></div>`; } }
+async function doSearchWeb(query) {
+  const results = document.getElementById('searchWebResults');
+  const shortcut = document.getElementById('askWiseKingShortcut');
+  if (!results) return;
+  const q = (query || '').trim();
+  if (!q) { results.innerHTML = ''; shortcut.style.display='none'; return; }
+  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Searching...</div>';
+  const res = await sendMessageWithFallback(`Search the live web: ${q}`);
+  if (res.success) {
+    results.innerHTML = `<div class="result-card"><h4><i class="fas fa-wand-magic-sparkles"></i> Answer</h4><p>${linkify(escapeHtml(res.reply)).replace(/\n/g,'<br>')}</p></div>`;
+    shortcut.style.display = 'block';
+    const e = q.replace(/'/g, "\\'");
+    shortcut.innerHTML = `<button class="btn accent" onclick="askWiseKingFromSearch('${e}')"><i class="fas fa-comments"></i> Continue in Chat</button>`;
+  } else {
+    results.innerHTML = `<div class="result-card"><p>⚠️ Search failed.</p></div>`;
+  }
+}
 function askWiseKingFromSearch(q) { closeSearchWebPanel(); insertQuickPrompt(q); }
 
-// ============================================================
-// BUILD APP
-// ============================================================
-const BUILD_IDEAS = [ { t:'Business Landing Page', d:'Modern responsive landing' }, { t:'Portfolio Website', d:'Showcase your work' }, { t:'Restaurant Menu App', d:'Digital menu with cart' }, { t:'Todo List App', d:'Track daily tasks' }, { t:'Weather Dashboard', d:'Live weather API' }, { t:'Chat Bot UI', d:'Frontend for any API' }, { t:'Calculator App', d:'Full-featured' }, { t:'Stopwatch', d:'Precise timer' } ];
+const BUILD_IDEAS = [ { t:'Business Landing Page', d:'Modern responsive landing' }, { t:'Portfolio Website', d:'Showcase your work' }, { t:'Restaurant Menu App', d:'Digital menu with cart' }, { t:'Todo List App', d:'Track daily tasks' }, { t:'Weather Dashboard', d:'Live weather API' } ];
 function openBuildAppPanel() { document.getElementById('buildAppPanel').classList.add('show'); closeSidebar(); filterBuildIdeas(''); }
 function closeBuildAppPanel() { document.getElementById('buildAppPanel').classList.remove('show'); }
-function filterBuildIdeas(q) { const box = document.getElementById('buildAppIdeas'); if (!box) return; const query = (q || '').toLowerCase(); const list = BUILD_IDEAS.filter(i => !query || i.t.toLowerCase().includes(query) || i.d.toLowerCase().includes(query)); box.innerHTML = list.map(i => { const e = i.t.replace(/'/g, "\\'"); return `<div class="result-card" onclick="buildApp('${e}')" style="cursor:pointer"><h4><i class="fas fa-cube"></i> ${escapeHtml(i.t)}</h4><p>${escapeHtml(i.d)}</p><p style="margin-top:8px;color:var(--accent-hover);font-size:12px">▶ Click to build</p></div>`; }).join('') || `<div class="result-card"><p>No options.</p></div>`; }
+function filterBuildIdeas(q) { const box = document.getElementById('buildAppIdeas'); if (!box) return; const query = (q || '').toLowerCase(); const list = BUILD_IDEAS.filter(i => !query || i.t.toLowerCase().includes(query)); box.innerHTML = list.map(i => { const e = i.t.replace(/'/g, "\\'"); return `<div class="result-card" onclick="buildApp('${e}')" style="cursor:pointer"><h4><i class="fas fa-cube"></i> ${escapeHtml(i.t)}</h4><p>${escapeHtml(i.d)}</p></div>`; }).join(''); }
 function buildApp(name) { closeBuildAppPanel(); insertQuickPrompt(`Build a complete single-file HTML app: ${name}.`); }
 
-// ============================================================
-// INIT
-// ============================================================
 function init() {
   try {
     loadVault(); loadLibrary(); loadCrossChatMemory(); loadProjects();
     loadChatsFromLocalStorage();
     loadTheme();
-    const theme = localStorage.getItem('wk_theme'); if (theme) applyTheme(theme);
     const savedName = localStorage.getItem('wk_user_name'); if (savedName) document.getElementById('sidebarName').textContent = savedName;
     const av = localStorage.getItem('wk_user_avatar'); if (av) applyAvatar(av);
     const k1 = localStorage.getItem('wk_api_key'); if (k1) document.getElementById('apiKeyInput').value = k1;
@@ -1695,7 +1526,7 @@ function init() {
     updateModelBadge(); handleInputChange(); updateReplicateStatus();
     initHoldToSpeak();
     if (localStorage.getItem('wk_guest_mode') === '1') unlockApp('Guest', 'Guest Mode (not synced)', null);
-  } catch(e){ console.warn(e); }
+  } catch(e){}
 }
 document.addEventListener('click', e => { const sw = e.target.closest('.theme-swatch'); if (sw) { const c = sw.dataset.color; localStorage.setItem('wk_theme', c); applyTheme(c); } });
 document.querySelectorAll('.modal-bg').forEach(m => { m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('show'); }); });
