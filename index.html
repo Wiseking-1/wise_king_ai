@@ -130,13 +130,14 @@
   .pm-divider{height:1px;background:var(--border-subtle);margin:6px 12px}
   .pm-account-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:var(--radius-md);background:transparent;border:none;color:var(--text-primary);font-size:14px;cursor:pointer;text-align:left;font-family:inherit;width:100%}
   .pm-account-item:hover{background:var(--bg-elevated)}
-  .pm-account-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent-gradient);display:flex;align-items:center;justify-content:center;font-size:12px;color:white;font-weight:600;flex-shrink:0}
+  .pm-account-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent-gradient);display:flex;align-items:center;justify-content:center;font-size:12px;color:white;font-weight:600;flex-shrink:0;overflow:hidden}
+  .pm-account-avatar img{width:100%;height:100%;object-fit:cover}
   .pm-account-info{flex:1;min-width:0}
   .pm-account-name{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .pm-account-email{font-size:11.5px;color:var(--text-tertiary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .pm-account-check{color:#10b981;font-size:14px}
   
-  .chat-scroll{flex:1;overflow-y:auto;padding:24px 20px 200px;scroll-behavior:smooth}
+  .chat-scroll{flex:1;overflow-y:auto;padding:24px 20px 140px;scroll-behavior:smooth}
   .chat-inner{max-width:780px;margin:0 auto}
   .welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 20px;min-height:60vh}
   .welcome-logo{width:72px;height:72px;border-radius:var(--radius-xl);background:var(--gold-gradient);display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:20px;box-shadow:0 0 32px rgba(251,191,36,0.5)}
@@ -163,7 +164,6 @@
   .msg-name{font-size:12.5px;font-weight:600;color:var(--text-secondary);margin-bottom:4px;padding:0 4px;display:flex;align-items:center;gap:6px}
   .message.user .msg-name{text-align:right;flex-direction:row-reverse}
   .edited-tag{font-size:10.5px;color:var(--text-tertiary);font-style:italic;font-weight:400}
-  .vision-tag{font-size:10.5px;color:var(--accent-hover);font-weight:500;display:inline-flex;align-items:center;gap:3px}
   .msg-content-wrap{position:relative;width:100%;display:flex}
   .message.user .msg-content-wrap{justify-content:flex-end}
   .msg-content{padding:14px 18px;border-radius:var(--radius-lg);font-size:15.5px;line-height:1.75;word-wrap:break-word;overflow-wrap:break-word;white-space:pre-wrap;max-width:100%}
@@ -201,37 +201,45 @@
   .code-copy-btn:hover{color:var(--text-primary);background:var(--bg-hover)}
   .md pre{background:var(--bg-elevated);padding:14px 12px;border-radius:10px;overflow-x:auto;margin:0}
 
-  .input-dock{position:absolute;bottom:0;left:0;right:0;padding:12px 20px 16px;background:linear-gradient(to top,var(--bg-primary) 60%,transparent);pointer-events:none;z-index:20}
+  /* ============================================================
+     ===== NEW DEEPSEEK-STYLE INPUT BOX (Picture 1 & 2) =====
+     ============================================================ */
+  .input-dock{position:absolute;bottom:0;left:0;right:0;padding:8px 16px 10px;background:linear-gradient(to top,var(--bg-primary) 70%,transparent);pointer-events:none;z-index:20}
   .input-inner-wrap{max-width:780px;margin:0 auto;pointer-events:auto}
-  .preview-area{display:none;gap:8px;flex-wrap:wrap;padding:8px 0}
+  .preview-area{display:none;gap:8px;flex-wrap:wrap;padding:6px 0}
   .preview-area.show{display:flex}
-  .preview-item{position:relative;width:56px;height:56px;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border-default);background:var(--bg-secondary)}
+  .preview-item{position:relative;width:52px;height:52px;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border-default);background:var(--bg-secondary)}
   .preview-item img{width:100%;height:100%;object-fit:cover}
   .preview-item .remove{position:absolute;top:2px;right:2px;width:18px;height:18px;background:rgba(0,0,0,0.7);color:white;border:none;border-radius:var(--radius-full);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-  
-  .gk-input-box{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:28px;padding:6px;display:flex;flex-direction:column;gap:6px;transition:all var(--transition-fast);box-shadow:var(--shadow-md)}
-  .gk-input-box:focus-within{border-color:var(--accent);box-shadow:var(--shadow-md),0 0 0 3px var(--accent-glow)}
-  .gk-text-row{display:flex;align-items:flex-end;gap:6px;padding:2px 4px}
-  .gk-input-btn{width:38px;height:38px;border-radius:50%;background:transparent;border:none;color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:background var(--transition-fast)}
-  .gk-input-btn:hover{background:var(--bg-elevated);color:var(--text-primary)}
-  .gk-textarea{flex:1;background:transparent;border:none;color:var(--text-primary);font-size:15.5px;font-family:inherit;padding:10px 4px;resize:none;outline:none;max-height:200px;min-height:38px;line-height:1.5;overflow-y:auto}
-  .gk-textarea::placeholder{color:var(--text-tertiary)}
-  .gk-send-btn{width:38px;height:38px;border-radius:50%;background:var(--accent-gradient);border:none;color:white;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--shadow-sm)}
-  .gk-send-btn.stop{background:var(--danger)}
-  .gk-send-btn.hidden{display:none}
-  
-  .gk-options-row{display:flex;align-items:center;gap:6px;padding:0 4px 2px;flex-wrap:wrap}
-  .gk-chip{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--radius-full);background:transparent;border:1px solid var(--border-default);color:var(--text-secondary);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all var(--transition-fast);white-space:nowrap}
-  .gk-chip:hover{background:var(--bg-elevated);color:var(--text-primary)}
-  .gk-chip.active{background:rgba(99,102,241,0.18);color:var(--accent-hover);border-color:var(--accent);box-shadow:0 0 12px rgba(99,102,241,0.25)}
-  .gk-options-spacer{flex:1}
-  
-  .gk-mic-pill{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 16px;background:var(--bg-input);border:1px solid var(--border-default);border-radius:20px;color:var(--text-secondary);font-size:14px;font-weight:600;cursor:pointer;-webkit-user-select:none;user-select:none;text-align:center;transition:all var(--transition-fast)}
-  .gk-mic-pill.recording{background:var(--danger);color:white;border-color:transparent;box-shadow:0 0 16px rgba(239,68,68,0.4);animation:pulseMic 1.2s infinite}
-  .gk-mic-pill.keyboard-mode{background:var(--accent-gradient);color:white;border-color:transparent}
-  @keyframes pulseMic{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
 
-  .input-hint{text-align:center;font-size:11.5px;color:var(--text-tertiary);margin-top:6px}
+  /* COMPACT BOX — DeepSeek style */
+  .ds-input-box{background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:24px;padding:10px 12px 8px;display:flex;flex-direction:column;gap:8px;transition:all var(--transition-fast);box-shadow:var(--shadow-md)}
+  .ds-input-box:focus-within{border-color:var(--accent);box-shadow:var(--shadow-md),0 0 0 3px var(--accent-glow)}
+
+  /* TOP AREA — shows "Hold to speak" or the textarea */
+  .ds-top-area{display:flex;align-items:center;justify-content:center;min-height:28px;padding:2px 4px}
+  .ds-hold-text{color:var(--text-secondary);font-size:15px;font-weight:500;letter-spacing:0.01em;cursor:pointer;user-select:none;-webkit-user-select:none;padding:4px 8px;transition:color var(--transition-fast)}
+  .ds-hold-text:hover{color:var(--text-primary)}
+  .ds-hold-text.recording{color:var(--danger);font-weight:600}
+  .ds-textarea{display:none;width:100%;background:transparent;border:none;color:var(--text-primary);font-size:15.5px;font-family:inherit;padding:2px 4px;resize:none;outline:none;max-height:130px;min-height:26px;line-height:1.5;overflow-y:auto}
+  .ds-textarea::placeholder{color:var(--text-tertiary)}
+  .ds-input-box.typing-mode .ds-hold-text{display:none}
+  .ds-input-box.typing-mode .ds-textarea{display:block}
+
+  /* BOTTOM ROW — chips on left, icons on right */
+  .ds-bottom-row{display:flex;align-items:center;gap:8px}
+  .ds-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--radius-full);background:transparent;border:1px solid var(--border-default);color:var(--text-secondary);font-size:13.5px;font-weight:500;cursor:pointer;font-family:inherit;transition:all var(--transition-fast);white-space:nowrap;line-height:1.2}
+  .ds-chip:hover{background:var(--bg-elevated);color:var(--text-primary)}
+  .ds-chip.active{background:rgba(99,102,241,0.18);color:var(--accent-hover);border-color:var(--accent);box-shadow:0 0 12px rgba(99,102,241,0.25)}
+  .ds-chip i{font-size:13px}
+  .ds-row-spacer{flex:1}
+  .ds-icon-btn{width:34px;height:34px;border-radius:50%;background:transparent;border:1px solid var(--border-default);color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;transition:all var(--transition-fast)}
+  .ds-icon-btn:hover{background:var(--bg-elevated);color:var(--text-primary);border-color:var(--border-strong)}
+  .ds-send-btn{width:34px;height:34px;border-radius:50%;background:var(--accent-gradient);border:none;color:white;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--shadow-sm)}
+  .ds-send-btn.stop{background:var(--danger)}
+  .ds-send-btn.hidden{display:none}
+
+  .input-hint{text-align:center;font-size:11px;color:var(--text-tertiary);margin-top:6px;padding:0 8px}
   
   .chat-search-bar{display:none;padding:8px 20px;background:var(--bg-secondary);border-bottom:1px solid var(--border-subtle);gap:8px;align-items:center}
   .chat-search-bar.show{display:flex}
@@ -279,7 +287,7 @@
   .result-card h4{color:var(--accent-hover);font-size:14px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
   .result-card p{font-size:14px;color:var(--text-secondary);line-height:1.7}
   
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--bg-elevated);border:1px solid var(--border-default);padding:10px 20px;border-radius:var(--radius-full);font-size:13px;font-weight:500;z-index:5000;opacity:0;pointer-events:none;box-shadow:var(--shadow-lg);transition:all var(--transition-smooth);max-width:90vw;text-align:center}
+  .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--bg-elevated);border:1px solid var(--border-default);padding:10px 20px;border-radius:var(--radius-full);font-size:13px;font-weight:500;z-index:5000;opacity:0;pointer-events:none;box-shadow:var(--shadow-lg);transition:all var(--transition-smooth);max-width:90vw;text-align:center}
   .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
   
   .vault-item{display:flex;align-items:flex-start;gap:10px;padding:12px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-md);margin-bottom:8px}
@@ -308,7 +316,6 @@
   .sp-x{background:linear-gradient(135deg,#000,#1a1a1a)}
   .share-cancel{width:100%;padding:12px;border-radius:var(--radius-md);background:var(--bg-elevated);border:1px solid var(--border-default);color:var(--text-primary);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
 
-  /* ===== PHOTO UPLOAD MODAL ===== */
   #photoUploadModal .modal { max-width:420px; }
   .photo-preview-box{width:120px;height:120px;border-radius:50%;margin:0 auto 20px;background:var(--gold-gradient);display:flex;align-items:center;justify-content:center;font-size:48px;overflow:hidden;box-shadow:0 0 0 4px var(--bg-secondary),0 0 0 5px #fbbf24}
   .photo-preview-box img{width:100%;height:100%;object-fit:cover}
@@ -318,14 +325,16 @@
     .sidebar{position:fixed;top:0;left:0;bottom:0;transform:translateX(-100%);box-shadow:var(--shadow-lg)}
     .sidebar.open{transform:translateX(0)}
     .chat-topbar{padding:10px 12px}
-    .chat-scroll{padding:16px 12px 220px}
-    .input-dock{padding:8px 10px 14px}
+    .chat-scroll{padding:16px 12px 130px}
+    .input-dock{padding:6px 10px 8px}
     .msg-avatar{width:30px;height:30px;font-size:13px}
     .msg-body{max-width:calc(100% - 42px)}
     .chat-model-badge{display:none}
     .top-btn .label{display:none}
     .top-btn{padding:8px 10px}
     .profile-menu-popup{width:calc(100vw - 32px);right:-10px}
+    .ds-chip{padding:6px 12px;font-size:13px}
+    .ds-chip i{font-size:12px}
   }
 </style>
 </head>
@@ -389,6 +398,7 @@
         <button class="top-btn" onclick="goToWelcome()"><i class="fas fa-house"></i><span class="label"> Home</span></button>
         <button class="top-btn" onclick="openVault()"><i class="fas fa-shield-halved"></i><span class="label"> Vault</span></button>
         <button class="top-btn" onclick="openSearchWebPanel()"><i class="fas fa-globe"></i><span class="label"> Search</span></button>
+        <button class="top-btn" onclick="togglePromptWizard()" id="topWizardBtn"><i class="fas fa-wand-magic-sparkles"></i><span class="label"> Wizard</span></button>
       </div>
       <div class="top-profile-container" id="topProfileContainer">
         <div class="top-profile-avatar" id="topProfileAvatar" onclick="toggleTopProfileMenu(event)">👑</div>
@@ -443,21 +453,22 @@
       </div>
     </div>
 
+    <!-- ===== NEW DEEPSEEK-STYLE INPUT BOX ===== -->
     <div class="input-dock">
       <div class="input-inner-wrap">
         <div class="preview-area" id="previewArea"></div>
-        <div class="gk-input-box" id="gkInputBox">
-          <div class="gk-text-row">
-            <textarea class="gk-textarea" id="messageInput" rows="1" placeholder="Ask Wise King AI Anything..." onkeydown="handleKeyDown(event)" oninput="handleInputChange()"></textarea>
-            <button class="gk-send-btn hidden" id="sendBtn" onclick="handleSendOrCancel()"><i class="fas fa-arrow-up"></i></button>
+        <div class="ds-input-box" id="dsInputBox">
+          <div class="ds-top-area">
+            <span class="ds-hold-text" id="dsHoldText">Hold to speak</span>
+            <textarea class="ds-textarea" id="messageInput" rows="1" placeholder="Type a message or hold to speak" onkeydown="handleKeyDown(event)" oninput="handleInputChange()"></textarea>
           </div>
-          <div class="gk-mic-pill" id="gkMicPill"><i class="fas fa-microphone" style="color:var(--accent-hover)"></i> <span id="gkMicLabel">Press & Hold to Speak 🎙️</span></div>
-          <div class="gk-options-row">
-            <button class="gk-chip" id="chipThink" onclick="toggleThinkMode()"><i class="fas fa-brain"></i> Think</button>
-            <button class="gk-chip" id="chipSearch" onclick="toggleSearchMode()"><i class="fas fa-globe"></i> Search</button>
-            <button class="gk-chip" id="chipWizard" onclick="togglePromptWizard()"><i class="fas fa-wand-magic-sparkles"></i> Prompt Wizard</button>
-            <div class="gk-options-spacer"></div>
-            <button class="gk-input-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()" title="Attach"><i class="fas fa-plus"></i></button>
+          <div class="ds-bottom-row">
+            <button class="ds-chip" id="chipThink" onclick="toggleThinkMode()"><i class="fas fa-brain"></i> Think</button>
+            <button class="ds-chip" id="chipSearch" onclick="toggleSearchMode()"><i class="fas fa-globe"></i> Search</button>
+            <div class="ds-row-spacer"></div>
+            <button class="ds-send-btn hidden" id="sendBtn" onclick="handleSendOrCancel()"><i class="fas fa-arrow-up"></i></button>
+            <button class="ds-icon-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()" title="Upload file"><i class="fas fa-plus"></i></button>
+            <button class="ds-icon-btn" id="micKeyboardBtn" onclick="toggleMicKeyboardMode()" title="Switch mic / keyboard"><i class="fas fa-microphone" id="micKeyboardIcon"></i></button>
           </div>
         </div>
         <input type="file" id="fileInput" accept="image/*,.pdf,.txt,.doc,.docx" style="display:none" multiple onchange="handleFiles(event)">
@@ -496,7 +507,7 @@
   </div>
 </div>
 
-<!-- ===== PHOTO UPLOAD MODAL ===== -->
+<!-- PHOTO UPLOAD MODAL -->
 <div class="modal-bg" id="photoUploadModal">
   <div class="modal">
     <div class="modal-head">
@@ -519,7 +530,7 @@
 </div>
 <input type="file" id="cameraCaptureInput" accept="image/*" capture="user" style="display:none" onchange="handlePhotoUpload(event)">
 
-<!-- ===== ADD ACCOUNT MODAL ===== -->
+<!-- ADD ACCOUNT MODAL -->
 <div class="modal-bg" id="addAccountModal">
   <div class="modal">
     <div class="modal-head">
@@ -539,7 +550,7 @@
   </div>
 </div>
 
-<!-- ===== SWITCH ACCOUNT MODAL ===== -->
+<!-- SWITCH ACCOUNT MODAL -->
 <div class="modal-bg" id="switchAccountModal">
   <div class="modal">
     <div class="modal-head">
@@ -555,7 +566,7 @@
   </div>
 </div>
 
-<!-- MODALS & PANELS -->
+<!-- EDIT / RENAME / DELETE MODALS -->
 <div class="modal-bg" id="editMessageModal">
   <div class="modal" style="max-width:520px">
     <div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Edit message</div><button class="modal-close" onclick="closeModal('editMessageModal')"><i class="fas fa-times"></i></button></div>
@@ -646,8 +657,6 @@
   <div class="panel-header"><div class="panel-title"><i class="fas fa-globe"></i> Search the web</div><button class="btn ghost" onclick="closeSearchWebPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
   <div class="panel-body"><div class="panel-inner">
     <input type="text" class="search-big" id="searchWebInput" placeholder="Ask anything..." style="width:100%;padding:16px 20px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);color:var(--text-primary);font-size:15px;outline:none;margin-bottom:20px" onkeydown="if(event.key==='Enter'){doSearchWeb(this.value)}">
-    <div id="searchSuggestionsBox" style="margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px"></div>
-    <div id="askWiseKingShortcut" style="margin-bottom:20px;display:none"></div>
     <div id="searchWebResults"></div>
   </div></div>
 </div>
@@ -725,18 +734,9 @@
       </div>
     </div>
     <div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-sliders-h"></i> Features</div>
-      <div class="settings-card">
-        <div class="toggle-row"><div class="toggle-label">Enable Web Search</div><div class="toggle-switch on" id="webSearchToggle" onclick="toggleWebSearchSetting()"></div></div>
-        <div style="height:1px;background:var(--border-subtle);margin:10px 0"></div>
-        <div class="toggle-row"><div class="toggle-label">Enable Cross-Chat Memory</div><div class="toggle-switch on" id="memoryToggle" onclick="toggleMemorySetting()"></div></div>
-      </div>
-    </div>
-    <div class="settings-group">
       <div class="settings-group-title"><i class="fas fa-key"></i> API Keys (Optional)</div>
       <div class="settings-card">
         <input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (auto-connected if empty)" autocomplete="off">
-        <input type="password" class="input-field" id="replicateKeyInput" placeholder="Replicate API key (optional)" autocomplete="off">
       </div>
     </div>
     <div class="settings-group">
@@ -758,7 +758,6 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- SCRIPT LOGIC -->
 <script>
 const ownerEmail = "kingnice314@gmail.com";
 const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
@@ -784,7 +783,6 @@ function getApiKey() {
 async function sendMessageWithFallback(userText, chatHistory = [], signal = null) {
   const apiKey = getApiKey();
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${apiKey}`;
-  
   let attempts = 0;
   while (attempts < 3) {
     attempts++;
@@ -798,13 +796,9 @@ async function sendMessageWithFallback(userText, chatHistory = [], signal = null
       };
       const fetchOpts = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(requestBody) };
       if (signal) fetchOpts.signal = signal;
-      
       const response = await fetch(url, fetchOpts);
       if (!response.ok) {
-        if (response.status === 429 || response.status >= 500) {
-          await new Promise(r => setTimeout(r, 1000 * attempts));
-          continue;
-        }
+        if (response.status === 429 || response.status >= 500) { await new Promise(r => setTimeout(r, 1000 * attempts)); continue; }
         throw new Error(`HTTP ${response.status}`);
       }
       const data = await response.json();
@@ -827,25 +821,17 @@ let uploadedImages = [];
 let isSending = false, currentAbortController = null;
 let vaultMemories = [];
 let crossChatMemory = [];
-let library = [];
-let projects = [];
-let deferredInstallPrompt = null;
 let editingMessageIdx = -1;
 let deletingMessageIdx = -1;
 let renamingChatId = null;
 let deletingChatId = null;
 let popupMenuChatId = null;
 let currentShareTarget = null;
-let searchMatches = [];
-let searchCurrentIdx = -1;
 let thinkMode = false;
 let searchMode = false;
 let promptWizardMode = false;
-
-let currentSpeakingUtterance = null;
 let speakingMessageIndex = null;
 
-// ===== USER PROFILE STATE =====
 let userProfile = {
   name: localStorage.getItem('wk_user_name') || 'IBRAHIM ABDULLAHI',
   email: localStorage.getItem('wk_user_email') || 'kingnice314@gmail.com',
@@ -854,34 +840,24 @@ let userProfile = {
 let accounts = JSON.parse(localStorage.getItem('wk_accounts') || '[]');
 let pendingPhotoData = '';
 
-// ===== PROFILE PHOTO FUNCTIONS =====
+// ===== PROFILE PHOTO =====
 function openPhotoUpload() {
   pendingPhotoData = userProfile.photo || '';
   const previewBox = document.getElementById('photoPreviewBox');
-  if (pendingPhotoData) {
-    previewBox.innerHTML = `<img src="${pendingPhotoData}">`;
-  } else {
-    previewBox.innerHTML = '👑';
-  }
+  if (pendingPhotoData) previewBox.innerHTML = `<img src="${pendingPhotoData}">`;
+  else previewBox.innerHTML = '👑';
   document.getElementById('photoUploadModal').classList.add('show');
 }
 function handlePhotoUpload(e) {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = (ev) => {
-    pendingPhotoData = ev.target.result;
-    document.getElementById('photoPreviewBox').innerHTML = `<img src="${pendingPhotoData}">`;
-  };
+  reader.onload = (ev) => { pendingPhotoData = ev.target.result; document.getElementById('photoPreviewBox').innerHTML = `<img src="${pendingPhotoData}">`; };
   reader.readAsDataURL(file);
   e.target.value = '';
 }
 function triggerCameraCapture() { document.getElementById('cameraCaptureInput').click(); }
-function removeProfilePhoto() {
-  pendingPhotoData = '';
-  document.getElementById('photoPreviewBox').innerHTML = '👑';
-  showToast('Photo removed. Tap Save to confirm.');
-}
+function removeProfilePhoto() { pendingPhotoData = ''; document.getElementById('photoPreviewBox').innerHTML = '👑'; showToast('Photo removed. Tap Save to confirm.'); }
 function saveProfilePhoto() {
   userProfile.photo = pendingPhotoData;
   localStorage.setItem('wk_user_photo', pendingPhotoData || '');
@@ -890,30 +866,23 @@ function saveProfilePhoto() {
   showToast('✅ Profile photo updated!');
 }
 function applyProfilePhoto() {
-  const avatars = ['topProfileAvatar', 'pmAvatar', 'sidebarAvatar', 'settingsAvatar'];
-  avatars.forEach(id => {
+  ['topProfileAvatar', 'pmAvatar', 'sidebarAvatar', 'settingsAvatar'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
-    if (userProfile.photo) {
-      el.innerHTML = `<img src="${userProfile.photo}">`;
-    } else {
-      el.textContent = '👑';
-    }
+    if (userProfile.photo) el.innerHTML = `<img src="${userProfile.photo}">`;
+    else el.textContent = '👑';
   });
-  // Apply to AI message avatars too
   document.querySelectorAll('.msg-avatar.ai').forEach(el => {
     if (userProfile.photo) el.innerHTML = `<img src="${userProfile.photo}">`;
     else el.textContent = '👑';
   });
 }
 function applyProfileText() {
-  const nameEls = ['pmName', 'sidebarName'];
-  const emailEls = ['pmEmail', 'settingsUserEmail'];
-  nameEls.forEach(id => { const el = document.getElementById(id); if (el) el.textContent = userProfile.name; });
-  emailEls.forEach(id => { const el = document.getElementById(id); if (el) el.textContent = userProfile.email; });
+  ['pmName', 'sidebarName'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = userProfile.name; });
+  ['pmEmail', 'settingsUserEmail'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = userProfile.email; });
 }
 
-// ===== ADD ACCOUNT =====
+// ===== ADD / SWITCH ACCOUNT =====
 function openAddAccount() {
   document.getElementById('addAccountName').value = '';
   document.getElementById('addAccountEmail').value = '';
@@ -922,32 +891,25 @@ function openAddAccount() {
 function continueAddAccount() {
   const name = document.getElementById('addAccountName').value.trim() || 'New Account';
   const email = document.getElementById('addAccountEmail').value.trim() || `user${Date.now()}@wiseking.ai`;
-  const newAcc = { name, email, id: 'acc-' + Date.now() };
-  accounts.push(newAcc);
+  accounts.push({ name, email, id: 'acc-' + Date.now() });
   localStorage.setItem('wk_accounts', JSON.stringify(accounts));
   closeModal('addAccountModal');
   showToast(`✅ Account "${name}" added!`);
   openSwitchAccount();
 }
-
-// ===== SWITCH ACCOUNT =====
 function openSwitchAccount() {
   const list = document.getElementById('switchAccountList');
-  const currentEmail = userProfile.email;
-  let html = '';
-  // Current account
-  html += `
+  let html = `
     <div class="pm-account-item" onclick="switchToAccount('${escapeAttr(userProfile.name)}', '${escapeAttr(userProfile.email)}')">
-      <div class="pm-account-avatar">${(userProfile.photo ? `<img src="${userProfile.photo}">` : '👑')}</div>
+      <div class="pm-account-avatar">${userProfile.photo ? `<img src="${userProfile.photo}">` : '👑'}</div>
       <div class="pm-account-info">
         <div class="pm-account-name">${escapeHtml(userProfile.name)}</div>
         <div class="pm-account-email">${escapeHtml(userProfile.email)}</div>
       </div>
       <i class="fas fa-check-circle pm-account-check"></i>
     </div>`;
-  // Other accounts
-  accounts.forEach((acc, i) => {
-    if (acc.email === currentEmail) return;
+  accounts.forEach(acc => {
+    if (acc.email === userProfile.email) return;
     html += `
       <div class="pm-account-item" onclick="switchToAccount('${escapeAttr(acc.name)}', '${escapeAttr(acc.email)}')">
         <div class="pm-account-avatar">${acc.name.charAt(0).toUpperCase()}</div>
@@ -957,21 +919,16 @@ function openSwitchAccount() {
         </div>
       </div>`;
   });
-  if (accounts.length === 0) {
-    html += `<div style="text-align:center;padding:20px;color:var(--text-secondary);font-size:13px">No other accounts. Tap "Add Account" below.</div>`;
-  }
+  if (accounts.length === 0) html += `<div style="text-align:center;padding:20px;color:var(--text-secondary);font-size:13px">No other accounts. Tap "Add Account" below.</div>`;
   list.innerHTML = html;
   document.getElementById('switchAccountModal').classList.add('show');
 }
 function switchToAccount(name, email) {
-  userProfile.name = name;
-  userProfile.email = email;
-  userProfile.photo = '';
+  userProfile.name = name; userProfile.email = email; userProfile.photo = '';
   localStorage.setItem('wk_user_name', name);
   localStorage.setItem('wk_user_email', email);
   localStorage.setItem('wk_user_photo', '');
-  applyProfileText();
-  applyProfilePhoto();
+  applyProfileText(); applyProfilePhoto();
   closeModal('switchAccountModal');
   showToast(`🔄 Switched to ${name}`);
   goToWelcome();
@@ -995,127 +952,120 @@ function loadTheme() {
 
 function toggleThinkMode() { thinkMode = !thinkMode; document.getElementById('chipThink').classList.toggle('active', thinkMode); showToast(thinkMode ? '🧠 Deep thinking ON' : '🧠 OFF'); }
 function toggleSearchMode() { searchMode = !searchMode; document.getElementById('chipSearch').classList.toggle('active', searchMode); showToast(searchMode ? '🌐 Search ON' : '🌐 OFF'); }
-function togglePromptWizard() { promptWizardMode = !promptWizardMode; document.getElementById('chipWizard').classList.toggle('active', promptWizardMode); showToast(promptWizardMode ? '🪄 Prompt Wizard ON' : '🪄 OFF'); }
+function togglePromptWizard() {
+  promptWizardMode = !promptWizardMode;
+  const btn = document.getElementById('topWizardBtn');
+  if (btn) btn.classList.toggle('active', promptWizardMode);
+  showToast(promptWizardMode ? '🪄 Prompt Wizard ON' : '🪄 OFF');
+}
 
-// ===== INPUT CONTROLLER (MIC + KEYBOARD) =====
-function initInputController() {
-  const pill = document.getElementById('gkMicPill');
-  const label = document.getElementById('gkMicLabel');
-  const micIcon = pill.querySelector('i');
+// ===== NEW DEEPSEEK-STYLE INPUT CONTROLLER =====
+let voiceModeActive = true;
+
+function toggleMicKeyboardMode() {
+  const box = document.getElementById('dsInputBox');
+  const icon = document.getElementById('micKeyboardIcon');
+  const input = document.getElementById('messageInput');
+  const holdText = document.getElementById('dsHoldText');
+
+  if (voiceModeActive) {
+    // Switch to keyboard (typing) mode
+    voiceModeActive = false;
+    box.classList.add('typing-mode');
+    icon.className = 'fas fa-microphone';
+    setTimeout(() => input.focus(), 100);
+    showToast('⌨️ Typing mode — write your message');
+  } else {
+    // Switch back to voice mode
+    voiceModeActive = true;
+    box.classList.remove('typing-mode');
+    icon.className = 'fas fa-keyboard';
+    input.blur();
+    holdText.textContent = 'Hold to speak';
+    showToast('🎙️ Voice mode — press & hold to speak');
+  }
+}
+
+function initHoldToSpeak() {
+  const holdText = document.getElementById('dsHoldText');
   const input = document.getElementById('messageInput');
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  
+
+  if (!SR) {
+    holdText.textContent = 'Type a message';
+    return;
+  }
+
   let recognition = null;
   let isHolding = false;
   let finalTranscript = '';
-  let keyboardMode = false;
-
-  function setKeyboardMode(active) {
-    keyboardMode = active;
-    if (active) {
-      pill.classList.add('keyboard-mode');
-      micIcon.className = 'fas fa-keyboard';
-      micIcon.style.color = 'white';
-      label.textContent = 'Type a message...';
-      input.focus();
-    } else {
-      pill.classList.remove('keyboard-mode');
-      micIcon.className = 'fas fa-microphone';
-      micIcon.style.color = 'var(--accent-hover)';
-      label.textContent = 'Press & Hold to Speak 🎙️';
-      input.blur();
-    }
-  }
 
   const startRec = (e) => {
-    if (keyboardMode || isHolding) return;
+    if (!voiceModeActive || isHolding) return;
     e.preventDefault();
     isHolding = true;
     finalTranscript = '';
-    pill.classList.add('recording');
-    label.textContent = 'Listening... Speak now 🎙️';
-    
+    holdText.classList.add('recording');
+    holdText.textContent = 'Listening...';
+
     try {
       recognition = new SR();
       recognition.lang = 'en-US';
       recognition.continuous = true;
       recognition.interimResults = true;
-      
+
       recognition.onresult = (event) => {
         let interim = '';
         for (let i = event.resultIndex; i < event.results.length; ++i) {
-          if (event.results[i].isFinal) {
-            finalTranscript += event.results[i][0].transcript + ' ';
-          } else {
-            interim += event.results[i][0].transcript;
-          }
+          if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript + ' ';
+          else interim += event.results[i][0].transcript;
         }
         const currentText = (finalTranscript + interim).trim();
         if (currentText) {
+          // Show in textarea temporarily while recording
           input.value = currentText;
+          document.getElementById('dsInputBox').classList.add('typing-mode');
           handleInputChange();
         }
       };
-      
       recognition.onerror = () => {};
       recognition.start();
     } catch(err) {}
   };
 
   const stopRec = (e) => {
-    if (keyboardMode || !isHolding) return;
-    e.preventDefault();
+    if (!voiceModeActive || !isHolding) return;
+    if (e) e.preventDefault();
     isHolding = false;
-    pill.classList.remove('recording');
-    label.textContent = 'Press & Hold to Speak 🎙️';
-    
+    holdText.classList.remove('recording');
+    holdText.textContent = 'Hold to speak';
+
     try { if (recognition) recognition.stop(); } catch(err) {}
-    
+
+    // If text was captured, stay in typing mode so user can review
     if (input.value.trim()) {
+      document.getElementById('dsInputBox').classList.add('typing-mode');
+      voiceModeActive = false;
+      document.getElementById('micKeyboardIcon').className = 'fas fa-microphone';
       showToast('✅ Voice captured! Review and tap Send.');
       input.focus();
+    } else {
+      // No text, return to voice pill
+      document.getElementById('dsInputBox').classList.remove('typing-mode');
+      voiceModeActive = true;
+      document.getElementById('micKeyboardIcon').className = 'fas fa-keyboard';
     }
   };
 
-  pill.addEventListener('click', (e) => {
-    if (!isHolding && !keyboardMode) {
-      setKeyboardMode(true);
-      showToast('⌨️ Keyboard mode — type your message');
-    } else if (keyboardMode) {
-      setKeyboardMode(false);
-      showToast('🎙️ Voice mode — press & hold to speak');
-    }
-  });
-
-  pill.addEventListener('mousedown', (e) => { if (!keyboardMode) startRec(e); });
-  pill.addEventListener('mouseup', (e) => { if (!keyboardMode) stopRec(e); });
-  pill.addEventListener('mouseleave', (e) => { if (!keyboardMode) stopRec(e); });
-  pill.addEventListener('touchstart', (e) => { if (!keyboardMode) startRec(e); }, {passive:false});
-  pill.addEventListener('touchend', (e) => { if (!keyboardMode) stopRec(e); }, {passive:false});
-  pill.addEventListener('touchcancel', (e) => { if (!keyboardMode) stopRec(e); }, {passive:false});
-
-  input.addEventListener('focus', () => {
-    if (!keyboardMode && !isHolding) {
-      setTimeout(() => {
-        if (document.activeElement === input && !keyboardMode) {
-          setKeyboardMode(true);
-        }
-      }, 100);
-    }
-  });
-
-  input.addEventListener('blur', () => {
-    if (keyboardMode && !input.value.trim()) {
-      setTimeout(() => {
-        if (document.activeElement !== input) {
-          setKeyboardMode(false);
-        }
-      }, 200);
-    }
-  });
+  holdText.addEventListener('mousedown', startRec);
+  holdText.addEventListener('mouseup', stopRec);
+  holdText.addEventListener('mouseleave', stopRec);
+  holdText.addEventListener('touchstart', startRec, {passive:false});
+  holdText.addEventListener('touchend', stopRec, {passive:false});
+  holdText.addEventListener('touchcancel', stopRec, {passive:false});
 }
 
-// ===== SPEECH =====
+// ===== SPEECH OUTPUT =====
 function toggleSpeech(text, idx) {
   if (!('speechSynthesis' in window)) { showToast('⚠️ Speech not supported'); return; }
   const synth = window.speechSynthesis;
@@ -1128,7 +1078,6 @@ function toggleSpeech(text, idx) {
   const utterance = new SpeechSynthesisUtterance(cleanText);
   utterance.rate = 1.0; utterance.pitch = 1.0;
   speakingMessageIndex = idx;
-  currentSpeakingUtterance = utterance;
   utterance.onstart = () => { updateSpeakerButtonState(idx, 'speaking'); showToast('🔊 Speaking...'); };
   utterance.onend = () => { speakingMessageIndex = null; updateSpeakerButtonState(idx, 'idle'); };
   utterance.onerror = () => { speakingMessageIndex = null; updateSpeakerButtonState(idx, 'idle'); };
@@ -1153,10 +1102,8 @@ function autoLoginUser() {
 }
 function unlockAppInstant() {
   localStorage.setItem('wk_logged_in', '1');
-  const ls = document.getElementById('loginScreen');
-  if (ls) ls.style.display = 'none';
-  const ma = document.getElementById('mainApp');
-  if (ma) ma.style.display = 'flex';
+  const ls = document.getElementById('loginScreen'); if (ls) ls.style.display = 'none';
+  const ma = document.getElementById('mainApp'); if (ma) ma.style.display = 'flex';
 }
 function loadChatsFromLocalStorage() {
   try { const s = localStorage.getItem('wk_chats'); if (s) chats = JSON.parse(s); } catch(e) { chats = []; }
@@ -1169,7 +1116,7 @@ function createNewChat() {
   const id = 'chat-' + Date.now();
   chats.unshift({ id, title:'New chat', messages:[], createdAt:Date.now(), pinned:false });
   activeChatId = id; saveChats(); renderMessages();
-  document.getElementById('messageInput').focus(); closeSidebar();
+  closeSidebar();
 }
 function switchToChat(id) { activeChatId = id; renderChats(); renderMessages(); closeSidebar(); }
 function renderChats() {
@@ -1212,12 +1159,12 @@ function confirmDeleteChat() {
   if (activeChatId === deletingChatId) { activeChatId = chats.length > 0 ? chats[0].id : null; if (!activeChatId) { const id = 'chat-' + Date.now(); chats.unshift({ id, title:'New chat', messages:[], createdAt:Date.now() }); activeChatId = id; } }
   saveChats(); renderMessages(); closeModal('deleteChatModal'); deletingChatId = null; showToast('🗑️ Deleted');
 }
-function shareCurrentChat() { 
-  const chat = chats.find(c => c.id === popupMenuChatId); 
-  if (!chat) return; 
-  currentShareTarget = { type: 'chat', title: chat.title, text: `Check out this chat: "${chat.title}"` }; 
-  closeChatMenu(); 
-  openSharePopup(); 
+function shareCurrentChat() {
+  const chat = chats.find(c => c.id === popupMenuChatId);
+  if (!chat) return;
+  currentShareTarget = { type: 'chat', title: chat.title, text: `Check out this chat: "${chat.title}"` };
+  closeChatMenu();
+  openSharePopup();
 }
 function openSharePopup() { document.getElementById('sharePopup')?.classList.add('show'); }
 function closeSharePopup() { document.getElementById('sharePopup')?.classList.remove('show'); currentShareTarget = null; }
@@ -1271,14 +1218,36 @@ function copyCodeBlock(id) {
   wkCopyToClipboard(el.textContent).then(ok => showToast(ok ? '📋 Code copied!' : '⚠️ Copy failed'));
 }
 function buildContentHtml(msg) { return `<div class="md">${renderMarkdown(msg.content || '')}</div>`; }
-function handleInputChange() { const input = document.getElementById('messageInput'), btn = document.getElementById('sendBtn'); const has = input.value.trim().length > 0 || uploadedImages.length > 0; btn.classList.toggle('hidden', !has && !isSending); input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 200) + 'px'; }
+function handleInputChange() {
+  const input = document.getElementById('messageInput');
+  const btn = document.getElementById('sendBtn');
+  const has = input.value.trim().length > 0 || uploadedImages.length > 0;
+  btn.classList.toggle('hidden', !has && !isSending);
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight, 130) + 'px';
+}
 function handleKeyDown(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!isSending) sendMessage(); } }
 function handleSendOrCancel() { if (isSending) cancelRequest(); else sendMessage(); }
 function cancelRequest() { if (currentAbortController) currentAbortController.abort(); isSending = false; }
-async function handleFiles(e) { const files = Array.from(e.target.files || []); for (const file of files) { if (file.type.startsWith('image/')) { await new Promise(r => { const fr = new FileReader(); fr.onload = ev => { uploadedImages.push(ev.target.result); r(); }; fr.readAsDataURL(file); }); } } updatePreview(); e.target.value = ''; }
+async function handleFiles(e) {
+  const files = Array.from(e.target.files || []);
+  for (const file of files) {
+    if (file.type.startsWith('image/')) {
+      await new Promise(r => { const fr = new FileReader(); fr.onload = ev => { uploadedImages.push(ev.target.result); r(); }; fr.readAsDataURL(file); });
+    }
+  }
+  updatePreview(); e.target.value = '';
+}
 function updatePreview() { const area = document.getElementById('previewArea'); area.innerHTML = ''; area.classList.toggle('show', uploadedImages.length > 0); uploadedImages.forEach((img, i) => { const d = document.createElement('div'); d.className = 'preview-item'; d.innerHTML = `<img src="${img}"><button class="remove" onclick="removeImg(${i})">×</button>`; area.appendChild(d); }); }
 function removeImg(i) { uploadedImages.splice(i,1); updatePreview(); handleInputChange(); }
-function useSuggestion(t) { document.getElementById('messageInput').value = t; handleInputChange(); sendMessage(); }
+function useSuggestion(t) {
+  document.getElementById('dsInputBox').classList.add('typing-mode');
+  voiceModeActive = false;
+  document.getElementById('micKeyboardIcon').className = 'fas fa-microphone';
+  const input = document.getElementById('messageInput');
+  input.value = t; handleInputChange();
+  setTimeout(() => sendMessage(), 100);
+}
 function filterChats() { const q = document.getElementById('searchInput').value.toLowerCase(); document.querySelectorAll('#chatsList .chat-item').forEach(el => { const t = el.querySelector('.chat-title')?.textContent.toLowerCase() || ''; el.style.display = t.includes(q) ? '' : 'none'; }); }
 function goToWelcome() { activeChatId = null; renderMessages(); }
 function closeModal(id) { document.getElementById(id)?.classList.remove('show'); }
@@ -1361,8 +1330,6 @@ async function doSearchWeb(q) {
   if (r.success) res.innerHTML = `<div class="result-card"><h4>Results</h4><p>${linkify(escapeHtml(r.reply))}</p></div>`;
   else res.innerHTML = `<div class="result-card"><p>Search complete.</p></div>`;
 }
-function getWebSearchEnabled() { return true; }
-function getMemoryEnabled() { return true; }
 function toggleWebSearchSetting() { showToast('Web search updated'); }
 function toggleMemorySetting() { showToast('Memory updated'); }
 
@@ -1377,7 +1344,13 @@ function sendMessage(textOverride) {
   if (chat.title === 'New chat' && text) chat.title = text.slice(0,32);
   const imgs = [...uploadedImages]; uploadedImages = []; updatePreview();
   const userMsg = { role:'user', content:text || '📎 Attachment', images:imgs, createdAt:Date.now() };
-  chat.messages.push(userMsg); input.value = ''; input.style.height = 'auto';
+  chat.messages.push(userMsg);
+  input.value = ''; input.style.height = 'auto';
+  // After sending, auto-return to voice mode (like DeepSeek)
+  document.getElementById('dsInputBox').classList.remove('typing-mode');
+  voiceModeActive = true;
+  document.getElementById('micKeyboardIcon').className = 'fas fa-keyboard';
+  handleInputChange();
   saveChats(); renderMessages();
   triggerResponse(chat, userMsg);
 }
@@ -1398,24 +1371,24 @@ function buildMessageEl(msg, idx, chatId) {
   const el = document.createElement('div'); el.className = 'message ' + msg.role;
   const isAI = msg.role === 'ai';
   const isThinking = isAI && msg.streaming === true && !msg.content;
-  
+
   const avatar = document.createElement('div'); avatar.className = 'msg-avatar ' + (isAI ? 'ai' : 'user');
   if (isAI && userProfile.photo) avatar.innerHTML = `<img src="${userProfile.photo}">`;
   else avatar.innerHTML = isAI ? '👑' : '<i class="fas fa-user"></i>';
-  
+
   const body = document.createElement('div'); body.className = 'msg-body';
   const name = document.createElement('div'); name.className = 'msg-name';
   name.innerHTML = (isAI ? (userProfile.name || 'Wise King AI') : 'You') + (msg.edited ? ' <span class="edited-tag">(edited)</span>' : '');
   body.appendChild(name);
-  
+
   const contentWrap = document.createElement('div'); contentWrap.className = 'msg-content-wrap';
   const content = document.createElement('div'); content.className = 'msg-content ' + (isAI ? 'ai' : 'user');
-  
+
   if (isThinking) {
     content.classList.add('thinking');
     content.innerHTML = `<div class="thinking-label"><span class="thinking-dots"><span></span><span></span><span></span></span>Wise King is thinking...</div>`;
   } else content.innerHTML = buildContentHtml(msg);
-  
+
   contentWrap.appendChild(content);
   body.appendChild(contentWrap);
 
@@ -1512,11 +1485,13 @@ async function triggerResponse(chat, userMsg) {
   handleInputChange(); saveChats(); renderMessages();
 }
 
+function promptInstallApp() { showToast('Install: use your browser menu → Add to Home Screen'); }
+
 function init() {
   try {
     loadTheme();
     loadChatsFromLocalStorage();
-    initInputController();
+    initHoldToSpeak();
     applyProfileText();
     applyProfilePhoto();
     if (localStorage.getItem('wk_logged_in') === '1') unlockAppInstant();
