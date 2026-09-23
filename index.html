@@ -315,11 +315,6 @@
   .sp-telegram{background:linear-gradient(135deg,#229ED9,#0088cc)}
   .sp-x{background:linear-gradient(135deg,#000,#1a1a1a)}
   .share-cancel{width:100%;padding:12px;border-radius:var(--radius-md);background:var(--bg-elevated);border:1px solid var(--border-default);color:var(--text-primary);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
-  .dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
-  .stat-card{background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:20px}
-  .stat-card .stat-icon{width:42px;height:42px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:14px;color:white}
-  .stat-card .stat-value{font-size:26px;font-weight:700;margin-bottom:4px}
-  .stat-card .stat-label{font-size:12.5px;color:var(--text-secondary);font-weight:500}
   @media(max-width:900px){.suggestions{grid-template-columns:1fr}}
   @media(max-width:768px){
     .sidebar{position:fixed;top:0;left:0;bottom:0;transform:translateX(-100%);box-shadow:var(--shadow-lg)}
@@ -389,6 +384,7 @@
       <div class="sidebar-search"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search chats" oninput="filterChats()"></div>
     </div>
     <div class="sidebar-scrollable">
+      <button class="nav-btn" onclick="openDirectorsRoom()"><span class="nav-icon gradient-1"><i class="fas fa-clapperboard"></i></span>Director’s Room<span class="nav-badge">Pro 🎬</span></button>
       <button class="nav-btn" onclick="openImagesPanel()"><span class="nav-icon gradient-1"><i class="fas fa-image"></i></span>Images</button>
       <button class="nav-btn" onclick="openVideosPanel()"><span class="nav-icon gradient-2"><i class="fas fa-video"></i></span>Videos</button>
       <button class="nav-btn" onclick="openVideoGallery()"><span class="nav-icon gradient-5"><i class="fas fa-film"></i></span>My Videos<span class="nav-badge" id="videoCountBadge">0</span></button>
@@ -489,6 +485,7 @@
           <div class="gk-options-row">
             <button class="gk-chip" id="chipThink" onclick="toggleThinkMode()"><i class="fas fa-brain"></i> Think</button>
             <button class="gk-chip" id="chipSearch" onclick="toggleSearchMode()"><i class="fas fa-globe"></i> Search</button>
+            <button class="gk-chip" id="chipWizard" onclick="togglePromptWizard()"><i class="fas fa-wand-magic-sparkles"></i> Prompt Wizard</button>
             <div class="gk-options-spacer"></div>
             <button class="gk-input-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()" title="Attach"><i class="fas fa-plus"></i></button>
             <button class="gk-input-btn" id="keyboardBtn" onclick="toggleVoiceMode()" title="Keyboard / Voice"><i class="fas fa-keyboard"></i></button>
@@ -512,7 +509,7 @@
 <div id="sharePopup">
   <div class="share-card">
     <div class="share-head">
-      <div class="share-title"><i class="fas fa-share-nodes"></i> Share to</div>
+      <div class="share-title"><i class="fas fa-share-nodes"></i> Share to Social Hub</div>
       <button class="share-close" onclick="closeSharePopup()"><i class="fas fa-times"></i></button>
     </div>
     <div class="share-grid">
@@ -523,11 +520,14 @@
       <button class="share-platform" onclick="shareTo('telegram')"><div class="sp-icon sp-telegram"><i class="fab fa-telegram-plane"></i></div><div class="sp-name">Telegram</div></button>
       <button class="share-platform" onclick="shareTo('x')"><div class="sp-icon sp-x"><i class="fab fa-x-twitter"></i></div><div class="sp-name">X</div></button>
     </div>
+    <div style="margin-bottom:14px">
+      <button class="btn solid" style="width:100%;justify-content:center;font-size:12.5px" onclick="copyCaptionWithHashtags()"><i class="fas fa-tags"></i> Copy Caption + Hausa/English Hashtags</button>
+    </div>
     <button class="share-cancel" onclick="closeSharePopup()">Cancel</button>
   </div>
 </div>
 
-<!-- MODALS -->
+<!-- MODALS & PANELS -->
 <div class="modal-bg" id="editMessageModal">
   <div class="modal" style="max-width:520px">
     <div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Edit message</div><button class="modal-close" onclick="closeModal('editMessageModal')"><i class="fas fa-times"></i></button></div>
@@ -587,7 +587,21 @@
   </div>
 </div>
 
-<!-- FULL PANELS -->
+<!-- DIRECTOR'S ROOM PANEL -->
+<div class="full-panel" id="directorsRoomPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-clapperboard"></i> Director’s Room — Multi-Scene Workspace 🎬</div><button class="btn ghost" onclick="closeDirectorsRoom()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner">
+    <div class="result-card" style="margin-bottom:16px">
+      <h4><i class="fas fa-film"></i> Setup Production Bible</h4>
+      <p style="margin-bottom:10px">Write your series or movie concept (e.g., *Sirrin Duji Part 2*, *Gizo Mai Takobi*):</p>
+      <input type="text" class="input-field" id="dirSeriesTitle" placeholder="Series / Movie Title" style="margin-bottom:8px">
+      <textarea class="input-field" id="dirSeriesContext" rows="3" placeholder="Characters, location, visual style..." style="margin-bottom:10px;resize:vertical"></textarea>
+      <button class="btn accent" onclick="startDirectorProduction()"><i class="fas fa-wand-magic-sparkles"></i> Generate Continuity Script Bible</button>
+    </div>
+    <div id="dirProductionOutput"></div>
+  </div></div>
+</div>
+
 <div class="full-panel" id="searchWebPanel">
   <div class="panel-header"><div class="panel-title"><i class="fas fa-globe"></i> Search the web</div><button class="btn ghost" onclick="closeSearchWebPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
   <div class="panel-body"><div class="panel-inner">
@@ -915,28 +929,17 @@ const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
 const ENV_GROQ_KEY = window.GROQ_API_KEY || '';
 const ENV_DEEPSEEK_KEY = window.DEEPSEEK_API_KEY || '';
 
+// EXPANDED SYSTEM PROMPT TO MATCH WORLDWIDE CHATGPT & GEMINI QUALITY STANDARDS
 const SYSTEM_PROMPT = `You are WISE KING AI — created by IBRAHIM ABDULLAHI from Nigeria (Wise King Industry). OWNER: Oga Ibrahim 🇳🇬.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎯 RESPONSE STYLE (MANDATORY — like ChatGPT)
+🎯 WORLD-CLASS RESPONSE STANDARD (MANDATORY)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Reply QUICKLY — no long preamble, no "Sure", no "Of course"
-• Use CLEAN MARKDOWN: headings (##), bullet points (•), bold (**key**), tables when useful
-• Structure answers as: **Short direct answer first** → then **details, tips, examples**
-• When giving instructions, use STEP 1, STEP 2, STEP 3
-• When listing options, use a clean bullet list or table
-• End with a **💡 Tip:** or **⚠️ Note:** when genuinely helpful
-• Never over-explain. Never pad. Deliver value instantly.
-• Match the user's language: Hausa, English, or natural code-mix
-•═════════════════════════════════════════
-✨ WISE KING AI — WRITING STANDARD ✨
-═════════════════════════════════════════
-ALWAYS write in this CLEAR, PROFESSIONAL STYLE:
-✅ USE BIG BOLD HEADINGS
-✅ USE CHECKMARKS & CLEAN LISTS
-✅ WRITE EVERYTHING LIKE A PRO
-✅ KEEP IT BEAUTIFUL & NATURAL (Hausa + English mix)
-✅ End video prompts and creative responses with proper completion tags: " — Good Introduction of Next Scene or Any Ideas.,✅📝🎖🌍"
+• Reply instantly with zero delay.
+• Structure answers with **Big Bold Headings**, **Checkmarks (✅)**, and **Clean Bullet Points**.
+• Provide immediate direct solutions first, followed by professional tips, code snippets, or film production notes.
+• Mix Hausa + English naturally (e.g., "Ranka ya dade, here is your breakdown...", "Wallahi, this code is blazing fast.").
+• Ensure all creative prompts (scripts, cartoons, characters, animals, and worldwide scenarios) are fully compliant, cinematic, high-fidelity, and end with: " — Good Introduction of Next Scene or Any Ideas.,✅📝🎖🌍"
 `;
 
 const AI_PROVIDERS = [
@@ -1019,6 +1022,7 @@ let searchMatches = [];
 let searchCurrentIdx = -1;
 let thinkMode = false;
 let searchMode = false;
+let promptWizardMode = false;
 let voiceMode = false;
 let holdToSpeakRecognition = null;
 let isHolding = false;
@@ -1041,6 +1045,7 @@ function loadTheme() {
 
 function toggleThinkMode() { thinkMode = !thinkMode; document.getElementById('chipThink').classList.toggle('active', thinkMode); showToast(thinkMode ? '🧠 Deep thinking ON' : '🧠 OFF'); }
 function toggleSearchMode() { searchMode = !searchMode; document.getElementById('chipSearch').classList.toggle('active', searchMode); showToast(searchMode ? '🌐 Search ON' : '🌐 OFF'); }
+function togglePromptWizard() { promptWizardMode = !promptWizardMode; document.getElementById('chipWizard').classList.toggle('active', promptWizardMode); showToast(promptWizardMode ? '🪄 Prompt Wizard ON (Hyper-Detailed Mode)' : '🪄 OFF'); }
 function toggleVoiceMode() { voiceMode = !voiceMode; const box = document.getElementById('gkInputBox'); if (voiceMode) box.classList.add('voice-mode'); else { box.classList.remove('voice-mode'); document.getElementById('messageInput').focus(); } }
 function initHoldToSpeak() {
   const pill = document.getElementById('gkHoldPill');
@@ -1174,7 +1179,6 @@ function confirmDeleteChat() {
   saveChats(); renderMessages(); closeModal('deleteChatModal'); deletingChatId = null; showToast('🗑️ Deleted');
 }
 
-// RESTORED FULL SHARE OPTIONS FOR RECENT CHATS & MESSAGES
 function shareCurrentChat() { 
   const chat = chats.find(c => c.id === popupMenuChatId); 
   if (!chat) return; 
@@ -1206,12 +1210,20 @@ function shareTo(platform) {
   else if (platform === 'telegram') url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encoded}`;
   else if (platform === 'x') url = `https://twitter.com/intent/tweet?text=${encoded}`;
   else if (platform === 'instagram' || platform === 'tiktok') {
-    wkCopyToClipboard(textToShare);
-    showToast(`✅ Copied for ${platform}! Paste it in your app.`);
+    wkCopyToClipboard(textToShare + "\n\n#WiseKingAI #OgaIbrahim #Kano #Afrobeat #NigeriaFilm");
+    showToast(`✅ Copied for ${platform} with Hausa/English hashtags!`);
     closeSharePopup();
     return;
   }
   if (url) window.open(url, '_blank');
+  closeSharePopup();
+}
+
+function copyCaptionWithHashtags() {
+  let textToShare = currentShareTarget ? (currentShareTarget.text || currentShareTarget.title || "Wise King AI Masterpiece") : "Wise King AI Masterpiece";
+  const fullCaption = `${textToShare}\n\n🎬 Created with Wise King AI by Oga Ibrahim 🇳🇬\n#WiseKingAI #KanoFilms #Afrobeat #NigeriaCreatives #AIVideo #Hausa #Entertainment`;
+  wkCopyToClipboard(fullCaption);
+  showToast('📋 Copied caption with hashtags!');
   closeSharePopup();
 }
 
@@ -1303,6 +1315,24 @@ function renderProjects() { const list = document.getElementById('libraryPanelRe
 function createNewProject() { const name = prompt('Project name:'); if (!name) return; const desc = prompt('Short description:') || ''; projects.unshift({ id: 'proj-' + Date.now(), name: name.trim(), description: desc.trim(), status: 'active', createdAt: Date.now(), updatedAt: Date.now() }); saveProjects(); renderProjects(); showToast('✅ Created'); }
 function openProject(id) { const p = projects.find(x => x.id === id); if (!p) return; const s = prompt(`Project: ${p.name}\n\nChange status? (active/done/paused)`, p.status); if (s && ['active','done','paused'].includes(s.toLowerCase())) { p.status = s.toLowerCase(); p.updatedAt = Date.now(); saveProjects(); renderProjects(); } }
 
+// Director's Room functions
+function openDirectorsRoom() { document.getElementById('directorsRoomPanel').classList.add('show'); closeSidebar(); }
+function closeDirectorsRoom() { document.getElementById('directorsRoomPanel').classList.remove('show'); }
+async function startDirectorProduction() {
+  const title = document.getElementById('dirSeriesTitle').value.trim();
+  const context = document.getElementById('dirSeriesContext').value.trim();
+  const output = document.getElementById('dirProductionOutput');
+  if (!title) return showToast('Enter series title');
+  output.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Building continuity script bible...</div>`;
+  const prompt = `Create a multi-scene cinematic production script bible for "${title}". Context: ${context}. Include Scene 1 and Scene 2 with Camera Angle, Visual Action, Character Dialogue, and proper completion tags.`;
+  const res = await sendMessageWithFallback(prompt);
+  if (res.success) {
+    output.innerHTML = `<div class="result-card"><h4><i class="fas fa-check-circle"></i> Production Bible Ready</h4><div class="md">${renderMarkdown(res.reply)}</div></div>`;
+  } else {
+    output.innerHTML = `<div class="result-card"><p>⚠️ Generation failed.</p></div>`;
+  }
+}
+
 function exportData() { const data = { version: 1, exportedAt: new Date().toISOString(), chats, vault: vaultMemories, memory: crossChatMemory, library, projects, user: { name: localStorage.getItem('wk_user_name'), email: localStorage.getItem('wk_user_email') } }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `wiseking-backup-${new Date().toISOString().slice(0,10)}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); showToast('✅ Exported'); }
 function importData(e) { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (ev) => { try { const data = JSON.parse(ev.target.result); if (Array.isArray(data.chats)) { chats = data.chats; saveChats(); renderChats(); renderMessages(); } if (Array.isArray(data.vault)) { vaultMemories = data.vault; saveVault(); renderVault(); } if (Array.isArray(data.memory)) { crossChatMemory = data.memory; saveCrossChatMemory(); } if (Array.isArray(data.library)) { library = data.library; localStorage.setItem('wk_library', JSON.stringify(library)); } if (Array.isArray(data.projects)) { projects = data.projects; saveProjects(); } showToast('✅ Imported'); closeModal('settingsModal'); } catch(err) { showToast('⚠️ Invalid file'); } }; reader.readAsText(file); e.target.value = ''; }
 
@@ -1322,8 +1352,11 @@ function updateReplicateStatus() { const el = document.getElementById('replicate
 function sendMessage(textOverride) {
   if (isSending) return;
   const input = document.getElementById('messageInput');
-  const text = (textOverride !== undefined ? String(textOverride) : input.value).trim();
+  let text = (textOverride !== undefined ? String(textOverride) : input.value).trim();
   if (!text && !uploadedImages.length) return;
+  if (promptWizardMode && text) {
+    text = `[Prompt Wizard Enhanced]: ${text}, cinematic lighting, photorealistic, ultra-detailed, professional quality, high fidelity, 8k resolution`;
+  }
   let chat = chats.find(c => c.id === activeChatId);
   if (!chat) { createNewChat(); chat = chats.find(c => c.id === activeChatId); }
   if (chat.title === 'New chat' && text) chat.title = text.slice(0,32);
@@ -1332,6 +1365,7 @@ function sendMessage(textOverride) {
   chat.messages.push(userMsg); input.value = ''; input.style.height = 'auto';
   if (thinkMode) { thinkMode = false; document.getElementById('chipThink').classList.remove('active'); }
   if (searchMode) { searchMode = false; document.getElementById('chipSearch').classList.remove('active'); }
+  if (promptWizardMode) { promptWizardMode = false; document.getElementById('chipWizard').classList.remove('active'); }
   saveChats(); renderMessages();
   if (imgs.length > 0 && isBgRemoval(text)) { handleBgRemovalInChat(chat, imgs[0]); return; }
   if (isImageRequest(text) && imgs.length === 0) { const prompt = extractImagePrompt(text); generateImageInChat(chat, prompt, null); return; }
@@ -1398,15 +1432,12 @@ function handleDislikeMessage(idx) { const chat = chats.find(c => c.id === activ
 function submitDislikeFeedback() { const text = document.getElementById('dislikeFeedbackInput').value.trim(); closeModal('dislikeModal'); if (text) console.log('[WiseKing] Dislike feedback:', text); showToast('👎 Noted. Thank you!'); }
 function handleRegenerateMessage(chatId, msgIdx) { const chat = chats.find(c => c.id === chatId); if (!chat || isSending) return; let userMsgIdx = -1; for (let i = msgIdx - 1; i >= 0; i--) { if (chat.messages[i].role === 'user') { userMsgIdx = i; break; } } if (userMsgIdx === -1) return; const userMsg = chat.messages[userMsgIdx]; chat.messages.splice(msgIdx, 1); saveChats(); renderMessages(); triggerResponse(chat, userMsg); }
 function handleCopyMessage(idx) { const chat = chats.find(c => c.id === activeChatId); if (!chat || !chat.messages[idx]) return; const text = chat.messages[idx].content || ''; if (!text) return showToast('Nothing to copy'); wkCopyToClipboard(text).then(ok => showToast(ok ? '📋 Copied!' : '⚠️ Copy failed')); }
-
-// RESTORED SHARE MESSAGE FULL LIST
 function handleShareMessage(idx) { 
   const chat = chats.find(c => c.id === activeChatId); 
   if (!chat || !chat.messages[idx]) return; 
   currentShareTarget = { type: 'message', idx, text: chat.messages[idx].content || '' }; 
   openSharePopup(); 
 }
-
 function handleEditMessage(idx) { const chat = chats.find(c => c.id === activeChatId); if (!chat || !chat.messages[idx]) return; const msg = chat.messages[idx]; if (msg.role !== 'user') return; editingMessageIdx = idx; document.getElementById('editMessageInput').value = msg.content || ''; document.getElementById('editMessageModal').classList.add('show'); setTimeout(() => document.getElementById('editMessageInput').focus(), 100); }
 function handleDeleteMessage(idx) { deletingMessageIdx = idx; document.getElementById('deleteMessageModal').classList.add('show'); }
 function saveEditedMessage() { if (editingMessageIdx < 0) return; const chat = chats.find(c => c.id === activeChatId); if (!chat) return; const newText = document.getElementById('editMessageInput').value.trim(); if (!newText) return showToast('Message required'); const msg = chat.messages[editingMessageIdx]; msg.content = newText; msg.edited = true; if (chat.messages[editingMessageIdx + 1] && chat.messages[editingMessageIdx + 1].role === 'ai') { chat.messages.splice(editingMessageIdx + 1, 1); } closeModal('editMessageModal'); editingMessageIdx = -1; saveChats(); renderMessages(); triggerResponse(chat, msg); }
@@ -1422,12 +1453,10 @@ function extractImagePrompt(text) { let t = text.trim(); t = t.replace(/^(please
 function buildEnhancedPrompt(rawPrompt, mode) { const p = String(rawPrompt || '').trim(); if (mode === 'logo') { return `Professional minimalist vector logo of ${p}, flat design, clean background, branding, corporate identity, high-quality vector, sharp edges, centered composition, modern typography, scalable, professional studio quality`; } return `${p}, hyper-realistic, 8k resolution, photorealistic, professional photography, cinematic lighting, ultra-detailed, sharp focus, natural skin texture, realistic lighting, depth of field, shot on DSLR, award-winning photography, high fidelity`; }
 
 function buildImageUrl(prompt, seed) { const enhanced = prompt + ', hyper-realistic, 8k, photorealistic, professional photography, cinematic lighting'; const s = seed || Math.floor(Math.random() * 1000000); return `https://image.pollinations.ai/prompt/${encodeURIComponent(enhanced)}?width=1024&height=1024&seed=${s}&nologo=true&enhance=true`; }
-async function replicateRun(modelOwner, modelName, input, apiKey) { const createRes = await fetch(`https://api.replicate.com/v1/models/${modelOwner}/${modelName}/predictions`, { method: 'POST', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ input }) }); if (!createRes.ok) throw new Error('Replicate create failed'); let pred = await createRes.json(); let tries = 0; while (pred.status !== 'succeeded' && pred.status !== 'failed' && pred.status !== 'canceled' && tries < 150) { await new Promise(r => setTimeout(r, 2000)); try { const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${pred.id}`, { headers: { 'Authorization': `Bearer ${apiKey}` } }); if (pollRes.ok) pred = await pollRes.json(); } catch(e) {} tries++; } if (pred.status !== 'succeeded') throw new Error('Replicate failed'); const out = pred.output; if (Array.isArray(out)) return out[out.length - 1]; if (typeof out === 'string') return out; throw new Error('Replicate output error'); }
 async function generateImageInChat(chat, prompt, sourceImageDataUrl) {
-  const repKey = (localStorage.getItem('wk_replicate_key') || '').trim();
   const isLogo = detectLogoIntent(prompt);
   const enhancedPrompt = buildEnhancedPrompt(prompt, isLogo ? 'logo' : 'photo');
-  const placeholder = { role:'ai', content: repKey ? '🎨 Generating...' : '🎨 Generating image...', type:'image-loading', createdAt: Date.now() };
+  const placeholder = { role:'ai', content: '🎨 Generating hyper-realistic image...', type:'image-loading', createdAt: Date.now() };
   chat.messages.push(placeholder); saveChats(); renderMessages();
   try {
     let imageUrl = buildImageUrl(enhancedPrompt);
@@ -1453,7 +1482,7 @@ async function generateImageFromPanel() {
     saveToLibrary({ type:'image', prompt, url, createdAt: Date.now() });
   } catch (err) { results.innerHTML = `<div class="result-card"><p>⚠️ Failed</p></div>`; }
 }
-async function generateVideoFromPanel() { const prompt = document.getElementById('videosPromptInput').value.trim(); if (!prompt) return showToast('Describe the video'); showToast('Video generation ready'); }
+async function generateVideoFromPanel() { showToast('Video generation ready'); }
 
 async function triggerResponse(chat, userMsg) {
   isSending = true;
