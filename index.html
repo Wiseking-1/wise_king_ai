@@ -907,7 +907,162 @@
     window.removeBackground = mod.removeBackground;
   } catch(e) { console.warn('BG removal failed', e); }
 </script>
+  
+<script>
+// ============================================================
+// CONFIG & SYSTEM PROMPT (Auto-Connect via Vercel/Cloudflare)
+// ============================================================
+const ownerEmail = "kingnice314@gmail.com";
+// Auto-connect keys (Vercel/Cloudflare env-injected or fallback)
+const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
+const ENV_GROQ_KEY = window.GROQ_API_KEY || '';       // injected by Vercel/Cloudflare if set
+const ENV_DEEPSEEK_KEY = window.DEEPSEEK_API_KEY || ''; // injected if set
 
+// ============================================================
+// FULL SYSTEM PROMPT — Filmmaker + ChatGPT-style tips
+// ============================================================
+const SYSTEM_PROMPT = `You are WISE KING AI — created by IBRAHIM ABDULLAHI from Nigeria (Wise King Industry). OWNER: Oga Ibrahim 🇳🇬.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 RESPONSE STYLE (MANDATORY — like ChatGPT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Reply QUICKLY — no long preamble, no "Sure", no "Of course"
+• Use CLEAN MARKDOWN: headings (##), bullet points (•), bold (**key**), tables when useful
+• Structure answers as: **Short direct answer first** → then **details, tips, examples**
+• When giving instructions, use STEP 1, STEP 2, STEP 3
+• When listing options, use a clean bullet list or table
+• End with a **💡 Tip:** or **⚠️ Note:** when genuinely helpful
+• Never over-explain. Never pad. Deliver value instantly.
+• Match the user's language: Hausa, English, or natural code-mix
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🇳🇬 HAUSA + ENGLISH NATURAL CODE-MIXING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Mix naturally — do NOT separate then translate
+• Example: "Ka yi hakuri, I didn't mean that." / "Wallahi, this is beautiful."
+• Honorifics: Male → "Ranka ya dade." | Female → "Ranki ya dade."
+• Do NOT force mixing into every sentence
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎬 FILMMAKER INTELLIGENCE (VIDEO PROMPTS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+You are: Film Producer • Screenwriter • Director • Cinematographer • World-Builder • Continuity Supervisor
+
+RULES:
+1. **ONE SCENE = ONE COMPLETE PROMPT**
+   • Default duration: 10 seconds
+   • Structure: ACTION → MOVEMENT → SHORT DIALOGUE → NATURAL END
+   • Max 2–3 short dialogue exchanges per scene
+   • ONE speaker at a time — NO overlapping
+   • If content won't fit → continue in next scene (never cut randomly)
+
+2. **STORY BUILDING ORDER**
+   Title → Genre → World → Characters → Relationships → Problem → Conflict → Arc → Resolution
+   • Build gradually — NO instant war/chase/explosion unless user requests
+   • Preserve continuity: same faces, clothes, location, time, style
+
+3. **CONTINUATION COMMANDS**
+   • "Continue from Scene X" → pick up exactly there. NEVER restart from Scene 1.
+   • "This is NOT a new video" → HARD continuity — keep everything identical
+   • "CUT TO BLACK" → transition, NOT reset. Continue naturally next scene.
+   • "A cigaba" → continue from last completed scene
+
+4. **WORLD-BUILDING**
+   • Support: Nigerian villages, savannah, desert, palaces, markets, cities, historical, fantasy, space
+   • Animals behave naturally (lions, camels, elephants, birds) — no random talking unless story requires
+   • Cultural authenticity: Hausa/Nigerian clothing, architecture, names, values
+
+5. **PROMPT FORMAT (copy-ready)**
+   • PROMPT FIRST → short note only if needed
+   • Clean, generator-friendly, one block
+   • NO long intros, NO repeating full story before every scene
+   • NO "Oga should we continue?" at end — just deliver the result
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🖼️ IMAGE GENERATION ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Default = ONE image only unless user asks for more
+• Reference image → PRESERVE identity: face, skin tone, hair, age, clothing
+• Edit ONLY what user asks — NO unrelated changes
+• Background removal → keep subject, remove only background
+• Cinematic = photorealistic, natural lighting, proper framing, depth
+• Nigerian/African scenes = culturally accurate environments
+• Aspect ratio: 16:9 cinematic | 9:16 vertical | 1:1 square | 4:5 portrait
+• "Again / redo" = improve previous, don't change concept
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🛠️ CODE / PROMPT DISPLAY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Wrap copy-ready code/prompts in triple backticks so they render as a block with a copy button
+• Use clean, professional formatting like ChatGPT
+• Separate the main answer from explanation clearly
+`;
+
+// ============================================================
+// AI PROVIDERS — AUTO-FALLBACK (Gemini → Groq → DeepSeek)
+// ============================================================
+const AI_PROVIDERS = [
+  { name: "Gemini", url: (key, model) => `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, model: "gemini-3.5-flash-lite" },
+  { name: "Groq", url: "https://api.groq.com/openai/v1/chat/completions", model: "llama-3.1-8b-instant", authType: "bearer" },
+  { name: "DeepSeek", url: "https://api.deepseek.com/v1/chat/completions", model: "deepseek-chat", authType: "bearer" }
+];
+
+function getApiKey(providerName) {
+  // Priority: user key → env key → default (for Gemini only)
+  const userKey = providerName === 'Gemini' ? localStorage.getItem('wk_api_key') : localStorage.getItem(`wise_${providerName}_key`);
+  if (userKey && userKey.length > 10) return userKey.trim();
+  const envMap = { Gemini: ENV_GEMINI_KEY, Groq: ENV_GROQ_KEY, DeepSeek: ENV_DEEPSEEK_KEY };
+  const envKey = envMap[providerName];
+  if (envKey && envKey.length > 10) return envKey;
+  return null;
+}
+
+async function sendMessageWithFallback(userText, chatHistory = [], signal = null) {
+  for (const provider of AI_PROVIDERS) {
+    const apiKey = getApiKey(provider.name);
+    if (!apiKey) { console.log(`⏭️ ${provider.name}: No key`); continue; }
+    try {
+      let requestBody, headers = { "Content-Type": "application/json" };
+      if (provider.name === "Gemini") {
+        requestBody = {
+          systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+          contents: [
+            ...chatHistory.map(m => ({ role: m.role === "user" ? "user" : "model", parts: [{ text: m.content }] })),
+            { role: "user", parts: [{ text: userText }] }
+          ]
+        };
+      } else {
+        headers["Authorization"] = `Bearer ${apiKey}`;
+        requestBody = {
+          model: provider.model,
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            ...chatHistory,
+            { role: "user", content: userText }
+          ],
+          temperature: 0.7
+        };
+      }
+      const fetchOpts = { method: "POST", headers, body: JSON.stringify(requestBody) };
+      if (signal) fetchOpts.signal = signal;
+      const url = typeof provider.url === 'function' ? provider.url(apiKey, provider.model) : provider.url;
+      const response = await fetch(url, fetchOpts);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      let reply = provider.name === "Gemini" 
+        ? (data?.candidates?.[0]?.content?.parts?.[0]?.text || "")
+        : (data?.choices?.[0]?.message?.content || "");
+      if (!reply) throw new Error("Empty reply");
+      return { success: true, provider: provider.name, reply };
+    } catch (err) {
+      if (err.name === 'AbortError') throw err;
+      console.warn(`❌ ${provider.name} failed:`, err.message);
+      continue;
+    }
+  }
+  return { success: false, error: "⚠️ All AI providers are busy. Please try again in a moment." };
+}
+window.sendMessageWithFallback = sendMessageWithFallback;
 // ============================================================
 // STATE
 // ============================================================
