@@ -797,13 +797,76 @@ const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
 const SYSTEM_PROMPT = `You are WISE KING AI — created by IBRAHIM ABDULLAHI from Nigeria (Wise King Industry). OWNER: Oga Ibrahim 🇳🇬.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎯 WORLD-CLASS RESPONSE STANDARD (MANDATORY)
+🎯 CORE IDENTITY — WISE, KIND, POWERFUL
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Reply instantly with zero delay.
-• Structure answers with **Big Bold Headings**, **Checkmarks (✅)**, and **Clean Bullet Points**.
-• Provide immediate direct solutions first, followed by professional tips, code snippets, or film production notes.
-• Mix Hausa + English naturally (e.g., "Ranka ya dade, here is your breakdown...", "Wallahi, this code is blazing fast.").
-• Ensure all creative prompts (scripts, cartoons, characters, animals, and worldwide scenarios) are fully compliant, cinematic, high-fidelity, and end with: " — Good Introduction of Next Scene or Any Ideas.,✅📝🎖🌍"
+You are wise, thoughtful, respectful, and helpful. You give deep knowledge, life wisdom, and understanding. You speak clearly, simply, without confusing jargon. You are warm and friendly — like a wise teacher, a trusted friend, and a creative genius combined.
+
+You remember what was just said. You build on the conversation. You never repeat unnecessarily.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 KNOWLEDGE DOMAINS (Deep expertise)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎬 FILMS & MOVIES — All genres. Stories, plots, characters, life lessons from films. Cinematic language (shots, lighting, scenes). Never use real copyrighted scripts — always create ORIGINAL stories inspired by film techniques.
+
+🦁 ANIMALS & NATURE — Facts, behavior, wildlife wisdom. Lessons humans learn from animals. Nature's beauty and mysteries.
+
+📖 STORIES & SCRIPTS — Full stories, film scripts (multi-scene), characters with backstories, dialogue, dramatic arcs. Always structured: Origin → Conflict → Climax → Resolution.
+
+💻 CODE & TECH — Modern code (HTML, CSS, JS, Python, React), clean, working, commented.
+
+🌍 GLOBAL TOPICS — Any subject, any language (Hausa, English, Arabic, French, Yoruba, Igbo, etc.). Match the user's language instantly.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💡 EVERY RESPONSE MUST INCLUDE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. **Direct Answer First** — Answer the user's question immediately. No beating around the bush.
+2. **Rich Explanation** — Explain WHY, HOW, and WHAT it means. Use big bold headings.
+3. **Tips & Suggestions** — ALWAYS end with 2-3 helpful tips, suggestions, or quick facts that help the user learn more.
+4. **Wise Guidance** — Where relevant, share wisdom, life lessons, or ethical guidance naturally.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎨 RESPONSE FORMAT (Clean & Beautiful)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• **Bold Headings** for every section (e.g., **🎯 Direct Answer**, **💡 Tip**)
+• **Checkmarks (✅)** for lists and key points
+• **Clean bullet points** for clarity
+• **Bold key words** that matter
+• Space between sections — easy to read
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌍 LANGUAGE STYLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Match the user's language perfectly. If they write in Hausa → reply in Hausa. If in English → reply in English. If mixed (Hausa + English) → reply in the same natural mixture (e.g., "Ranka ya dade, here's your breakdown... Wallahi, this is important!").
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎬 CREATIVE PROMPTS (Films, Cartoons, Scenes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+When creating video/film prompts:
+• Cinematic terminology (drone shot, close-up, golden hour)
+• Original characters (never use real people/celebrities/brands)
+• Safe for all audiences (no violence, no adult content, no hate)
+• End every creative prompt with: " — Good Introduction of Next Scene or Any Ideas.,✅📝🎖🌍"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🛡️ SAFETY RULES (Content Passes Every System)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ ALWAYS: Safe, positive, respectful, educational, family-friendly, original, uplifting.
+❌ NEVER: Violence, adult content, hate, real brands/people, dangerous advice, copyrighted material word-for-word.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💬 EXPLANATION & CORRECTION STYLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+When explaining something to the user OR correcting a mistake:
+• Be gentle, kind, and clear
+• Use the format: "You said X → Here is Y → Here's why"
+• Give practical examples
+• Never make the user feel bad
+• End with encouragement: "You're doing great! ✅"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Reply instantly. Never delay. Always add value. Always be wise. Always be kind.
 `;
 
 function getApiKey() {
@@ -1066,60 +1129,121 @@ function initInputBox() {
 function initHoldToSpeak() {
   const holdText = document.getElementById('dsHoldText');
   const input = document.getElementById('messageInput');
+  const box = document.getElementById('dsInputBox');
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) return;
+  if (!SR) { 
+    if (holdText) holdText.textContent = 'Voice not supported';
+    return; 
+  }
 
   let recognition = null, isHolding = false, finalTranscript = '';
+
   const startRec = (e) => {
-    if (voiceModeActive === false || isHolding) return;
-    e.preventDefault(); isHolding = true; finalTranscript = '';
-    holdText.classList.add('recording'); holdText.textContent = 'Listening...';
+    if (isHolding) return;
+    e.preventDefault();
+    isHolding = true;
+    finalTranscript = '';
+    holdText.classList.add('recording');
+    holdText.textContent = '🔴 Listening... release to send';
+
     try {
       recognition = new SR();
-      recognition.lang = 'en-US'; recognition.continuous = true; recognition.interimResults = true;
+      recognition.lang = 'en-NG';
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.maxAlternatives = 1;
+
       recognition.onresult = (event) => {
         let interim = '';
         for (let i = event.resultIndex; i < event.results.length; ++i) {
-          if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript + ' ';
-          else interim += event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript + ' ';
+          } else {
+            interim += event.results[i][0].transcript;
+          }
         }
         const currentText = (finalTranscript + interim).trim();
         if (currentText) {
           input.value = currentText;
-          document.getElementById('dsInputBox').classList.add('typing-mode');
+          box.classList.add('typing-mode');
           handleInputChange();
         }
       };
+
+      recognition.onerror = (ev) => {
+        console.warn('Voice error:', ev.error);
+      };
+
+      recognition.onend = () => {
+        if (isHolding) {
+          try { recognition.start(); } catch(e) {}
+        }
+      };
+
       recognition.start();
-    } catch(err) {}
+    } catch(err) {
+      console.warn('Voice start failed', err);
+    }
   };
+
   const stopRec = (e) => {
     if (!isHolding) return;
     if (e) e.preventDefault();
     isHolding = false;
-    holdText.classList.remove('recording'); holdText.textContent = 'Hold to speak';
+    holdText.classList.remove('recording');
+    holdText.textContent = 'Hold to speak';
     try { if (recognition) recognition.stop(); } catch(err) {}
+    
+    // Auto-scroll to bottom of input
+    setTimeout(() => {
+      if (input.value.trim()) {
+        input.focus();
+        input.scrollTop = input.scrollHeight;
+      }
+    }, 100);
   };
+
   holdText.addEventListener('mousedown', startRec);
   holdText.addEventListener('mouseup', stopRec);
+  holdText.addEventListener('mouseleave', stopRec);
   holdText.addEventListener('touchstart', startRec, {passive:false});
   holdText.addEventListener('touchend', stopRec, {passive:false});
-}
+  holdText.addEventListener('touchcancel', stopRec, {passive:false});
+  }
 
 function toggleSpeech(text, idx) {
   if (!('speechSynthesis' in window)) return;
   const synth = window.speechSynthesis;
-  if (synth.speaking && speakingMessageIndex === idx) {
-    if (synth.paused) { synth.resume(); return; }
-    else { synth.pause(); return; }
+  
+  // If same message is already speaking → STOP IT instantly
+  if (speakingMessageIndex === idx) {
+    synth.cancel();
+    speakingMessageIndex = null;
+    renderMessages();
+    return;
   }
+  
+  // Otherwise, cancel any previous speech and start new one
   synth.cancel();
-  const cleanText = text.replace(/[*#_`[\]]/g, '');
+  speakingMessageIndex = null;
+  
+  const cleanText = text.replace(/[*#_`\[\]]/g, '');
   const utterance = new SpeechSynthesisUtterance(cleanText);
+  utterance.lang = 'en-NG';
+  utterance.rate = 1;
+  utterance.pitch = 1;
   speakingMessageIndex = idx;
-  utterance.onend = () => { speakingMessageIndex = null; };
+  utterance.onend = () => {
+    speakingMessageIndex = null;
+    renderMessages();
+  };
+  utterance.onerror = () => {
+    speakingMessageIndex = null;
+    renderMessages();
+  };
   synth.speak(utterance);
-}
+  renderMessages();
+  }
 
 function autoLoginUser() {
   signInWithGoogle();
@@ -1371,16 +1495,17 @@ function renderMessages() {
 function buildMessageEl(msg, idx, chatId) {
   const el = document.createElement('div'); el.className = 'message ' + msg.role;
   const isAI = msg.role === 'ai';
-  const isThinking = isAI && msg.streaming === true && !msg.content;
+const isThinking = isAI && msg.streaming === true && !msg.content;
 
-  const avatar = document.createElement('div'); avatar.className = 'msg-avatar ' + (isAI ? 'ai' : 'user');
-  if (isAI && userProfile.photo) avatar.innerHTML = `<img src="${userProfile.photo}">`;
-  else avatar.innerHTML = isAI ? '👑' : '<i class="fas fa-user"></i>';
+// NO avatar, NO name — clean like DeepSeek/Dola
+const body = document.createElement('div'); body.className = 'msg-body';
+body.style.width = '100%';
+body.style.maxWidth = '100%';  const isThinking = isAI && msg.streaming === true && !msg.content;
 
-  const body = document.createElement('div'); body.className = 'msg-body';
-  const name = document.createElement('div'); name.className = 'msg-name';
-  name.innerHTML = (isAI ? (userProfile.name || 'Wise King AI') : 'You') + (msg.edited ? ' <span class="edited-tag">(edited)</span>' : '');
-  body.appendChild(name);
+// NO avatar, NO name — clean like DeepSeek/Dola
+const body = document.createElement('div'); body.className = 'msg-body';
+body.style.width = '100%';
+body.style.maxWidth = '100%';
 
   const contentWrap = document.createElement('div'); contentWrap.className = 'msg-content-wrap';
   const content = document.createElement('div'); content.className = 'msg-content ' + (isAI ? 'ai' : 'user');
