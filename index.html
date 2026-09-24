@@ -932,6 +932,7 @@ function togglePromptWizard() {
 }
 
 // ========== INPUT BOX ==========
+  
 function toggleMicKeyboardMode() {
   const box = document.getElementById('dsInputBox');
   const icon = document.getElementById('micKeyboardIcon');
@@ -1076,7 +1077,6 @@ function initHoldToSpeak() {
 }
 
 // ========== SPEECH OUTPUT ==========
-  
 function toggleSpeech(text, idx) {
   if (!('speechSynthesis' in window)) return;
   const synth = window.speechSynthesis;
