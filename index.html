@@ -451,8 +451,8 @@
             <button class="pm-item" onclick="addAnotherAccount();"><i class="fas fa-user-plus"></i> Add Account</button>
             <button class="pm-item" onclick="switchAccount();"><i class="fas fa-right-left"></i> Switch Account</button>
             <button class="pm-item" onclick="window.open('https://myaccount.google.com/', '_blank'); closeTopProfileMenu();"><i class="fas fa-external-link-alt"></i> Manage Account</button>
-            <div class="pm-divider"></div>
-            <button class="pm-item danger" onclick="askSignOut();"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+           <div class="pm-divider"></div>
+           <button class="pm-item danger" onclick="askSignOut();"><i class="fas fa-sign-out-alt"></i> Sign Out</button>  
           </div>
         </div>
       </div>
@@ -911,22 +911,141 @@
     setTimeout(() => signInWithGoogle(), 80);
   };
 
-  // ============ SIGN OUT — CONFIRMATION FIRST ============
-  window.askSignOut = function() {
-    closeTopProfileMenu();
-    document.getElementById('signOutModal').classList.add('show');
-  };
-  window.confirmSignOut = function() {
-    document.getElementById('signOutModal').classList.remove('show');
-    showToast('Signing out... 👋');
-    signOut(auth).then(() => {
-      ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_library','wk_projects'].forEach(k => localStorage.removeItem(k));
-      try { sessionStorage.clear(); } catch(e) {}
-      lastUid = null;
-      showLoginScreen();
-    }).catch(() => { location.reload(); });
-  };
-  window.signOutUser = window.confirmSignOut;
+// ============ SIGN OUT — CONFIRMATION FIRST ============
+window.askSignOut = function() {
+  closeTopProfileMenu();
+  document.getElementById('signOutModal').classList.add('show');
+};
+
+window.confirmSignOut = function() {
+  // Close the modal immediately
+  document.getElementById('signOutModal').classList.remove('show');
+  showToast('Signing out... 👋');
+
+  // Sign out from Firebase
+  signOut(auth).then(() => {
+    // Clear ALL local data
+    ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_library','wk_projects'].forEach(k => localStorage.removeItem(k));
+    try { sessionStorage.clear(); } catch(e) {}
+    lastUid = null;
+
+    // ✅ IMMEDIATELY show login screen (no waiting, no reload)
+    forceShowLoginScreen();
+
+  }).catch((err) => {
+    console.warn('Sign out error:', err);
+    // Even if Firebase errors, show login screen
+    forceShowLoginScreen();
+  });
+};
+
+window.signOutUser = window.confirmSignOut;
+
+// ✅ Force show login screen INSTANTLY
+function forceShowLoginScreen() {
+  const ls = document.getElementById('loginScreen');
+  const ma = document.getElementById('mainApp');
+
+  if (ma) {
+    ma.style.opacity = '0';
+    ma.style.display = 'none';
+  }
+  if (ls) {
+    ls.classList.remove('hidden');
+    ls.style.display = 'flex';
+    ls.style.opacity = '1';
+    ls.style.pointerEvents = 'auto';
+  }
+
+  // Clear form fields
+  ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
+  // Clear errors
+  document.getElementById('authError')?.classList.remove('show');
+  document.getElementById('authSuccess')?.classList.remove('show');
+
+  // Reset chat state
+  try { chats = []; activeChatId = null; } catch(e) {}
+  try { renderChats(); renderMessages(); } catch(e) {}
+
+  // Switch to Sign In tab
+  try { switchAuthTab('signin'); } catch(e) {}
+
+  // Scroll to top
+  window.scrollTo(0, 0);
+  console.log('👋 Login screen shown instantly');
+}
+window.forceShowLoginScreen = forceShowLoginScreen; // ============ SIGN OUT — CONFIRMATION FIRST ============
+window.askSignOut = function() {
+  closeTopProfileMenu();
+  document.getElementById('signOutModal').classList.add('show');
+};
+
+window.confirmSignOut = function() {
+  // Close the modal immediately
+  document.getElementById('signOutModal').classList.remove('show');
+  showToast('Signing out... 👋');
+
+  // Sign out from Firebase
+  signOut(auth).then(() => {
+    // Clear ALL local data
+    ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_library','wk_projects'].forEach(k => localStorage.removeItem(k));
+    try { sessionStorage.clear(); } catch(e) {}
+    lastUid = null;
+
+    // ✅ IMMEDIATELY show login screen (no waiting, no reload)
+    forceShowLoginScreen();
+
+  }).catch((err) => {
+    console.warn('Sign out error:', err);
+    // Even if Firebase errors, show login screen
+    forceShowLoginScreen();
+  });
+};
+
+window.signOutUser = window.confirmSignOut;
+
+// ✅ Force show login screen INSTANTLY
+function forceShowLoginScreen() {
+  const ls = document.getElementById('loginScreen');
+  const ma = document.getElementById('mainApp');
+
+  if (ma) {
+    ma.style.opacity = '0';
+    ma.style.display = 'none';
+  }
+  if (ls) {
+    ls.classList.remove('hidden');
+    ls.style.display = 'flex';
+    ls.style.opacity = '1';
+    ls.style.pointerEvents = 'auto';
+  }
+
+  // Clear form fields
+  ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
+  // Clear errors
+  document.getElementById('authError')?.classList.remove('show');
+  document.getElementById('authSuccess')?.classList.remove('show');
+
+  // Reset chat state
+  try { chats = []; activeChatId = null; } catch(e) {}
+  try { renderChats(); renderMessages(); } catch(e) {}
+
+  // Switch to Sign In tab
+  try { switchAuthTab('signin'); } catch(e) {}
+
+  // Scroll to top
+  window.scrollTo(0, 0);
+  console.log('👋 Login screen shown instantly');
+}
+window.forceShowLoginScreen = forceShowLoginScreen;
 </script>
 
 <script>
@@ -973,7 +1092,7 @@ ALWAYS format your answers like this 👇
 ✅ **Space Between Sections** — never write a wall of text 📏
 
 ✅ **Use Emojis** at the start of headings and important lines
-   Favorites: 🎯 💡 ✅ ⚠️ 📌 🌟 🏆 📝 🔥 👑 🇳🇬 💛 🤲 🌙 ✨ 🎨 🚀 🧠 👉 😉 😂 🙏 🤗 🌞 🌴 🏄 🎇 🙉 👰 💪 💭 💌 💥b💍 📿 🐅 🐂 🐄 🐖 🐺 🐵 🐈 🐢 🕊 🐧 🐤 🐓 🐋 🐬 🐠 💐 🌹 🌻 🌏 🎨 🚨 ⛅ 🌦 🌩 ⚡ 🎖 🏆 🏅 🎶 🎙 💰 📚 📌 📍 📎 🔐 🔓 😎 👍 👏 💌 🍹 🍭 ☕ 🎂 🚅 🚵 ♥ 🔉 💻 ⌨ 🖥 🎬 📸 💵 📝 📂 ✒ 📭 🔒 💯 and lots more..
+   Favorites: 🎯 💡 ✅ ⚠️ 📌 🌟 🏆 📝 🔥 👑 🇳🇬 💛 🤲 🌙 ✨ 🎨 🚀 ☝ 👊 🤘 🍉🍞🍅🍒🍎🍌🍝🍖🌐🏝🏖🏙🏘🌋🏔🕌🕋🏫💒🏰🏥🏤🏣🏢🗾🗽🗼💒🏦♨🌇🎢🌆🚌🚣🚲🚦🚜🛥✈💺🚀🚿🛀🚁🛌🛏🚽⏰⏳⌛🌨🌦🌝🌞☀🌪🔥🌊❄⛄🎈🎎🎗🏂👈👁👀🗯🗨💫💬💤💞💝💦💨💥👝👜🎒👒👡🎓👒🎀🎊🎏✨🎉🏀🏋🏊🏂🚴🎳♥🏒🕹🚵🏎🏍📲📞🖥💽📠🖲🎻📻🔎🔍📕📖💡📡🔭🔬📼📹📺🔖💹📄📧🗞🖍📝🗑🛠🔑🔮🚻🏁🚸🚫🚱🚭☣↪↕➡❌▶⏩⏭⏯◀🔀📴📵🔆🔞🔢🆎🆘🔺🔴🔵⚪💠🔻⚫ 🧠 👉 😉 😂 🙏 🤗 🌞 🌴 🏄 🎇 🙉 👰 💪 💭 💌 💥b💍 📿 🐅 🐂 🐄 🐖 🐺 🐵 🐈 🐢 🕊 🐧 🐤 🐓 🐋 🐬 🐠 💐 🌹 🌻 🌏 🎨 🚨 ⛅ 🌦 🌩 ⚡ 🎖 🏆 🏅 🎶 🎙 💰 📚 📌 📍 📎 🔐 🔓 😎 👍 👏 💌 🍹 🍭 ☕ 🎂 🚅 🚵 ♥ 🔉 💻 ⌨ 🖥 🎬 📸 💵 📝 📂 ✒ 📭 🔒 💯 and lots more..
 
 ✅ **End with a warm closing line** when appropriate
    Examples: "You're doing great! ✅" or "Ranka ya dade! 👑" or "Take care and stay blessed! 🙏" or "Alhamdulillah! 🤲"
@@ -1301,13 +1420,149 @@ function cleanTranscript(raw) {
   t = t.charAt(0).toUpperCase() + t.slice(1);
   return t.trim();
 }
-
+// ============ SMART VOICE RECOGNITION (no repeats) ============
 function initHoldToSpeak() {
   const pill = document.getElementById('gkHoldPill');
   const label = document.getElementById('gkHoldLabel');
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { if (pill) pill.style.display = 'none'; return; }
+
+  let recognition = null;
+  let isHolding = false;
   let finalText = '';
+  let interimText = '';
+  let restartTimeout = null;
+
+  // Clean up duplicate words and sentences
+  function cleanTranscript(raw) {
+    if (!raw) return '';
+    let t = raw.trim();
+
+    // Remove filler words
+    t = t.replace(/\b(um|uh|erm|ah|hmm|eh)\b[,]?\s*/gi, '');
+
+    // Remove repeating word sequences (e.g., "I and I and I" → "I")
+    for (let i = 0; i < 5; i++) {
+      t = t.replace(/\b(\w+(?:\s+\w+){0,5})\s+\1\b/gi, '$1');
+    }
+
+    // Remove duplicate sentences
+    const sentences = t.split(/(?<=[.!?])\s+/);
+    const unique = [];
+    const seen = new Set();
+    for (const s of sentences) {
+      const key = s.toLowerCase().trim();
+      if (key && !seen.has(key)) {
+        seen.add(key);
+        unique.push(s);
+      }
+    }
+    t = unique.join(' ');
+
+    // Collapse spaces
+    t = t.replace(/\s+/g, ' ').trim();
+
+    // Capitalize first letter
+    if (t) t = t.charAt(0).toUpperCase() + t.slice(1);
+
+    return t;
+  }
+
+  const startRec = (e) => {
+    e.preventDefault();
+    if (isHolding) return;
+    isHolding = true;
+    finalText = '';
+    interimText = '';
+    pill.classList.add('holding');
+    label.textContent = '🎙️ Speak now...';
+
+    try {
+      recognition = new SR();
+      recognition.lang = 'en-NG';
+      recognition.continuous = false;       // ✅ Stop after one sentence
+      recognition.interimResults = true;
+      recognition.maxAlternatives = 1;
+
+      recognition.onresult = (ev) => {
+        interimText = '';
+        for (let i = ev.resultIndex; i < ev.results.length; i++) {
+          const transcript = ev.results[i][0].transcript;
+          if (ev.results[i].isFinal) {
+            finalText += transcript + ' ';
+          } else {
+            interimText += transcript;
+          }
+        }
+        // Show preview
+        const preview = (finalText + interimText).trim();
+        if (preview) {
+          label.textContent = preview.slice(0, 50) + (preview.length > 50 ? '...' : '');
+        }
+      };
+
+      recognition.onerror = (ev) => { console.warn('Voice error:', ev.error); };
+
+      recognition.onend = () => {
+        // If user is still holding, restart briefly (max 2 restarts)
+        if (isHolding) {
+          clearTimeout(restartTimeout);
+          restartTimeout = setTimeout(() => {
+            if (isHolding && recognition) {
+              try { recognition.start(); } catch(e) {}
+            }
+          }, 300);
+        }
+      };
+
+      recognition.start();
+    } catch(err) { console.warn('Voice start failed', err); }
+  };
+
+  const stopRec = (e) => {
+    if (!isHolding) return;
+    if (e) e.preventDefault();
+    isHolding = false;
+    clearTimeout(restartTimeout);
+    pill.classList.remove('holding');
+    label.textContent = 'Hold to speak';
+
+    try { if (recognition) recognition.stop(); } catch(err) {}
+
+    // Wait for final results, then clean and fill
+    setTimeout(() => {
+      const cleaned = cleanTranscript(finalText);
+      if (cleaned && cleaned.length > 1) {
+        // Switch to keyboard mode to show the text
+        const box = document.getElementById('gkInputBox');
+        if (box) box.classList.remove('voice-mode');
+        const mi = document.getElementById('micIcon');
+        if (mi) mi.className = 'fas fa-microphone';
+        try { voiceMode = false; } catch(e) {}
+
+        document.getElementById('messageInput').value = cleaned;
+        if (typeof handleInputChange === 'function') handleInputChange();
+
+        showToast('✅ Captured — tap Send or edit');
+      } else {
+        showToast('Did not catch that — try again');
+      }
+      finalText = '';
+      interimText = '';
+      recognition = null;
+    }, 500);
+  };
+
+  // Mouse events
+  pill.addEventListener('mousedown', startRec);
+  pill.addEventListener('mouseup', stopRec);
+  pill.addEventListener('mouseleave', stopRec);
+
+  // Touch events (mobile)
+  pill.addEventListener('touchstart', startRec, {passive:false});
+  pill.addEventListener('touchend', stopRec, {passive:false});
+  pill.addEventListener('touchcancel', stopRec, {passive:false});
+  }
 
   const startHold = (e) => {
     e.preventDefault();
