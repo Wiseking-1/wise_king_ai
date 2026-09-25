@@ -357,52 +357,18 @@
 </head>
 <body>
 
-<!-- ============ LOGIN SCREEN (Picture 5 design) ============ -->
-<div id="loginScreen">
+c<!-- LOGIN SCREEN -->
+<div id="loginScreen" style="display:none">
   <div class="login-card">
     <div class="login-logo">👑</div>
-    <h1 class="login-title">Welcome to Wise King AI</h1>
-    <p class="login-subtitle">Your conversations, memories, and creations — synced forever.</p>
-
-    <div class="auth-error" id="authError"></div>
-    <div class="auth-success" id="authSuccess"></div>
-
-    <!-- Google Sign In -->
-    <button class="social-btn" onclick="signInWithGoogle()">
-      <i class="fab fa-google" style="color:#ea4335"></i> Continue with Google
-    </button>
-
-    <div class="auth-divider">OR</div>
-
-    <!-- Tabs -->
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tabSignIn" onclick="switchAuthTab('signin')">Sign In</button>
-      <button class="auth-tab" id="tabSignUp" onclick="switchAuthTab('signup')">Sign Up</button>
-    </div>
-
-    <!-- Sign In Panel -->
-    <div class="auth-panel active" id="panelSignIn">
-      <div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" class="auth-input" id="signinEmail" placeholder="Email address" autocomplete="email"></div>
-      <div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" class="auth-input" id="signinPassword" placeholder="Password" autocomplete="current-password"></div>
-      <button class="auth-link" onclick="forgotPassword()">Forgot password?</button>
-      <button class="auth-submit" onclick="signInWithEmail()"><i class="fas fa-sign-in-alt"></i> Sign In</button>
-    </div>
-
-    <!-- Sign Up Panel -->
-    <div class="auth-panel" id="panelSignUp">
-      <div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" class="auth-input" id="signupName" placeholder="Full name" autocomplete="name"></div>
-      <div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" class="auth-input" id="signupEmail" placeholder="Email address" autocomplete="email"></div>
-      <div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" class="auth-input" id="signupPassword" placeholder="Password" autocomplete="new-password"></div>
-      <div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" class="auth-input" id="signupConfirm" placeholder="Confirm password" autocomplete="new-password"></div>
-      <button class="auth-submit" onclick="signUpWithEmail()"><i class="fas fa-user-plus"></i> Sign Up</button>
-    </div>
-
-    <button class="guest-btn" onclick="continueAsGuest()">Continue as Guest (Local Mode)</button>
+    <h1 class="login-title">Wise King AI</h1>
+    <p class="login-subtitle">Your worldwide AI powerhouse, perfectly synced.</p>
+    <button class="social-btn" onclick="autoLoginUser()"><i class="fas fa-crown" style="color:#fbbf24"></i> Enter Wise King AI</button>
   </div>
 </div>
 
-<!-- ============ MAIN APP ============ -->
-<div class="app" id="mainApp" style="opacity:0;transition:opacity .4s">
+<!-- MAIN APP -->
+<div class="app" id="mainApp">
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="brand"><div class="brand-logo">👑</div><div class="brand-name">Wise King Ai 👑</div></div>
@@ -413,10 +379,14 @@
       <div class="sidebar-search"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search chats" oninput="filterChats()"></div>
     </div>
     <div class="sidebar-scrollable">
+      <button class="nav-btn" onclick="openDirectorsRoom()"><span class="nav-icon gradient-1"><i class="fas fa-clapperboard"></i></span>Director’s Room<span class="nav-badge">Pro 🎬</span></button>
       <button class="nav-btn" onclick="openImagesPanel()"><span class="nav-icon gradient-1"><i class="fas fa-image"></i></span>Images</button>
       <button class="nav-btn" onclick="openVideosPanel()"><span class="nav-icon gradient-2"><i class="fas fa-video"></i></span>Videos</button>
+      <button class="nav-btn" onclick="openVideoGallery()"><span class="nav-icon gradient-5"><i class="fas fa-film"></i></span>My Videos<span class="nav-badge" id="videoCountBadge">0</span></button>
+      <button class="nav-btn" onclick="openLibraryPanel()"><span class="nav-icon gradient-3"><i class="fas fa-shapes"></i></span>Library</button>
       <button class="nav-btn" onclick="openVault()"><span class="nav-icon gradient-4"><i class="fas fa-shield-halved"></i></span>Vault<span class="nav-badge" id="vaultCountBadge">0</span></button>
       <button class="nav-btn" onclick="openMemoryPanel()"><span class="nav-icon gradient-4"><i class="fas fa-brain"></i></span>Memory<span class="nav-badge" id="memoryCountBadge">0</span></button>
+      <button class="nav-btn" onclick="openProjectsPanel()"><span class="nav-icon gradient-6"><i class="fas fa-folder-open"></i></span>Projects<span class="nav-badge" id="projectCountBadge">0</span></button>
       <button class="nav-btn" onclick="openSettings()"><span class="nav-icon gradient-7"><i class="fas fa-sliders"></i></span>Settings</button>
       <div class="section">
         <div class="section-header open" onclick="toggleSection(this)"><div class="left">Recent</div><i class="fas fa-chevron-down arrow"></i></div>
@@ -426,7 +396,7 @@
     <div class="sidebar-footer">
       <div class="user-chip" onclick="openSettings()">
         <div class="avatar" id="sidebarAvatar">WK</div>
-        <div class="user-info"><div class="user-name" id="sidebarName">Wise King User</div><div class="user-plan" id="userPlanBadge">Free Plan</div></div>
+        <div class="user-info"><div class="user-name" id="sidebarName">IBRAHIM ABDULLAHI</div><div class="user-plan" id="userPlanBadge">Plus plan</div></div>
       </div>
       <button class="icon-action" onclick="openSettings()"><i class="fas fa-cog"></i></button>
     </div>
@@ -445,7 +415,6 @@
         <button class="top-btn" onclick="goToWelcome()"><i class="fas fa-house"></i><span class="label"> Home</span></button>
         <button class="top-btn" onclick="openVault()"><i class="fas fa-shield-halved"></i><span class="label"> Vault</span></button>
         <button class="top-btn" onclick="openSearchWebPanel()"><i class="fas fa-globe"></i><span class="label"> Search</span></button>
-        <button class="top-btn" onclick="togglePromptWizard()" id="topWizardBtn"><i class="fas fa-wand-magic-sparkles"></i><span class="label"> Wizard</span></button>
       </div>
       <div class="top-profile-container" id="topProfileContainer">
         <div class="top-profile-avatar" id="topProfileAvatar" onclick="toggleTopProfileMenu(event)">👑</div>
@@ -453,22 +422,12 @@
           <div class="pm-header">
             <div class="pm-user-info">
               <div class="pm-avatar" id="pmAvatar">👑</div>
-              <div class="pm-details">
-                <div class="pm-name" id="pmName">Wise King User</div>
-                <div class="pm-email" id="pmEmail">Not signed in</div>
-                <div class="pm-plan-badge plus" id="pmPlanBadge"plus>Plus Plan</div>
-              </div>
+              <div class="pm-details"><div class="pm-name" id="pmName">IBRAHIM ABDULLAHI</div><div class="pm-email" id="pmEmail">kingnice314@gmail.com</div></div>
             </div>
             <button class="pm-close" onclick="closeTopProfileMenu()"><i class="fas fa-times"></i></button>
           </div>
           <div class="pm-body">
-            <button class="pm-item" onclick="document.getElementById('profilePhotoInput').click(); closeTopProfileMenu();"><i class="fas fa-camera"></i> Upload Photo</button>
-            <input type="file" id="profilePhotoInput" accept="image/*" style="display:none" onchange="handleProfilePhotoUpload(event)">
             <button class="pm-item" onclick="openSettings(); closeTopProfileMenu();"><i class="fas fa-gear"></i> Settings</button>
-            <div class="pm-divider"></div>
-            <button class="pm-item" onclick="addAnotherAccount(); closeTopProfileMenu();"><i class="fas fa-user-plus"></i> Add Account</button>
-            <button class="pm-item" onclick="switchAccount(); closeTopProfileMenu();"><i class="fas fa-right-left"></i> Switch Account</button>
-            <button class="pm-item" onclick="openManageAccount(); closeTopProfileMenu();"><i class="fas fa-external-link-alt"></i> Manage Account</button>
             <div class="pm-divider"></div>
             <button class="pm-item danger" onclick="openSignOutModal(); closeTopProfileMenu();"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
           </div>
@@ -478,21 +437,11 @@
 
     <div class="chat-search-bar" id="chatSearchBar">
       <i class="fas fa-magnifying-glass" style="color:var(--text-secondary);font-size:13px"></i>
-      <input type="text" id="chatSearchInput" placeholder="Search in this chat..." oninput="doChatSearch()">
-      <button onclick="toggleChatSearch()">      <div class="suggestions">
-            <div class="suggestion-card" onclick="useSuggestion('Explain quantum computing in simple terms')"><i class="fas fa-atom"></i><div class="sc-title">Explain quantum computing</div><div class="sc-desc">In simple, clear terms</div></div>
-            <div class="suggestion-card" onclick="useSuggestion('Write me an Afrobeat song about Kano city')"><i class="fas fa-music"></i><div class="sc-title">Write an Afrobeat song</div><div class="sc-desc">Full lyrics with structure</div></div>
-            <div class="suggestion-card" onclick="useSuggestion('What is the latest news in Nigeria today?')"><i class="fas fa-globe"></i><div class="sc-title">Latest Nigeria news</div><div class="sc-desc">Live search with sources</div></div>
-            <div class="suggestion-card" onclick="useSuggestion('Create a cinematic prompt for a martial arts movie')"><i class="fas fa-clapperboard"></i><div class="sc-title">Cinematic Script</div><div class="sc-desc">Multi-scene production</div></div>
-      </div>button>
-    </div>   
-    
-    <div class="suggestions">
-            <div class="suggestion-card" onclick="useSuggestion('Explain quantum computing in simple terms')"><i class="fas fa-atom"></i><div class="sc-title">Explain quantum computing</div><div class="sc-desc">In simple, clear terms</div></div>
-            <div class="suggestion-card" onclick="useSuggestion('Write me an Afrobeat song about Kano city')"><i class="fas fa-music"></i><div class="sc-title">Write an Afrobeat song</div><div class="sc-desc">Full lyrics with structure</div></div>
-            <div class="suggestion-card" onclick="useSuggestion('What is the latest news in Nigeria today?')"><i class="fas fa-globe"></i><div class="sc-title">Latest Nigeria news</div><div class="sc-desc">Live search with sources</div></div>
-            <div class="suggestion-card" onclick="useSuggestion('Create a cinematic prompt for a martial arts movie')"><i class="fas fa-clapperboard"></i><div class="sc-title">Cinematic Script</div><div class="sc-desc">Multi-scene production</div></div>
-      </div>button>
+      <input type="text" id="chatSearchInput" placeholder="Search in this chat..." oninput="doChatSearch()" onkeydown="if(event.key==='Enter'){event.preventDefault();nextSearchMatch();}">
+      <span class="search-count" id="chatSearchCount">0 / 0</span>
+      <button onclick="prevSearchMatch()"><i class="fas fa-chevron-up"></i></button>
+      <button onclick="nextSearchMatch()"><i class="fas fa-chevron-down"></i></button>
+      <button onclick="toggleChatSearch()"><i class="fas fa-times"></i></button>
     </div>
 
     <div class="chat-scroll" id="chatScroll">
@@ -501,6 +450,12 @@
           <div class="welcome-logo">👑</div>
           <h1>How can I help you today?</h1>
           <p>I'm <strong>Wise King AI</strong>. Ready to assist with scripts, code, web search, and worldwide creativity.</p>
+          <div class="suggestions">
+            <div class="suggestion-card" onclick="useSuggestion('Explain quantum computing in simple terms')"><i class="fas fa-atom"></i><div class="sc-title">Explain quantum computing</div><div class="sc-desc">In simple, clear terms</div></div>
+            <div class="suggestion-card" onclick="useSuggestion('Write me an Afrobeat song about Kano city')"><i class="fas fa-music"></i><div class="sc-title">Write an Afrobeat song</div><div class="sc-desc">Full lyrics with structure</div></div>
+            <div class="suggestion-card" onclick="useSuggestion('What is the latest news in Nigeria today?')"><i class="fas fa-globe"></i><div class="sc-title">Latest Nigeria news</div><div class="sc-desc">Live search with sources</div></div>
+            <div class="suggestion-card" onclick="useSuggestion('Create a cinematic prompt for a martial arts movie')"><i class="fas fa-clapperboard"></i><div class="sc-title">Cinematic Script</div><div class="sc-desc">Multi-scene production</div></div>
+          </div>
         </div>
         <div id="messagesArea"></div>
       </div>
@@ -509,18 +464,18 @@
     <div class="input-dock">
       <div class="input-inner-wrap">
         <div class="preview-area" id="previewArea"></div>
-        <div class="ds-input-box" id="dsInputBox">
-          <div class="ds-top-area">
-            <span class="ds-hold-text" id="dsHoldText">Hold to speak</span>
-            <textarea class="ds-textarea" id="messageInput" rows="1" placeholder="Type a message or hold to speak" onkeydown="handleKeyDown(event)" oninput="handleInputChange()"></textarea>
+        <div class="gk-input-box" id="gkInputBox">
+          <div class="gk-text-row">
+            <textarea class="gk-textarea" id="messageInput" rows="1" placeholder="Ask Wise King AI Anything..." onkeydown="handleKeyDown(event)" oninput="handleInputChange()"></textarea>
+            <button class="gk-send-btn hidden" id="sendBtn" onclick="handleSendOrCancel()"><i class="fas fa-arrow-up"></i></button>
           </div>
-          <div class="ds-bottom-row">
-            <button class="ds-chip" id="chipThink" onclick="toggleThinkMode()"><i class="fas fa-brain"></i> Think</button>
-            <button class="ds-chip" id="chipSearch" onclick="toggleSearchMode()"><i class="fas fa-globe"></i> Search</button>
-            <div class="ds-row-spacer"></div>
-            <button class="ds-send-btn hidden" id="sendBtn" onclick="handleSendOrCancel()"><i class="fas fa-arrow-up"></i></button>
-            <button class="ds-icon-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()" title="Upload"><i class="fas fa-plus"></i></button>
-            <button class="ds-icon-btn" id="micKeyboardBtn" onclick="toggleMicKeyboardMode()" title="Mic/Keyboard"><i class="fas fa-microphone" id="micKeyboardIcon"></i></button>
+          <div class="gk-mic-pill" id="gkMicPill"><i class="fas fa-microphone" style="color:var(--accent-hover)"></i> <span id="gkMicLabel">Press & Hold to Speak 🎙️</span></div>
+          <div class="gk-options-row">
+            <button class="gk-chip" id="chipThink" onclick="toggleThinkMode()"><i class="fas fa-brain"></i> Think</button>
+            <button class="gk-chip" id="chipSearch" onclick="toggleSearchMode()"><i class="fas fa-globe"></i> Search</button>
+            <button class="gk-chip" id="chipWizard" onclick="togglePromptWizard()"><i class="fas fa-wand-magic-sparkles"></i> Prompt Wizard</button>
+            <div class="gk-options-spacer"></div>
+            <button class="gk-input-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()" title="Attach"><i class="fas fa-plus"></i></button>
           </div>
         </div>
         <input type="file" id="fileInput" accept="image/*,.pdf,.txt,.doc,.docx" style="display:none" multiple onchange="handleFiles(event)">
@@ -541,7 +496,7 @@
 <div id="sharePopup">
   <div class="share-card">
     <div class="share-head">
-      <div class="share-title"><i class="fas fa-share-nodes"></i> Share to</div>
+      <div class="share-title"><i class="fas fa-share-nodes"></i> Share to Social Hub</div>
       <button class="share-close" onclick="closeSharePopup()"><i class="fas fa-times"></i></button>
     </div>
     <div class="share-grid">
@@ -552,14 +507,18 @@
       <button class="share-platform" onclick="shareTo('telegram')"><div class="sp-icon sp-telegram"><i class="fab fa-telegram-plane"></i></div><div class="sp-name">Telegram</div></button>
       <button class="share-platform" onclick="shareTo('x')"><div class="sp-icon sp-x"><i class="fab fa-x-twitter"></i></div><div class="sp-name">X</div></button>
     </div>
+    <div style="margin-bottom:14px">
+      <button class="btn solid" style="width:100%;justify-content:center;font-size:12.5px" onclick="copyCaptionWithHashtags()"><i class="fas fa-tags"></i> Copy Caption + Hausa/English Hashtags</button>
+    </div>
     <button class="share-cancel" onclick="closeSharePopup()">Cancel</button>
   </div>
 </div>
 
-<!-- MODALS -->
+<!-- MODALS & PANELS -->
 <div class="modal-bg" id="editMessageModal">
   <div class="modal" style="max-width:520px">
     <div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Edit message</div><button class="modal-close" onclick="closeModal('editMessageModal')"><i class="fas fa-times"></i></button></div>
+    <p class="modal-text">Editing this message will regenerate the AI's response.</p>
     <textarea class="input-field" id="editMessageInput" rows="4" style="min-height:120px;resize:vertical"></textarea>
     <div class="modal-actions">
       <button class="btn ghost" onclick="closeModal('editMessageModal')">Cancel</button>
@@ -582,11 +541,11 @@
 <div class="modal-bg" id="deleteChatModal">
   <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px">
     <div style="font-size:36px;margin-bottom:12px">🗑️</div>
-    <div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete this chat?</div>
-    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">This cannot be undone.</p>
+    <div style="font-size:17px;font-weight:600;margin-bottom:8px">Are you sure?</div>
+    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">Delete this chat permanently?</p>
     <div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0">
       <button class="btn ghost" style="flex:1" onclick="closeModal('deleteChatModal')">Cancel</button>
-      <button class="btn danger" style="flex:1" onclick="confirmDeleteChat()">Delete</button>
+      <button class="btn danger" style="flex:1" onclick="confirmDeleteChat()">Yes, Delete</button>
     </div>
   </div>
 </div>
@@ -594,11 +553,11 @@
 <div class="modal-bg" id="deleteMessageModal">
   <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px">
     <div style="font-size:36px;margin-bottom:12px">🗑️</div>
-    <div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete this message?</div>
-    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">This cannot be undone.</p>
+    <div style="font-size:17px;font-weight:600;margin-bottom:8px">Are you sure?</div>
+    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">Delete this message?</p>
     <div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0">
       <button class="btn ghost" style="flex:1" onclick="closeModal('deleteMessageModal')">Cancel</button>
-      <button class="btn danger" style="flex:1" onclick="confirmDeleteMessage()">Delete</button>
+      <button class="btn danger" style="flex:1" onclick="confirmDeleteMessage()">Yes, Delete</button>
     </div>
   </div>
 </div>
@@ -606,8 +565,8 @@
 <div class="modal-bg" id="dislikeModal">
   <div class="modal" style="max-width:400px">
     <div class="modal-head"><div class="modal-title"><i class="fas fa-thumbs-down"></i> Tell us more</div><button class="modal-close" onclick="closeModal('dislikeModal')"><i class="fas fa-times"></i></button></div>
-    <p class="modal-text">Help us improve. What went wrong?</p>
-    <textarea class="input-field" id="dislikeFeedbackInput" rows="3" placeholder="Optional feedback..." style="min-height:80px;resize:vertical"></textarea>
+    <p class="modal-text" style="margin-bottom:12px">Please let us know why you disliked this response so we can improve:</p>
+    <textarea class="input-field" id="dislikeFeedbackInput" rows="3" placeholder="Type your feedback here..." style="min-height:80px;resize:vertical;margin-bottom:0"></textarea>
     <div class="modal-actions">
       <button class="btn ghost" onclick="closeModal('dislikeModal')">Cancel</button>
       <button class="btn accent" onclick="submitDislikeFeedback()"><i class="fas fa-paper-plane"></i> Submit</button>
@@ -627,11 +586,27 @@
   </div>
 </div>
 
-<!-- FULL PANELS -->
+<!-- DIRECTOR'S ROOM & PANELS -->
+<div class="full-panel" id="directorsRoomPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-clapperboard"></i> Director’s Room — Multi-Scene Workspace 🎬</div><button class="btn ghost" onclick="closeDirectorsRoom()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner">
+    <div class="result-card" style="margin-bottom:16px">
+      <h4><i class="fas fa-film"></i> Setup Production Bible</h4>
+      <p style="margin-bottom:10px">Write your series or movie concept (e.g., *Sirrin Duji Part 2*):</p>
+      <input type="text" class="input-field" id="dirSeriesTitle" placeholder="Series / Movie Title" style="margin-bottom:8px">
+      <textarea class="input-field" id="dirSeriesContext" rows="3" placeholder="Characters, location, visual style..." style="margin-bottom:10px;resize:vertical"></textarea>
+      <button class="btn accent" onclick="startDirectorProduction()"><i class="fas fa-wand-magic-sparkles"></i> Generate Continuity Script Bible</button>
+    </div>
+    <div id="dirProductionOutput"></div>
+  </div></div>
+</div>
+
 <div class="full-panel" id="searchWebPanel">
   <div class="panel-header"><div class="panel-title"><i class="fas fa-globe"></i> Search the web</div><button class="btn ghost" onclick="closeSearchWebPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
   <div class="panel-body"><div class="panel-inner">
-    <input type="text" class="search-big" id="searchWebInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter'){doSearchWeb(this.value)}">
+    <input type="text" class="search-big" id="searchWebInput" placeholder="Ask anything..." style="width:100%;padding:16px 20px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);color:var(--text-primary);font-size:15px;outline:none;margin-bottom:20px" onkeydown="if(event.key==='Enter'){doSearchWeb(this.value)}">
+    <div id="searchSuggestionsBox" style="margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px"></div>
+    <div id="askWiseKingShortcut" style="margin-bottom:20px;display:none"></div>
     <div id="searchWebResults"></div>
   </div></div>
 </div>
@@ -640,7 +615,7 @@
   <div class="panel-header"><div class="panel-title"><i class="fas fa-image"></i> Images</div><button class="btn ghost" onclick="closeImagesPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
   <div class="panel-body"><div class="panel-inner">
     <div style="font-size:13.5px;color:var(--text-secondary);margin-bottom:8px">Describe the image or logo you want:</div>
-    <input type="text" class="search-big" id="imagesPromptInput" placeholder="e.g. beautiful Hausa woman OR logo for Wise King" onkeydown="if(event.key==='Enter'){generateImageFromPanel()}">
+    <input type="text" class="search-big" id="imagesPromptInput" placeholder="e.g. beautiful Hausa woman OR logo for Wise King" style="width:100%;padding:16px 20px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);color:var(--text-primary);font-size:15px;outline:none;margin-bottom:12px" onkeydown="if(event.key==='Enter'){generateImageFromPanel()}">
     <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:12px" onclick="generateImageFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Generate</button>
     <div id="imagesPanelResults"></div>
   </div></div>
@@ -649,10 +624,296 @@
 <div class="full-panel" id="videosPanel">
   <div class="panel-header"><div class="panel-title"><i class="fas fa-video"></i> Create Video</div><button class="btn ghost" onclick="closeVideosPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
   <div class="panel-body"><div class="panel-inner">
-    <input type="text" class="search-big" id="videosPromptInput" placeholder="Describe the video scene...">
+    <input type="text" class="search-big" id="videosPromptInput" placeholder="Describe the video scene..." style="width:100%;padding:16px 20px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);color:var(--text-primary);font-size:15px;outline:none;margin-bottom:16px">
     <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="generateVideoFromPanel()"><i class="fas fa-clapperboard"></i> Generate Video</button>
     <div id="videoPanelResults"></div>
   </div></div>
+</div>
+
+<div class="full-panel" id="videoGalleryPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-film"></i> My Videos</div><button class="btn ghost" onclick="closeVideoGallery()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner"><div id="videoGalleryContent"></div></div></div>
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" style="display:none">
+  <div class="login-card">
+    <div class="login-logo">👑</div>
+    <h1 class="login-title">Wise King AI</h1>
+    <p class="login-subtitle">Your worldwide AI powerhouse, perfectly synced.</p>
+    <button class="social-btn" onclick="autoLoginUser()"><i class="fas fa-crown" style="color:#fbbf24"></i> Enter Wise King AI</button>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="app" id="mainApp">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand"><div class="brand-logo">👑</div><div class="brand-name">Wise King Ai 👑</div></div>
+      <button class="sidebar-close-btn" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="sidebar-fixed-top">
+      <button class="nav-btn" onclick="createNewChat()"><span class="nav-icon"><i class="fas fa-pen-to-square"></i></span>New chat</button>
+      <div class="sidebar-search"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search chats" oninput="filterChats()"></div>
+    </div>
+    <div class="sidebar-scrollable">
+      <button class="nav-btn" onclick="openDirectorsRoom()"><span class="nav-icon gradient-1"><i class="fas fa-clapperboard"></i></span>Director’s Room<span class="nav-badge">Pro 🎬</span></button>
+      <button class="nav-btn" onclick="openImagesPanel()"><span class="nav-icon gradient-1"><i class="fas fa-image"></i></span>Images</button>
+      <button class="nav-btn" onclick="openVideosPanel()"><span class="nav-icon gradient-2"><i class="fas fa-video"></i></span>Videos</button>
+      <button class="nav-btn" onclick="openVideoGallery()"><span class="nav-icon gradient-5"><i class="fas fa-film"></i></span>My Videos<span class="nav-badge" id="videoCountBadge">0</span></button>
+      <button class="nav-btn" onclick="openLibraryPanel()"><span class="nav-icon gradient-3"><i class="fas fa-shapes"></i></span>Library</button>
+      <button class="nav-btn" onclick="openVault()"><span class="nav-icon gradient-4"><i class="fas fa-shield-halved"></i></span>Vault<span class="nav-badge" id="vaultCountBadge">0</span></button>
+      <button class="nav-btn" onclick="openMemoryPanel()"><span class="nav-icon gradient-4"><i class="fas fa-brain"></i></span>Memory<span class="nav-badge" id="memoryCountBadge">0</span></button>
+      <button class="nav-btn" onclick="openProjectsPanel()"><span class="nav-icon gradient-6"><i class="fas fa-folder-open"></i></span>Projects<span class="nav-badge" id="projectCountBadge">0</span></button>
+      <button class="nav-btn" onclick="openSettings()"><span class="nav-icon gradient-7"><i class="fas fa-sliders"></i></span>Settings</button>
+      <div class="section">
+        <div class="section-header open" onclick="toggleSection(this)"><div class="left">Recent</div><i class="fas fa-chevron-down arrow"></i></div>
+        <div class="section-body open"><div id="chatsList"></div></div>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-chip" onclick="openSettings()">
+        <div class="avatar" id="sidebarAvatar">WK</div>
+        <div class="user-info"><div class="user-name" id="sidebarName">IBRAHIM ABDULLAHI</div><div class="user-plan" id="userPlanBadge">Plus plan</div></div>
+      </div>
+      <button class="icon-action" onclick="openSettings()"><i class="fas fa-cog"></i></button>
+    </div>
+  </aside>
+
+  <main class="chat-main">
+    <div class="chat-topbar">
+      <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="chat-title-wrap">
+        <span class="chat-title" id="chatTitle">New chat</span>
+        <span class="chat-model-badge" id="modelBadge"><i class="fas fa-circle"></i> <span id="modelBadgeText">Gemini 3.5 Flash-lite</span></span>
+      </div>
+      <div class="chat-actions">
+        <button class="top-btn install-btn" id="installAppBtn" onclick="promptInstallApp()" style="display:none"><i class="fas fa-download"></i><span class="label"> Install</span></button>
+        <button class="top-btn" onclick="toggleChatSearch()"><i class="fas fa-magnifying-glass"></i><span class="label"> Find</span></button>
+        <button class="top-btn" onclick="goToWelcome()"><i class="fas fa-house"></i><span class="label"> Home</span></button>
+        <button class="top-btn" onclick="openVault()"><i class="fas fa-shield-halved"></i><span class="label"> Vault</span></button>
+        <button class="top-btn" onclick="openSearchWebPanel()"><i class="fas fa-globe"></i><span class="label"> Search</span></button>
+      </div>
+      <div class="top-profile-container" id="topProfileContainer">
+        <div class="top-profile-avatar" id="topProfileAvatar" onclick="toggleTopProfileMenu(event)">👑</div>
+        <div class="profile-menu-popup" id="topProfileMenu">
+          <div class="pm-header">
+            <div class="pm-user-info">
+              <div class="pm-avatar" id="pmAvatar">👑</div>
+              <div class="pm-details"><div class="pm-name" id="pmName">IBRAHIM ABDULLAHI</div><div class="pm-email" id="pmEmail">kingnice314@gmail.com</div></div>
+            </div>
+            <button class="pm-close" onclick="closeTopProfileMenu()"><i class="fas fa-times"></i></button>
+          </div>
+          <div class="pm-body">
+            <button class="pm-item" onclick="openSettings(); closeTopProfileMenu();"><i class="fas fa-gear"></i> Settings</button>
+            <div class="pm-divider"></div>
+            <button class="pm-item danger" onclick="openSignOutModal(); closeTopProfileMenu();"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-search-bar" id="chatSearchBar">
+      <i class="fas fa-magnifying-glass" style="color:var(--text-secondary);font-size:13px"></i>
+      <input type="text" id="chatSearchInput" placeholder="Search in this chat..." oninput="doChatSearch()" onkeydown="if(event.key==='Enter'){event.preventDefault();nextSearchMatch();}">
+      <span class="search-count" id="chatSearchCount">0 / 0</span>
+      <button onclick="prevSearchMatch()"><i class="fas fa-chevron-up"></i></button>
+      <button onclick="nextSearchMatch()"><i class="fas fa-chevron-down"></i></button>
+      <button onclick="toggleChatSearch()"><i class="fas fa-times"></i></button>
+    </div>
+
+    <div class="chat-scroll" id="chatScroll">
+      <div class="chat-inner" id="chatInner">
+        <div class="welcome" id="welcomeScreen">
+          <div class="welcome-logo">👑</div>
+          <h1>How can I help you today?</h1>
+          <p>I'm <strong>Wise King AI</strong>. Ready to assist with scripts, code, web search, and worldwide creativity.</p>
+          <div class="suggestions">
+            <div class="suggestion-card" onclick="useSuggestion('Explain quantum computing in simple terms')"><i class="fas fa-atom"></i><div class="sc-title">Explain quantum computing</div><div class="sc-desc">In simple, clear terms</div></div>
+            <div class="suggestion-card" onclick="useSuggestion('Write me an Afrobeat song about Kano city')"><i class="fas fa-music"></i><div class="sc-title">Write an Afrobeat song</div><div class="sc-desc">Full lyrics with structure</div></div>
+            <div class="suggestion-card" onclick="useSuggestion('What is the latest news in Nigeria today?')"><i class="fas fa-globe"></i><div class="sc-title">Latest Nigeria news</div><div class="sc-desc">Live search with sources</div></div>
+            <div class="suggestion-card" onclick="useSuggestion('Create a cinematic prompt for a martial arts movie')"><i class="fas fa-clapperboard"></i><div class="sc-title">Cinematic Script</div><div class="sc-desc">Multi-scene production</div></div>
+          </div>
+        </div>
+        <div id="messagesArea"></div>
+      </div>
+    </div>
+
+    <div class="input-dock">
+      <div class="input-inner-wrap">
+        <div class="preview-area" id="previewArea"></div>
+        <div class="gk-input-box" id="gkInputBox">
+          <div class="gk-text-row">
+            <textarea class="gk-textarea" id="messageInput" rows="1" placeholder="Ask Wise King AI Anything..." onkeydown="handleKeyDown(event)" oninput="handleInputChange()"></textarea>
+            <button class="gk-send-btn hidden" id="sendBtn" onclick="handleSendOrCancel()"><i class="fas fa-arrow-up"></i></button>
+          </div>
+          <div class="gk-mic-pill" id="gkMicPill"><i class="fas fa-microphone" style="color:var(--accent-hover)"></i> <span id="gkMicLabel">Press & Hold to Speak 🎙️</span></div>
+          <div class="gk-options-row">
+            <button class="gk-chip" id="chipThink" onclick="toggleThinkMode()"><i class="fas fa-brain"></i> Think</button>
+            <button class="gk-chip" id="chipSearch" onclick="toggleSearchMode()"><i class="fas fa-globe"></i> Search</button>
+            <button class="gk-chip" id="chipWizard" onclick="togglePromptWizard()"><i class="fas fa-wand-magic-sparkles"></i> Prompt Wizard</button>
+            <div class="gk-options-spacer"></div>
+            <button class="gk-input-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()" title="Attach"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+        <input type="file" id="fileInput" accept="image/*,.pdf,.txt,.doc,.docx" style="display:none" multiple onchange="handleFiles(event)">
+        <div class="input-hint">Wise King AI can make mistakes. Please verify important information.</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- POPUP MENUS -->
+<div class="popup-menu" id="chatPopupMenu">
+  <button class="popup-menu-item pin-item" id="chatPinBtn" onclick="togglePinCurrentChat()"><i class="fas fa-thumbtack"></i> <span id="chatPinLabel">Pin chat</span></button>
+  <button class="popup-menu-item" onclick="renameCurrentChat()"><i class="fas fa-pen"></i> Rename</button>
+  <button class="popup-menu-item" onclick="deleteCurrentChat()"><i class="fas fa-trash"></i> Delete</button>
+  <button class="popup-menu-item" onclick="shareCurrentChat()"><i class="fas fa-share"></i> Share</button>
+</div>
+
+<div id="sharePopup">
+  <div class="share-card">
+    <div class="share-head">
+      <div class="share-title"><i class="fas fa-share-nodes"></i> Share to Social Hub</div>
+      <button class="share-close" onclick="closeSharePopup()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="share-grid">
+      <button class="share-platform" onclick="shareTo('whatsapp')"><div class="sp-icon sp-whatsapp"><i class="fab fa-whatsapp"></i></div><div class="sp-name">WhatsApp</div></button>
+      <button class="share-platform" onclick="shareTo('facebook')"><div class="sp-icon sp-facebook"><i class="fab fa-facebook-f"></i></div><div class="sp-name">Facebook</div></button>
+      <button class="share-platform" onclick="shareTo('tiktok')"><div class="sp-icon sp-tiktok"><i class="fab fa-tiktok"></i></div><div class="sp-name">TikTok</div></button>
+      <button class="share-platform" onclick="shareTo('instagram')"><div class="sp-icon sp-instagram"><i class="fab fa-instagram"></i></div><div class="sp-name">Instagram</div></button>
+      <button class="share-platform" onclick="shareTo('telegram')"><div class="sp-icon sp-telegram"><i class="fab fa-telegram-plane"></i></div><div class="sp-name">Telegram</div></button>
+      <button class="share-platform" onclick="shareTo('x')"><div class="sp-icon sp-x"><i class="fab fa-x-twitter"></i></div><div class="sp-name">X</div></button>
+    </div>
+    <div style="margin-bottom:14px">
+      <button class="btn solid" style="width:100%;justify-content:center;font-size:12.5px" onclick="copyCaptionWithHashtags()"><i class="fas fa-tags"></i> Copy Caption + Hausa/English Hashtags</button>
+    </div>
+    <button class="share-cancel" onclick="closeSharePopup()">Cancel</button>
+  </div>
+</div>
+
+<!-- MODALS & PANELS -->
+<div class="modal-bg" id="editMessageModal">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Edit message</div><button class="modal-close" onclick="closeModal('editMessageModal')"><i class="fas fa-times"></i></button></div>
+    <p class="modal-text">Editing this message will regenerate the AI's response.</p>
+    <textarea class="input-field" id="editMessageInput" rows="4" style="min-height:120px;resize:vertical"></textarea>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal('editMessageModal')">Cancel</button>
+      <button class="btn accent" onclick="saveEditedMessage()"><i class="fas fa-check"></i> Save & Regenerate</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="renameChatModal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Rename chat</div><button class="modal-close" onclick="closeModal('renameChatModal')"><i class="fas fa-times"></i></button></div>
+    <input type="text" class="input-field" id="renameChatInput" placeholder="Enter new name" maxlength="60">
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal('renameChatModal')">Cancel</button>
+      <button class="btn accent" onclick="saveRenamedChat()"><i class="fas fa-check"></i> Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="deleteChatModal">
+  <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px">
+    <div style="font-size:36px;margin-bottom:12px">🗑️</div>
+    <div style="font-size:17px;font-weight:600;margin-bottom:8px">Are you sure?</div>
+    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">Delete this chat permanently?</p>
+    <div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0">
+      <button class="btn ghost" style="flex:1" onclick="closeModal('deleteChatModal')">Cancel</button>
+      <button class="btn danger" style="flex:1" onclick="confirmDeleteChat()">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="deleteMessageModal">
+  <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px">
+    <div style="font-size:36px;margin-bottom:12px">🗑️</div>
+    <div style="font-size:17px;font-weight:600;margin-bottom:8px">Are you sure?</div>
+    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">Delete this message?</p>
+    <div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0">
+      <button class="btn ghost" style="flex:1" onclick="closeModal('deleteMessageModal')">Cancel</button>
+      <button class="btn danger" style="flex:1" onclick="confirmDeleteMessage()">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="dislikeModal">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-thumbs-down"></i> Tell us more</div><button class="modal-close" onclick="closeModal('dislikeModal')"><i class="fas fa-times"></i></button></div>
+    <p class="modal-text" style="margin-bottom:12px">Please let us know why you disliked this response so we can improve:</p>
+    <textarea class="input-field" id="dislikeFeedbackInput" rows="3" placeholder="Type your feedback here..." style="min-height:80px;resize:vertical;margin-bottom:0"></textarea>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal('dislikeModal')">Cancel</button>
+      <button class="btn accent" onclick="submitDislikeFeedback()"><i class="fas fa-paper-plane"></i> Submit</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="signOutModal">
+  <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px">
+    <div style="font-size:36px;margin-bottom:12px">⚠️</div>
+    <div style="font-size:17px;font-weight:600;margin-bottom:8px">Are you sure?</div>
+    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">Sign out of Wise King AI?</p>
+    <div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0">
+      <button class="btn ghost" style="flex:1" onclick="closeModal('signOutModal')">Cancel</button>
+      <button class="btn danger" style="flex:1" onclick="signOutUser()">Yes, Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<!-- DIRECTOR'S ROOM & PANELS -->
+<div class="full-panel" id="directorsRoomPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-clapperboard"></i> Director’s Room — Multi-Scene Workspace 🎬</div><button class="btn ghost" onclick="closeDirectorsRoom()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner">
+    <div class="result-card" style="margin-bottom:16px">
+      <h4><i class="fas fa-film"></i> Setup Production Bible</h4>
+      <p style="margin-bottom:10px">Write your series or movie concept (e.g., *Sirrin Duji Part 2*):</p>
+      <input type="text" class="input-field" id="dirSeriesTitle" placeholder="Series / Movie Title" style="margin-bottom:8px">
+      <textarea class="input-field" id="dirSeriesContext" rows="3" placeholder="Characters, location, visual style..." style="margin-bottom:10px;resize:vertical"></textarea>
+      <button class="btn accent" onclick="startDirectorProduction()"><i class="fas fa-wand-magic-sparkles"></i> Generate Continuity Script Bible</button>
+    </div>
+    <div id="dirProductionOutput"></div>
+  </div></div>
+</div>
+
+<div class="full-panel" id="searchWebPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-globe"></i> Search the web</div><button class="btn ghost" onclick="closeSearchWebPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner">
+    <input type="text" class="search-big" id="searchWebInput" placeholder="Ask anything..." style="width:100%;padding:16px 20px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);color:var(--text-primary);font-size:15px;outline:none;margin-bottom:20px" onkeydown="if(event.key==='Enter'){doSearchWeb(this.value)}">
+    <div id="searchSuggestionsBox" style="margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px"></div>
+    <div id="askWiseKingShortcut" style="margin-bottom:20px;display:none"></div>
+    <div id="searchWebResults"></div>
+  </div></div>
+</div>
+
+<div class="full-panel" id="imagesPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-image"></i> Images</div><button class="btn ghost" onclick="closeImagesPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner">
+    <div style="font-size:13.5px;color:var(--text-secondary);margin-bottom:8px">Describe the image or logo you want:</div>
+    <input type="text" class="search-big" id="imagesPromptInput" placeholder="e.g. beautiful Hausa woman OR logo for Wise King" style="width:100%;padding:16px 20px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);color:var(--text-primary);font-size:15px;outline:none;margin-bottom:12px" onkeydown="if(event.key==='Enter'){generateImageFromPanel()}">
+    <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:12px" onclick="generateImageFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Generate</button>
+    <div id="imagesPanelResults"></div>
+  </div></div>
+</div>
+
+<div class="full-panel" id="videosPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-video"></i> Create Video</div><button class="btn ghost" onclick="closeVideosPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner">
+    <input type="text" class="search-big" id="videosPromptInput" placeholder="Describe the video scene..." style="width:100%;padding:16px 20px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-lg);color:var(--text-primary);font-size:15px;outline:none;margin-bottom:16px">
+    <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="generateVideoFromPanel()"><i class="fas fa-clapperboard"></i> Generate Video</button>
+    <div id="videoPanelResults"></div>
+  </div></div>
+</div>
+
+<div class="full-panel" id="videoGalleryPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-film"></i> My Videos</div><button class="btn ghost" onclick="closeVideoGallery()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner"><div id="videoGalleryContent"></div></div></div>
+</div>
+
+<div class="full-panel" id="libraryPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-shapes"></i> Library</div><button class="btn ghost" onclick="closeLibraryPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner"><div id="libraryPanelResults"></div></div></div>
 </div>
 
 <div class="full-panel" id="memoryPanel">
@@ -677,44 +938,40 @@
   </div>
 </div>
 
-<!-- SETTINGS -->
 <div class="modal-bg" id="settingsModal">
   <div class="modal">
     <div class="modal-head"><div class="modal-title"><i class="fas fa-cog"></i> Settings</div><button class="modal-close" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button></div>
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-palette"></i> Appearance</div>
+      <div class="settings-card">
+        <div class="toggle-row"><div class="toggle-label">Light Mode<span class="hint">Bright theme for daytime</span></div><div class="toggle-switch" id="lightModeToggle" onclick="toggleLightMode()"></div></div>
+      </div>
+    </div>
     <div class="settings-group">
       <div class="settings-group-title"><i class="fas fa-user"></i> Profile & Account</div>
       <div class="settings-card">
         <div style="display:flex;align-items:center;gap:12px">
           <div class="avatar" style="width:52px;height:52px;font-size:20px" id="settingsAvatar">WK</div>
           <div style="flex:1">
-            <div id="settingsUserEmail" style="font-size:13px;color:var(--text-secondary);margin-bottom:6px">Not signed in</div>
-            <div id="settingsPlanText" style="font-size:12px;color:var(--gold-light);font-weight:600">Free Plan</div>
+            <div id="settingsUserEmail" style="font-size:13px;color:var(--text-secondary);margin-bottom:6px">kingnice314@gmail.com</div>
+            <div style="font-size:12px;color:var(--success);font-weight:600">Connected & Auto-Synced ✅</div>
           </div>
         </div>
       </div>
     </div>
     <div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-palette"></i> Appearance</div>
+      <div class="settings-group-title"><i class="fas fa-sliders-h"></i> Features</div>
       <div class="settings-card">
-        <div class="toggle-row"><div class="toggle-label">Light Mode<span class="hint">Bright theme</span></div><div class="toggle-switch" id="lightModeToggle" onclick="toggleLightMode()"></div></div>
+        <div class="toggle-row"><div class="toggle-label">Enable Web Search</div><div class="toggle-switch on" id="webSearchToggle" onclick="toggleWebSearchSetting()"></div></div>
+        <div style="height:1px;background:var(--border-subtle);margin:10px 0"></div>
+        <div class="toggle-row"><div class="toggle-label">Enable Cross-Chat Memory</div><div class="toggle-switch on" id="memoryToggle" onclick="toggleMemorySetting()"></div></div>
       </div>
     </div>
     <div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-key"></i> API Keys</div>
+      <div class="settings-group-title"><i class="fas fa-key"></i> API Keys (Optional)</div>
       <div class="settings-card">
-        <div id="geminiKeyStatus" class="key-status missing"><i class="fas fa-circle"></i> <span>Gemini: checking…</span></div>
-        <label style="font-size:12.5px;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:6px">Gemini API Key (optional override)</label>
-        <div style="display:flex;gap:8px;margin-bottom:14px">
-          <input type="password" class="input-field" id="apiKeyInput" placeholder="Paste your Gemini key" autocomplete="off" style="margin-bottom:0;flex:1">
-          <button class="btn accent small" onclick="saveGeminiKey()">Save</button>
-        </div>
-        <div id="replicateKeyStatus" class="key-status missing"><i class="fas fa-circle"></i> <span>Replicate: checking…</span></div>
-        <label style="font-size:12.5px;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:6px">Replicate API Key (optional override)</label>
-        <div style="display:flex;gap:8px;margin-bottom:12px">
-          <input type="password" class="input-field" id="replicateKeyInput" placeholder="Paste your Replicate key" autocomplete="off" style="margin-bottom:0;flex:1">
-          <button class="btn accent small" onclick="saveReplicateKey()">Save</button>
-        </div>
-        <button class="btn solid" style="width:100%;justify-content:center" onclick="syncWithGemini()"><i class="fas fa-sync-alt"></i> Sync with Gemini</button>
+        <input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (auto-connected if empty)" autocomplete="off">
+        <input type="password" class="input-field" id="replicateKeyInput" placeholder="Replicate API key (optional)" autocomplete="off">
       </div>
     </div>
     <div class="settings-group">
@@ -722,22 +979,13 @@
       <div class="settings-card">
         <select class="input-field" id="modelSelect" style="margin-bottom:0">
           <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-lite — Blazing Fast ✅</option>
-          <option value="gemini-3.5-flash">Gemini 3.5 Flash — Best for Web Search 🔍</option>
+          <option value="gemini-3.1-flash">Gemini 3.1 Flash — Best for Web Search 🔍</option>
           <option value="gemini-2.5-flash">Gemini 2.5 Flash — Instant</option>
         </select>
       </div>
     </div>
-    <div class="signout-inline" id="signoutInline">
-      <div class="si-warn">⚠️</div>
-      <div class="si-title">Are you sure?</div>
-      <div class="si-msg">Sign out of Wise King AI?</div>
-      <div class="si-actions">
-        <button class="btn ghost" onclick="cancelInlineSignout()">Cancel</button>
-        <button class="btn danger" onclick="signOutUser()">Yes, Sign Out</button>
-      </div>
-    </div>
     <div class="modal-actions" style="justify-content:space-between">
-      <button class="btn ghost" style="color:#f87171" onclick="showInlineSignout()"><i class="fas fa-sign-out-alt"></i> Sign out</button>
+      <button class="btn ghost" style="color:#f87171" onclick="openSignOutModal()"><i class="fas fa-sign-out-alt"></i> Sign out</button>
       <button class="btn accent" onclick="saveSettings()">Save changes</button>
     </div>
   </div>
@@ -745,211 +993,100 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- ============ GLOBAL ENV (set by Vercel / Cloudflare build) ============ -->
-<!-- These get injected at build time by your hosting platform -->
-<script>
-  // ============ AUTO KEY LOADING ============
-  // Priority order:
-  // 1. User's own key from localStorage (Settings)
-  // 2. ENV key from Vercel/Cloudflare (injected into window at runtime)
-  // 3. Owner's fallback key
-  window.__WK_ENV__ = window.__WK_ENV__ || {};
-  // Vercel auto-injects via <script> or you can hardcode below if needed.
-  // If you set ENV variables in Vercel named GEMINI_API_KEY / REPLICATE_API_KEY,
-  // they get exposed here via a small build hook, OR you can hardcode:
-  if (!window.__WK_ENV__.GEMINI_API_KEY) {
-    window.__WK_ENV__.GEMINI_API_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
-  }
-  if (!window.__WK_ENV__.REPLICATE_API_KEY) {
-    window.__WK_ENV__.REPLICATE_API_KEY = '';
-  }
-</script>
-
-<!-- ============ FIREBASE MODULE ============ -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-  import {
-    getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged,
-    setPersistence, browserLocalPersistence,
-    createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail
-  } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU",
-    authDomain: "wise-king-ai-259fc.firebaseapp.com",
-    projectId: "wise-king-ai-259fc",
-    storageBucket: "wise-king-ai-259fc.firebasestorage.app",
-    messagingSenderId: "19851699752",
-    appId: "1:19851699752:web:6735280bf59561e8ffb71d"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
-  provider.setCustomParameters({ prompt: 'select_account' });
-  setPersistence(auth, browserLocalPersistence).catch(() => {});
-
-  let lastUid = null;
-
-  // ============ AUTH STATE LISTENER ============
-  onAuthStateChanged(auth, (user) => {
-    console.log('🔐 Auth state:', user ? user.email : 'signed out');
-
-    if (user) {
-      const switched = lastUid && lastUid !== user.uid;
-      lastUid = user.uid;
-
-      localStorage.setItem('wk_logged_in', '1');
-      localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
-      localStorage.setItem('wk_user_email', user.email || '');
-      localStorage.setItem('wk_user_uid', user.uid || '');
-
-      if (typeof window.unlockApp === 'function') {
-        window.unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
-        if (switched) window.showToast(`Switched to ${user.displayName || 'account'} ✅`);
-      }
-    } else {
-      lastUid = null;
-      localStorage.removeItem('wk_logged_in');
-      const ls = document.getElementById('loginScreen');
-      if (ls) ls.classList.remove('hidden');
-      const ma = document.getElementById('mainApp');
-      if (ma) ma.style.opacity = '0';
-    }
-  });
-
-  // ============ GOOGLE SIGN-IN (POPUP — no white screen) ============
-  window.signInWithGoogle = function() {
-    const errEl = document.getElementById('authError');
-    const sucEl = document.getElementById('authSuccess');
-    if (errEl) errEl.classList.remove('show');
-    if (sucEl) sucEl.classList.remove('show');
-
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const user = result.user;
-        console.log('✅ Google sign-in:', user.email);
-        localStorage.setItem('wk_logged_in', '1');
-        localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
-        localStorage.setItem('wk_user_email', user.email || '');
-        localStorage.setItem('wk_user_uid', user.uid || '');
-        lastUid = user.uid;
-        if (typeof window.unlockApp === 'function') {
-          window.unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
-        }
-        window.showToast('Welcome, ' + (user.displayName || 'Wise King User') + '! 🎉');
-      })
-      .catch((error) => {
-        if (error.code === "auth/cancelled-popup-request" ||
-            error.code === "auth/popup-closed-by-user" ||
-            error.code === "auth/user-cancelled") return;
-        console.warn('Google error:', error);
-        if (errEl) { errEl.textContent = error.message || 'Google sign-in failed.'; errEl.classList.add('show'); }
-      });
-  };
-
-  // ============ EMAIL SIGN-IN ============
-  window.signInWithEmail = function() {
-    const email = document.getElementById('signinEmail').value.trim();
-    const pass = document.getElementById('signinPassword').value;
-    const errEl = document.getElementById('authError');
-    errEl.classList.remove('show');
-
-    if (!email || !pass) { errEl.textContent = 'Please enter email and password.'; errEl.classList.add('show'); return; }
-
-    signInWithEmailAndPassword(auth, email, pass)
-      .then((cred) => {
-        const user = cred.user;
-        localStorage.setItem('wk_logged_in', '1');
-        localStorage.setItem('wk_user_name', user.displayName || email.split('@')[0]);
-        localStorage.setItem('wk_user_email', user.email || email);
-        localStorage.setItem('wk_user_uid', user.uid || '');
-        lastUid = user.uid;
-        window.unlockApp(user.displayName || email.split('@')[0], user.email, user.photoURL);
-        window.showToast('Welcome back! ✅');
-      })
-      .catch((error) => {
-        errEl.textContent = error.message || 'Sign in failed.';
-        errEl.classList.add('show');
-      });
-  };
-
-  // ============ EMAIL SIGN-UP ============
-  window.signUpWithEmail = function() {
-    const name = document.getElementById('signupName').value.trim();
-    const email = document.getElementById('signupEmail').value.trim();
-    const pass = document.getElementById('signupPassword').value;
-    const confirm = document.getElementById('signupConfirm').value;
-    const errEl = document.getElementById('authError');
-    errEl.classList.remove('show');
-
-    if (!name || !email || !pass) { errEl.textContent = 'Please fill all fields.'; errEl.classList.add('show'); return; }
-    if (pass !== confirm) { errEl.textContent = 'Passwords do not match.'; errEl.classList.add('show'); return; }
-    if (pass.length < 6) { errEl.textContent = 'Password must be at least 6 characters.'; errEl.classList.add('show'); return; }
-
-    createUserWithEmailAndPassword(auth, email, pass)
-      .then((cred) => {
-        const user = cred.user;
-        return updateProfile(user, { displayName: name }).then(() => {
-          localStorage.setItem('wk_logged_in', '1');
-          localStorage.setItem('wk_user_name', name);
-          localStorage.setItem('wk_user_email', email);
-          localStorage.setItem('wk_user_uid', user.uid || '');
-          lastUid = user.uid;
-          window.unlockApp(name, email, null);
-          window.showToast('Account created! 🎉');
-        });
-      })
-      .catch((error) => {
-        errEl.textContent = error.message || 'Sign up failed.';
-        errEl.classList.add('show');
-      });
-  };
-
-  // ============ FORGOT PASSWORD ============
-  window.forgotPassword = function() {
-    const email = document.getElementById('signinEmail').value.trim();
-    const sucEl = document.getElementById('authSuccess');
-    const errEl = document.getElementById('authError');
-    errEl.classList.remove('show'); sucEl.classList.remove('show');
-
-    if (!email) { errEl.textContent = 'Enter your email first, then tap Forgot password.'; errEl.classList.add('show'); return; }
-
-    sendPasswordResetEmail(auth, email)
-      .then(() => { sucEl.textContent = '✅ Reset link sent to ' + email; sucEl.classList.add('show'); })
-      .catch((error) => { errEl.textContent = error.message; errEl.classList.add('show'); });
-  };
-
-  // ============ ADD / SWITCH ACCOUNT ============
-  window.addAnotherAccount = function() {
-    window.showToast('Pick another Google account 👥');
-    provider.setCustomParameters({ prompt: 'select_account' });
-    window.signInWithGoogle();
-  };
-  window.switchAccount = function() {
-    window.showToast('Switching account... 🔄');
-    provider.setCustomParameters({ prompt: 'select_account' });
-    window.signInWithGoogle();
-  };
-
-  // ============ SIGN OUT ============
-  window.signOutUser = function() {
-    signOut(auth).then(() => {
-      ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_library'].forEach(k => localStorage.removeItem(k));
-      try { sessionStorage.clear(); } catch(e) {}
-      lastUid = null;
-      location.reload();
-    }).catch(() => location.reload());
-  };
-
-  window.__wkAuth = auth;
-</script>
-
-<!-- ============ MAIN APP SCRIPT ============ -->
+<!-- SCRIPT LOGIC -->
 <script>
 const ownerEmail = "kingnice314@gmail.com";
+const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
+</div>
 
-const SYSTEM_PROMPT = `You are WISE KING AI — created by IBRAHIM ABDULLAHI from Nigeria (Wise King Industry). OWNER: Oga Ibrahim 🇳🇬.
+<div class="full-panel" id="libraryPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-shapes"></i> Library</div><button class="btn ghost" onclick="closeLibraryPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner"><div id="libraryPanelResults"></div></div></div>
+</div>
+
+<div class="full-panel" id="memoryPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-brain"></i> Cross-Chat Memory</div><button class="btn ghost" onclick="closeMemoryPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner">
+    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">Wise King automatically learns facts from your chats.</p>
+    <button class="btn solid" style="width:100%;justify-content:center;margin-bottom:16px" onclick="extractMemoryNow()"><i class="fas fa-wand-magic-sparkles"></i> Extract Memory</button>
+    <div id="memoryPanelResults"></div>
+  </div></div>
+</div>
+
+<div class="modal-bg" id="vaultModal">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-shield-halved"></i> Master Vault</div><button class="modal-close" onclick="closeModal('vaultModal')"><i class="fas fa-times"></i></button></div>
+    <p class="modal-text">Permanent locked memories the AI will never forget.</p>
+    <div class="settings-card" style="margin-bottom:16px">
+      <textarea class="input-field" id="vaultNewInput" rows="3" placeholder="e.g., My name is Ibrahim Abdullahi..." style="resize:vertical;min-height:70px;margin-bottom:10px"></textarea>
+      <button class="btn accent" style="width:100%;justify-content:center" onclick="addVaultMemory()"><i class="fas fa-plus"></i> Lock this memory</button>
+    </div>
+    <div id="vaultList"></div>
+    <div class="modal-actions"><button class="btn solid" onclick="closeModal('vaultModal')">Close</button></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="settingsModal">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-cog"></i> Settings</div><button class="modal-close" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button></div>
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-palette"></i> Appearance</div>
+      <div class="settings-card">
+        <div class="toggle-row"><div class="toggle-label">Light Mode<span class="hint">Bright theme for daytime</span></div><div class="toggle-switch" id="lightModeToggle" onclick="toggleLightMode()"></div></div>
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-user"></i> Profile & Account</div>
+      <div class="settings-card">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="avatar" style="width:52px;height:52px;font-size:20px" id="settingsAvatar">WK</div>
+          <div style="flex:1">
+            <div id="settingsUserEmail" style="font-size:13px;color:var(--text-secondary);margin-bottom:6px">kingnice314@gmail.com</div>
+            <div style="font-size:12px;color:var(--success);font-weight:600">Connected & Auto-Synced ✅</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-sliders-h"></i> Features</div>
+      <div class="settings-card">
+        <div class="toggle-row"><div class="toggle-label">Enable Web Search</div><div class="toggle-switch on" id="webSearchToggle" onclick="toggleWebSearchSetting()"></div></div>
+        <div style="height:1px;background:var(--border-subtle);margin:10px 0"></div>
+        <div class="toggle-row"><div class="toggle-label">Enable Cross-Chat Memory</div><div class="toggle-switch on" id="memoryToggle" onclick="toggleMemorySetting()"></div></div>
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-key"></i> API Keys (Optional)</div>
+      <div class="settings-card">
+        <input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (auto-connected if empty)" autocomplete="off">
+        <input type="password" class="input-field" id="replicateKeyInput" placeholder="Replicate API key (optional)" autocomplete="off">
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div>
+      <div class="settings-card">
+        <select class="input-field" id="modelSelect" style="margin-bottom:0">
+          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-lite — Blazing Fast ✅</option>
+          <option value="gemini-3.1-flash">Gemini 3.1 Flash — Best for Web Search 🔍</option>
+          <option value="gemini-2.5-flash">Gemini 2.5 Flash — Instant</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions" style="justify-content:space-between">
+      <button class="btn ghost" style="color:#f87171" onclick="openSignOutModal()"><i class="fas fa-sign-out-alt"></i> Sign out</button>
+      <button class="btn accent" onclick="saveSettings()">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- SCRIPT LOGIC -->
+<script>
+const ownerEmail = "kingnice314@gmail.com";
+const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
+  
+onst SYSTEM_PROMPT = `You are WISE KING AI — created by IBRAHIM ABDULLAHI from Nigeria (Wise King Industry). OWNER: Oga Ibrahim 🇳🇬.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🎯 CORE IDENTITY — WISE, KIND, POWERFUL
