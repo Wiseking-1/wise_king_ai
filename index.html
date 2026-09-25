@@ -212,7 +212,21 @@
   .md th,.md td{border:1px solid var(--border-default);padding:7px 10px;text-align:left}
   .md th{background:var(--bg-elevated);font-weight:600}
   .md code{background:var(--bg-elevated);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:0.9em}
-  .md pre{background:var(--bg-elevated);padding:10px;border-radius:8px;overflow-x:auto;margin:8px 0}
+  .md pre{background:var(--bg-elevated);padding:0;border-radius:12px;overflow:hidden;margin:14px 0;border:1px solid var(--border-default)}
+  .md pre .code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#16161d;border-bottom:1px solid var(--border-subtle)}
+  .md pre .code-lang{font-size:12px;font-weight:700;color:var(--accent-hover);text-transform:uppercase;letter-spacing:0.08em;font-family:'JetBrains Mono',monospace}
+  .md pre .code-actions{display:flex;gap:6px}
+  .md pre .code-action-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);border:1px solid var(--border-default);color:var(--text-secondary);font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:8px;cursor:pointer;font-family:inherit;transition:all var(--transition-fast)}
+  .md pre .code-action-btn:hover{background:rgba(99,102,241,0.15);color:var(--accent-hover);border-color:var(--accent)}
+  .md pre .code-action-btn.copied{background:rgba(16,185,129,0.15);color:#6ee7b7;border-color:rgba(16,185,129,0.4)}
+  .md pre code{display:block;padding:14px 16px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.65;color:#e4e4e7;background:transparent}  .md pre{background:var(--bg-elevated);padding:0;border-radius:12px;overflow:hidden;margin:14px 0;border:1px solid var(--border-default)}
+  .md pre .code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#16161d;border-bottom:1px solid var(--border-subtle)}
+  .md pre .code-lang{font-size:12px;font-weight:700;color:var(--accent-hover);text-transform:uppercase;letter-spacing:0.08em;font-family:'JetBrains Mono',monospace}
+  .md pre .code-actions{display:flex;gap:6px}
+  .md pre .code-action-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);border:1px solid var(--border-default);color:var(--text-secondary);font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:8px;cursor:pointer;font-family:inherit;transition:all var(--transition-fast)}
+  .md pre .code-action-btn:hover{background:rgba(99,102,241,0.15);color:var(--accent-hover);border-color:var(--accent)}
+  .md pre .code-action-btn.copied{background:rgba(16,185,129,0.15);color:#6ee7b7;border-color:rgba(16,185,129,0.4)}
+  .md pre code{display:block;padding:14px 16px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.65;color:#e4e4e7;background:transparent}
   .input-dock{position:absolute;bottom:0;left:0;right:0;padding:12px 20px 16px;background:linear-gradient(to top,var(--bg-primary) 60%,transparent);pointer-events:none;z-index:20}
   .input-inner-wrap{max-width:780px;margin:0 auto;pointer-events:auto}
   .preview-area{display:none;gap:8px;flex-wrap:wrap;padding:8px 0}
@@ -979,7 +993,8 @@ YOU Can Write this format to your Suggestions or Instructions to Some details an
 ✅ **Space Between Sections** — never write a wall of text 📏
 
 ✅ **Use Emojis** at the start of headings and important lines
-   Favorites: 🎯 💡 ✅ ⚠️ 📌 🌟 🏆 📝 🔥 👑 🇳🇬 💛 🤲 🌙 ✨ 🎨 🚀 ☝ 👊 🤘 🍉 🍞 🍅 🍒 🍎 🍌 🍝 🍖 🌐 🏝 🏖 🏙 😇 🤓 🏘 🌋 🏔 🕌 🕋 🏫 💒 🏰 🏥 🏤 🏣 🏢 🗾 🗽 🗼 💒 🏦 ♨ 🌇 🎢 🌆 🚌 🚣 🚲 🚦 🚜  🛥 ✈ 💺 🚀 🚿 🛀 🚁 🛌 🛏🚽 ⏰ ⏳ ⌛ 👳 👮 👰 💃 🗣 🌨 🌦 🌝 🌞 ☀🌪 🔥🌊❄⛄🎈🎎🎗🏂👈👁👀🗯🗨💫💬💤💞💝💦💨💥👝👜🎒💐🌹🐌🦀 🕸 🐝🌼 🌻🕌✈ 🛫🛋 🌙 🌔 🌓 👒 👡 🎓 👒 🎀 🎊 🎏 ✨ 🎉 🏀 🏋  🏊 🏂 🚴 🎳 ♥ 🏒 🕹 🚵 🏎 🏍 📲 📞 🖥 💽 📠 🖲 🎻 📻 🔎 🔍 📕 📖 💡 📡 🔭 🔬 📼 📹 📺 🔖  💹 📄 📧 🗞  🖍 📝 🗑 🛠 🔑 🔮 🚻 🏁 🚸 🚫 🚱 🚭 ☣ ↪ ↕ ➡ ❌ ▶⏩ ⏭ ⏯ ◀ 🔀 📴 📵 🔆 🔞 🔢 🆎 🆘 🔺 🔴 🔵⚪💠 🔻⚫ 🧠 👉 😉 😂 🙏 🤗 🌞 🌴 🏄 🎇 🙉 👰 💪 💭 💌 💥b💍 📿 🐅 🐂 🐄 🐖 🐺 🐵 🐈 🐢 🕊 🐧 🐤 🐓 🐋 🐬 🐠 💐 🌹 🌻 🌏 🎨 🚨 ⛅ 🌦 🌩 ⚡ 🎖 🏆 🏅 🎶 🎙 💰 📚 📌 📍 📎 🔐 🔓 😎 👍 👏 💌 🍹 🍭 ☕ 🎂 🚅 🚵 ♥ 🔉 💻 ⌨ 🖥 🎬 📸 💵 📝 📂 ✒ 📭 🔒 💯 and lots more..
+   Favorites: 🎯 💡 ✅ ⚠️ 📌 🌟 🏆 📝 🔥 👑 🇳🇬 💛 🤲 🌙 ✨ 🎨 🚀 ☝ 👊 🤘 🍉 🍞 🍅 🍒 🍎 🍌 🍝 🍖 🌐 🏝 🏖 🏙 😇 🤓 🏘 🌋 🏔 🕌 🕋 🏫 💒 🏰 🏥 🏤 🏣 🏢 🗾 🗽 🗼 💒 🏦 ♨ 🌇 🎢 🌆 🚌 🚣 🚲 🚦 🚜  🛥 ✈ 💺 🚀 🚿 🛀 🚁 🛌 🛏🚽 ⏰ ⏳ ⌛ 👳 👮 👰 💃 🗣 🌨 🌦 🌝 🌞 ☀🌪 🔥🌊❄⛄🎈🎎🎗🏂👈👁👀🗯🗨💫💬💤💞💝💦💨💥👝👜🎒💐🌹🐌🦀 🕸 🐝🌼 🌻🕌✈ 🏘♨🌇💈🎡🎠🎰🚂🎢🚈🚓🚕🛥⚓🚖🚗🚙🛰🕒🌀🌬🌥☔🌂🌈💧🌊⚡🎆🎾🎱🏈🎣🏒🏐🀄🃏🔕🔔🔇🔈📯🎺🎹🎧🎤🎷🎶🎵🎙📯📢🎚📲📱📞📘🔎🔦📼🔖🗞📫📦📌📍🗑🗃✂💊🛢🗿🚬🗡🗝🗜🔧🏧🚫🚾⛔♿🚹
+   🛫🛋 🌙 🌔 🌓 👒 👡 🎓 👒 🎀 🎊 🎏 ✨ 🎉 🏀 🏋  🏊 🏂 🚴 🎳 ♥ 🏒 🕹 🚵 🏎 🏍 📲 📞 🖥 💽 📠 🖲 🎻 📻 🔎 🔍 📕 📖 💡 📡 🔭 🔬 📼 📹 📺 🔖  💹 📄 📧 🗞  🖍 📝 🗑 🛠 🔑 🔮 🚻 🏁 🚸 🚫 🚱 🚭 ☣ ↪ ↕ ➡ ❌ ▶⏩ ⏭ ⏯ ◀ 🔀 📴 📵 🔆 🔞 🔢 🆎 🆘 🔺 🔴 🔵⚪💠 🔻⚫ 🧠 👉 😉 😂 🙏 🤗 🌞 🌴 🏄 🎇 🙉 👰 💪 💭 💌 💥b💍 📿 🐅 🐂 🐄 🐖 🐺 🐵 🐈 🐢 🕊 🐧 🐤 🐓 🐋 🐬 🐠 💐 🌹 🌻 🌏 🎨 🚨 ⛅ 🌦 🌩 ⚡ 🎖 🏆 🏅 🎶 🎙 💰 📚 📌 📍 📎 🔐 🔓 😎 👍 👏 💌 🍹 🍭 ☕ 🎂 🚅 🚵 ♥ 🔉 💻 ⌨ 🖥 🎬 📸 💵 📝 📂 ✒ 📭 🔒 💯 and lots more..
  
 ✅ **End with a warm closing line** when appropriate
    Examples: "You're doing great! ✅" or "Ranka ya dade! 👑" or "Take care and stay blessed! 🙏" or "Alhamdulillah! 🤲"
@@ -987,7 +1002,7 @@ YOU Can Write this format to your Suggestions or Instructions to Some details an
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📐 STRUCTURE EVERY RESPONSE LIKE THIS 👇
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. **🎯 Short Direct Answer** — Answer immediately in 1-2 lines
+1. **🎯 Short Direct Answer** — Answer immediately in 1-2 lines.
 2. **📚 Rich Details** — Explain WHY, HOW, WHAT with headings
 3. **💡 Tips & Suggestions** — 2-3 helpful tips at the end
 4. **🤲 Warm Closing** — A kind or wise line to end with
@@ -1425,7 +1440,7 @@ function linkify(t) { return t.replace(/(https?:\/\/[^\s)]+)/g, '<a href="$1" ta
 function renderMarkdown(src) {
   let s = escapeHtml(String(src ?? ''));
   s = linkify(s);
-  s = s.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+  s = s.replace(/```(\w+)?\n?([\s\S]*?)```/g, (m, lang, code) => buildCodeBlock(code.trim(), lang));
   s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
   s = s.replace(/^### (.*)$/gm, '<h4>$1</h4>');
   s = s.replace(/^## (.*)$/gm, '<h3>$1</h3>');
@@ -1672,18 +1687,58 @@ function sendMessage(textOverride) {
   triggerResponse(chat, userMsg);
 }
 
-// ============ RENDER MESSAGES ============
-function renderMessages() {
-  const area = document.getElementById('messagesArea'); if (!area) return;
-  area.innerHTML = '';
-  const chat = chats.find(c => c.id === activeChatId);
-  if (!chat) { document.getElementById('welcomeScreen').style.display = 'flex'; return; }
-  const hasMsgs = chat.messages.length > 0;
-  document.getElementById('welcomeScreen').style.display = hasMsgs ? 'none' : 'flex';
-  document.getElementById('chatTitle').textContent = chat.title;
-  chat.messages.forEach((msg, idx) => area.appendChild(buildMessageEl(msg, idx, chat.id)));
-  const cs = document.getElementById('chatScroll'); cs.scrollTop = cs.scrollHeight;
+// ============ CODE BLOCK WITH COPY + DOWNLOAD ============
+let __codeBlockCounter = 0;
+function buildCodeBlock(code, lang) {
+  const id = 'code-' + (++__codeBlockCounter);
+  const safeCode = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const langLabel = (lang || 'text').toUpperCase();
+  const ext = lang === 'javascript' ? 'js' : lang === 'python' ? 'py' : lang === 'html' ? 'html' : lang === 'css' ? 'css' : lang === 'json' ? 'json' : 'txt';
+  
+  // Store code for copy/download
+  window.__wkCodeBlocks = window.__wkCodeBlocks || {};
+  window.__wkCodeBlocks[id] = code;
+  
+  return `<pre id="${id}">
+    <div class="code-header">
+      <div class="code-lang">${langLabel}</div>
+      <div class="code-actions">
+        <button class="code-action-btn" onclick="copyCodeBlock('${id}', this)"><i class="fas fa-copy"></i> Copy</button>
+        <button class="code-action-btn" onclick="downloadCodeBlock('${id}', 'wiseking-code.${ext}')"><i class="fas fa-download"></i> Download</button>
+      </div>
+    </div>
+    <code>${safeCode}</code>
+  </pre>`;
 }
+
+function copyCodeBlock(id, btn) {
+  const code = window.__wkCodeBlocks?.[id] || '';
+  wkCopyToClipboard(code).then(ok => {
+    if (ok) {
+      const orig = btn.innerHTML;
+      btn.classList.add('copied');
+      btn.innerHTML = '<i class="fas fa-check"></i> Copied';
+      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 1800);
+    } else {
+      showToast('⚠️ Copy failed');
+    }
+  });
+}
+window.copyCodeBlock = copyCodeBlock;
+
+function downloadCodeBlock(id, filename) {
+  const code = window.__wkCodeBlocks?.[id] || '';
+  try {
+    const blob = new Blob([code], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 100);
+    showToast('⬇️ Downloaded!');
+  } catch(e) { showToast('⚠️ Download failed'); }
+}
+window.downloadCodeBlock = downloadCodeBlock;
 
 function buildMessageEl(msg, idx, chatId) {
   const el = document.createElement('div'); el.className = 'message ' + msg.role;
