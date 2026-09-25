@@ -35,7 +35,7 @@
   body.light-mode ::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15)}
   
   #loginScreen{position:fixed;inset:0;background:radial-gradient(circle at 20% 20%,rgba(99,102,241,0.15) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(168,85,247,0.12) 0%,transparent 50%),var(--bg-primary);display:flex;align-items:center;justify-content:center;z-index:9999;padding:24px;transition:opacity 0.4s ease;overflow-y:auto}
-  #loginScreen.hidden{opacity:0;pointer-events:none}
+  #loginScreen.hidden{opacity:0;pointer-events:none;display:none}
   .login-card{width:100%;max-width:440px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-xl);padding:36px 32px;box-shadow:var(--shadow-lg);animation:slideUp 0.5s;text-align:center;margin:auto}
   @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
   .login-logo{width:56px;height:56px;border-radius:var(--radius-lg);background:var(--accent-gradient);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;box-shadow:var(--shadow-glow)}
@@ -203,8 +203,6 @@
   .md th{background:var(--bg-elevated);font-weight:600}
   .md code{background:var(--bg-elevated);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:0.9em}
   .md pre{background:var(--bg-elevated);padding:10px;border-radius:8px;overflow-x:auto;margin:8px 0}
-  .streaming-cursor{display:inline-block;width:2px;height:1.1em;background:var(--accent);vertical-align:text-bottom;margin-left:2px;animation:blink 0.8s infinite}
-  @keyframes blink{50%{opacity:0}}
   .input-dock{position:absolute;bottom:0;left:0;right:0;padding:12px 20px 16px;background:linear-gradient(to top,var(--bg-primary) 60%,transparent);pointer-events:none;z-index:20}
   .input-inner-wrap{max-width:780px;margin:0 auto;pointer-events:auto}
   .preview-area{display:none;gap:8px;flex-wrap:wrap;padding:8px 0}
@@ -227,8 +225,8 @@
   .gk-chip:hover{background:var(--bg-elevated);color:var(--text-primary)}
   .gk-chip.active{background:rgba(99,102,241,0.18);color:var(--accent-hover);border-color:var(--accent);box-shadow:0 0 12px rgba(99,102,241,0.25)}
   .gk-options-spacer{flex:1}
-  .gk-hold-pill{display:none;align-items:center;justify-content:center;padding:10px 16px;background:var(--bg-input);border:1px solid var(--border-default);border-radius:20px;color:var(--text-secondary);font-size:13.5px;font-weight:500;cursor:pointer;-webkit-user-select:none;user-select:none;text-align:center}
-  .gk-hold-pill.holding{background:var(--accent-gradient);color:white;border-color:transparent}
+  .gk-hold-pill{display:none;align-items:center;justify-content:center;padding:12px 16px;background:var(--bg-input);border:1px solid var(--border-default);border-radius:20px;color:var(--text-secondary);font-size:13.5px;font-weight:500;cursor:pointer;-webkit-user-select:none;user-select:none;text-align:center}
+  .gk-hold-pill.holding{background:var(--accent-gradient);color:white;border-color:transparent;box-shadow:0 0 20px var(--accent-glow)}
   .gk-hold-pill i{margin-right:6px}
   .gk-input-box.voice-mode .gk-textarea{display:none}
   .gk-input-box.voice-mode .gk-text-row{display:none}
@@ -282,7 +280,6 @@
   .result-card p{font-size:14px;color:var(--text-secondary);line-height:1.7}
   .result-card a{color:var(--accent);font-size:12px;text-decoration:none}
   
-  /* ===== WEB SEARCH SUGGESTION CHIPS (open real pages) ===== */
   .quick-chip{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-full);color:var(--text-primary);font-size:13.5px;font-weight:500;cursor:pointer;font-family:inherit;transition:all var(--transition-fast);text-decoration:none}
   .quick-chip:hover{background:var(--bg-elevated);border-color:var(--accent);transform:translateY(-1px);box-shadow:var(--shadow-md)}
   .quick-chip i{font-size:14px;color:var(--accent-hover)}
@@ -290,15 +287,10 @@
   .quick-chip.youtube i{color:#ff0033}
   .quick-chip.google i{color:#4285f4}
   .quick-chip.bbc i{color:#bb1919}
-  .quick-chip.chat i{color:var(--accent-hover)}
-  .quick-chip.chat{background:rgba(99,102,241,0.12);border-color:var(--accent)}
   
   .gen-image-loading{padding:60px 20px;text-align:center;color:var(--text-secondary);font-size:13px}
   .gen-image-loading i{font-size:28px;color:var(--accent);margin-bottom:12px;display:block;animation:spin 1s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .image-result img{max-width:100%;border-radius:14px;display:block;box-shadow:var(--shadow-md);border:1px solid var(--border-default)}
-  .image-result-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-  .image-result-actions .btn{padding:7px 14px;font-size:12.5px}
   .image-loading{display:flex;flex-direction:column;align-items:center;gap:10px;padding:30px;color:var(--text-secondary);font-size:13px}
   .image-loading .ring{width:26px;height:26px;border:3px solid var(--accent);border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite}
   .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--bg-elevated);border:1px solid var(--border-default);padding:10px 20px;border-radius:var(--radius-full);font-size:13px;font-weight:500;z-index:5000;opacity:0;pointer-events:none;box-shadow:var(--shadow-lg);transition:all var(--transition-smooth);max-width:90vw;text-align:center}
@@ -412,7 +404,7 @@
     <div class="sidebar-footer">
       <div class="user-chip" onclick="openSettings()">
         <div class="avatar" id="sidebarAvatar">WK</div>
-        <div class="user-info"><div class="user-name" id="sidebarName">IBRAHIM ABDULLAHI</div><div class="user-plan" id="userPlanBadge">Pro plan</div></div>
+        <div class="user-info"><div class="user-name" id="sidebarName">Wise King User</div><div class="user-plan" id="userPlanBadge">Free plan</div></div>
       </div>
       <button class="icon-action" onclick="openSettings()"><i class="fas fa-cog"></i></button>
     </div>
@@ -439,7 +431,7 @@
           <div class="pm-header">
             <div class="pm-user-info">
               <div class="pm-avatar" id="pmAvatar">👑</div>
-              <div class="pm-details"><div class="pm-name" id="pmName">IBRAHIM ABDULLAHI</div><div class="pm-email" id="pmEmail">kingnice314@gmail.com</div></div>
+              <div class="pm-details"><div class="pm-name" id="pmName">Wise King User</div><div class="pm-email" id="pmEmail">Not signed in</div></div>
             </div>
             <button class="pm-close" onclick="closeTopProfileMenu()"><i class="fas fa-times"></i></button>
           </div>
@@ -451,8 +443,8 @@
             <button class="pm-item" onclick="addAnotherAccount();"><i class="fas fa-user-plus"></i> Add Account</button>
             <button class="pm-item" onclick="switchAccount();"><i class="fas fa-right-left"></i> Switch Account</button>
             <button class="pm-item" onclick="window.open('https://myaccount.google.com/', '_blank'); closeTopProfileMenu();"><i class="fas fa-external-link-alt"></i> Manage Account</button>
-           <div class="pm-divider"></div>
-           <button class="pm-item danger" onclick="askSignOut();"><i class="fas fa-sign-out-alt"></i> Sign Out</button>  
+            <div class="pm-divider"></div>
+            <button class="pm-item danger" onclick="askSignOut();"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
           </div>
         </div>
       </div>
@@ -460,10 +452,7 @@
 
     <div class="chat-search-bar" id="chatSearchBar">
       <i class="fas fa-magnifying-glass" style="color:var(--text-secondary);font-size:13px"></i>
-      <input type="text" id="chatSearchInput" placeholder="Search in this chat..." oninput="doChatSearch()" onkeydown="if(event.key==='Enter'){event.preventDefault();nextSearchMatch();}">
-      <span class="search-count" id="chatSearchCount">0 / 0</span>
-      <button onclick="prevSearchMatch()"><i class="fas fa-chevron-up"></i></button>
-      <button onclick="nextSearchMatch()"><i class="fas fa-chevron-down"></i></button>
+      <input type="text" id="chatSearchInput" placeholder="Search in this chat...">
       <button onclick="toggleChatSearch()"><i class="fas fa-times"></i></button>
     </div>
 
@@ -592,64 +581,6 @@
       <button class="btn accent" onclick="submitDislikeFeedback()"><i class="fas fa-paper-plane"></i> Submit</button>
     </div>
   </div>
-</div>
-
-<!-- FULL PANELS -->
-<div class="full-panel" id="searchWebPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-globe"></i> Search the web</div><button class="btn ghost" onclick="closeSearchWebPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <input type="text" class="search-big" id="searchWebInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter'){doSearchWeb(this.value)}">
-    <div id="searchSuggestionsBox" style="margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px"></div>
-    <div id="askWiseKingShortcut" style="margin-bottom:20px;display:none"></div>
-    <div id="searchWebResults"></div>
-  </div></div>
-</div>
-
-<div class="full-panel" id="buildAppPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-code"></i> Build an app</div><button class="btn ghost" onclick="closeBuildAppPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <input type="text" class="search-big" id="buildAppInput" placeholder="Search or describe your app idea..." oninput="filterBuildIdeas(this.value)">
-    <div id="buildAppIdeas"></div>
-  </div></div>
-</div>
-
-<div class="full-panel" id="imagesPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-image"></i> Images</div><button class="btn ghost" onclick="closeImagesPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <div style="font-size:13.5px;color:var(--text-secondary);margin-bottom:8px">Describe the image or logo you want:</div>
-    <input type="text" class="search-big" id="imagesPromptInput" placeholder="e.g. beautiful Hausa woman OR logo for Wise King" onkeydown="if(event.key==='Enter'){generateImageFromPanel()}">
-    <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:12px" onclick="generateImageFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Generate</button>
-    <div id="replicateStatus" style="font-size:11.5px;color:var(--text-tertiary);text-align:center;margin-bottom:20px"></div>
-    <div id="imagesPanelResults"></div>
-  </div></div>
-</div>
-
-<div class="full-panel" id="videosPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-video"></i> Create Video</div><button class="btn ghost" onclick="closeVideosPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <input type="text" class="search-big" id="videosPromptInput" placeholder="Describe the video scene...">
-    <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="generateVideoFromPanel()"><i class="fas fa-clapperboard"></i> Generate Video</button>
-    <div id="videoPanelResults"></div>
-  </div></div>
-</div>
-
-<div class="full-panel" id="videoGalleryPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-film"></i> My Videos</div><button class="btn ghost" onclick="closeVideoGallery()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner"><div id="videoGalleryContent"></div></div></div>
-</div>
-
-<div class="full-panel" id="libraryPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-shapes"></i> Library</div><button class="btn ghost" onclick="closeLibraryPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner"><div id="libraryPanelResults"></div></div></div>
-</div>
-
-<div class="full-panel" id="memoryPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-brain"></i> Cross-Chat Memory</div><button class="btn ghost" onclick="closeMemoryPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">Wise King automatically learns facts from your chats.</p>
-    <button class="btn solid" style="width:100%;justify-content:center;margin-bottom:16px" onclick="extractMemoryNow()"><i class="fas fa-wand-magic-sparkles"></i> Extract Memory</button>
-    <div id="memoryPanelResults"></div>
-  </div></div>
 </div>
 
 <div class="modal-bg" id="signOutModal">
@@ -897,7 +828,6 @@
       .catch((error) => { showAuthError("Error: " + error.message); btn.disabled = false; btn.innerHTML = orig; });
   };
 
-  // ============ ADD ACCOUNT / SWITCH ACCOUNT — INSTANT ============
   window.addAnotherAccount = function() {
     closeTopProfileMenu();
     showToast('Pick another Google account 👥');
@@ -911,141 +841,45 @@
     setTimeout(() => signInWithGoogle(), 80);
   };
 
-// ============ SIGN OUT — CONFIRMATION FIRST ============
-window.askSignOut = function() {
-  closeTopProfileMenu();
-  document.getElementById('signOutModal').classList.add('show');
-};
+  window.askSignOut = function() {
+    closeTopProfileMenu();
+    document.getElementById('signOutModal').classList.add('show');
+  };
 
-window.confirmSignOut = function() {
-  // Close the modal immediately
-  document.getElementById('signOutModal').classList.remove('show');
-  showToast('Signing out... 👋');
+  window.confirmSignOut = function() {
+    document.getElementById('signOutModal').classList.remove('show');
+    showToast('Signing out... 👋');
+    signOut(auth).then(() => {
+      ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_library','wk_projects'].forEach(k => localStorage.removeItem(k));
+      try { sessionStorage.clear(); } catch(e) {}
+      lastUid = null;
+      forceShowLoginScreen();
+    }).catch(() => { forceShowLoginScreen(); });
+  };
 
-  // Sign out from Firebase
-  signOut(auth).then(() => {
-    // Clear ALL local data
-    ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_library','wk_projects'].forEach(k => localStorage.removeItem(k));
-    try { sessionStorage.clear(); } catch(e) {}
-    lastUid = null;
+  window.signOutUser = window.confirmSignOut;
 
-    // ✅ IMMEDIATELY show login screen (no waiting, no reload)
-    forceShowLoginScreen();
-
-  }).catch((err) => {
-    console.warn('Sign out error:', err);
-    // Even if Firebase errors, show login screen
-    forceShowLoginScreen();
-  });
-};
-
-window.signOutUser = window.confirmSignOut;
-
-// ✅ Force show login screen INSTANTLY
-function forceShowLoginScreen() {
-  const ls = document.getElementById('loginScreen');
-  const ma = document.getElementById('mainApp');
-
-  if (ma) {
-    ma.style.opacity = '0';
-    ma.style.display = 'none';
-  }
-  if (ls) {
-    ls.classList.remove('hidden');
-    ls.style.display = 'flex';
-    ls.style.opacity = '1';
-    ls.style.pointerEvents = 'auto';
-  }
-
-  // Clear form fields
-  ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-
-  // Clear errors
-  document.getElementById('authError')?.classList.remove('show');
-  document.getElementById('authSuccess')?.classList.remove('show');
-
-  // Reset chat state
-  try { chats = []; activeChatId = null; } catch(e) {}
-  try { renderChats(); renderMessages(); } catch(e) {}
-
-  // Switch to Sign In tab
-  try { switchAuthTab('signin'); } catch(e) {}
-
-  // Scroll to top
-  window.scrollTo(0, 0);
-  console.log('👋 Login screen shown instantly');
-}
-window.forceShowLoginScreen = forceShowLoginScreen; // ============ SIGN OUT — CONFIRMATION FIRST ============
-window.askSignOut = function() {
-  closeTopProfileMenu();
-  document.getElementById('signOutModal').classList.add('show');
-};
-
-window.confirmSignOut = function() {
-  // Close the modal immediately
-  document.getElementById('signOutModal').classList.remove('show');
-  showToast('Signing out... 👋');
-
-  // Sign out from Firebase
-  signOut(auth).then(() => {
-    // Clear ALL local data
-    ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_library','wk_projects'].forEach(k => localStorage.removeItem(k));
-    try { sessionStorage.clear(); } catch(e) {}
-    lastUid = null;
-
-    // ✅ IMMEDIATELY show login screen (no waiting, no reload)
-    forceShowLoginScreen();
-
-  }).catch((err) => {
-    console.warn('Sign out error:', err);
-    // Even if Firebase errors, show login screen
-    forceShowLoginScreen();
-  });
-};
-
-window.signOutUser = window.confirmSignOut;
-
-// ✅ Force show login screen INSTANTLY
-function forceShowLoginScreen() {
-  const ls = document.getElementById('loginScreen');
-  const ma = document.getElementById('mainApp');
-
-  if (ma) {
-    ma.style.opacity = '0';
-    ma.style.display = 'none';
-  }
-  if (ls) {
-    ls.classList.remove('hidden');
-    ls.style.display = 'flex';
-    ls.style.opacity = '1';
-    ls.style.pointerEvents = 'auto';
-  }
-
-  // Clear form fields
-  ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-
-  // Clear errors
-  document.getElementById('authError')?.classList.remove('show');
-  document.getElementById('authSuccess')?.classList.remove('show');
-
-  // Reset chat state
-  try { chats = []; activeChatId = null; } catch(e) {}
-  try { renderChats(); renderMessages(); } catch(e) {}
-
-  // Switch to Sign In tab
-  try { switchAuthTab('signin'); } catch(e) {}
-
-  // Scroll to top
-  window.scrollTo(0, 0);
-  console.log('👋 Login screen shown instantly');
-}
-window.forceShowLoginScreen = forceShowLoginScreen;
+  window.forceShowLoginScreen = function() {
+    const ls = document.getElementById('loginScreen');
+    const ma = document.getElementById('mainApp');
+    if (ma) { ma.style.opacity = '0'; ma.style.display = 'none'; }
+    if (ls) {
+      ls.classList.remove('hidden');
+      ls.style.display = 'flex';
+      ls.style.opacity = '1';
+      ls.style.pointerEvents = 'auto';
+    }
+    ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    document.getElementById('authError')?.classList.remove('show');
+    document.getElementById('authSuccess')?.classList.remove('show');
+    try { chats = []; activeChatId = null; } catch(e) {}
+    try { renderChats(); renderMessages(); } catch(e) {}
+    try { switchAuthTab('signin'); } catch(e) {}
+    window.scrollTo(0, 0);
+  };
 </script>
 
 <script>
@@ -1092,8 +926,8 @@ ALWAYS format your answers like this 👇
 ✅ **Space Between Sections** — never write a wall of text 📏
 
 ✅ **Use Emojis** at the start of headings and important lines
-   Favorites: 🎯 💡 ✅ ⚠️ 📌 🌟 🏆 📝 🔥 👑 🇳🇬 💛 🤲 🌙 ✨ 🎨 🚀 ☝ 👊 🤘 🍉🍞🍅🍒🍎🍌🍝🍖🌐🏝🏖🏙🏘🌋🏔🕌🕋🏫💒🏰🏥🏤🏣🏢🗾🗽🗼💒🏦♨🌇🎢🌆🚌🚣🚲🚦🚜🛥✈💺🚀🚿🛀🚁🛌🛏🚽⏰⏳⌛🌨🌦🌝🌞☀🌪🔥🌊❄⛄🎈🎎🎗🏂👈👁👀🗯🗨💫💬💤💞💝💦💨💥👝👜🎒👒👡🎓👒🎀🎊🎏✨🎉🏀🏋🏊🏂🚴🎳♥🏒🕹🚵🏎🏍📲📞🖥💽📠🖲🎻📻🔎🔍📕📖💡📡🔭🔬📼📹📺🔖💹📄📧🗞🖍📝🗑🛠🔑🔮🚻🏁🚸🚫🚱🚭☣↪↕➡❌▶⏩⏭⏯◀🔀📴📵🔆🔞🔢🆎🆘🔺🔴🔵⚪💠🔻⚫ 🧠 👉 😉 😂 🙏 🤗 🌞 🌴 🏄 🎇 🙉 👰 💪 💭 💌 💥b💍 📿 🐅 🐂 🐄 🐖 🐺 🐵 🐈 🐢 🕊 🐧 🐤 🐓 🐋 🐬 🐠 💐 🌹 🌻 🌏 🎨 🚨 ⛅ 🌦 🌩 ⚡ 🎖 🏆 🏅 🎶 🎙 💰 📚 📌 📍 📎 🔐 🔓 😎 👍 👏 💌 🍹 🍭 ☕ 🎂 🚅 🚵 ♥ 🔉 💻 ⌨ 🖥 🎬 📸 💵 📝 📂 ✒ 📭 🔒 💯 and lots more..
-
+   Favorites: 🎯 💡 ✅ ⚠️ 📌 🌟 🏆 📝 🔥 👑 🇳🇬 💛 🤲 🌙 ✨ 🎨 🚀 ☝ 👊 🤘 🍉 🍞 🍅 🍒 🍎 🍌 🍝 🍖 🌐 🏝 🏖 🏙 😇 🤓 🏘 🌋 🏔 🕌 🕋 🏫 💒 🏰 🏥 🏤 🏣 🏢 🗾 🗽 🗼 💒 🏦 ♨ 🌇 🎢 🌆 🚌 🚣 🚲 🚦 🚜  🛥 ✈ 💺 🚀 🚿 🛀 🚁 🛌 🛏🚽 ⏰ ⏳ ⌛ 👳 👮 👰 💃 🗣 🌨 🌦 🌝 🌞 ☀🌪 🔥🌊❄⛄🎈🎎🎗🏂👈👁👀🗯🗨💫💬💤💞💝💦💨💥👝👜🎒💐🌹🐌🦀 🕸 🐝🌼 🌻🕌✈ 🛫🛋 🌙 🌔 🌓 👒 👡 🎓 👒 🎀 🎊 🎏 ✨ 🎉 🏀 🏋  🏊 🏂 🚴 🎳 ♥ 🏒 🕹 🚵 🏎 🏍 📲 📞 🖥 💽 📠 🖲 🎻 📻 🔎 🔍 📕 📖 💡 📡 🔭 🔬 📼 📹 📺 🔖  💹 📄 📧 🗞  🖍 📝 🗑 🛠 🔑 🔮 🚻 🏁 🚸 🚫 🚱 🚭 ☣ ↪ ↕ ➡ ❌ ▶⏩ ⏭ ⏯ ◀ 🔀 📴 📵 🔆 🔞 🔢 🆎 🆘 🔺 🔴 🔵⚪💠 🔻⚫ 🧠 👉 😉 😂 🙏 🤗 🌞 🌴 🏄 🎇 🙉 👰 💪 💭 💌 💥b💍 📿 🐅 🐂 🐄 🐖 🐺 🐵 🐈 🐢 🕊 🐧 🐤 🐓 🐋 🐬 🐠 💐 🌹 🌻 🌏 🎨 🚨 ⛅ 🌦 🌩 ⚡ 🎖 🏆 🏅 🎶 🎙 💰 📚 📌 📍 📎 🔐 🔓 😎 👍 👏 💌 🍹 🍭 ☕ 🎂 🚅 🚵 ♥ 🔉 💻 ⌨ 🖥 🎬 📸 💵 📝 📂 ✒ 📭 🔒 💯 and lots more..
+ 
 ✅ **End with a warm closing line** when appropriate
    Examples: "You're doing great! ✅" or "Ranka ya dade! 👑" or "Take care and stay blessed! 🙏" or "Alhamdulillah! 🤲"
 
@@ -1114,7 +948,7 @@ ALWAYS format your answers like this 👇
 • When user asks for code → always use fenced code blocks like: \`\`\`language ... \`\`\`
 • When user asks for image → respond with: \`\`\`image prompt \`\`\`
 • When user asks for video → respond with: \`\`\`video prompt \`\`\`
-
+ 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📚 KNOWLEDGE DOMAINS (Deep Expertise) 🧠
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1190,32 +1024,9 @@ let renamingChatId = null;
 let deletingChatId = null;
 let popupMenuChatId = null;
 let currentShareTarget = null;
-let searchMatches = [];
-let searchCurrentIdx = -1;
 let thinkMode = false;
 let searchMode = false;
 let voiceMode = false;
-let isHolding = false;
-let holdToSpeakRecognition = null;
-
-// ============ SHOW LOGIN SCREEN INSTANTLY ============
-function showLoginScreen() {
-  const ma = document.getElementById('mainApp');
-  if (ma) ma.style.opacity = '0';
-  const ls = document.getElementById('loginScreen');
-  if (ls) { ls.classList.remove('hidden'); ls.style.display = 'flex'; }
-  ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  document.getElementById('authError')?.classList.remove('show');
-  document.getElementById('authSuccess')?.classList.remove('show');
-  activeChatId = null;
-  chats = [];
-  if (typeof loadChatsFromLocalStorage === 'function') loadChatsFromLocalStorage();
-  if (typeof switchAuthTab === 'function') switchAuthTab('signin');
-}
-window.showLoginScreen = showLoginScreen;
 
 // ============ AUTH HELPERS ============
 function showAuthError(msg) { const el = document.getElementById('authError'); if (!el) return; el.textContent = msg; el.classList.add('show'); document.getElementById('authSuccess')?.classList.remove('show'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 6000); }
@@ -1374,7 +1185,6 @@ function updateModelBadge() { const m = localStorage.getItem('wk_model') || 'gem
 function applyTheme(color) { document.documentElement.style.setProperty('--accent', color); document.querySelectorAll('.theme-swatch').forEach(s => s.classList.toggle('active', s.dataset.color === color)); }
 function toggleLightMode() { document.body.classList.toggle('light-mode'); const isLight = document.body.classList.contains('light-mode'); localStorage.setItem('wk_light_mode', isLight ? '1' : '0'); document.getElementById('lightModeToggle')?.classList.toggle('on', isLight); showToast(isLight ? '☀️ Light Mode' : '🌙 Dark Mode'); }
 function loadTheme() { if (localStorage.getItem('wk_light_mode') === '1') { document.body.classList.add('light-mode'); document.getElementById('lightModeToggle')?.classList.add('on'); } }
-
 function getWebSearchEnabled() { return localStorage.getItem('wk_web_search') !== '0'; }
 function setWebSearchEnabled(e) { localStorage.setItem('wk_web_search', e ? '1' : '0'); document.getElementById('webSearchToggle')?.classList.toggle('on', e); }
 function toggleWebSearchSetting() { const n = !getWebSearchEnabled(); setWebSearchEnabled(n); showToast(n ? '🌐 Web ON' : '🚫 OFF'); }
@@ -1404,23 +1214,7 @@ function toggleVoiceMode() {
   }
 }
 
-// ============ CLEAN VOICE RECOGNITION (no duplicates) ============
-function cleanTranscript(raw) {
-  if (!raw) return '';
-  let t = raw.trim();
-  // Remove filler words
-  t = t.replace(/\b(um|uh|erm|ah|hmm|eh|like|you know|i mean)\b[,]?\s*/gi, '');
-  // Collapse repeated words: "the the the" → "the"
-  t = t.replace(/\b(\w+)(\s+\1\b)+/gi, '$1');
-  // Collapse repeated phrases: "I want to I want to" → "I want to"
-  t = t.replace(/\b(.{3,30}?)\s+\1\b/gi, '$1');
-  // Fix spacing
-  t = t.replace(/\s+/g, ' ');
-  // Capitalize first letter
-  t = t.charAt(0).toUpperCase() + t.slice(1);
-  return t.trim();
-}
-// ============ SMART VOICE RECOGNITION (no repeats) ============
+// ============ SMART VOICE RECOGNITION ============
 function initHoldToSpeak() {
   const pill = document.getElementById('gkHoldPill');
   const label = document.getElementById('gkHoldLabel');
@@ -1431,40 +1225,24 @@ function initHoldToSpeak() {
   let isHolding = false;
   let finalText = '';
   let interimText = '';
-  let restartTimeout = null;
 
-  // Clean up duplicate words and sentences
-  function cleanTranscript(raw) {
+  function cleanText(raw) {
     if (!raw) return '';
     let t = raw.trim();
-
-    // Remove filler words
     t = t.replace(/\b(um|uh|erm|ah|hmm|eh)\b[,]?\s*/gi, '');
-
-    // Remove repeating word sequences (e.g., "I and I and I" → "I")
-    for (let i = 0; i < 5; i++) {
-      t = t.replace(/\b(\w+(?:\s+\w+){0,5})\s+\1\b/gi, '$1');
+    for (let i = 0; i < 6; i++) {
+      t = t.replace(/\b(\w+(?:\s+\w+){0,4})\s+\1\b/gi, '$1');
     }
-
-    // Remove duplicate sentences
     const sentences = t.split(/(?<=[.!?])\s+/);
     const unique = [];
     const seen = new Set();
     for (const s of sentences) {
       const key = s.toLowerCase().trim();
-      if (key && !seen.has(key)) {
-        seen.add(key);
-        unique.push(s);
-      }
+      if (key && !seen.has(key)) { seen.add(key); unique.push(s); }
     }
     t = unique.join(' ');
-
-    // Collapse spaces
     t = t.replace(/\s+/g, ' ').trim();
-
-    // Capitalize first letter
     if (t) t = t.charAt(0).toUpperCase() + t.slice(1);
-
     return t;
   }
 
@@ -1472,15 +1250,14 @@ function initHoldToSpeak() {
     e.preventDefault();
     if (isHolding) return;
     isHolding = true;
-    finalText = '';
-    interimText = '';
+    finalText = ''; interimText = '';
     pill.classList.add('holding');
     label.textContent = '🎙️ Speak now...';
 
     try {
       recognition = new SR();
       recognition.lang = 'en-NG';
-      recognition.continuous = false;       // ✅ Stop after one sentence
+      recognition.continuous = false;
       recognition.interimResults = true;
       recognition.maxAlternatives = 1;
 
@@ -1488,33 +1265,15 @@ function initHoldToSpeak() {
         interimText = '';
         for (let i = ev.resultIndex; i < ev.results.length; i++) {
           const transcript = ev.results[i][0].transcript;
-          if (ev.results[i].isFinal) {
-            finalText += transcript + ' ';
-          } else {
-            interimText += transcript;
-          }
+          if (ev.results[i].isFinal) finalText += transcript + ' ';
+          else interimText += transcript;
         }
-        // Show preview
         const preview = (finalText + interimText).trim();
-        if (preview) {
-          label.textContent = preview.slice(0, 50) + (preview.length > 50 ? '...' : '');
-        }
+        if (preview) label.textContent = preview.slice(0, 50) + (preview.length > 50 ? '...' : '');
       };
 
       recognition.onerror = (ev) => { console.warn('Voice error:', ev.error); };
-
-      recognition.onend = () => {
-        // If user is still holding, restart briefly (max 2 restarts)
-        if (isHolding) {
-          clearTimeout(restartTimeout);
-          restartTimeout = setTimeout(() => {
-            if (isHolding && recognition) {
-              try { recognition.start(); } catch(e) {}
-            }
-          }, 300);
-        }
-      };
-
+      recognition.onend = () => { if (isHolding) { try { recognition.start(); } catch(e) {} } };
       recognition.start();
     } catch(err) { console.warn('Voice start failed', err); }
   };
@@ -1523,104 +1282,33 @@ function initHoldToSpeak() {
     if (!isHolding) return;
     if (e) e.preventDefault();
     isHolding = false;
-    clearTimeout(restartTimeout);
     pill.classList.remove('holding');
     label.textContent = 'Hold to speak';
-
     try { if (recognition) recognition.stop(); } catch(err) {}
-
-    // Wait for final results, then clean and fill
     setTimeout(() => {
-      const cleaned = cleanTranscript(finalText);
+      const cleaned = cleanText(finalText);
       if (cleaned && cleaned.length > 1) {
-        // Switch to keyboard mode to show the text
         const box = document.getElementById('gkInputBox');
         if (box) box.classList.remove('voice-mode');
         const mi = document.getElementById('micIcon');
         if (mi) mi.className = 'fas fa-microphone';
-        try { voiceMode = false; } catch(e) {}
-
+        voiceMode = false;
         document.getElementById('messageInput').value = cleaned;
-        if (typeof handleInputChange === 'function') handleInputChange();
-
+        handleInputChange();
         showToast('✅ Captured — tap Send or edit');
       } else {
         showToast('Did not catch that — try again');
       }
-      finalText = '';
-      interimText = '';
-      recognition = null;
+      finalText = ''; interimText = ''; recognition = null;
     }, 500);
   };
 
-  // Mouse events
   pill.addEventListener('mousedown', startRec);
   pill.addEventListener('mouseup', stopRec);
   pill.addEventListener('mouseleave', stopRec);
-
-  // Touch events (mobile)
   pill.addEventListener('touchstart', startRec, {passive:false});
   pill.addEventListener('touchend', stopRec, {passive:false});
   pill.addEventListener('touchcancel', stopRec, {passive:false});
-  }
-
-  const startHold = (e) => {
-    e.preventDefault();
-    if (isHolding) return;
-    isHolding = true; finalText = '';
-    pill.classList.add('holding');
-    label.textContent = 'Listening... speak now';
-    try {
-      holdToSpeakRecognition = new SR();
-      holdToSpeakRecognition.lang = 'en-NG';
-      holdToSpeakRecognition.continuous = true;
-      holdToSpeakRecognition.interimResults = true;
-      holdToSpeakRecognition.maxAlternatives = 1;
-      holdToSpeakRecognition.onresult = (ev) => {
-        let interim = '';
-        for (let i = ev.resultIndex; i < ev.results.length; i++) {
-          const t = ev.results[i][0].transcript;
-          if (ev.results[i].isFinal) finalText += t + ' ';
-          else interim += t;
-        }
-        const preview = (finalText + interim).trim().slice(0, 60);
-        label.textContent = preview || 'Listening...';
-      };
-      holdToSpeakRecognition.onerror = (ev) => { console.warn('Voice err', ev.error); };
-      holdToSpeakRecognition.start();
-    } catch(err) { console.warn(err); }
-  };
-
-  const endHold = async (e) => {
-    if (!isHolding) return;
-    if (e) e.preventDefault();
-    isHolding = false;
-    pill.classList.remove('holding');
-    label.textContent = 'Hold to speak';
-    try { if (holdToSpeakRecognition) holdToSpeakRecognition.stop(); } catch(err) {}
-    await new Promise(r => setTimeout(r, 400));
-    const cleaned = cleanTranscript(finalText);
-    if (cleaned && cleaned.length > 1) {
-      // Switch to keyboard mode to show the text
-      voiceMode = false;
-      document.getElementById('gkInputBox').classList.remove('voice-mode');
-      const mi = document.getElementById('micIcon'); if (mi) mi.className = 'fas fa-microphone';
-      document.getElementById('messageInput').value = cleaned;
-      handleInputChange();
-      showToast('✅ Captured — tap send or edit');
-    } else {
-      showToast('Did not catch that — try again');
-    }
-    holdToSpeakRecognition = null;
-    finalText = '';
-  };
-
-  pill.addEventListener('mousedown', startHold);
-  pill.addEventListener('mouseup', endHold);
-  pill.addEventListener('mouseleave', endHold);
-  pill.addEventListener('touchstart', startHold, {passive:false});
-  pill.addEventListener('touchend', endHold, {passive:false});
-  pill.addEventListener('touchcancel', endHold, {passive:false});
 }
 
 // ============ VAULT ============
@@ -1651,7 +1339,7 @@ function renderLibrary() { const box = document.getElementById('libraryPanelResu
 function loadProjects() { try { projects = JSON.parse(localStorage.getItem('wk_projects') || '[]'); } catch(e) { projects = []; } updateProjectBadge(); }
 function saveProjects() { localStorage.setItem('wk_projects', JSON.stringify(projects)); updateProjectBadge(); }
 function updateProjectBadge() { const badge = document.getElementById('projectCountBadge'); if (badge) badge.textContent = projects.length; }
-function openProjectsPanel() { document.getElementById('libraryPanel').classList.add('show'); document.querySelector('#libraryPanel .panel-title').innerHTML = '<i class="fas fa-folder-open"></i> Projects'; closeSidebar(); renderProjects(); }
+function openProjectsPanel() { document.getElementById('libraryPanel').classList.add('show'); closeSidebar(); renderProjects(); }
 function renderProjects() { const list = document.getElementById('libraryPanelResults'); if (!list) return; if (!projects.length) { list.innerHTML = '<div class="result-card" style="text-align:center;padding:60px 20px"><div style="font-size:48px;margin-bottom:16px">📁</div><h4 style="justify-content:center">No projects yet</h4><button class="btn accent" onclick="createNewProject()"><i class="fas fa-plus"></i> Create Project</button></div>'; return; } list.innerHTML = projects.map(p => `<div class="result-card"><h4>📁 ${escapeHtml(p.name)}</h4><p>${escapeHtml(p.description || '')}</p></div>`).join(''); }
 function createNewProject() { const name = prompt('Project name:'); if (!name) return; projects.unshift({ id: 'proj-' + Date.now(), name: name.trim(), description: '', status: 'active', createdAt: Date.now() }); saveProjects(); renderProjects(); showToast('✅ Created'); }
 
@@ -1758,34 +1446,24 @@ function confirmDeleteMessage() { if (deletingMessageIdx < 0) return; const chat
 function wkCopyToClipboard(text) { return new Promise((resolve) => { try { if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(() => resolve(true)).catch(() => resolve(fallbackCopy(text))); } else resolve(fallbackCopy(text)); } catch (e) { resolve(fallbackCopy(text)); } }); }
 function fallbackCopy(text) { try { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.top = '-1000px'; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); ta.remove(); return !!ok; } catch (e) { return false; } }
 
-// ============ WEB SEARCH WITH REAL LINK SUGGESTIONS ============
-function openSearchWebPanel() {
-  document.getElementById('searchWebPanel').classList.add('show');
-  closeSidebar();
-  renderSearchSuggestions();
-}
+// ============ WEB SEARCH ============
+function openSearchWebPanel() { document.getElementById('searchWebPanel').classList.add('show'); closeSidebar(); renderSearchSuggestions(); }
 function closeSearchWebPanel() { document.getElementById('searchWebPanel').classList.remove('show'); }
-
 function renderSearchSuggestions() {
   const box = document.getElementById('searchSuggestionsBox');
   if (!box) return;
   const suggestions = [
-    { label: '📰 Latest Nigeria news',    url: 'https://www.google.com/search?q=latest+nigeria+news',                cls: 'google',  icon: 'fa-google' },
-    { label: '💵 Naira to USD rate',      url: 'https://www.google.com/search?q=naira+to+usd+rate+today',          cls: 'google',  icon: 'fa-google' },
-    { label: '🤖 Latest AI news 2026',    url: 'https://www.google.com/search?q=latest+AI+news+2026',                cls: 'google',  icon: 'fa-google' },
-    { label: '🌦️ Weather in Lagos',      url: 'https://www.google.com/search?q=weather+in+lagos+today',            cls: 'google',  icon: 'fa-google' },
-    { label: '📈 Crypto prices today',    url: 'https://www.google.com/search?q=crypto+prices+today',               cls: 'google',  icon: 'fa-google' },
-    { label: '📖 Wikipedia',              url: 'https://en.wikipedia.org/wiki/Main_Page',                            cls: 'wiki',    icon: 'fa-wikipedia-w' },
-    { label: '▶️ YouTube',                url: 'https://www.youtube.com',                                            cls: 'youtube', icon: 'fa-youtube' },
-    { label: '📺 BBC News',               url: 'https://www.bbc.com/news',                                           cls: 'bbc',     icon: 'fa-tower-broadcast' }
+    { label: '📰 Latest Nigeria news', url: 'https://www.google.com/search?q=latest+nigeria+news', cls: 'google', icon: 'fa-google' },
+    { label: '💵 Naira to USD rate', url: 'https://www.google.com/search?q=naira+to+usd+rate+today', cls: 'google', icon: 'fa-google' },
+    { label: '🤖 Latest AI news 2026', url: 'https://www.google.com/search?q=latest+AI+news+2026', cls: 'google', icon: 'fa-google' },
+    { label: '🌦️ Weather in Lagos', url: 'https://www.google.com/search?q=weather+in+lagos+today', cls: 'google', icon: 'fa-google' },
+    { label: '📈 Crypto prices today', url: 'https://www.google.com/search?q=crypto+prices+today', cls: 'google', icon: 'fa-google' },
+    { label: '📖 Wikipedia', url: 'https://en.wikipedia.org/wiki/Main_Page', cls: 'wiki', icon: 'fa-wikipedia-w' },
+    { label: '▶️ YouTube', url: 'https://www.youtube.com', cls: 'youtube', icon: 'fa-youtube' },
+    { label: '📺 BBC News', url: 'https://www.bbc.com/news', cls: 'bbc', icon: 'fa-tower-broadcast' }
   ];
-  box.innerHTML = suggestions.map(s =>
-    `<a class="quick-chip ${s.cls}" href="${s.url}" target="_blank" rel="noopener">
-      <i class="fab ${s.icon}"></i> ${s.label}
-    </a>`
-  ).join('');
+  box.innerHTML = suggestions.map(s => `<a class="quick-chip ${s.cls}" href="${s.url}" target="_blank" rel="noopener"><i class="fab ${s.icon}"></i> ${s.label}</a>`).join('');
 }
-
 async function doSearchWeb(query) {
   const results = document.getElementById('searchWebResults');
   const shortcut = document.getElementById('askWiseKingShortcut');
