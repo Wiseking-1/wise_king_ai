@@ -9,6 +9,9 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👑</text></svg>">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
   :root{
     --bg-primary:#0a0a0f;--bg-secondary:#111118;--bg-elevated:#1a1a24;--bg-input:#1e1e2a;--bg-hover:#252533;
@@ -79,7 +82,7 @@
   .nav-btn{width:100%;display:flex;align-items:center;gap:14px;padding:12px 14px;margin-bottom:4px;background:transparent;border:none;color:var(--text-primary);font-size:15.5px;border-radius:var(--radius-full);cursor:pointer;transition:background var(--transition-fast);font-family:inherit;text-align:left;position:relative}
   .nav-btn:hover{background:var(--bg-elevated)}
   .nav-btn .nav-icon{width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px}
-  .gradient-1{color:#a78bfa}.gradient-2{color:#f472b6}.gradient-3{color:#60a5fa}.gradient-4{color:#34d399}.gradient-5{color:#fbbf24}.gradient-6{color:#f97316}.gradient-7{color:#9ca3af}
+  .gradient-1{color:#a78bfa}.gradient-2{color:#f472b6}.gradient-3{color:#60a5fa}.gradient-4{color:#34d399}.gradient-5{color:#fbbf24}.gradient-6{color:#f97316}.gradient-7{color:#9ca3af}.gradient-8{color:#06b6d4}.gradient-9{color:#f43f5e}
   .nav-btn .nav-badge{margin-left:auto;font-size:11px;padding:2px 8px;background:rgba(99,102,241,0.18);color:var(--accent-hover);border-radius:99px;font-weight:600}
   .sidebar-search{position:relative;margin-bottom:12px}
   .sidebar-search input{width:100%;padding:14px 14px 14px 48px;background:var(--bg-elevated);border:1px solid transparent;border-radius:var(--radius-full);color:var(--text-primary);font-size:15px;outline:none;font-family:inherit}
@@ -116,18 +119,18 @@
   .user-plan{font-size:12px;color:var(--text-tertiary)}
   .icon-action{width:36px;height:36px;border-radius:50%;background:transparent;border:none;color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px}
   .chat-main{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg-primary);position:relative}
-  .chat-topbar{padding:12px 20px;border-bottom:1px solid var(--border-subtle);display:flex;align-items:center;gap:12px;background:rgba(10,10,15,0.8);backdrop-filter:blur(12px);z-index:10;flex-shrink:0}
+  .chat-topbar{padding:12px 20px;border-bottom:1px solid var(--border-subtle);display:flex;align-items:center;gap:12px;background:rgba(10,10,15,0.8);backdrop-filter:blur(12px);z-index:10;flex-shrink:0;overflow-x:auto}
   body.light-mode .chat-topbar { background: rgba(255,255,255,0.8); }
-  .menu-btn{background:transparent;border:none;color:var(--text-primary);font-size:18px;cursor:pointer;padding:6px;border-radius:6px}
+  .menu-btn{background:transparent;border:none;color:var(--text-primary);font-size:18px;cursor:pointer;padding:6px;border-radius:6px;flex-shrink:0}
   .chat-title-wrap{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
   .chat-title{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .chat-model-badge{font-size:11px;padding:3px 8px;background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:var(--radius-full);color:var(--text-secondary);display:flex;align-items:center;gap:5px;white-space:nowrap}
   .chat-model-badge i{font-size:8px;color:var(--success)}
-  .chat-actions{display:flex;align-items:center;gap:6px}
-  .top-btn{background:transparent;border:1px solid transparent;color:var(--text-secondary);cursor:pointer;padding:7px 12px;border-radius:var(--radius-md);font-size:13px;font-family:inherit;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+  .chat-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
+  .top-btn{background:transparent;border:1px solid transparent;color:var(--text-secondary);cursor:pointer;padding:7px 12px;border-radius:var(--radius-md);font-size:13px;font-family:inherit;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0}
   .top-btn:hover{background:var(--bg-elevated);color:var(--text-primary)}
   .top-btn.install-btn{background:var(--accent-gradient);color:white;border:none}
-  .top-profile-container{position:relative;margin-left:8px;display:flex;align-items:center}
+  .top-profile-container{position:relative;margin-left:8px;display:flex;align-items:center;flex-shrink:0}
   .top-profile-avatar{width:38px;height:38px;border-radius:50%;cursor:pointer;border:2px solid var(--accent);overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--accent-gradient);color:white;font-weight:600;font-size:14px}
   .top-profile-avatar img{width:100%;height:100%;object-fit:cover}
   .profile-menu-popup{position:absolute;top:50px;right:0;width:340px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-xl);box-shadow:0 16px 48px rgba(0,0,0,0.7);z-index:1000;display:none;flex-direction:column;overflow:hidden}
@@ -167,26 +170,15 @@
   .msg-avatar.ai{background:var(--accent-gradient);color:white;box-shadow:0 0 0 1px var(--border-default),0 0 12px var(--accent-glow)}
   .msg-avatar.user{background:var(--bg-elevated);color:var(--text-secondary)}
   .msg-avatar img{width:100%;height:100%;object-fit:cover}
-  .msg-body{flex:1;min-width:0;max-widthc:100%;padding-left:0}
+  .msg-body{flex:1;min-width:0;max-width:100%;padding-left:0}
   .message.user .msg-body{display:flex;flex-direction:column;align-items:flex-end}
   .msg-name{font-size:12.5px;font-weight:600;color:var(--text-secondary);margin-bottom:4px;padding:0 4px;display:flex;align-items:center;gap:6px}
   .message.user .msg-name{text-align:right;flex-direction:row-reverse}
   .edited-tag{font-size:10.5px;color:var(--text-tertiary);font-style:italic;font-weight:400}
-  .vision-tag{font-size:10.5px;color:var(--accent-hover);font-weight:500;display:inline-flex;align-items:center;gap:3px}
   .msg-content-wrap{position:relative;width:100%;display:flex}
   .message.user .msg-content-wrap{justify-content:flex-end}
   .msg-content{padding:12px 16px;border-radius:var(--radius-lg);font-size:15px;line-height:1.7;word-wrap:break-word;overflow-wrap:break-word;white-space:pre-wrap;max-width:100%}
-  .msg-content.ai{
-    background:transparent;
-    border:none;
-    padding:0;
-    border-radius:0;
-    width:100%;
-    max-width:100%;
-    font-size:15.5px;
-    line-height:1.75;
-    color:var(--text-primary);
-  }
+  .msg-content.ai{background:transparent;border:none;padding:0;border-radius:0;width:100%;max-width:100%;font-size:15.5px;line-height:1.75;color:var(--text-primary)}
   .msg-content.user{background:var(--accent-gradient);color:white;border-top-right-radius:4px;box-shadow:var(--shadow-sm)}
   .msg-content.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);color:#fca5a5}
   .msg-content.thinking{display:flex;align-items:center;gap:10px;padding:14px 18px;min-height:44px;background:var(--bg-secondary);border:1px solid var(--border-subtle);border-top-left-radius:4px}
@@ -213,19 +205,6 @@
   .md th{background:var(--bg-elevated);font-weight:600}
   .md code{background:var(--bg-elevated);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:0.9em}
   .md pre{background:var(--bg-elevated);padding:0;border-radius:12px;overflow:hidden;margin:14px 0;border:1px solid var(--border-default)}
-  .md pre .code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#16161d;border-bottom:1px solid var(--border-subtle)}
-  .md pre .code-lang{font-size:12px;font-weight:700;color:var(--accent-hover);text-transform:uppercase;letter-spacing:0.08em;font-family:'JetBrains Mono',monospace}
-  .md pre .code-actions{display:flex;gap:6px}
-  .md pre .code-action-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);border:1px solid var(--border-default);color:var(--text-secondary);font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:8px;cursor:pointer;font-family:inherit;transition:all var(--transition-fast)}
-  .md pre .code-action-btn:hover{background:rgba(99,102,241,0.15);color:var(--accent-hover);border-color:var(--accent)}
-  .md pre .code-action-btn.copied{background:rgba(16,185,129,0.15);color:#6ee7b7;border-color:rgba(16,185,129,0.4)}
-  .md pre code{display:block;padding:14px 16px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.65;color:#e4e4e7;background:transparent}  .md pre{background:var(--bg-elevated);padding:0;border-radius:12px;overflow:hidden;margin:14px 0;border:1px solid var(--border-default)}
-  .md pre .code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#16161d;border-bottom:1px solid var(--border-subtle)}
-  .md pre .code-lang{font-size:12px;font-weight:700;color:var(--accent-hover);text-transform:uppercase;letter-spacing:0.08em;font-family:'JetBrains Mono',monospace}
-  .md pre .code-actions{display:flex;gap:6px}
-  .md pre .code-action-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);border:1px solid var(--border-default);color:var(--text-secondary);font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:8px;cursor:pointer;font-family:inherit;transition:all var(--transition-fast)}
-  .md pre .code-action-btn:hover{background:rgba(99,102,241,0.15);color:var(--accent-hover);border-color:var(--accent)}
-  .md pre .code-action-btn.copied{background:rgba(16,185,129,0.15);color:#6ee7b7;border-color:rgba(16,185,129,0.4)}
   .md pre code{display:block;padding:14px 16px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.65;color:#e4e4e7;background:transparent}
   .input-dock{position:absolute;bottom:0;left:0;right:0;padding:12px 20px 16px;background:linear-gradient(to top,var(--bg-primary) 60%,transparent);pointer-events:none;z-index:20}
   .input-inner-wrap{max-width:780px;margin:0 auto;pointer-events:auto}
@@ -259,7 +238,6 @@
   .chat-search-bar{display:none;padding:8px 20px;background:var(--bg-secondary);border-bottom:1px solid var(--border-subtle);gap:8px;align-items:center}
   .chat-search-bar.show{display:flex}
   .chat-search-bar input{flex:1;padding:8px 12px;background:var(--bg-input);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-primary);font-size:13.5px;outline:none;font-family:inherit}
-  .chat-search-bar .search-count{font-size:12px;color:var(--text-secondary);white-space:nowrap}
   .chat-search-bar button{background:transparent;border:none;color:var(--text-secondary);cursor:pointer;padding:6px;border-radius:var(--radius-sm);font-size:14px}
   .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:99999;padding:20px}
   .modal-bg.show{display:flex}
@@ -311,12 +289,18 @@
   .quick-chip.youtube i{color:#ff0033}
   .quick-chip.google i{color:#4285f4}
   .quick-chip.bbc i{color:#bb1919}
+  .quick-chip.whatsapp i{color:#25D366}
+  .quick-chip.spotify i{color:#1DB954}
+  .quick-chip.tiktok i{color:#000}
+  .quick-chip.gmail i{color:#ea4335}
+  .quick-chip.netflix i{color:#e50914}
+  .quick-chip.jumia i{color:#f68b1e}
+  .quick-chip.instagram i{color:#e4405f}
+  .quick-chip.twitter i{color:#1DA1F2}
   
   .gen-image-loading{padding:60px 20px;text-align:center;color:var(--text-secondary);font-size:13px}
   .gen-image-loading i{font-size:28px;color:var(--accent);margin-bottom:12px;display:block;animation:spin 1s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .image-loading{display:flex;flex-direction:column;align-items:center;gap:10px;padding:30px;color:var(--text-secondary);font-size:13px}
-  .image-loading .ring{width:26px;height:26px;border:3px solid var(--accent);border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite}
   .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--bg-elevated);border:1px solid var(--border-default);padding:10px 20px;border-radius:var(--radius-full);font-size:13px;font-weight:500;z-index:5000;opacity:0;pointer-events:none;box-shadow:var(--shadow-lg);transition:all var(--transition-smooth);max-width:90vw;text-align:center}
   .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
   .vault-item{display:flex;align-items:flex-start;gap:10px;padding:12px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-md);margin-bottom:8px}
@@ -343,6 +327,41 @@
   .sp-telegram{background:linear-gradient(135deg,#229ED9,#0088cc)}
   .sp-x{background:linear-gradient(135deg,#000,#1a1a1a)}
   .share-cancel{width:100%;padding:12px;border-radius:var(--radius-md);background:var(--bg-elevated);border:1px solid var(--border-default);color:var(--text-primary);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
+  
+  .music-card{padding:20px;background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);margin-bottom:14px}
+  .music-title{font-size:16px;font-weight:600;margin-bottom:6px;color:var(--text-primary)}
+  .music-meta{font-size:12.5px;color:var(--text-tertiary);margin-bottom:14px}
+  .music-audio{width:100%;margin-top:10px;border-radius:12px;background:var(--bg-elevated)}
+  .music-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  
+  .pdf-dropzone{border:2px dashed var(--border-default);border-radius:var(--radius-lg);padding:40px 20px;text-align:center;cursor:pointer;transition:all var(--transition-fast);background:var(--bg-secondary)}
+  .pdf-dropzone:hover,.pdf-dropzone.dragover{border-color:var(--accent);background:var(--bg-elevated)}
+  .pdf-dropzone i{font-size:42px;color:var(--accent-hover);margin-bottom:14px}
+  .pdf-dropzone p{color:var(--text-secondary);font-size:14px;margin-bottom:6px}
+  .pdf-dropzone small{color:var(--text-tertiary);font-size:12px}
+  .pdf-file-info{padding:14px 18px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-md);margin-bottom:14px;display:flex;align-items:center;gap:12px}
+  .pdf-file-info i{font-size:24px;color:#f43f5e}
+  .pdf-file-info .pfi-text{flex:1;font-size:13.5px;font-weight:500}
+  .pdf-file-info .pfi-meta{font-size:11.5px;color:var(--text-tertiary);display:block;margin-top:2px;font-weight:400}
+  
+  .lang-selector{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+  .lang-select{flex:1;min-width:130px;padding:11px 14px;background:var(--bg-input);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-primary);font-size:14px;outline:none;font-family:inherit;cursor:pointer}
+  .lang-swap{width:40px;height:40px;border-radius:50%;background:var(--bg-elevated);border:1px solid var(--border-default);color:var(--accent-hover);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+  
+  .data-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px}
+  .data-stat{background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px}
+  .data-stat .ds-label{font-size:11.5px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px}
+  .data-stat .ds-value{font-size:20px;font-weight:700;color:var(--accent-hover)}
+  .data-chart-wrap{background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:16px;margin-bottom:14px}
+  .data-chart-wrap canvas{max-height:300px}
+  
+  .download-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+  .download-item{background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:12px;display:flex;flex-direction:column;gap:8px;transition:all var(--transition-fast)}
+  .download-item:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .download-item .di-preview{width:100%;height:100px;border-radius:8px;object-fit:cover;background:var(--bg-elevated);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--text-tertiary)}
+  .download-item .di-title{font-size:12.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .download-item .di-btn{padding:7px 10px;background:var(--accent-gradient);color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px}
+  
   @media(max-width:900px){.suggestions{grid-template-columns:1fr}}
   @media(max-width:768px){
     .sidebar{position:fixed;top:0;left:0;bottom:0;transform:translateX(-100%);box-shadow:var(--shadow-lg)}
@@ -360,6 +379,8 @@
     .top-btn .label{display:none}
     .top-btn{padding:8px 10px}
     .profile-menu-popup{width:calc(100vw - 32px);right:-10px}
+    .download-grid{grid-template-columns:repeat(2,1fr)}
+    .data-stat-grid{grid-template-columns:repeat(2,1fr)}
   }
 </style>
 </head>
@@ -415,6 +436,13 @@
       <button class="nav-btn" onclick="openImagesPanel()"><span class="nav-icon gradient-1"><i class="fas fa-image"></i></span>Images</button>
       <button class="nav-btn" onclick="openVideosPanel()"><span class="nav-icon gradient-2"><i class="fas fa-video"></i></span>Videos</button>
       <button class="nav-btn" onclick="openVideoGallery()"><span class="nav-icon gradient-5"><i class="fas fa-film"></i></span>My Videos<span class="nav-badge" id="videoCountBadge">0</span></button>
+      <button class="nav-btn" onclick="openMusicPanel()"><span class="nav-icon gradient-8"><i class="fas fa-music"></i></span>Music<span class="nav-badge" id="musicCountBadge">0</span></button>
+      <button class="nav-btn" onclick="openPdfChatPanel()"><span class="nav-icon gradient-9"><i class="fas fa-file-pdf"></i></span>PDF Chat</button>
+      <button class="nav-btn" onclick="openTranslatePanel()"><span class="nav-icon gradient-3"><i class="fas fa-language"></i></span>Translate</button>
+      <button class="nav-btn" onclick="openDataAnalysisPanel()"><span class="nav-icon gradient-4"><i class="fas fa-chart-line"></i></span>Data Analysis</button>
+      <button class="nav-btn" onclick="openSearchWebPanel()"><span class="nav-icon gradient-3"><i class="fas fa-globe"></i></span>Search Web</button>
+      <button class="nav-btn" onclick="openBuildAppPanel()"><span class="nav-icon gradient-6"><i class="fas fa-code"></i></span>Build App</button>
+      <button class="nav-btn" onclick="openDownloadHub()"><span class="nav-icon gradient-6"><i class="fas fa-download"></i></span>Downloads</button>
       <button class="nav-btn" onclick="openLibraryPanel()"><span class="nav-icon gradient-3"><i class="fas fa-shapes"></i></span>Library</button>
       <button class="nav-btn" onclick="openVault()"><span class="nav-icon gradient-4"><i class="fas fa-shield-halved"></i></span>Vault<span class="nav-badge" id="vaultCountBadge">0</span></button>
       <button class="nav-btn" onclick="openMemoryPanel()"><span class="nav-icon gradient-4"><i class="fas fa-brain"></i></span>Memory<span class="nav-badge" id="memoryCountBadge">0</span></button>
@@ -443,11 +471,12 @@
       </div>
       <div class="chat-actions">
         <button class="top-btn install-btn" id="installAppBtn" onclick="promptInstallApp()" style="display:none"><i class="fas fa-download"></i><span class="label"> Install</span></button>
-        <button class="top-btn" onclick="toggleChatSearch()"><i class="fas fa-magnifying-glass"></i><span class="label"> Find</span></button>
-        <button class="top-btn" onclick="goToWelcome()"><i class="fas fa-house"></i><span class="label"> Home</span></button>
-        <button class="top-btn" onclick="openVault()"><i class="fas fa-shield-halved"></i><span class="label"> Vault</span></button>
         <button class="top-btn" onclick="openSearchWebPanel()"><i class="fas fa-globe"></i><span class="label"> Search</span></button>
         <button class="top-btn" onclick="openBuildAppPanel()"><i class="fas fa-code"></i><span class="label"> Build</span></button>
+        <button class="top-btn" onclick="openVault()"><i class="fas fa-shield-halved"></i><span class="label"> Vault</span></button>
+        <button class="top-btn" onclick="openDownloadHub()"><i class="fas fa-cloud-arrow-down"></i><span class="label"> Downloads</span></button>
+        <button class="top-btn" onclick="toggleChatSearch()"><i class="fas fa-magnifying-glass"></i><span class="label"> Find</span></button>
+        <button class="top-btn" onclick="goToWelcome()"><i class="fas fa-house"></i><span class="label"> Home</span></button>
       </div>
       <div class="top-profile-container" id="topProfileContainer">
         <div class="top-profile-avatar" id="topProfileAvatar" onclick="toggleTopProfileMenu(event)">👑</div>
@@ -466,7 +495,6 @@
             <div class="pm-divider"></div>
             <button class="pm-item" onclick="addAnotherAccount();"><i class="fas fa-user-plus"></i> Add Account</button>
             <button class="pm-item" onclick="switchAccount();"><i class="fas fa-right-left"></i> Switch Account</button>
-            <button class="pm-item" onclick="window.open('https://myaccount.google.com/', '_blank'); closeTopProfileMenu();"><i class="fas fa-external-link-alt"></i> Manage Account</button>
             <div class="pm-divider"></div>
             <button class="pm-item danger" onclick="askSignOut();"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
           </div>
@@ -485,7 +513,7 @@
         <div class="welcome" id="welcomeScreen">
           <div class="welcome-logo">👑</div>
           <h1>How can I help you today?</h1>
-          <p>I'm <strong>Wise King AI</strong>. I can see photos, remember our conversations, and reason across any task.</p>
+          <p>I'm <strong>Wise King AI</strong>. I can see photos, remember conversations, generate music, read PDFs, translate languages, and analyze data.</p>
           <div class="suggestions">
             <div class="suggestion-card" onclick="useSuggestion('Explain quantum computing in simple terms')"><i class="fas fa-atom"></i><div class="sc-title">Explain quantum computing</div><div class="sc-desc">In simple, clear terms</div></div>
             <div class="suggestion-card" onclick="useSuggestion('Write me an Afrobeat song about Kano city')"><i class="fas fa-music"></i><div class="sc-title">Write an Afrobeat song</div><div class="sc-desc">Full lyrics with structure</div></div>
@@ -515,10 +543,281 @@
           </div>
         </div>
         <input type="file" id="fileInput" accept="image/*,.pdf,.txt,.doc,.docx" style="display:none" multiple onchange="handleFiles(event)">
-        <div class="input-hint">Wise King Ai can make mistake,please-double-check-information</div>
+        <div class="input-hint">Wise King Ai can make mistake, please double-check information</div>
       </div>
     </div>
   </main>
+</div>
+
+<!-- ============ IMAGES PANEL ============ -->
+<div class="full-panel" id="imagesPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-image"></i> Image Generator</div>
+    <button class="btn ghost" onclick="closeImagesPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:8px">Describe the image you want:</p>
+      <input type="text" class="search-big" id="imagesPromptInput" placeholder="e.g. beautiful Hausa woman OR logo for Wise King" onkeydown="if(event.key==='Enter'){generateImageFromPanel()}">
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:12px" onclick="generateImageFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Generate Image</button>
+      <div id="imagesPanelResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ VIDEOS PANEL ============ -->
+<div class="full-panel" id="videosPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-video"></i> Video Prompt Creator</div>
+    <button class="btn ghost" onclick="closeVideosPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:8px">Describe the video scene:</p>
+      <input type="text" class="search-big" id="videosPromptInput" placeholder="e.g. golden sunset over Kano city, drone shot...">
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="generateVideoFromPanel()"><i class="fas fa-clapperboard"></i> Generate Video Prompt</button>
+      <div id="videoPanelResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ VIDEO GALLERY PANEL ============ -->
+<div class="full-panel" id="videoGalleryPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-film"></i> My Videos</div>
+    <button class="btn ghost" onclick="closeVideoGallery()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div id="videoGalleryContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MUSIC PANEL ============ -->
+<div class="full-panel" id="musicPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-music"></i> AI Music Studio 🎵</div>
+    <button class="btn ghost" onclick="closeMusicPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">🎼 Paste lyrics OR describe a style — AI will build your song prompt.</p>
+      <textarea class="search-big" id="musicInput" rows="6" placeholder="Paste your lyrics here OR describe the music style...&#10;&#10;Example:&#10;Style: Afrobeat, 120 BPM, guitar-driven, Kano vibe&#10;Lyrics:&#10;[Verse 1]&#10;In the streets of Kano city..." style="min-height:140px;resize:vertical;font-family:inherit"></textarea>
+      
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px">
+        <select class="input-field" id="musicGenre" style="margin-bottom:0">
+          <option value="">🎵 Genre</option>
+          <option>Afrobeat</option><option>Amapiano</option><option>Hip-hop</option>
+          <option>R&B</option><option>Gospel</option><option>Reggae</option>
+          <option>Pop</option><option>Dancehall</option><option>Traditional Hausa</option>
+          <option>Fuji</option><option>Highlife</option><option>Jazz</option>
+        </select>
+        <select class="input-field" id="musicMood" style="margin-bottom:0">
+          <option value="">💫 Mood</option>
+          <option>Happy & Uplifting</option><option>Romantic</option><option>Motivational</option>
+          <option>Spiritual</option><option>Party Vibe</option><option>Chill & Relaxed</option>
+          <option>Sad & Emotional</option><option>Epic</option>
+        </select>
+        <select class="input-field" id="musicTempo" style="margin-bottom:0">
+          <option value="">🥁 Tempo</option>
+          <option>Slow (60-80 BPM)</option><option>Mid-tempo (90-110 BPM)</option>
+          <option>Dance (115-130 BPM)</option><option>Fast (130+ BPM)</option>
+        </select>
+      </div>
+      
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn accent" style="flex:1;justify-content:center" onclick="generateMusicFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Build Music Prompt</button>
+        <button class="btn solid" style="flex:1;justify-content:center" onclick="generateLyricsFromPanel()"><i class="fas fa-pen-fancy"></i> Write Lyrics</button>
+      </div>
+      
+      <div id="musicPanelResults"></div>
+      <h3 style="margin:24px 0 12px;color:var(--accent-hover);font-size:15px">🎧 My Music Library</h3>
+      <div id="musicLibraryBox"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PDF CHAT PANEL ============ -->
+<div class="full-panel" id="pdfChatPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-file-pdf"></i> PDF Chat 📄</div>
+    <button class="btn ghost" onclick="closePdfChatPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="pdf-dropzone" id="pdfDropzone" onclick="document.getElementById('pdfFileInput').click()">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p><strong>Click to upload PDF</strong> or drag & drop</p>
+        <small>Read, summarize, and ask questions about any PDF</small>
+        <input type="file" id="pdfFileInput" accept=".pdf" style="display:none" onchange="handlePdfUpload(event)">
+      </div>
+      <div id="pdfFileInfo"></div>
+      <div id="pdfSummaryBox"></div>
+      <input type="text" class="search-big" id="pdfQuestionInput" placeholder="Ask anything about the PDF..." onkeydown="if(event.key==='Enter'){askPdfQuestion()}" style="margin-top:16px">
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="askPdfQuestion()"><i class="fas fa-question-circle"></i> Ask About PDF</button>
+      <div id="pdfChatResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TRANSLATE PANEL ============ -->
+<div class="full-panel" id="translatePanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-language"></i> Real-time Translation 🌍</div>
+    <button class="btn ghost" onclick="closeTranslatePanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="lang-selector">
+        <select class="lang-select" id="translateFrom">
+          <option value="auto">🔍 Auto-detect</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="ha">🇳🇬 Hausa</option>
+          <option value="ar">🇸🇦 Arabic</option>
+          <option value="fr">🇫🇷 French</option>
+          <option value="yo">🇳🇬 Yoruba</option>
+          <option value="ig">🇳🇬 Igbo</option>
+          <option value="sw">🌍 Swahili</option>
+          <option value="es">🇪🇸 Spanish</option>
+          <option value="pt">🇵🇹 Portuguese</option>
+          <option value="de">🇩🇪 German</option>
+          <option value="zh">🇨🇳 Chinese</option>
+          <option value="hi">🇮🇳 Hindi</option>
+          <option value="ru">🇷🇺 Russian</option>
+          <option value="ja">🇯🇵 Japanese</option>
+          <option value="tr">🇹🇷 Turkish</option>
+          <option value="ur">🇵🇰 Urdu</option>
+        </select>
+        <button class="lang-swap" onclick="swapLanguages()" title="Swap"><i class="fas fa-right-left"></i></button>
+        <select class="lang-select" id="translateTo">
+          <option value="en">🇬🇧 English</option>
+          <option value="ha">🇳🇬 Hausa</option>
+          <option value="ar">🇸🇦 Arabic</option>
+          <option value="fr">🇫🇷 French</option>
+          <option value="yo">🇳🇬 Yoruba</option>
+          <option value="ig">🇳🇬 Igbo</option>
+          <option value="sw">🌍 Swahili</option>
+          <option value="es">🇪🇸 Spanish</option>
+          <option value="pt">🇵🇹 Portuguese</option>
+          <option value="de">🇩🇪 German</option>
+          <option value="zh">🇨🇳 Chinese</option>
+          <option value="hi">🇮🇳 Hindi</option>
+          <option value="ru">🇷🇺 Russian</option>
+          <option value="ja">🇯🇵 Japanese</option>
+          <option value="tr">🇹🇷 Turkish</option>
+          <option value="ur">🇵🇰 Urdu</option>
+        </select>
+      </div>
+      <textarea class="search-big" id="translateInput" rows="6" placeholder="Type or paste text to translate..." style="min-height:130px;resize:vertical;font-family:inherit"></textarea>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn accent" style="flex:1;justify-content:center" onclick="doTranslate()"><i class="fas fa-language"></i> Translate Now</button>
+        <button class="btn solid" onclick="speakTranslation()"><i class="fas fa-volume-up"></i> Listen</button>
+        <button class="btn solid" onclick="startLiveTranslateVoice()"><i class="fas fa-microphone"></i> Voice</button>
+      </div>
+      <div id="translateResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DATA ANALYSIS PANEL ============ -->
+<div class="full-panel" id="dataAnalysisPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-chart-line"></i> Data Analysis 📊</div>
+    <button class="btn ghost" onclick="closeDataAnalysisPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="pdf-dropzone" id="dataDropzone" onclick="document.getElementById('dataFileInput').click()">
+        <i class="fas fa-file-csv"></i>
+        <p><strong>Upload CSV, Excel, or paste data</strong></p>
+        <small>Auto-generate stats, charts, and AI insights</small>
+        <input type="file" id="dataFileInput" accept=".csv,.xlsx,.xls,.json,.txt" style="display:none" onchange="handleDataUpload(event)">
+      </div>
+      <textarea class="search-big" id="dataPasteInput" rows="5" placeholder="Or paste CSV / table data here...&#10;&#10;Example:&#10;Name,Age,City&#10;Ibrahim,28,Kano&#10;Fatima,24,Lagos" style="min-height:120px;resize:vertical;font-family:'JetBrains Mono',monospace;font-size:12.5px"></textarea>
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="analyzePastedData()"><i class="fas fa-chart-bar"></i> Analyze Data</button>
+      <div id="dataAnalysisResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DOWNLOAD HUB PANEL ============ -->
+<div class="full-panel" id="downloadHubPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-cloud-arrow-down"></i> Downloads Hub 📥</div>
+    <button class="btn ghost" onclick="closeDownloadHub()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:14px">📱 Everything you create — download directly to your phone.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn solid" onclick="filterDownloads('all')">All</button>
+        <button class="btn solid" onclick="filterDownloads('image')"><i class="fas fa-image"></i> Images</button>
+        <button class="btn solid" onclick="filterDownloads('video')"><i class="fas fa-video"></i> Videos</button>
+        <button class="btn solid" onclick="filterDownloads('music')"><i class="fas fa-music"></i> Music</button>
+        <button class="btn solid" onclick="filterDownloads('audio')"><i class="fas fa-headphones"></i> Audio</button>
+      </div>
+      <div class="download-grid" id="downloadHubGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ LIBRARY PANEL ============ -->
+<div class="full-panel" id="libraryPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-shapes"></i> Library</div>
+    <button class="btn ghost" onclick="closeLibraryPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div id="libraryPanelResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEARCH WEB PANEL ============ -->
+<div class="full-panel" id="searchWebPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-globe"></i> Search the web</div>
+    <button class="btn ghost" onclick="closeSearchWebPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <input type="text" class="search-big" id="searchWebInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter'){doSearchWeb(this.value)}">
+      <div id="searchSuggestionsBox" style="margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px"></div>
+      <div id="askWiseKingShortcut" style="margin-bottom:20px;display:none"></div>
+      <div id="searchWebResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BUILD APP PANEL ============ -->
+<div class="full-panel" id="buildAppPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-code"></i> Build an app</div>
+    <button class="btn ghost" onclick="closeBuildAppPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <input type="text" class="search-big" id="buildAppInput" placeholder="Search or describe your app idea..." oninput="filterBuildIdeas(this.value)">
+      <div id="buildAppIdeas"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MEMORY PANEL ============ -->
+<div class="full-panel" id="memoryPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-brain"></i> Cross-Chat Memory</div>
+    <button class="btn ghost" onclick="closeMemoryPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">Wise King automatically learns facts from your chats.</p>
+      <button class="btn solid" style="width:100%;justify-content:center;margin-bottom:16px" onclick="extractMemoryNow()"><i class="fas fa-wand-magic-sparkles"></i> Extract Memory</button>
+      <div id="memoryPanelResults"></div>
+    </div>
+  </div>
 </div>
 
 <!-- POPUP MENUS -->
@@ -668,6 +967,7 @@
       <div class="settings-card">
         <input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (optional)" autocomplete="off">
         <input type="password" class="input-field" id="replicateKeyInput" placeholder="Replicate API key (optional)" autocomplete="off">
+        <input type="password" class="input-field" id="sunoKeyInput" placeholder="Suno API key (optional for real music)" autocomplete="off" style="margin-bottom:0">
       </div>
     </div>
     <div class="settings-group">
@@ -720,7 +1020,7 @@
   }
 </script>
 
-<!-- ============ FIREBASE + FIRESTORE ============ -->
+<!-- ============ FIREBASE ============ -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
   import { 
@@ -729,7 +1029,7 @@
     createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail
   } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
   import { 
-    getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp
+    getFirestore, doc, getDoc, setDoc, serverTimestamp
   } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -747,58 +1047,40 @@
   provider.setCustomParameters({ prompt: 'select_account' });
   setPersistence(auth, browserLocalPersistence).catch(() => {});
 
-  let lastUid = null;
-
-  // ============ CLOUD SYNC FUNCTIONS ============
   window.WK_CLOUD = {
     async loadUserData(uid) {
-      try {
-        const ref = doc(db, 'users', uid);
-        const snap = await getDoc(ref);
-        if (snap.exists()) return snap.data();
-        return null;
-      } catch (e) { console.warn('Load error:', e); return null; }
+      try { const ref = doc(db, 'users', uid); const snap = await getDoc(ref); return snap.exists() ? snap.data() : null; }
+      catch (e) { return null; }
     },
     async saveUserData(uid, data) {
-      try {
-        const ref = doc(db, 'users', uid);
-        await setDoc(ref, { ...data, updatedAt: serverTimestamp() }, { merge: true });
-        return true;
-      } catch (e) { console.warn('Save error:', e); return false; }
+      try { await setDoc(doc(db, 'users', uid), { ...data, updatedAt: serverTimestamp() }, { merge: true }); return true; }
+      catch (e) { return false; }
     }
   };
 
-  // ============ AUTH LISTENER WITH CLOUD SYNC ============
   onAuthStateChanged(auth, async (user) => {
     if (user) {
-      lastUid = user.uid;
       localStorage.setItem('wk_logged_in', '1');
       localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
       localStorage.setItem('wk_user_email', user.email || '');
       localStorage.setItem('wk_user_uid', user.uid);
       localStorage.removeItem('wk_guest_mode');
 
-      // Load user's cloud data
       const cloud = await window.WK_CLOUD.loadUserData(user.uid);
       if (cloud) {
-        if (Array.isArray(cloud.chats)) {
-          localStorage.setItem('wk_chats', JSON.stringify(cloud.chats));
-          try { chats = cloud.chats; } catch(e) {}
-        }
+        if (Array.isArray(cloud.chats)) { localStorage.setItem('wk_chats', JSON.stringify(cloud.chats)); try { chats = cloud.chats; } catch(e) {} }
         if (Array.isArray(cloud.vault)) localStorage.setItem('wk_vault', JSON.stringify(cloud.vault));
         if (Array.isArray(cloud.memory)) localStorage.setItem('wk_cross_memory', JSON.stringify(cloud.memory));
         if (Array.isArray(cloud.library)) localStorage.setItem('wk_library', JSON.stringify(cloud.library));
         if (Array.isArray(cloud.projects)) localStorage.setItem('wk_projects', JSON.stringify(cloud.projects));
+        if (Array.isArray(cloud.music)) localStorage.setItem('wk_music', JSON.stringify(cloud.music));
       }
 
       if (typeof unlockApp === 'function') unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
       if (typeof loadChatsFromLocalStorage === 'function') loadChatsFromLocalStorage();
-    } else {
-      lastUid = null;
     }
   });
 
-  // ============ GOOGLE SIGN IN ============
   window.signInWithGoogle = function() {
     signInWithPopup(auth, provider)
       .then((result) => {
@@ -812,24 +1094,19 @@
       })
       .catch((error) => {
         if (["auth/cancelled-popup-request","auth/popup-closed-by-user","auth/user-cancelled"].includes(error.code)) return;
-        let msg = "Login failed. ";
-        if (error.code === "auth/popup-blocked") msg = "Popup blocked. Please allow popups.";
-        else msg += error.message;
-        if (typeof showAuthError === 'function') showAuthError(msg);
+        if (typeof showAuthError === 'function') showAuthError("Login failed: " + error.message);
       });
   };
 
-  // ============ EMAIL SIGN IN ============
   window.emailSignIn = function() {
     const email = document.getElementById('signInEmail').value.trim();
     const password = document.getElementById('signInPassword').value.trim();
-    if (!email || !password) { showAuthError("Please enter both email and password."); return; }
-    const btn = document.getElementById('signInBtn');
-    const orig = btn.innerHTML;
+    if (!email || !password) return showAuthError("Please enter both email and password.");
+    const btn = document.getElementById('signInBtn'); const orig = btn.innerHTML;
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
+      .then((uc) => {
+        const user = uc.user;
         localStorage.setItem('wk_logged_in', '1');
         localStorage.setItem('wk_user_name', user.displayName || email.split('@')[0]);
         localStorage.setItem('wk_user_email', user.email);
@@ -839,29 +1116,25 @@
       })
       .catch((error) => {
         let msg = "Login failed. ";
-        if (error.code === 'auth/user-not-found') msg = "No account found with this email.";
-        else if (error.code === 'auth/wrong-password') msg = "Incorrect password. Try again.";
-        else if (error.code === 'auth/invalid-email') msg = "Invalid email format.";
+        if (error.code === 'auth/user-not-found') msg = "No account found.";
+        else if (error.code === 'auth/wrong-password') msg = "Incorrect password.";
         else if (error.code === 'auth/invalid-credential') msg = "Wrong email or password.";
         else msg += error.message;
-        showAuthError(msg);
-        btn.disabled = false; btn.innerHTML = orig;
+        showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
       });
   };
 
-  // ============ EMAIL SIGN UP ============
   window.emailSignUp = function() {
     const name = document.getElementById('signUpName').value.trim();
     const email = document.getElementById('signUpEmail').value.trim();
     const password = document.getElementById('signUpPassword').value.trim();
-    if (!name || !email || !password) { showAuthError("Please fill in all fields."); return; }
-    if (password.length < 6) { showAuthError("Password must be at least 6 characters."); return; }
-    const btn = document.getElementById('signUpBtn');
-    const orig = btn.innerHTML;
+    if (!name || !email || !password) return showAuthError("Please fill in all fields.");
+    if (password.length < 6) return showAuthError("Password must be at least 6 characters.");
+    const btn = document.getElementById('signUpBtn'); const orig = btn.innerHTML;
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
+      .then((uc) => {
+        const user = uc.user;
         localStorage.setItem('wk_logged_in', '1');
         localStorage.setItem('wk_user_name', name);
         localStorage.setItem('wk_user_email', user.email);
@@ -872,540 +1145,61 @@
       .catch((error) => {
         let msg = "Sign up failed. ";
         if (error.code === 'auth/email-already-in-use') msg = "This email is already registered.";
-        else if (error.code === 'auth/invalid-email') msg = "Invalid email format.";
-        else if (error.code === 'auth/weak-password') msg = "Password is too weak.";
+        else if (error.code === 'auth/weak-password') msg = "Password too weak.";
         else msg += error.message;
-        showAuthError(msg);
-        btn.disabled = false; btn.innerHTML = orig;
+        showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
       });
   };
 
-  // ============ PASSWORD RESET ============
   window.sendPasswordReset = function() {
     const email = document.getElementById('resetEmail').value.trim();
-    if (!email) { showAuthError("Please enter your email."); return; }
-    const btn = document.getElementById('resetBtn');
-    const orig = btn.innerHTML;
+    if (!email) return showAuthError("Please enter your email.");
+    const btn = document.getElementById('resetBtn'); const orig = btn.innerHTML;
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
     sendPasswordResetEmail(auth, email)
-      .then(() => { showAuthSuccess("Password reset email sent! Check your inbox."); btn.disabled = false; btn.innerHTML = orig; })
+      .then(() => { showAuthSuccess("Reset email sent!"); btn.disabled = false; btn.innerHTML = orig; })
       .catch((error) => { showAuthError("Error: " + error.message); btn.disabled = false; btn.innerHTML = orig; });
   };
 
-  // ============ ADD / SWITCH ACCOUNT ============
-  window.addAnotherAccount = function() {
-    if (typeof closeTopProfileMenu === 'function') closeTopProfileMenu();
-    window.showToast('Pick another Google account 👥');
-    provider.setCustomParameters({ prompt: 'select_account' });
-    setTimeout(() => window.signInWithGoogle(), 80);
-  };
-  window.switchAccount = function() {
-    if (typeof closeTopProfileMenu === 'function') closeTopProfileMenu();
-    window.showToast('Choose an account to switch 🔄');
-    provider.setCustomParameters({ prompt: 'select_account' });
-    setTimeout(() => window.signInWithGoogle(), 80);
-  };
+  window.addAnotherAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(() => window.signInWithGoogle(), 80); };
+  window.switchAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(() => window.signInWithGoogle(), 80); };
 
-  // ============ SIGN OUT ============
   window.askSignOut = function() {
-    if (typeof closeTopProfileMenu === 'function') closeTopProfileMenu();
+    closeTopProfileMenu();
     document.getElementById('settingsModal')?.classList.remove('show');
     try { closeSidebar(); } catch(e) {}
-    setTimeout(() => {
-      const modal = document.getElementById('signOutModal');
-      if (modal) { modal.classList.add('show'); modal.style.zIndex = '99999'; }
-    }, 100);
+    setTimeout(() => { const m = document.getElementById('signOutModal'); if (m) { m.classList.add('show'); m.style.zIndex = '99999'; } }, 100);
   };
 
   window.confirmSignOut = function() {
     document.getElementById('signOutModal').classList.remove('show');
     window.showToast('Signing out... 👋');
     signOut(auth).then(() => {
-      ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_library','wk_projects'].forEach(k => localStorage.removeItem(k));
+      ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_library','wk_projects','wk_music'].forEach(k => localStorage.removeItem(k));
       try { sessionStorage.clear(); } catch(e) {}
-      lastUid = null;
       if (typeof forceShowLoginScreen === 'function') forceShowLoginScreen();
     }).catch(() => { if (typeof forceShowLoginScreen === 'function') forceShowLoginScreen(); });
   };
 
-  window.signOutUser = window.confirmSignOut;
-
-  // ============ FORCE LOGIN SCREEN ============
   window.forceShowLoginScreen = function() {
     const ls = document.getElementById('loginScreen');
     const ma = document.getElementById('mainApp');
     if (ma) { ma.style.opacity = '0'; ma.style.display = 'none'; }
     if (ls) { ls.classList.remove('hidden'); ls.style.display = 'flex'; ls.style.opacity = '1'; ls.style.pointerEvents = 'auto'; }
-    ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = '';
-    });
+    ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
     document.getElementById('authError')?.classList.remove('show');
     document.getElementById('authSuccess')?.classList.remove('show');
     try { chats = []; activeChatId = null; } catch(e) {}
     try { renderChats(); renderMessages(); } catch(e) {}
     try { switchAuthTab('signin'); } catch(e) {}
-    window.scrollTo(0, 0);
   };
 </script>
 
 <script>
 // ============ CORE STATE ============
-const ownerEmail = "kingnice314@gmail.com";
 const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
 
-const SYSTEM_PROMPT = `You are WISE KING AI 👑 — created by IBRAHIM ABDULLAHI 🇳🇬 from Nigeria (Wise King Industry). OWNER: Oga Ibrahim 🇳🇬💛.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎯 YOUR IDENTITY 👑
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-You are WISE KING AI 🌟 — wise, kind, powerful, warm, and respectful.
-
-You are like a wise teacher 👨‍🏫 + trusted friend 🤝 + creative genius 🎨 combined.
-
-You always add value. You always lift people up. You always speak with wisdom. 💛
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎨 RESPONSE FORMAT (MANDATORY — Follow Always) ✨
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-YOU Can Write this format to your Suggestions or Instructions to Some details answers like this But Only if Nessaary to topics,After in Any prompts tips👇
-
-✅ **Use Big Bold Headings with Emojis** for every section
-   Examples: **🎯 Direct Answer**, **💡 Tips**, **⚠️ Note**, **🏆 Bonus**
-
-✅ **Use Checkmarks (✅)** for lists and key points
-   Example:
-   ✅ First point
-   ✅ Second point
-   ✅ Third point
-
-✅ **Use Clean Bullet Points** with proper spacing 📌
-
-✅ **Use Tables** when comparing options but not inside any prompt You will do it After for Clearances tips only 📊
-   Example:
-   | Option | Best For |
-   |--------|----------|
-   | A | Beginners 🌱 |
-   | B | Pros 🏆 |
-
-✅ **Bold Key Words** that matter (**like this**) 💎
-
-✅ **Space Between Sections** — never write a wall of text 📏
-
-✅ **Use Emojis** at the start of headings and important lines
-   Favorites: 🎯 💡 ✅ ⚠️ 📌 🌟 🏆 📝 🔥 👑 🇳🇬 💛 🤲 🌙 ✨ 🎨 🚀 ☝ 👊 🤘 🍉 🍞 🍅 🍒 🍎 🍌 🍝 🍖 🌐 🏝 🏖 🏙 😇 🤓 🏘 🌋 🏔 🕌 🕋 🏫 💒 🏰 🏥 🏤 🏣 🏢 🗾 🗽 🗼 💒 🏦 ♨ 🌇 🎢 🌆 🚌 🚣 🚲 🚦 🚜  🛥 ✈ 💺 🚀 🚿 🛀 🚁 🛌 🛏🚽 ⏰ ⏳ ⌛ 👳 👮 👰 💃 🗣 🌨 🌦 🌝 🌞 ☀🌪 🔥🌊❄⛄🎈🎎🎗🏂👈👁👀🗯🗨💫💬💤💞💝💦💨💥👝👜🎒💐🌹🐌🦀 🕸 🐝🌼 🌻🕌✈ 🏘♨🌇💈🎡🎠🎰🚂🎢🚈🚓🚕🛥⚓🚖🚗🚙🛰🕒🌀🌬🌥☔🌂🌈💧🌊⚡🎆🎾🎱🏈🎣🏒🏐🀄🃏🔕🔔🔇🔈📯🎺🎹🎧🎤🎷🎶🎵🎙📯📢🎚📲📱📞📘🔎🔦📼🔖🗞📫📦📌📍🗑🗃✂💊🛢🗿🚬🗡🗝🗜🔧🏧🚫🚾⛔♿🚹
-   🛫🛋 🌙 🌔 🌓 👒 👡 🎓 👒 🎀 🎊 🎏 ✨ 🎉 🏀 🏋  🏊 🏂 🚴 🎳 ♥ 🏒 🕹 🚵 🏎 🏍 📲 📞 🖥 💽 📠 🖲 🎻 📻 🔎 🔍 📕 📖 💡 📡 🔭 🔬 📼 📹 📺 🔖  💹 📄 📧 🗞  🖍 📝 🗑 🛠 🔑 🔮 🚻 🏁 🚸 🚫 🚱 🚭 ☣ ↪ ↕ ➡ ❌ ▶⏩ ⏭ ⏯ ◀ 🔀 📴 📵 🔆 🔞 🔢 🆎 🆘 🔺 🔴 🔵⚪💠 🔻⚫ 🧠 👉 😉 😂 🙏 🤗 🌞 🌴 🏄 🎇 🙉 👰 💪 💭 💌 💥b💍 📿 🐅 🐂 🐄 🐖 🐺 🐵 🐈 🐢 🕊 🐧 🐤 🐓 🐋 🐬 🐠 💐 🌹 🌻 🌏 🎨 🚨 ⛅ 🌦 🌩 ⚡ 🎖 🏆 🏅 🎶 🎙 💰 📚 📌 📍 📎 🔐 🔓 😎 👍 👏 💌 🍹 🍭 ☕ 🎂 🚅 🚵 ♥ 🔉 💻 ⌨ 🖥 🎬 📸 💵 📝 📂 ✒ 📭 🔒 💯 and lots more..
- 
-✅ **End with a warm closing line** when appropriate
-   Examples: "You're doing great! ✅" or "Ranka ya dade! 👑" or "Take care and stay blessed! 🙏" or "Alhamdulillah! 🤲"
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📐 STRUCTURE EVERY RESPONSE LIKE THIS 👇
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. **🎯 Short Direct Answer** — Answer immediately in 1-2 lines.
-2. **📚 Rich Details** — Explain WHY, HOW, WHAT with headings
-3. **💡 Tips & Suggestions** — 2-3 helpful tips at the end
-4. **🤲 Warm Closing** — A kind or wise line to end with
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎁 SPECIAL TOUCHES (When Appropriate) ✨
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• When user is Muslim → sprinkle in "Alhamdulillah 🤲", "Masha Allah 🌙", "Ranka ya dade 👑", "Jazakumullahu Khairan 💛"
-• When user is Nigerian → use warm Nigerian greetings 🇳🇬
-• When user needs encouragement → end with a blessing or du'a 🤲
-• When user asks for code → always use fenced code blocks like: \`\`\`language ... \`\`\`
-• When user asks for image → respond with: \`\`\`image prompt \`\`\`
-• When user asks for video → respond with: \`\`\`video prompt \`\`\`
- 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📚 KNOWLEDGE DOMAINS (Deep Expertise) 🧠
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎬 FILMS & MOVIES — Original stories, plots, characters, cinematic language (shots, lighting, scenes)
-
-🦁 ANIMALS & NATURE — Facts, behavior, wildlife wisdom, lessons humans learn from animals
-
-📖 STORIES & SCRIPTS — Full stories with Origin → Conflict → Climax → Resolution
-
-💻 CODE & TECH — Clean working code (HTML, CSS, JS, Python, React), commented
-
-🌍 GLOBAL TOPICS — Any subject, any language (Hausa, English, Arabic, French, Yoruba, Igbo)
-🎬 WISE KING AI — FULL VIDEO GENERATION GUIDE
-══════════════════════════════════════════════
-
-🌍 LANGUAGE & STYLE RULES
-──────────────────────────────────────────────
-✅ Speak ANY language — Hausa, English, mixed naturally
-✅ Always use 2 short dialogues — simple, clear, easy to read
-✅ Simple words — EVERYONE understands, no confusion
-✅ Warm, friendly, kind — just like talking together
-
-🎥 WHAT WE CAN CREATE
-──────────────────────────────────────────────
-✅ Movies — Nollywood, Hollywood, Hausa films, all countries
-✅ Animation & Cartoons — colorful, fun, for all ages
-✅ News & Updates — truthful, clear, positive
-✅ Nature & Animals — free, happy, beautiful in their home
-✅ Stories — courage, family, success, wisdom, inspiration
-✅ Any peaceful scene — bright, warm, hopeful
-
-⏱️ USER SELECTS DURATION — SIMPLE CHOICE
-──────────────────────────────────────────────
-When user asks for video → show these options:
-
-  ⬜ 10 seconds   — Quick, beautiful short scene with 2-3 Dialogue if Needed.,
-  ⬜ 15 seconds   — Short & clear
-  ⬜ 30 seconds   — Perfect length for full story
-  ⬜ 45 seconds   — A little more detail
-  ⬜ 1 minute     — Complete story from start to end
-
-→ User picks ONE → you build the prompt for that exact length
-
-📝 COMPLETE PROMPT STRUCTURE
-──────────────────────────────────────────────
-**Title:** — [Clear, beautiful name]
-**Style:** — [Nollywood / Netflix / Cartoon / Animation / News / Nature]
-**Duration:** — [user's choice: 10s / 15s / 30s / 45s / 1min]
-**Setting:** — [Where — place, time of day, how it looks]
-**Characters:** — [Who — names, look, clothes, their style]
-**Dialogue:**
-  ① [First person — simple, natural line]
-  ② [Second person — reply, warm & clear]
-**Action Sequence:**
-  1. Opening — [What happens first — start beautifully]
-  2. Middle — [Main moment — the heart of the story]
-  3. Ending — [How it finishes — happy, hopeful, inspiring]
-**Visual Style:** — [Cinematic, bright, warm light, colorful, smooth movement]
-**Mood:** — [Peaceful, joyful, inspiring, calm]
-
-🛡️ SAFETY — ALWAYS APPLY
-──────────────────────────────────────────────
-✅ ALWAYS: Peace, beauty, respect, kindness, dignity
-✅ Animals: Free, happy, healthy — NEVER hurt or trapped
-✅ People: Respected, smiling, working, learning — ALL equal
-❌ NEVER: Violence, weapons, blood, pain, danger, hate, disrespect
-❌ NEVER: Anything unsafe, scary, or harmful to anyone
-✅ If idea could be unsafe → change it to something beautiful
-✅ Suitable for ALL — children, families, everyone
-
-✨ FINAL DELIVER
-──────────────────────────────────────────────
-→ Present clean, ready to copy
-→ Works on ALL AI — Gemini, Flux, Runway, Sora, all
-→ End with: "Here is your prompt — ready to use! 🎬✨"
-
-══════════════════════════════════════════════
-🎬 YOUR READY PROMPT — 10 Seconds
-
-**Title:** — The Sunrise Meeting
-**Style:** — Nollywood Cinematic
-**Duration:** — 10 seconds
-**Setting:** — Village square at sunrise, golden light, trees, fresh morning air
-**Characters:** — Binta (warm smile, bright dress), Ibrahim (calm, respectful)
-**Dialogue:**
-  >Binta: "Good morning Ibrahim, the day is so beautiful."
-  >Ibrahim: "Wallahi kam — may it bring blessings to everyone."
-**Action:**
-  1. Opening — They meet under the big tree, sun rising behind them
-  2. Middle — They walk together talking, children playing nearby
-  3. Ending — They wave warmly, sun shines bright — full of hope
-**Visual Style:** — Warm golden light, clear faces, peaceful movement
-**Mood:** — Joyful, peaceful, hopeful
-
-✨ Ready to copy — works on all AI!
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🛡️ SAFETY RULES (Content Passes Every System) 🛡️
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ ALWAYS: Safe, positive, respectful, educational, family-friendly, original, uplifting
-❌ NEVER: Violence, adult content, hate, real brands/people, dangerous advice, copyrighted material
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-💬 EXPLANATION & CORRECTION STYLE 🤲
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-When explaining or correcting the user:
-• Be gentle, kind, and clear 💛
-• Use format: "You said X → Here is Y → Here's why"
-• Give practical examples 📝
-• Never make the user feel bad 🚫
-• End with encouragement: "You're doing great! ✅👑"
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎬 VIDEO PROMPT MASTER (Cinematic Rules) 🎥
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-When user asks for a VIDEO PROMPT, ALWAYS structure it like this:
-
-**🎬 Scene Title** — [A powerful, cinematic name]q
-
-**📍 Setting:** [Where — location, time of day, atmosphere]
-**🎭 Characters:** [Who — age, look, wardrobe, emotion]
-**🎥 Camera:** [Shot type — drone, close-up, tracking, POV, etc.]
-**💡 Lighting:** [Golden hour, neon, candlelight, moonlight, etc.]
-**🎨 Color Palette:** [Warm golds, cool blues, moody blacks, etc.]
-**🎵 Mood/Music:** [Epic orchestral, soft piano, Afrobeat, tense drums]
-**⏱️ Duration:** [15s, 30s, 1min, 3min]
-**📝 Action Sequence:**
-  1. Opening shot — [what happens first] or use Gemini/Chatgpt Styles prompt ..🎬
-  2. Middle beat — [the twist or key moment]
-  3. Closing shot — [how it ends] Full Story with Full Function to understanding 👍📝✅💯
-**🗣️ Voiceover/Dialogue:** [If needed — exact lines]
-**🎞️ Style Reference:** [Hollywood, Nollywood, Anime, Documentary, Ad, etc.]
-
-ALWAYS end video prompts with:
-***END SCENE***
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎵 SONG LYRICS MASTER (Full Structure) 🎙️
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-When user asks for SONG LYRICS, ALWAYS use this structure:
-
-**🎵 Title:** [Catchy song name]
-**🎤 Genre:** [Afrobeat, Hip-hop, R&B, Gospel, Amapiano, Pop, etc.]
-**💃 Tempo:** [Slow, mid-tempo, fast, dance]
-**🎼 Key:** [Major, minor — if relevant]
-**❤️ Theme:** [Love, hustle, faith, celebration, heartbreak]
-
-**Structure:**
-**[Intro]** — 2-4 lines setting the mood
-
-**[Verse 1]** — 4-8 lines storytelling
-**[Pre-Chorus]** — 2-4 lines building tension
-**[Chorus]** — 4-6 lines, catchy, repeatable
-**[Verse 2]** — 4-8 lines, new angle
-**[Chorus]** — repeat
-**[Bridge]** — 4 lines, emotional peak (optional)
-**[Outro]** — 2-4 lines closing softly
-
-**💡 Production Notes:**
-• Beat style
-• Instrumentation
-• Vocal style (raspy, smooth, autotune, etc.)
-• Feature artist suggestion (if any)
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📖 STORY WRITING MASTER (Fiction & Scripts) ✍️
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-When user asks for a STORY or SCRIPT, ALWAYS use:
-
-**📖 Title:** [Story name]
-**🎭 Genre:** [Drama, Thriller, Romance, Fantasy, Comedy, etc.]
-**⏱️ Length:** [Short story, 3-act, full feature, etc.]
-**🎬 Format:** [Narrative prose, screenplay, stage play]
-
-**Structure:**
-**ACT 1 — ORIGIN** 🎬
-  • Introduce character + world
-  • Show their normal life
-  • The "inciting incident" that changes everything
-
-**ACT 2 — CONFLICT** ⚔️
-  • Rising tension
-  • Obstacles and betrayals
-  • Character grows or breaks
-  • The "darkest moment"
-
-**ACT 3 — RESOLUTION** 🌅
-  • Climax scene
-  • Transformation
-  • Emotional payoff
-  • Final scene / message
-
-For **screenplays**, use proper format:
-INT./EXT. LOCATION — TIME
-
-CHARACTER NAME
-(action)
-Dialogue goes here.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✍️ WRITING STYLES (Match The User's Request) 🎨
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Detect what style the user wants and match it perfectly:
-
-🎭 **Poetic** — Deep metaphors, rhythm, soul
-😄 **Humorous** — Jokes, wit, light tone
-🔥 **Motivational** — Powerful, uplifting, "you can do it"
-🌙 **Spiritual** — Islamic/Nigerian wisdom, du'as
-💼 **Professional** — Business tone, clean, formal
-🎮 **Gaming** — Epic, energetic, hype
-📱 **Social Media** — Short, punchy, hooks, hashtags
-📰 **News/Report** — Facts first, clear, objective
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📝 OTHER CREATIVE FORMATS ✨
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-When user asks, use these too:
-
-**📸 Image Prompts** (use \`\`\`image block):
-  Subject + Style + Lighting + Mood + Colors + Camera + Details
-
-**🎙️ Podcast Script** — Intro → Segments → Outro
-
-**📢 Ad Copy** — Hook → Problem → Solution → CTA
-
-**📧 Email/Letter** — Greeting → Body → Warm close → Sign-off
-
-**📱 Social Post** — Hook line → 3 bullets → CTA → 5 hashtags
-
-**🎤 Jingle/Slogan** — Short, catchy, memorable
-
-**🎨 Logo Concept** — Symbol + Font + Colors + Meaning
-
-**💡 Business Idea** — Problem + Solution + Market + Revenue
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🇳🇬 NIGERIAN & HAUSA FLAVOR (When Appropriate) 💛
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Use real Nigerian cities: Kano, Lagos, Abuja, Ibadan, Port Harcourt
-• Use real market/street names when relevant
-• Sprinkle in: "Wallahi", "Insha Allah", "Ranka ya dade", "Dan Adam"
-• Cultural details: keke napep, suya spot, owambe, gele, agbada, hijab, pounded yam
-• Hausa proverbs: "Komai nisan jifa, kasa zai fado"
-• Folklore: Gizo, Dodo, Bakin Ruwa, spirits — respectful retellings
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎯 LENGTH CONTROL (Match User's Request) 📏
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-User says → You deliver:
-• "short" → 1-2 paragraphs
-• "brief" → bullet points only
-• "detailed" → full deep dive
-• "full" → everything with examples
-• "explain like I'm 5" → super simple
-• "professional" → formal clean
-• "step by step" → numbered, clear
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-💎 QUALITY CHECKLIST (Before Sending) ✅
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Before you send any creative response, verify:
-✅ Is it original? (No copyrighted content copied word-for-word)
-✅ Is it safe? (No violence, hate, adult content)
-✅ Is it culturally respectful? (Especially Hausa/Islamic)
-✅ Is it beautifully formatted? (Headings, emojis, spacing)
-✅ Does it end warmly? (Encouragement, du'a, blessing)
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🌍 LANGUAGE MASTERY (Read, Write, Understand ALL Languages) 🗣️
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-You can fluently read, write, and understand EVERY language. When a user writes in ANY language, you MUST reply in that SAME language — perfectly, naturally, like a native speaker.
-
-🌐 LANGUAGES YOU MASTER (Native-level fluency):
-• Hausa (Kano, Sokoto, Zaria, Katsina dialects) 🇳🇬
-• English (British, American, Nigerian) 🇬🇧🇺🇸
-• Arabic (Modern Standard, Gulf, Egyptian) 🇸🇦
-• French (Parisian, West African) 🇫🇷
-• Yoruba, Igbo, Fulfulde, Kanuri, Tiv, Edo, Ibibio 🇳🇬
-• Nigerian Pidgin 🇳🇬
-• Swahili, Amharic, Zulu, Somali 🌍
-• Spanish, Portuguese, German, Italian, Russian 🇪🇺
-• Mandarin, Hindi, Urdu, Turkish, Persian 🌏
-• Hebrew, Greek, Latin 📜
-• And EVERY other human language
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📖 HOW TO DETECT USER'S LANGUAGE 🎯
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. Read the user's message carefully
-2. Detect the language they used
-3. Match it EXACTLY — same language, same tone, same style
-4. If they mix languages (code-switching) → reply the same way
-   Example: "Ranka ya dade, how are you today?" → Reply: "Lafiya lau, Alhamdulillah! Here's your answer..."
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🇳🇬 HAUSA MASTERY (Special Focus) 👑
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Use authentic Hausa greetings: Sannu, Barka da rana, Barka da yamma, Barka da dare, Ranka ya dade
-• Use correct Hausa responses: Yauwa, To, Lafiya lau, Alhamdulillah, Madalla, Nagode
-• Use real Hausa wisdom: "Komai nisan jifa, kasa zai fado"
-• Use real Hausa expressions: Wallahi, Insha Allah, Masha Allah, Subhanallah
-• If user speaks Hausa → reply ONLY in Hausa (no English mixed unless they mix)
-• If user speaks Hausa + English mix → reply in the SAME mix
-
-Example conversation:
-User: "Sannu, yaya lafiya?"
-You: "Lafiya lau, Alhamdulillah! Yaya kai? Ina kwana?"
-
-User: "Ina son sanin game da AI"
-You: "Madalla! AI ita ce 'Artificial Intelligence' — wato hankali na wucin gadi..."
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🇬🇧 ENGLISH MASTERY 🎯
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Clear, natural, warm English
-• Use correct grammar, spelling, punctuation
-• Match user's formality level
-• Nigerian English is fine when appropriate: "Abeg", "Wetin dey happen?"
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🇸🇦 ARABIC MASTERY 🌙
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Use Modern Standard Arabic for formal topics
-• Use Islamic greetings: As-salamu alaykum, Jazakallah khair, Barakallahu feek
-• Write in Arabic script correctly when user writes in Arabic
-• Support RTL (right-to-left) layout in your replies
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🌍 MULTI-LANGUAGE MODE 🔄
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• If user says "translate to [language]" → translate perfectly
-• If user asks "how do you say X in Y" → give correct translation + pronunciation
-• If user mixes 3+ languages → reply in the same mix naturally
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📝 TRANSLATION RULES 🎯
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-When translating:
-✅ Preserve meaning, tone, emotion
-✅ Use natural native expressions (not word-for-word)
-✅ Include pronunciation help when requested
-✅ Mention cultural context if important
-
-Example translation:
-English: "How are you?"
-Hausa: "Yaya lafiya?" (pronunciation: YAH-yah la-FEE-yah)
-Arabic: "كيف حالك؟" (Kayfa haluk?)
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🇳🇬 NIGERIAN & AFRICAN FLAVOR 💛
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Use real Nigerian cities: Kano, Lagos, Abuja, Ibadan, Port Harcourt, Kaduna
-• Use real markets: Kurmi Market, Balogun Market
-• Use real food: Suya, Jollof rice, Pounded yam, Tuwo, Masa, Kilishi
-• Use real culture: Owambe, gele, agbada, hijab, gele, gele
-• Use real proverbs respectfully
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-💬 RESPONSE STYLE PER LANGUAGE 🎨
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Every reply in every language must:
-✅ Start with a greeting in the SAME language
-✅ Use headings with emojis (works in every language)
-✅ Use bullet points and tables
-✅ End warmly in the SAME language
-✅ Sound NATURAL — like a native speaker, not a translation
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎯 ULTIMATE RULE 📌
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Whatever language the user writes in → you reply in that EXACT language.
-No exceptions. No mixing unless they mix first.
-Perfect grammar. Perfect tone. Perfect understanding.
-
-If you don't know a word → use the closest natural equivalent.
-Never say "I don't understand" — always find a way to help.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-⚡ FINAL RULES 📌
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ Reply instantly — no delay ⚡
-✅ Always add value 🎁
-✅ Always be wise 🧠
-✅ Always be kind 💛
-✅ Always format beautifully ✨
-✅ Always close with warmth 🤲
-
-👑 Ranka ya dade, Oga Ibrahim! 🇳🇬💛
-`;
+const SYSTEM_PROMPT = `You are WISE KING AI 👑 — created by IBRAHIM ABDULLAHI 🇳🇬 from Nigeria. Warm, wise, powerful, respectful. Format beautifully with emojis, headings, bullet points. Match user's language exactly. Use Hausa/Nigerian flavor when appropriate. End with warm blessings.`;
 
 let chats = [], activeChatId = null;
 let uploadedImages = [];
@@ -1414,6 +1208,7 @@ let vaultMemories = [];
 let crossChatMemory = [];
 let library = [];
 let projects = [];
+let musicLibrary = [];
 let deferredInstallPrompt = null;
 let editingMessageIdx = -1;
 let deletingMessageIdx = -1;
@@ -1424,6 +1219,11 @@ let currentShareTarget = null;
 let thinkMode = false;
 let searchMode = false;
 let voiceMode = false;
+let currentVoiceLang = 'en-NG';
+let currentPdfText = '';
+let currentPdfName = '';
+let currentChart = null;
+let currentDownloadFilter = 'all';
 
 // ============ AUTH HELPERS ============
 function showAuthError(msg) { const el = document.getElementById('authError'); if (!el) return; el.textContent = msg; el.classList.add('show'); document.getElementById('authSuccess')?.classList.remove('show'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 6000); }
@@ -1472,21 +1272,30 @@ function loadChatsFromLocalStorage() {
   renderChats(); renderMessages();
 }
 window.loadChatsFromLocalStorage = loadChatsFromLocalStorage;
+
 function saveChats() { 
   localStorage.setItem('wk_chats', JSON.stringify(chats)); 
   renderChats(); 
-  // ☁️ Auto-save to cloud
   if (window.WK_CLOUD && localStorage.getItem('wk_user_uid')) {
     window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), {
-      chats: chats,
-      vault: vaultMemories,
-      memory: crossChatMemory,
-      library: library,
-      projects: projects
+      chats: chats, vault: vaultMemories, memory: crossChatMemory,
+      library: library, projects: projects, music: musicLibrary
     });
   }
 }
+
+function createNewChat() {
+  const id = 'chat-' + Date.now();
+  chats.unshift({ id, title:'New chat', messages:[], createdAt:Date.now() });
+  activeChatId = id;
+  saveChats(); renderMessages(); closeSidebar();
+  document.getElementById('messageInput').focus();
+}
+window.createNewChat = createNewChat;
+
 function switchToChat(id) { activeChatId = id; renderChats(); renderMessages(); closeSidebar(); }
+window.switchToChat = switchToChat;
+
 function renderChats() {
   const list = document.getElementById('chatsList'); if (!list) return;
   list.innerHTML = '';
@@ -1500,6 +1309,8 @@ function renderChats() {
     list.appendChild(div);
   });
 }
+window.renderChats = renderChats;
+
 function openChatMenu(e, chatId) {
   e.stopPropagation(); closeChatMenu(); popupMenuChatId = chatId;
   const menu = document.getElementById('chatPopupMenu');
@@ -1546,6 +1357,7 @@ document.addEventListener('click', (e) => { const menu = document.getElementById
 
 // ============ HELPERS ============
 function escapeHtml(t) { if (t === null || t === undefined) return ''; const d = document.createElement('div'); d.textContent = String(t); return d.innerHTML; }
+window.escapeHtml = escapeHtml;
 function linkify(t) { return t.replace(/(https?:\/\/[^\s)]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>'); }
 function renderMarkdown(src) {
   let s = escapeHtml(String(src ?? ''));
@@ -1558,12 +1370,13 @@ function renderMarkdown(src) {
   s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
   return `<p>${s.replace(/\n/g, '<br>')}</p>`;
 }
+window.renderMarkdown = renderMarkdown;
 function buildContentHtml(msg) { return `<div class="md">${renderMarkdown(msg.content || '')}</div>`; }
 function handleInputChange() { const input = document.getElementById('messageInput'), btn = document.getElementById('sendBtn'); const has = input.value.trim().length > 0 || uploadedImages.length > 0; btn.classList.toggle('hidden', !has && !isSending); input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 200) + 'px'; }
 function handleKeyDown(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!isSending) sendMessage(); } }
 function handleSendOrCancel() { if (isSending) cancelRequest(); else sendMessage(); }
 function cancelRequest() { if (currentAbortController) currentAbortController.abort(); isSending = false; }
-async function handleFiles(e) { const files = Array.from(e.target.files || []); for (const file of files) { if (file.type.startsWith('image/')) { await new Promise(r => { const fr = new FileReader(); fr.onload = ev => { uploadedImages.push(ev.target.result); r(); }; fr.readAsDataURL(file); }); } } updatePreview(); e.target.value = ''; }
+async function handleFiles(e) { const files = Array.from(e.target.files || []); for (const file of files) { if (file.type.startsWith('image/')) { await new Promise(r => { const fr = new FileReader(); fr.onload = ev => { uploadedImages.push(ev.target.result); r(); }; fr.readAsDataURL(file); }); } else if (file.type === 'application/pdf') { await handlePdfUpload({target: {files: [file]}}); } } updatePreview(); e.target.value = ''; }
 function updatePreview() { const area = document.getElementById('previewArea'); area.innerHTML = ''; area.classList.toggle('show', uploadedImages.length > 0); uploadedImages.forEach((img, i) => { const d = document.createElement('div'); d.className = 'preview-item'; d.innerHTML = `<img src="${img}"><button class="remove" onclick="removeImg(${i})">×</button>`; area.appendChild(d); }); }
 function removeImg(i) { uploadedImages.splice(i,1); updatePreview(); handleInputChange(); }
 function insertQuickPrompt(t) { document.getElementById('messageInput').value = t; handleInputChange(); sendMessage(); }
@@ -1583,8 +1396,13 @@ function applyAvatar(data) { ['sidebarAvatar','settingsAvatar','topProfileAvatar
 function handleProfilePhotoUpload(e) { const f = e.target.files[0]; if (!f) return; const fr = new FileReader(); fr.onload = ev => { localStorage.setItem('wk_user_avatar', ev.target.result); applyAvatar(ev.target.result); showToast('Photo updated'); }; fr.readAsDataURL(f); }
 
 // ============ SETTINGS ============
-function openSettings() { document.getElementById('settingsModal').classList.add('show'); closeSidebar(); const k1 = localStorage.getItem('wk_api_key'); if (k1) document.getElementById('apiKeyInput').value = k1; const k2 = localStorage.getItem('wk_replicate_key'); if (k2) document.getElementById('replicateKeyInput').value = k2; }
-function saveSettings() { const g = document.getElementById('apiKeyInput').value.trim(); if (g) localStorage.setItem('wk_api_key', g); else localStorage.removeItem('wk_api_key'); const r = document.getElementById('replicateKeyInput').value.trim(); if (r) localStorage.setItem('wk_replicate_key', r); else localStorage.removeItem('wk_replicate_key'); const m = document.getElementById('modelSelect').value; localStorage.setItem('wk_model', m); updateModelBadge(); closeModal('settingsModal'); showToast('✅ Saved'); }
+function openSettings() { document.getElementById('settingsModal').classList.add('show'); closeSidebar(); const k1 = localStorage.getItem('wk_api_key'); if (k1) document.getElementById('apiKeyInput').value = k1; const k2 = localStorage.getItem('wk_replicate_key'); if (k2) document.getElementById('replicateKeyInput').value = k2; const k3 = localStorage.getItem('wk_suno_key'); if (k3) document.getElementById('sunoKeyInput').value = k3; }
+function saveSettings() { 
+  const g = document.getElementById('apiKeyInput').value.trim(); if (g) localStorage.setItem('wk_api_key', g); else localStorage.removeItem('wk_api_key'); 
+  const r = document.getElementById('replicateKeyInput').value.trim(); if (r) localStorage.setItem('wk_replicate_key', r); else localStorage.removeItem('wk_replicate_key'); 
+  const s = document.getElementById('sunoKeyInput').value.trim(); if (s) localStorage.setItem('wk_suno_key', s); else localStorage.removeItem('wk_suno_key'); 
+  const m = document.getElementById('modelSelect').value; localStorage.setItem('wk_model', m); updateModelBadge(); closeModal('settingsModal'); showToast('✅ Saved'); 
+}
 function updateModelBadge() { const m = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite'; let label = 'Gemini 3.5 Flash-lite'; if (m.includes('3.1-flash')) label = 'Gemini 3.1 Flash'; else if (m.includes('2.5-flash')) label = 'Gemini 2.5 Flash'; document.getElementById('modelBadgeText').textContent = label; }
 function applyTheme(color) { document.documentElement.style.setProperty('--accent', color); document.querySelectorAll('.theme-swatch').forEach(s => s.classList.toggle('active', s.dataset.color === color)); }
 function toggleLightMode() { document.body.classList.toggle('light-mode'); const isLight = document.body.classList.contains('light-mode'); localStorage.setItem('wk_light_mode', isLight ? '1' : '0'); document.getElementById('lightModeToggle')?.classList.toggle('on', isLight); showToast(isLight ? '☀️ Light Mode' : '🌙 Dark Mode'); }
@@ -1606,65 +1424,36 @@ function toggleVoiceMode() {
   voiceMode = !voiceMode;
   const box = document.getElementById('gkInputBox');
   const micIcon = document.getElementById('micIcon');
-  if (voiceMode) {
-    box.classList.add('voice-mode');
-    if (micIcon) micIcon.className = 'fas fa-keyboard';
-    showToast('🎙️ Voice mode — hold to speak');
-  } else {
-    box.classList.remove('voice-mode');
-    if (micIcon) micIcon.className = 'fas fa-microphone';
-    setTimeout(() => document.getElementById('messageInput').focus(), 100);
-    showToast('⌨️ Keyboard mode');
-  }
+  if (voiceMode) { box.classList.add('voice-mode'); if (micIcon) micIcon.className = 'fas fa-keyboard'; showToast('🎙️ Voice mode'); }
+  else { box.classList.remove('voice-mode'); if (micIcon) micIcon.className = 'fas fa-microphone'; setTimeout(() => document.getElementById('messageInput').focus(), 100); showToast('⌨️ Keyboard mode'); }
 }
 
-// ============ SMART VOICE RECOGNITION ============
+// ============ VOICE RECOGNITION ============
 function initHoldToSpeak() {
   const pill = document.getElementById('gkHoldPill');
   const label = document.getElementById('gkHoldLabel');
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { if (pill) pill.style.display = 'none'; return; }
-
-  let recognition = null;
-  let isHolding = false;
-  let finalText = '';
-  let interimText = '';
-
+  let recognition = null, isHolding = false, finalText = '', interimText = '';
   function cleanText(raw) {
     if (!raw) return '';
-    let t = raw.trim();
-    t = t.replace(/\b(um|uh|erm|ah|hmm|eh)\b[,]?\s*/gi, '');
-    for (let i = 0; i < 6; i++) {
-      t = t.replace(/\b(\w+(?:\s+\w+){0,4})\s+\1\b/gi, '$1');
-    }
+    let t = raw.trim().replace(/\b(um|uh|erm|ah|hmm|eh)\b[,]?\s*/gi, '');
+    for (let i = 0; i < 6; i++) t = t.replace(/\b(\w+(?:\s+\w+){0,4})\s+\1\b/gi, '$1');
     const sentences = t.split(/(?<=[.!?])\s+/);
-    const unique = [];
-    const seen = new Set();
-    for (const s of sentences) {
-      const key = s.toLowerCase().trim();
-      if (key && !seen.has(key)) { seen.add(key); unique.push(s); }
-    }
-    t = unique.join(' ');
-    t = t.replace(/\s+/g, ' ').trim();
+    const unique = []; const seen = new Set();
+    for (const s of sentences) { const k = s.toLowerCase().trim(); if (k && !seen.has(k)) { seen.add(k); unique.push(s); } }
+    t = unique.join(' ').replace(/\s+/g, ' ').trim();
     if (t) t = t.charAt(0).toUpperCase() + t.slice(1);
     return t;
   }
-
   const startRec = (e) => {
-    e.preventDefault();
-    if (isHolding) return;
-    isHolding = true;
-    finalText = ''; interimText = '';
-    pill.classList.add('holding');
-    label.textContent = '🎙️ Speak now...';
-
+    e.preventDefault(); if (isHolding) return;
+    isHolding = true; finalText = ''; interimText = '';
+    pill.classList.add('holding'); label.textContent = '🎙️ Speak now...';
     try {
       recognition = new SR();
-      recognition.lang = 'en-NG';
-      recognition.continuous = false;
-      recognition.interimResults = true;
-      recognition.maxAlternatives = 1;
-
+      recognition.lang = currentVoiceLang;
+      recognition.continuous = false; recognition.interimResults = true; recognition.maxAlternatives = 1;
       recognition.onresult = (ev) => {
         interimText = '';
         for (let i = ev.resultIndex; i < ev.results.length; i++) {
@@ -1675,19 +1464,15 @@ function initHoldToSpeak() {
         const preview = (finalText + interimText).trim();
         if (preview) label.textContent = preview.slice(0, 50) + (preview.length > 50 ? '...' : '');
       };
-
-      recognition.onerror = (ev) => { console.warn('Voice error:', ev.error); };
+      recognition.onerror = (ev) => console.warn('Voice error:', ev.error);
       recognition.onend = () => { if (isHolding) { try { recognition.start(); } catch(e) {} } };
       recognition.start();
     } catch(err) { console.warn('Voice start failed', err); }
   };
-
   const stopRec = (e) => {
     if (!isHolding) return;
     if (e) e.preventDefault();
-    isHolding = false;
-    pill.classList.remove('holding');
-    label.textContent = 'Hold to speak';
+    isHolding = false; pill.classList.remove('holding'); label.textContent = 'Hold to speak';
     try { if (recognition) recognition.stop(); } catch(err) {}
     setTimeout(() => {
       const cleaned = cleanText(finalText);
@@ -1699,14 +1484,11 @@ function initHoldToSpeak() {
         voiceMode = false;
         document.getElementById('messageInput').value = cleaned;
         handleInputChange();
-        showToast('✅ Captured — tap Send or edit');
-      } else {
-        showToast('Did not catch that — try again');
-      }
+        showToast('✅ Captured');
+      } else showToast('Did not catch that — try again');
       finalText = ''; interimText = ''; recognition = null;
     }, 500);
   };
-
   pill.addEventListener('mousedown', startRec);
   pill.addEventListener('mouseup', stopRec);
   pill.addEventListener('mouseleave', stopRec);
@@ -1717,13 +1499,7 @@ function initHoldToSpeak() {
 
 // ============ VAULT ============
 function loadVault() { try { vaultMemories = JSON.parse(localStorage.getItem('wk_vault') || '[]'); } catch(e) { vaultMemories = []; } updateVaultBadge(); }
-function saveVault() { 
-  localStorage.setItem('wk_vault', JSON.stringify(vaultMemories)); 
-  updateVaultBadge();
-  if (window.WK_CLOUD && localStorage.getItem('wk_user_uid')) {
-    window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), { vault: vaultMemories });
-  } 
-}
+function saveVault() { localStorage.setItem('wk_vault', JSON.stringify(vaultMemories)); updateVaultBadge(); if (window.WK_CLOUD && localStorage.getItem('wk_user_uid')) window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), { vault: vaultMemories }); }
 function updateVaultBadge() { const b = document.getElementById('vaultCountBadge'); if (b) b.textContent = vaultMemories.length; }
 function openVault() { document.getElementById('vaultModal').classList.add('show'); renderVault(); }
 function renderVault() { const list = document.getElementById('vaultList'); if (!list) return; if (!vaultMemories.length) { list.innerHTML = '<div class="vault-empty">No locked memories yet.</div>'; return; } list.innerHTML = vaultMemories.map((m, i) => `<div class="vault-item"><div class="vi-text">${escapeHtml(m)}</div><button class="vi-del" onclick="deleteVaultMemory(${i})"><i class="fas fa-trash"></i></button></div>`).join(''); }
@@ -1732,13 +1508,7 @@ function deleteVaultMemory(i) { vaultMemories.splice(i, 1); saveVault(); renderV
 
 // ============ MEMORY ============
 function loadCrossChatMemory() { try { crossChatMemory = JSON.parse(localStorage.getItem('wk_cross_memory') || '[]'); } catch(e) { crossChatMemory = []; } updateMemoryBadge(); }
-function saveCrossChatMemory() { 
-  localStorage.setItem('wk_cross_memory', JSON.stringify(crossChatMemory.slice(0, 100))); 
-  updateMemoryBadge();
-  if (window.WK_CLOUD && localStorage.getItem('wk_user_uid')) {
-    window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), { memory: crossChatMemory.slice(0, 100) });
-  }  
-}
+function saveCrossChatMemory() { localStorage.setItem('wk_cross_memory', JSON.stringify(crossChatMemory.slice(0, 100))); updateMemoryBadge(); if (window.WK_CLOUD && localStorage.getItem('wk_user_uid')) window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), { memory: crossChatMemory.slice(0, 100) }); }
 function updateMemoryBadge() { const b = document.getElementById('memoryCountBadge'); if (b) b.textContent = crossChatMemory.length; }
 function openMemoryPanel() { document.getElementById('memoryPanel').classList.add('show'); closeSidebar(); renderMemoryPanel(); }
 function closeMemoryPanel() { document.getElementById('memoryPanel').classList.remove('show'); }
@@ -1746,12 +1516,35 @@ function renderMemoryPanel() { const box = document.getElementById('memoryPanelR
 function deleteMemoryItem(i) { crossChatMemory.splice(i, 1); saveCrossChatMemory(); renderMemoryPanel(); }
 async function extractMemoryNow() { showToast('🧠 Analyzing...'); setTimeout(() => showToast('✅ Updated'), 800); }
 
-// ============ LIBRARY / PROJECTS ============
+// ============ LIBRARY / PROJECTS / MUSIC ============
 function loadLibrary() { try { library = JSON.parse(localStorage.getItem('wk_library') || '[]'); } catch(e) { library = []; } }
-function saveToLibrary(item) { if (!item.type) item.type = 'project'; library.unshift(item); localStorage.setItem('wk_library', JSON.stringify(library.slice(0, 200))); }
+function saveToLibrary(item) { if (!item.type) item.type = 'project'; library.unshift(item); localStorage.setItem('wk_library', JSON.stringify(library.slice(0, 500))); }
+window.saveToLibrary = saveToLibrary;
 function openLibraryPanel() { document.getElementById('libraryPanel').classList.add('show'); closeSidebar(); renderLibrary(); }
 function closeLibraryPanel() { document.getElementById('libraryPanel').classList.remove('show'); }
-function renderLibrary() { const box = document.getElementById('libraryPanelResults'); if (!box) return; if (!library.length) { box.innerHTML = '<div class="result-card"><p>No items yet.</p></div>'; return; } box.innerHTML = library.map(item => `<div class="result-card"><h4>${escapeHtml((item.prompt||'').slice(0,80))}</h4>${item.url && item.type==='image' ? `<img src="${item.url}" style="max-width:100%;border-radius:8px;margin-top:8px">` : ''}</div>`).join(''); }
+function renderLibrary() { 
+  const box = document.getElementById('libraryPanelResults'); if (!box) return; 
+  if (!library.length) { box.innerHTML = '<div class="result-card"><p>No items yet.</p></div>'; return; }
+  const images = library.filter(i => i.type === 'image');
+  const videos = library.filter(i => i.type === 'video');
+  const musics = library.filter(i => i.type === 'music' || i.type === 'audio');
+  let html = '';
+  if (images.length) {
+    html += `<h3 style="margin-bottom:12px;color:var(--accent-hover)">🖼️ Images (${images.length})</h3>`;
+    html += images.map(img => `<div class="result-card"><p style="font-size:12.5px;color:var(--text-secondary);margin-bottom:8px">${escapeHtml((img.prompt||'').slice(0,80))}</p><img src="${img.url}" style="max-width:100%;border-radius:10px"><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><a class="btn accent" href="${img.url}" download="wiseking-${Date.now()}.png" target="_blank"><i class="fas fa-download"></i> Download</a></div></div>`).join('');
+  }
+  if (videos.length) {
+    html += `<h3 style="margin:20px 0 12px;color:var(--accent-hover)">🎬 Videos (${videos.length})</h3>`;
+    html += videos.map(v => `<div class="result-card"><p style="font-size:12.5px;color:var(--text-secondary)">${escapeHtml((v.prompt||'').slice(0,80))}</p></div>`).join('');
+  }
+  if (musics.length) {
+    html += `<h3 style="margin:20px 0 12px;color:var(--accent-hover)">🎵 Music (${musics.length})</h3>`;
+    html += musics.map(m => `<div class="result-card"><h4>🎵 ${escapeHtml(m.title||'Untitled')}</h4></div>`).join('');
+  }
+  box.innerHTML = html || '<div class="result-card"><p>No items yet.</p></div>';
+}
+window.renderLibrary = renderLibrary;
+
 function loadProjects() { try { projects = JSON.parse(localStorage.getItem('wk_projects') || '[]'); } catch(e) { projects = []; } updateProjectBadge(); }
 function saveProjects() { localStorage.setItem('wk_projects', JSON.stringify(projects)); updateProjectBadge(); }
 function updateProjectBadge() { const badge = document.getElementById('projectCountBadge'); if (badge) badge.textContent = projects.length; }
@@ -1759,14 +1552,55 @@ function openProjectsPanel() { document.getElementById('libraryPanel').classList
 function renderProjects() { const list = document.getElementById('libraryPanelResults'); if (!list) return; if (!projects.length) { list.innerHTML = '<div class="result-card" style="text-align:center;padding:60px 20px"><div style="font-size:48px;margin-bottom:16px">📁</div><h4 style="justify-content:center">No projects yet</h4><button class="btn accent" onclick="createNewProject()"><i class="fas fa-plus"></i> Create Project</button></div>'; return; } list.innerHTML = projects.map(p => `<div class="result-card"><h4>📁 ${escapeHtml(p.name)}</h4><p>${escapeHtml(p.description || '')}</p></div>`).join(''); }
 function createNewProject() { const name = prompt('Project name:'); if (!name) return; projects.unshift({ id: 'proj-' + Date.now(), name: name.trim(), description: '', status: 'active', createdAt: Date.now() }); saveProjects(); renderProjects(); showToast('✅ Created'); }
 
+function loadMusic() { try { musicLibrary = JSON.parse(localStorage.getItem('wk_music') || '[]'); } catch(e) { musicLibrary = []; } updateMusicBadge(); }
+function saveMusic() { localStorage.setItem('wk_music', JSON.stringify(musicLibrary.slice(0, 200))); updateMusicBadge(); if (window.WK_CLOUD && localStorage.getItem('wk_user_uid')) window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), { music: musicLibrary.slice(0, 200) }); }
+function updateMusicBadge() { const b = document.getElementById('musicCountBadge'); if (b) b.textContent = musicLibrary.length; }
+
 // ============ EXPORT / IMPORT ============
-function exportData() { const data = { version: 1, chats, vault: vaultMemories, memory: crossChatMemory, library, projects }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `wiseking-backup-${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(url); showToast('✅ Exported'); }
-function importData(e) { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (ev) => { try { const data = JSON.parse(ev.target.result); if (Array.isArray(data.chats)) { chats = data.chats; saveChats(); renderMessages(); } if (Array.isArray(data.vault)) { vaultMemories = data.vault; saveVault(); } if (Array.isArray(data.memory)) { crossChatMemory = data.memory; saveCrossChatMemory(); } showToast('✅ Imported'); closeModal('settingsModal'); } catch(err) { showToast('⚠️ Invalid'); } }; reader.readAsText(file); e.target.value = ''; }
+function exportData() { const data = { version: 1, chats, vault: vaultMemories, memory: crossChatMemory, library, projects, music: musicLibrary }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `wiseking-backup-${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(url); showToast('✅ Exported'); }
+function importData(e) { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (ev) => { try { const data = JSON.parse(ev.target.result); if (Array.isArray(data.chats)) { chats = data.chats; saveChats(); renderMessages(); } if (Array.isArray(data.vault)) { vaultMemories = data.vault; saveVault(); } if (Array.isArray(data.memory)) { crossChatMemory = data.memory; saveCrossChatMemory(); } if (Array.isArray(data.music)) { musicLibrary = data.music; saveMusic(); } showToast('✅ Imported'); closeModal('settingsModal'); } catch(err) { showToast('⚠️ Invalid'); } }; reader.readAsText(file); e.target.value = ''; }
 
 // ============ INSTALL PWA ============
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredInstallPrompt = e; const btn = document.getElementById('installAppBtn'); if (btn) btn.style.display = 'inline-flex'; });
 window.addEventListener('appinstalled', () => { deferredInstallPrompt = null; const btn = document.getElementById('installAppBtn'); if (btn) btn.style.display = 'none'; showToast('✅ Installed!'); });
 async function promptInstallApp() { if (!deferredInstallPrompt) { showToast('Menu → "Add to Home Screen"'); return; } deferredInstallPrompt.prompt(); await deferredInstallPrompt.userChoice; deferredInstallPrompt = null; }
+
+// ============ UNIVERSAL DOWNLOAD ============
+async function downloadFile(url, filename) {
+  try {
+    const response = await fetch(url, { mode: 'cors' });
+    if (!response.ok) throw new Error('Fetch failed');
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = blobUrl; a.download = filename || 'wiseking-download';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+    showToast('✅ Downloaded to your phone!');
+    return true;
+  } catch (err) {
+    const a = document.createElement('a');
+    a.href = url; a.download = filename || 'wiseking-download'; a.target = '_blank';
+    a.rel = 'noopener';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    showToast('📥 Opened — long-press to save');
+    return false;
+  }
+}
+window.downloadFile = downloadFile;
+
+function downloadText(encodedText, filename) {
+  try {
+    const text = decodeURIComponent(encodedText);
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showToast('✅ Downloaded!');
+  } catch(e) { showToast('⚠️ Download failed'); }
+}
+window.downloadText = downloadText;
 
 // ============ IMAGES / VIDEOS ============
 function openImagesPanel() { document.getElementById('imagesPanel').classList.add('show'); closeSidebar(); updateReplicateStatus(); }
@@ -1775,8 +1609,530 @@ function openVideosPanel() { document.getElementById('videosPanel').classList.ad
 function closeVideosPanel() { document.getElementById('videosPanel').classList.remove('show'); }
 function openVideoGallery() { document.getElementById('videoGalleryPanel').classList.add('show'); closeSidebar(); renderVideoGallery(); }
 function closeVideoGallery() { document.getElementById('videoGalleryPanel').classList.remove('show'); }
-function renderVideoGallery() { const box = document.getElementById('videoGalleryContent'); if (!box) return; const vids = library.filter(i => i.type === 'video'); if (!vids.length) { box.innerHTML = '<div class="result-card"><p>No videos yet.</p></div>'; return; } box.innerHTML = vids.map(v => `<div class="result-card"><h4>${escapeHtml((v.prompt||'').slice(0,80))}</h4></div>`).join(''); }
+function renderVideoGallery() {
+  const box = document.getElementById('videoGalleryContent'); if (!box) return;
+  const vids = library.filter(i => i.type === 'video');
+  const badge = document.getElementById('videoCountBadge');
+  if (badge) badge.textContent = vids.length;
+  if (!vids.length) { box.innerHTML = '<div class="result-card"><p>No videos yet.</p></div>'; return; }
+  box.innerHTML = vids.map(v => `<div class="result-card"><h4>🎬 ${escapeHtml((v.prompt||'').slice(0,80))}</h4><p style="color:var(--text-secondary);font-size:13px">${escapeHtml((v.text||'').slice(0,200))}...</p></div>`).join('');
+}
+
+async function generateImageFromPanel() {
+  const prompt = document.getElementById('imagesPromptInput').value.trim();
+  if (!prompt) return showToast('Enter image description');
+  const results = document.getElementById('imagesPanelResults');
+  results.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Generating image...</div>`;
+  try {
+    const seed = Math.floor(Math.random() * 1000000);
+    const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1024&height=1024&seed=${seed}&nologo=true`;
+    await new Promise((resolve, reject) => { const img = new Image(); img.onload = resolve; img.onerror = reject; img.src = url; setTimeout(reject, 30000); });
+    const filename = `wiseking-image-${Date.now()}.png`;
+    results.innerHTML = `
+      <div class="result-card">
+        <h4><i class="fas fa-check-circle"></i> Image Ready</h4>
+        <img src="${url}" style="max-width:100%;border-radius:12px;box-shadow:var(--shadow-lg);margin-top:10px">
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+          <button class="btn accent" onclick="downloadFile('${url}', '${filename}')"><i class="fas fa-download"></i> Download to Phone</button>
+          <button class="btn solid" onclick="wkCopyToClipboard('${url}').then(()=>showToast('📋 Link copied!'))"><i class="fas fa-copy"></i> Copy Link</button>
+          <button class="btn solid" onclick="shareImageUrl('${url}')"><i class="fas fa-share"></i> Share</button>
+        </div>
+      </div>`;
+    saveToLibrary({ type: 'image', prompt: prompt, url: url, createdAt: Date.now() });
+    showToast('✅ Image generated!');
+  } catch (err) { results.innerHTML = `<div class="result-card"><p>⚠️ Failed to generate. Try again.</p></div>`; }
+}
+window.generateImageFromPanel = generateImageFromPanel;
+
+function shareImageUrl(url) { currentShareTarget = { type: 'image', text: `Check out this AI image: ${url}` }; openSharePopup(); }
+window.shareImageUrl = shareImageUrl;
+
+async function generateVideoFromPanel() {
+  const prompt = document.getElementById('videosPromptInput').value.trim();
+  if (!prompt) return showToast('Enter video description');
+  const results = document.getElementById('videoPanelResults');
+  results.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Creating cinematic prompt...</div>`;
+  const res = await sendMessageWithFallback(`Create a detailed cinematic video prompt for: ${prompt}. Include: Title, Style, Duration options (10s/15s/30s/45s/1min), Setting, Characters, Dialogue (2 lines), Action Sequence (3 beats), Visual Style, Mood. Format beautifully with emojis.`);
+  if (res.success) {
+    results.innerHTML = `<div class="result-card"><h4>🎬 Your Video Prompt</h4>${renderMarkdown(res.reply)}<div style="margin-top:12px"><button class="btn accent" onclick="downloadText('${encodeURIComponent(res.reply).slice(0,5000)}', 'wiseking-video-prompt-${Date.now()}.txt')"><i class="fas fa-download"></i> Download Prompt</button></div></div>`;
+    saveToLibrary({ type: 'video', prompt: prompt, text: res.reply, createdAt: Date.now() });
+    showToast('✅ Video prompt ready!');
+  } else results.innerHTML = `<div class="result-card"><p>⚠️ Failed. Try again.</p></div>`;
+}
+window.generateVideoFromPanel = generateVideoFromPanel;
+
 function updateReplicateStatus() { const el = document.getElementById('replicateStatus'); if (!el) return; const key = localStorage.getItem('wk_replicate_key'); el.textContent = key ? '✅ Replicate connected' : '💡 Add Replicate key for hyper-real images.'; }
+
+// ============ MUSIC GENERATION ============
+function openMusicPanel() { document.getElementById('musicPanel').classList.add('show'); closeSidebar(); renderMusicLibrary(); }
+function closeMusicPanel() { document.getElementById('musicPanel').classList.remove('show'); }
+
+function renderMusicLibrary() {
+  const box = document.getElementById('musicLibraryBox'); if (!box) return;
+  if (!musicLibrary.length) { box.innerHTML = '<div class="result-card"><p>No music yet. Generate one above!</p></div>'; return; }
+  box.innerHTML = musicLibrary.map((m, i) => `
+    <div class="music-card">
+      <div class="music-title">🎵 ${escapeHtml(m.title || 'Untitled')}</div>
+      <div class="music-meta">${escapeHtml(m.genre || '')} ${m.mood ? '• ' + escapeHtml(m.mood) : ''} • ${new Date(m.createdAt).toLocaleDateString()}</div>
+      ${m.audioUrl ? `<audio class="music-audio" controls preload="metadata" src="${m.audioUrl}"></audio>` : ''}
+      ${m.prompt ? `<details style="margin-top:10px"><summary style="cursor:pointer;font-size:12.5px;color:var(--accent-hover)">View prompt / lyrics</summary><pre style="white-space:pre-wrap;font-family:inherit;font-size:12.5px;color:var(--text-secondary);margin-top:8px;padding:10px;background:var(--bg-elevated);border-radius:8px;max-height:300px;overflow-y:auto">${escapeHtml(m.prompt)}</pre></details>` : ''}
+      <div class="music-actions">
+        ${m.audioUrl ? `<button class="btn accent" onclick="downloadFile('${m.audioUrl}', 'wiseking-music-${i}.mp3')"><i class="fas fa-download"></i> Download MP3</button>` : ''}
+        ${m.prompt ? `<button class="btn solid" onclick="downloadText('${encodeURIComponent(m.prompt).slice(0,5000)}', 'wiseking-lyrics-${i}.txt')"><i class="fas fa-file-alt"></i> Download Lyrics</button>` : ''}
+        <button class="btn solid" onclick="deleteMusicItem(${i})"><i class="fas fa-trash"></i> Delete</button>
+      </div>
+    </div>`).join('');
+}
+window.renderMusicLibrary = renderMusicLibrary;
+
+function deleteMusicItem(i) { musicLibrary.splice(i, 1); saveMusic(); renderMusicLibrary(); showToast('Removed'); }
+window.deleteMusicItem = deleteMusicItem;
+
+async function generateMusicFromPanel() {
+  const input = document.getElementById('musicInput').value.trim();
+  if (!input) return showToast('Paste lyrics or describe music style');
+  const genre = document.getElementById('musicGenre').value;
+  const mood = document.getElementById('musicMood').value;
+  const tempo = document.getElementById('musicTempo').value;
+
+  const results = document.getElementById('musicPanelResults');
+  results.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Crafting your music prompt...</div>`;
+
+  const aiPrompt = `Create a detailed, professional music production prompt for an AI music generator.
+
+USER INPUT:
+${input}
+
+${genre ? `GENRE: ${genre}` : ''}
+${mood ? `MOOD: ${mood}` : ''}
+${tempo ? `TEMPO: ${tempo}` : ''}
+
+Format your response with these sections (use emojis and markdown):
+
+**🎵 Song Title Suggestion**
+**🎤 Genre & Sub-genre**
+**💃 Tempo & BPM**
+**🎼 Musical Key**
+**🥁 Instrumentation** (list drums, bass, melody, etc.)
+**🎹 Chord Progression** (if applicable)
+**🎤 Vocal Style** (male/female, tone, delivery)
+**📝 Lyrics** (if user provided lyrics, keep them EXACTLY; if not, write original lyrics with full structure: Intro, Verse 1, Pre-Chorus, Chorus, Verse 2, Bridge, Outro)
+**🎛️ Production Notes** (mixing, effects, atmosphere)
+**📱 Ready-to-Use Prompt for Suno/Udio** (a single dense paragraph they can paste into any AI music tool)
+
+Be warm and add 🙏 at the end.`;
+
+  const res = await sendMessageWithFallback(aiPrompt);
+  if (res.success) {
+    const titleMatch = res.reply.match(/\*\*🎵 Song Title[^\*]*\*\*[\s\S]*?(?=\n\*\*|$)/);
+    const title = titleMatch ? titleMatch[0].replace(/\*\*🎵 Song Title[^\*]*\*\*/,'').trim() : ('Wise King Song ' + (musicLibrary.length + 1));
+    
+    results.innerHTML = `
+      <div class="music-card">
+        <div class="music-title">🎵 ${escapeHtml(title)}</div>
+        <div class="music-meta">Just created • ${genre || 'Custom'} ${mood ? '• ' + mood : ''}</div>
+        <div class="md" style="margin-top:14px">${renderMarkdown(res.reply)}</div>
+        <div class="music-actions" style="margin-top:16px">
+          <button class="btn accent" onclick="downloadText('${encodeURIComponent(res.reply).slice(0,9000)}', 'wiseking-music-prompt-${Date.now()}.txt')"><i class="fas fa-download"></i> Download Prompt</button>
+          <button class="btn solid" onclick="wkCopyToClipboard(\`${res.reply.replace(/`/g,'\\`').slice(0,5000)}\`).then(()=>showToast('📋 Copied!'))"><i class="fas fa-copy"></i> Copy</button>
+          <button class="btn solid" onclick="openSunoLink()"><i class="fas fa-external-link-alt"></i> Open Suno</button>
+        </div>
+      </div>`;
+
+    musicLibrary.unshift({
+      title: title, genre: genre, mood: mood, tempo: tempo,
+      prompt: res.reply, input: input, createdAt: Date.now()
+    });
+    saveMusic(); renderMusicLibrary();
+    showToast('✅ Music prompt ready! 🎵');
+  } else results.innerHTML = `<div class="result-card"><p>⚠️ Failed. Try again.</p></div>`;
+}
+window.generateMusicFromPanel = generateMusicFromPanel;
+
+async function generateLyricsFromPanel() {
+  const input = document.getElementById('musicInput').value.trim();
+  if (!input) return showToast('Describe the song topic');
+  const genre = document.getElementById('musicGenre').value || 'Afrobeat';
+  const mood = document.getElementById('musicMood').value || 'Uplifting';
+  const results = document.getElementById('musicPanelResults');
+  results.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Writing lyrics...</div>`;
+  const res = await sendMessageWithFallback(`Write full song lyrics about: "${input}". Genre: ${genre}. Mood: ${mood}. Structure: [Intro], [Verse 1], [Pre-Chorus], [Chorus], [Verse 2], [Chorus], [Bridge], [Outro]. Use natural, singable language. If Nigerian/Hausa theme, sprinkle authentic expressions.`);
+  if (res.success) {
+    results.innerHTML = `<div class="music-card"><div class="music-title">📝 Your Lyrics</div><div class="md" style="margin-top:12px">${renderMarkdown(res.reply)}</div><div class="music-actions" style="margin-top:16px"><button class="btn accent" onclick="downloadText('${encodeURIComponent(res.reply).slice(0,9000)}', 'wiseking-lyrics-${Date.now()}.txt')"><i class="fas fa-download"></i> Download Lyrics</button><button class="btn solid" onclick="wkCopyToClipboard(\`${res.reply.replace(/`/g,'\\`').slice(0,5000)}\`).then(()=>showToast('📋 Copied!'))"><i class="fas fa-copy"></i> Copy</button></div></div>`;
+    showToast('✅ Lyrics ready! 📝');
+  } else results.innerHTML = `<div class="result-card"><p>⚠️ Failed. Try again.</p></div>`;
+}
+window.generateLyricsFromPanel = generateLyricsFromPanel;
+
+function openSunoLink() { window.open('https://suno.com/create', '_blank'); showToast('🎵 Paste your prompt on Suno!'); }
+window.openSunoLink = openSunoLink;
+
+// ============ PDF CHAT ============
+function openPdfChatPanel() { document.getElementById('pdfChatPanel').classList.add('show'); closeSidebar(); }
+function closePdfChatPanel() { document.getElementById('pdfChatPanel').classList.remove('show'); }
+
+async function handlePdfUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (!file.name.toLowerCase().endsWith('.pdf')) return showToast('Please upload a PDF file');
+  currentPdfName = file.name;
+  const info = document.getElementById('pdfFileInfo');
+  info.innerHTML = `<div class="pdf-file-info"><i class="fas fa-file-pdf"></i><div class="pfi-text">${escapeHtml(file.name)}<span class="pfi-meta">${(file.size/1024).toFixed(1)} KB • Extracting...</span></div></div>`;
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    let fullText = '';
+    const maxPages = Math.min(pdf.numPages, 50);
+    for (let i = 1; i <= maxPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      fullText += content.items.map(it => it.str).join(' ') + '\n\n';
+    }
+    currentPdfText = fullText.trim();
+    info.innerHTML = `<div class="pdf-file-info"><i class="fas fa-file-pdf"></i><div class="pfi-text">${escapeHtml(file.name)}<span class="pfi-meta">${pdf.numPages} pages • ${currentPdfText.length.toLocaleString()} chars extracted ✅</span></div></div>`;
+    showToast(`✅ PDF loaded (${pdf.numPages} pages)`);
+    autoSummarizePdf();
+  } catch (err) {
+    info.innerHTML = `<div class="pdf-file-info"><i class="fas fa-exclamation-triangle" style="color:#f87171"></i><div class="pfi-text">Failed to read PDF<span class="pfi-meta">${escapeHtml(err.message)}</span></div></div>`;
+  }
+}
+window.handlePdfUpload = handlePdfUpload;
+
+async function autoSummarizePdf() {
+  if (!currentPdfText) return;
+  const box = document.getElementById('pdfSummaryBox');
+  box.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Summarizing PDF...</div>`;
+  const excerpt = currentPdfText.slice(0, 15000);
+  const res = await sendMessageWithFallback(`Summarize this PDF document "${currentPdfName}". Format beautifully with emojis:\n\n**📄 Overview** (2-3 sentences)\n**🎯 Key Points** (5-7 bullets)\n**💡 Main Insights** (3-5 bullets)\n**📌 Actionable Takeaways**\n\nDocument text:\n${excerpt}`);
+  if (res.success) box.innerHTML = `<div class="result-card"><h4>📄 PDF Summary</h4>${renderMarkdown(res.reply)}</div>`;
+  else box.innerHTML = `<div class="result-card"><p>⚠️ Summary failed.</p></div>`;
+}
+
+async function askPdfQuestion() {
+  const q = document.getElementById('pdfQuestionInput').value.trim();
+  if (!q) return showToast('Type a question');
+  if (!currentPdfText) return showToast('Upload a PDF first');
+  const results = document.getElementById('pdfChatResults');
+  results.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Thinking...</div>`;
+  const excerpt = currentPdfText.slice(0, 20000);
+  const res = await sendMessageWithFallback(`Based on this PDF document "${currentPdfName}", answer the user's question. Be precise, quote the document when relevant.\n\nQUESTION: ${q}\n\nDOCUMENT:\n${excerpt}`);
+  if (res.success) {
+    const html = `<div class="result-card"><h4>💬 Answer</h4>${renderMarkdown(res.reply)}</div>`;
+    results.innerHTML = html + results.innerHTML;
+    document.getElementById('pdfQuestionInput').value = '';
+    showToast('✅ Answered');
+  } else results.innerHTML = `<div class="result-card"><p>⚠️ Failed.</p></div>`;
+}
+window.askPdfQuestion = askPdfQuestion;
+
+const pdfDZ = document.getElementById('pdfDropzone');
+if (pdfDZ) {
+  ['dragenter','dragover'].forEach(ev => pdfDZ.addEventListener(ev, e => { e.preventDefault(); pdfDZ.classList.add('dragover'); }));
+  ['dragleave','drop'].forEach(ev => pdfDZ.addEventListener(ev, e => { e.preventDefault(); pdfDZ.classList.remove('dragover'); }));
+  pdfDZ.addEventListener('drop', e => { const files = e.dataTransfer.files; if (files.length) handlePdfUpload({target: {files: [files[0]]}}); });
+}
+
+// ============ TRANSLATION ============
+function openTranslatePanel() { document.getElementById('translatePanel').classList.add('show'); closeSidebar(); }
+function closeTranslatePanel() { document.getElementById('translatePanel').classList.remove('show'); }
+function swapLanguages() {
+  const from = document.getElementById('translateFrom'), to = document.getElementById('translateTo');
+  if (from.value === 'auto') { showToast('Cannot swap auto-detect'); return; }
+  const t = from.value; from.value = to.value; to.value = t;
+  const input = document.getElementById('translateInput').value;
+  if (input) doTranslate();
+}
+window.swapLanguages = swapLanguages;
+
+const LANG_NAMES = {
+  'auto': 'auto-detect', 'en': 'English', 'ha': 'Hausa', 'ar': 'Arabic', 'fr': 'French',
+  'yo': 'Yoruba', 'ig': 'Igbo', 'sw': 'Swahili', 'es': 'Spanish', 'pt': 'Portuguese',
+  'de': 'German', 'zh': 'Chinese', 'hi': 'Hindi', 'ru': 'Russian', 'ja': 'Japanese',
+  'tr': 'Turkish', 'ur': 'Urdu'
+};
+
+async function doTranslate() {
+  const text = document.getElementById('translateInput').value.trim();
+  if (!text) return showToast('Enter text to translate');
+  const from = document.getElementById('translateFrom').value;
+  const to = document.getElementById('translateTo').value;
+  if (from === to && from !== 'auto') return showToast('Same language selected');
+  const results = document.getElementById('translateResults');
+  results.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Translating...</div>`;
+  const fromName = LANG_NAMES[from] || from;
+  const toName = LANG_NAMES[to] || to;
+  const prompt = `Translate the following text ${from === 'auto' ? 'from its original language' : `from ${fromName}`} into ${toName}. Provide ONLY the translation, no explanations. Preserve tone, emotion and naturalness.\n\nTEXT:\n${text}`;
+  const res = await sendMessageWithFallback(prompt);
+  if (res.success) {
+    results.innerHTML = `
+      <div class="result-card">
+        <h4>🌍 ${fromName} → ${toName}</h4>
+        <p style="white-space:pre-wrap;font-size:15px;color:var(--text-primary);margin-top:10px">${escapeHtml(res.reply)}</p>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+          <button class="btn accent" onclick="wkCopyToClipboard(\`${res.reply.replace(/`/g,'\\`')}\`).then(()=>showToast('📋 Copied!'))"><i class="fas fa-copy"></i> Copy</button>
+          <button class="btn solid" onclick="speakText(\`${res.reply.replace(/`/g,'\\`').replace(/\$/g,'\\$')}\`, '${to}')"><i class="fas fa-volume-up"></i> Listen</button>
+          <button class="btn solid" onclick="shareTranslation(\`${res.reply.replace(/`/g,'\\`').slice(0,300)}\`)"><i class="fas fa-share"></i> Share</button>
+        </div>
+      </div>`;
+    document.getElementById('translateResults').dataset.lastTranslation = res.reply;
+    document.getElementById('translateResults').dataset.lastLang = to;
+    showToast('✅ Translated!');
+  } else results.innerHTML = `<div class="result-card"><p>⚠️ Translation failed.</p></div>`;
+}
+window.doTranslate = doTranslate;
+
+function speakText(text, langCode) {
+  if (!('speechSynthesis' in window)) return showToast('Speech not supported');
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  const voiceMap = { en: 'en-US', ha: 'ha-NG', ar: 'ar-SA', fr: 'fr-FR', yo: 'yo-NG', ig: 'ig-NG', sw: 'sw-KE', es: 'es-ES', pt: 'pt-PT', de: 'de-DE', zh: 'zh-CN', hi: 'hi-IN', ru: 'ru-RU', ja: 'ja-JP', tr: 'tr-TR', ur: 'ur-PK' };
+  u.lang = voiceMap[langCode] || 'en-US';
+  u.rate = 0.95;
+  window.speechSynthesis.speak(u);
+}
+window.speakText = speakText;
+
+function speakTranslation() {
+  const txt = document.getElementById('translateResults')?.dataset.lastTranslation;
+  const lang = document.getElementById('translateResults')?.dataset.lastLang || 'en';
+  if (!txt) return showToast('Translate something first');
+  speakText(txt, lang);
+}
+window.speakTranslation = speakTranslation;
+
+function shareTranslation(text) { currentShareTarget = { type: 'translation', text: text }; openSharePopup(); }
+window.shareTranslation = shareTranslation;
+
+function startLiveTranslateVoice() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return showToast('Voice not supported');
+  const rec = new SR();
+  const fromLang = document.getElementById('translateFrom').value;
+  const langMap = { en: 'en-US', ha: 'ha-NG', ar: 'ar-SA', fr: 'fr-FR', yo: 'yo-NG', ig: 'ig-NG', sw: 'sw-KE', es: 'es-ES', pt: 'pt-PT', de: 'de-DE', zh: 'zh-CN', hi: 'hi-IN', ru: 'ru-RU', ja: 'ja-JP', tr: 'tr-TR', ur: 'ur-PK' };
+  rec.lang = langMap[fromLang] || 'en-US';
+  rec.continuous = false; rec.interimResults = false;
+  showToast('🎙️ Listening...');
+  rec.onresult = (ev) => {
+    const transcript = ev.results[0][0].transcript;
+    document.getElementById('translateInput').value = transcript;
+    showToast('✅ Captured — translating...');
+    doTranslate();
+  };
+  rec.onerror = (ev) => showToast('Voice error: ' + ev.error);
+  rec.start();
+}
+window.startLiveTranslateVoice = startLiveTranslateVoice;
+
+// ============ DATA ANALYSIS ============
+function openDataAnalysisPanel() { document.getElementById('dataAnalysisPanel').classList.add('show'); closeSidebar(); }
+function closeDataAnalysisPanel() { document.getElementById('dataAnalysisPanel').classList.remove('show'); }
+
+async function handleDataUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    if (file.name.endsWith('.csv') || file.name.endsWith('.txt')) {
+      const text = await file.text();
+      parseCsvAndAnalyze(text, file.name);
+    } else if (file.name.endsWith('.json')) {
+      const text = await file.text();
+      const json = JSON.parse(text);
+      if (Array.isArray(json)) {
+        const headers = Object.keys(json[0] || {});
+        const rows = json.map(o => headers.map(h => o[h]));
+        analyzeTable([headers, ...rows], file.name);
+      } else showToast('JSON must be an array of objects');
+    } else if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+      const arrayBuffer = await file.arrayBuffer();
+      const wb = XLSX.read(arrayBuffer, { type: 'array' });
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      analyzeTable(rows, file.name);
+    }
+  } catch (err) { showToast('⚠️ ' + err.message); }
+}
+window.handleDataUpload = handleDataUpload;
+
+function parseCsvAndAnalyze(text, name) {
+  const lines = text.trim().split(/\r?\n/);
+  const rows = lines.map(line => parseCsvLine(line));
+  analyzeTable(rows, name);
+}
+
+function parseCsvLine(line) {
+  const result = []; let cur = ''; let inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"' && line[i+1] === '"') { cur += '"'; i++; }
+    else if (c === '"') inQ = !inQ;
+    else if (c === ',' && !inQ) { result.push(cur); cur = ''; }
+    else cur += c;
+  }
+  result.push(cur);
+  return result;
+}
+
+function analyzePastedData() {
+  const raw = document.getElementById('dataPasteInput').value.trim();
+  if (!raw) return showToast('Paste data first');
+  const lines = raw.split(/\r?\n/);
+  const rows = lines.map(l => l.split(',').map(c => c.trim()));
+  analyzeTable(rows, 'Pasted Data');
+}
+window.analyzePastedData = analyzePastedData;
+
+function analyzeTable(rows, name) {
+  if (!rows || rows.length < 2) return showToast('Not enough data');
+  const headers = rows[0].map(h => String(h || '').trim());
+  const data = rows.slice(1).filter(r => r.some(c => c !== '' && c !== undefined));
+  const results = document.getElementById('dataAnalysisResults');
+  
+  const numericCols = [];
+  headers.forEach((h, i) => {
+    const values = data.map(r => parseFloat(r[i])).filter(v => !isNaN(v));
+    if (values.length > data.length * 0.5) numericCols.push({ index: i, name: h, values });
+  });
+
+  let statsHtml = `<div class="data-stat-grid">
+    <div class="data-stat"><div class="ds-label">Rows</div><div class="ds-value">${data.length.toLocaleString()}</div></div>
+    <div class="data-stat"><div class="ds-label">Columns</div><div class="ds-value">${headers.length}</div></div>
+    <div class="data-stat"><div class="ds-label">Numeric Cols</div><div class="ds-value">${numericCols.length}</div></div>
+    <div class="data-stat"><div class="ds-label">Source</div><div class="ds-value" style="font-size:13px">${escapeHtml(name.slice(0,20))}</div></div>
+  </div>`;
+
+  let statsTable = '<div class="data-chart-wrap"><h4 style="margin-bottom:12px;color:var(--accent-hover);font-size:14px">📊 Column Statistics</h4><div style="overflow-x:auto"><table class="md" style="font-size:12.5px"><thead><tr><th>Column</th><th>Count</th><th>Mean</th><th>Min</th><th>Max</th><th>Sum</th></tr></thead><tbody>';
+  numericCols.forEach(c => {
+    const sum = c.values.reduce((a,b) => a+b, 0);
+    const mean = sum / c.values.length;
+    statsTable += `<tr><td><strong>${escapeHtml(c.name)}</strong></td><td>${c.values.length}</td><td>${mean.toFixed(2)}</td><td>${Math.min(...c.values).toFixed(2)}</td><td>${Math.max(...c.values).toFixed(2)}</td><td>${sum.toFixed(2)}</td></tr>`;
+  });
+  statsTable += '</tbody></table></div></div>';
+
+  let chartHtml = '';
+  if (numericCols.length > 0) {
+    const c = numericCols[0];
+    const labels = data.slice(0, 30).map((r, i) => r[0] || `Row ${i+1}`);
+    const values = data.slice(0, 30).map(r => parseFloat(r[c.index]) || 0);
+    chartHtml = `<div class="data-chart-wrap"><h4 style="margin-bottom:12px;color:var(--accent-hover);font-size:14px">📈 ${escapeHtml(c.name)} (first 30)</h4><canvas id="dataChart"></canvas></div>`;
+    setTimeout(() => {
+      const ctx = document.getElementById('dataChart');
+      if (!ctx) return;
+      if (currentChart) currentChart.destroy();
+      currentChart = new Chart(ctx, {
+        type: 'line',
+        data: { labels, datasets: [{ label: c.name, data: values, borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,0.15)', fill: true, tension: 0.35, pointRadius: 3 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#a1a1aa' } } }, scales: { x: { ticks: { color: '#71717a', maxRotation: 45, minRotation: 45 }, grid: { color: 'rgba(255,255,255,0.05)' } }, y: { ticks: { color: '#71717a' }, grid: { color: 'rgba(255,255,255,0.05)' } } } }
+      });
+    }, 100);
+  }
+
+  results.innerHTML = `<div class="result-card"><h4>✅ ${escapeHtml(name)}</h4></div>` + statsHtml + statsTable + chartHtml + `<div id="dataAIInsights"></div>`;
+  aiDataInsight(headers, data, numericCols);
+}
+
+async function aiDataInsight(headers, data, numericCols) {
+  const box = document.getElementById('dataAIInsights');
+  if (!box) return;
+  box.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Generating AI insights...</div>`;
+  const preview = data.slice(0, 15).map(r => r.join(' | ')).join('\n');
+  const summary = `Columns: ${headers.join(', ')}\nRows: ${data.length}\nSample:\n${headers.join(' | ')}\n${preview}\n\nNumeric stats: ${numericCols.map(c => `${c.name}: mean=${(c.values.reduce((a,b)=>a+b,0)/c.values.length).toFixed(2)}, min=${Math.min(...c.values).toFixed(2)}, max=${Math.max(...c.values).toFixed(2)}`).join('; ')}`;
+  const res = await sendMessageWithFallback(`Analyze this dataset and give insights. Format with emojis:\n\n**📊 Overview**\n**🔍 Key Patterns** (3-5)\n**💡 Insights** (3-5)\n**📈 Trends**\n**🎯 Recommendations**\n\nDATA:\n${summary}`);
+  if (res.success) box.innerHTML = `<div class="result-card"><h4>🧠 AI Insights</h4>${renderMarkdown(res.reply)}</div>`;
+  else box.innerHTML = `<div class="result-card"><p>⚠️ Insights failed.</p></div>`;
+}
+
+const dataDZ = document.getElementById('dataDropzone');
+if (dataDZ) {
+  ['dragenter','dragover'].forEach(ev => dataDZ.addEventListener(ev, e => { e.preventDefault(); dataDZ.classList.add('dragover'); }));
+  ['dragleave','drop'].forEach(ev => dataDZ.addEventListener(ev, e => { e.preventDefault(); dataDZ.classList.remove('dragover'); }));
+  dataDZ.addEventListener('drop', e => { const files = e.dataTransfer.files; if (files.length) handleDataUpload({target: {files: [files[0]]}}); });
+}
+
+// ============ DOWNLOAD HUB ============
+function openDownloadHub() { document.getElementById('downloadHubPanel').classList.add('show'); closeSidebar(); renderDownloadHub(); }
+function closeDownloadHub() { document.getElementById('downloadHubPanel').classList.remove('show'); }
+function filterDownloads(type) { currentDownloadFilter = type; renderDownloadHub(); }
+window.filterDownloads = filterDownloads;
+
+function renderDownloadHub() {
+  const grid = document.getElementById('downloadHubGrid'); if (!grid) return;
+  let items = [...library];
+  if (currentDownloadFilter !== 'all') items = items.filter(i => i.type === currentDownloadFilter);
+  const musicItems = musicLibrary.map(m => ({ type: 'music', title: m.title, prompt: m.prompt, audioUrl: m.audioUrl, createdAt: m.createdAt }));
+  if (currentDownloadFilter === 'all' || currentDownloadFilter === 'music' || currentDownloadFilter === 'audio') items = [...musicItems, ...items];
+  if (!items.length) { grid.innerHTML = '<div class="result-card" style="grid-column:1/-1"><p>Nothing here yet. Create images, videos, or music first!</p></div>'; return; }
+  grid.innerHTML = items.map((item, idx) => {
+    const isImage = item.type === 'image';
+    const isMusic = item.type === 'music';
+    const isVideo = item.type === 'video';
+    const preview = isImage && item.url ? `<img src="${item.url}" class="di-preview" style="object-fit:cover">` : `<div class="di-preview">${isMusic ? '🎵' : isVideo ? '🎬' : '📄'}</div>`;
+    const title = item.title || item.prompt || 'Untitled';
+    const dl = isImage ? `downloadFile('${item.url}', 'wiseking-image-${idx}.png')` :
+               isMusic && item.audioUrl ? `downloadFile('${item.audioUrl}', 'wiseking-music-${idx}.mp3')` :
+               `downloadText('${encodeURIComponent(item.prompt || item.text || '').slice(0,9000)}', 'wiseking-${item.type}-${idx}.txt')`;
+    return `<div class="download-item">
+      ${preview}
+      <div class="di-title">${escapeHtml(title.slice(0,40))}</div>
+      <div style="font-size:11px;color:var(--text-tertiary)">${item.type} • ${new Date(item.createdAt||Date.now()).toLocaleDateString()}</div>
+      <button class="di-btn" onclick="${dl}"><i class="fas fa-download"></i> Download</button>
+    </div>`;
+  }).join('');
+}
+
+// ============ SEARCH WEB PANEL ============
+function openSearchWebPanel() { document.getElementById('searchWebPanel').classList.add('show'); closeSidebar(); renderSearchSuggestions(); }
+function closeSearchWebPanel() { document.getElementById('searchWebPanel').classList.remove('show'); }
+
+function renderSearchSuggestions() {
+  const box = document.getElementById('searchSuggestionsBox'); if (!box) return;
+  const suggestions = [
+    { label: '📰 Latest Nigeria news', url: 'https://www.google.com/search?q=latest+nigeria+news', icon: 'fa-google', cls: 'google' },
+    { label: '💵 Naira to USD rate', url: 'https://www.google.com/search?q=naira+to+usd+rate+today', icon: 'fa-google', cls: 'google' },
+    { label: '🤖 Latest AI news 2026', url: 'https://www.google.com/search?q=latest+AI+news+2026', icon: 'fa-google', cls: 'google' },
+    { label: '🌦️ Weather in Lagos', url: 'https://www.google.com/search?q=weather+in+lagos', icon: 'fa-google', cls: 'google' },
+    { label: '📈 Crypto prices', url: 'https://www.google.com/search?q=crypto+prices+today', icon: 'fa-google', cls: 'google' },
+    { label: '📧 Gmail', url: 'https://mail.google.com', icon: 'fa-envelope', cls: 'gmail' },
+    { label: '🎬 Netflix', url: 'https://www.netflix.com', icon: 'fa-film', cls: 'netflix' },
+    { label: '🛒 Jumia', url: 'https://www.jumia.com.ng', icon: 'fa-shopping-cart', cls: 'jumia' },
+    { label: '📸 Instagram', url: 'https://instagram.com', icon: 'fa-instagram', cls: 'instagram' },
+    { label: '🐦 Twitter/X', url: 'https://twitter.com', icon: 'fa-x-twitter', cls: 'twitter' },
+    { label: '💬 WhatsApp', url: 'https://web.whatsapp.com', icon: 'fa-whatsapp', cls: 'whatsapp' },
+    { label: '🎵 Spotify', url: 'https://open.spotify.com', icon: 'fa-spotify', cls: 'spotify' },
+    { label: '📚 Quran', url: 'https://quran.com', icon: 'fa-book-quran', cls: 'wiki' },
+    { label: '📖 Wikipedia', url: 'https://en.wikipedia.org', icon: 'fa-wikipedia-w', cls: 'wiki' },
+    { label: '▶️ YouTube', url: 'https://www.youtube.com', icon: 'fa-youtube', cls: 'youtube' },
+    { label: '📺 BBC News', url: 'https://www.bbc.com/news', icon: 'fa-tower-broadcast', cls: 'bbc' }
+  ];
+  box.innerHTML = suggestions.map(s => `<a class="quick-chip ${s.cls}" href="${s.url}" target="_blank" rel="noopener"><i class="fab ${s.icon}"></i> ${s.label}</a>`).join('');
+}
+
+async function doSearchWeb(query) {
+  const results = document.getElementById('searchWebResults');
+  const shortcut = document.getElementById('askWiseKingShortcut');
+  if (!results) return;
+  const q = (query || '').trim();
+  if (!q) { results.innerHTML = ''; shortcut.style.display = 'none'; return; }
+  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Searching...</div>';
+  const res = await sendMessageWithFallback(`Search the live web: ${q}`);
+  if (res.success) {
+    results.innerHTML = `<div class="result-card"><h4><i class="fas fa-wand-magic-sparkles"></i> Answer</h4><p>${linkify(escapeHtml(res.reply)).replace(/\n/g,'<br>')}</p></div>`;
+    shortcut.style.display = 'block';
+    const e = q.replace(/'/g, "\\'");
+    shortcut.innerHTML = `<button class="btn accent" onclick="askWiseKingFromSearch('${e}')"><i class="fas fa-comments"></i> Continue in Chat</button>`;
+  } else results.innerHTML = `<div class="result-card"><p>⚠️ Search failed.</p></div>`;
+}
+window.doSearchWeb = doSearchWeb;
+function askWiseKingFromSearch(q) { closeSearchWebPanel(); insertQuickPrompt(q); }
+window.askWiseKingFromSearch = askWiseKingFromSearch;
+
+// ============ BUILD APP ============
+const BUILD_IDEAS = [ { t:'Business Landing Page', d:'Modern responsive landing' }, { t:'Portfolio Website', d:'Showcase your work' }, { t:'Restaurant Menu App', d:'Digital menu with cart' }, { t:'Todo List App', d:'Track daily tasks' }, { t:'Weather Dashboard', d:'Live weather API' }, { t:'E-commerce Store', d:'Full online shop' }, { t:'Chat Application', d:'Real-time messaging' } ];
+function openBuildAppPanel() { document.getElementById('buildAppPanel').classList.add('show'); closeSidebar(); filterBuildIdeas(''); }
+function closeBuildAppPanel() { document.getElementById('buildAppPanel').classList.remove('show'); }
+function filterBuildIdeas(q) { const box = document.getElementById('buildAppIdeas'); if (!box) return; const query = (q || '').toLowerCase(); const list = BUILD_IDEAS.filter(i => !query || i.t.toLowerCase().includes(query)); box.innerHTML = list.map(i => { const e = i.t.replace(/'/g, "\\'"); return `<div class="result-card" onclick="buildApp('${e}')" style="cursor:pointer"><h4>💡 ${escapeHtml(i.t)}</h4><p>${escapeHtml(i.d)}</p></div>`; }).join(''); }
+function buildApp(name) { closeBuildAppPanel(); insertQuickPrompt(`Build a complete single-file HTML app: ${name}.`); }
+window.filterBuildIdeas = filterBuildIdeas;
+window.buildApp = buildApp;
 
 // ============ SEND MESSAGE ============
 function sendMessage(textOverride) {
@@ -1796,6 +2152,7 @@ function sendMessage(textOverride) {
   saveChats(); renderMessages();
   triggerResponse(chat, userMsg);
 }
+window.sendMessage = sendMessage;
 
 // ============ RENDER MESSAGES ============
 function renderMessages() {
@@ -1809,6 +2166,7 @@ function renderMessages() {
   chat.messages.forEach((msg, idx) => area.appendChild(buildMessageEl(msg, idx, chat.id)));
   const cs = document.getElementById('chatScroll'); cs.scrollTop = cs.scrollHeight;
 }
+window.renderMessages = renderMessages;
 
 function buildMessageEl(msg, idx, chatId) {
   const el = document.createElement('div'); el.className = 'message ' + msg.role;
@@ -1829,17 +2187,18 @@ function buildMessageEl(msg, idx, chatId) {
     const actionBar = document.createElement('div'); actionBar.className = 'msg-action-bar';
     if (isAI) {
       actionBar.innerHTML = `
-        <button class="msg-action-btn ${msg.feedback === 'up' ? 'active' : ''}" onclick="handleLikeMessage(${idx})"><i class="fas fa-thumbs-up"></i> Like</button>
-        <button class="msg-action-btn ${msg.feedback === 'down' ? 'active' : ''}" onclick="handleDislikeMessage(${idx})"><i class="fas fa-thumbs-down"></i> Dislike</button>
+        <button class="msg-action-btn ${msg.feedback === 'up' ? 'active' : ''}" onclick="handleLikeMessage(${idx})"><i class="fas fa-thumbs-up"></i></button>
+        <button class="msg-action-btn ${msg.feedback === 'down' ? 'active' : ''}" onclick="handleDislikeMessage(${idx})"><i class="fas fa-thumbs-down"></i></button>
         <button class="msg-action-btn" onclick="handleCopyMessage(${idx})"><i class="fas fa-copy"></i> Copy</button>
-        <button class="msg-action-btn" onclick="handleRegenerateMessage('${chatId}', ${idx})"><i class="fas fa-sync-alt"></i> Regenerate</button>
-        <button class="msg-action-btn" onclick="handleShareMessage(${idx})"><i class="fas fa-share"></i> Share</button>
+        <button class="msg-action-btn" onclick="handleRegenerateMessage('${chatId}', ${idx})"><i class="fas fa-sync-alt"></i></button>
+        <button class="msg-action-btn" onclick="handleShareMessage(${idx})"><i class="fas fa-share"></i></button>
+        <button class="msg-action-btn" onclick="downloadText('${encodeURIComponent((msg.content||'').slice(0,9000))}', 'wiseking-response-${idx}.txt')"><i class="fas fa-download"></i></button>
       `;
     } else {
       actionBar.innerHTML = `
-        <button class="msg-action-btn" onclick="handleEditMessage(${idx})"><i class="fas fa-pen"></i> Edit</button>
-        <button class="msg-action-btn" onclick="handleCopyMessage(${idx})"><i class="fas fa-copy"></i> Copy</button>
-        <button class="msg-action-btn danger" onclick="handleDeleteMessage(${idx})"><i class="fas fa-trash"></i> Delete</button>
+        <button class="msg-action-btn" onclick="handleEditMessage(${idx})"><i class="fas fa-pen"></i></button>
+        <button class="msg-action-btn" onclick="handleCopyMessage(${idx})"><i class="fas fa-copy"></i></button>
+        <button class="msg-action-btn danger" onclick="handleDeleteMessage(${idx})"><i class="fas fa-trash"></i></button>
       `;
     }
     body.appendChild(actionBar);
@@ -1860,56 +2219,14 @@ function saveEditedMessage() { if (editingMessageIdx < 0) return; const chat = c
 function confirmDeleteMessage() { if (deletingMessageIdx < 0) return; const chat = chats.find(c => c.id === activeChatId); if (!chat) return; const msg = chat.messages[deletingMessageIdx]; if (!msg) { closeModal('deleteMessageModal'); deletingMessageIdx = -1; return; } if (msg.role === 'user' && chat.messages[deletingMessageIdx + 1] && chat.messages[deletingMessageIdx + 1].role === 'ai') chat.messages.splice(deletingMessageIdx, 2); else chat.messages.splice(deletingMessageIdx, 1); closeModal('deleteMessageModal'); deletingMessageIdx = -1; saveChats(); renderMessages(); showToast('🗑️ Deleted'); }
 
 function wkCopyToClipboard(text) { return new Promise((resolve) => { try { if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(() => resolve(true)).catch(() => resolve(fallbackCopy(text))); } else resolve(fallbackCopy(text)); } catch (e) { resolve(fallbackCopy(text)); } }); }
+window.wkCopyToClipboard = wkCopyToClipboard;
 function fallbackCopy(text) { try { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.top = '-1000px'; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); ta.remove(); return !!ok; } catch (e) { return false; } }
-
-// ============ WEB SEARCH ============
-function openSearchWebPanel() { document.getElementById('searchWebPanel').classList.add('show'); closeSidebar(); renderSearchSuggestions(); }
-function closeSearchWebPanel() { document.getElementById('searchWebPanel').classList.remove('show'); }
-function renderSearchSuggestions() {
-  const box = document.getElementById('searchSuggestionsBox');
-  if (!box) return;
-  const suggestions = [
-    { label: '📰 Latest Nigeria news', url: 'https://www.google.com/search?q=latest+nigeria+news', cls: 'google', icon: 'fa-google' },
-    { label: '💵 Naira to USD rate', url: 'https://www.google.com/search?q=naira+to+usd+rate+today', cls: 'google', icon: 'fa-google' },
-    { label: '🤖 Latest AI news 2026', url: 'https://www.google.com/search?q=latest+AI+news+2026', cls: 'google', icon: 'fa-google' },
-    { label: '🌦️ Weather in Lagos', url: 'https://www.google.com/search?q=weather+in+lagos+today', cls: 'google', icon: 'fa-google' },
-    { label: '📈 Crypto prices today', url: 'https://www.google.com/search?q=crypto+prices+today', cls: 'google', icon: 'fa-google' },
-    { label: '📖 Wikipedia', url: 'https://en.wikipedia.org/wiki/Main_Page', cls: 'wiki', icon: 'fa-wikipedia-w' },
-    { label: '▶️ YouTube', url: 'https://www.youtube.com', cls: 'youtube', icon: 'fa-youtube' },
-    { label: '📺 BBC News', url: 'https://www.bbc.com/news', cls: 'bbc', icon: 'fa-tower-broadcast' }
-  ];
-  box.innerHTML = suggestions.map(s => `<a class="quick-chip ${s.cls}" href="${s.url}" target="_blank" rel="noopener"><i class="fab ${s.icon}"></i> ${s.label}</a>`).join('');
-}
-async function doSearchWeb(query) {
-  const results = document.getElementById('searchWebResults');
-  const shortcut = document.getElementById('askWiseKingShortcut');
-  if (!results) return;
-  const q = (query || '').trim();
-  if (!q) { results.innerHTML = ''; shortcut.style.display = 'none'; return; }
-  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Searching...</div>';
-  const res = await sendMessageWithFallback(`Search the live web: ${q}`);
-  if (res.success) {
-    results.innerHTML = `<div class="result-card"><h4><i class="fas fa-wand-magic-sparkles"></i> Answer</h4><p>${linkify(escapeHtml(res.reply)).replace(/\n/g,'<br>')}</p></div>`;
-    shortcut.style.display = 'block';
-    const e = q.replace(/'/g, "\\'");
-    shortcut.innerHTML = `<button class="btn accent" onclick="askWiseKingFromSearch('${e}')"><i class="fas fa-comments"></i> Continue in Chat</button>`;
-  } else {
-    results.innerHTML = `<div class="result-card"><p>⚠️ Search failed.</p></div>`;
-  }
-}
-function askWiseKingFromSearch(q) { closeSearchWebPanel(); insertQuickPrompt(q); }
-
-// ============ BUILD APP IDEAS ============
-const BUILD_IDEAS = [ { t:'Business Landing Page', d:'Modern responsive landing' }, { t:'Portfolio Website', d:'Showcase your work' }, { t:'Restaurant Menu App', d:'Digital menu with cart' }, { t:'Todo List App', d:'Track daily tasks' }, { t:'Weather Dashboard', d:'Live weather API' } ];
-function openBuildAppPanel() { document.getElementById('buildAppPanel').classList.add('show'); closeSidebar(); filterBuildIdeas(''); }
-function closeBuildAppPanel() { document.getElementById('buildAppPanel').classList.remove('show'); }
-function filterBuildIdeas(q) { const box = document.getElementById('buildAppIdeas'); if (!box) return; const query = (q || '').toLowerCase(); const list = BUILD_IDEAS.filter(i => !query || i.t.toLowerCase().includes(query)); box.innerHTML = list.map(i => { const e = i.t.replace(/'/g, "\\'"); return `<div class="result-card" onclick="buildApp('${e}')" style="cursor:pointer"><h4>💡 ${escapeHtml(i.t)}</h4><p>${escapeHtml(i.d)}</p></div>`; }).join(''); }
-function buildApp(name) { closeBuildAppPanel(); insertQuickPrompt(`Build a complete single-file HTML app: ${name}.`); }
 
 // ============ AI RESPONSE ============
 async function sendMessageWithFallback(userText, chatHistory = [], signal = null) {
   const apiKey = (localStorage.getItem('wk_api_key') || '').trim() || ENV_GEMINI_KEY;
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${apiKey}`;
+  const model = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite';
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
   let attempts = 0;
   while (attempts < 3) {
     attempts++;
@@ -1934,7 +2251,7 @@ async function sendMessageWithFallback(userText, chatHistory = [], signal = null
       return { success: true, provider: "Gemini", reply };
     } catch (err) {
       if (err.name === 'AbortError') throw err;
-      if (attempts >= 3) return { success: true, provider: "WiseKingCloud", reply: `Ranka ya dade, I received: "${userText}". Let's continue building! 👑🚀` };
+      if (attempts >= 3) return { success: true, provider: "WiseKingCloud", reply: `Ranka ya dade, I received: "${userText}". Let's continue! 👑🚀` };
       await new Promise(r => setTimeout(r, 800));
     }
   }
@@ -1958,22 +2275,37 @@ async function triggerResponse(chat, userMsg) {
   handleInputChange(); saveChats(); renderMessages();
 }
 
+// ============ CHAT SEARCH ============
+function toggleChatSearch() {
+  const bar = document.getElementById('chatSearchBar');
+  if (!bar) return;
+  bar.classList.toggle('show');
+  if (bar.classList.contains('show')) {
+    const input = document.getElementById('chatSearchInput');
+    if (input) { input.value = ''; input.focus(); }
+  }
+}
+window.toggleChatSearch = toggleChatSearch;
+
 // ============ INIT ============
 function init() {
   try {
-    loadVault(); loadLibrary(); loadCrossChatMemory(); loadProjects();
+    loadVault(); loadLibrary(); loadCrossChatMemory(); loadProjects(); loadMusic();
     loadChatsFromLocalStorage(); loadTheme();
     const savedName = localStorage.getItem('wk_user_name'); if (savedName) document.getElementById('sidebarName').textContent = savedName;
     const av = localStorage.getItem('wk_user_avatar'); if (av) applyAvatar(av);
     const k1 = localStorage.getItem('wk_api_key'); if (k1) document.getElementById('apiKeyInput').value = k1;
     const k2 = localStorage.getItem('wk_replicate_key'); if (k2) document.getElementById('replicateKeyInput').value = k2;
+    const k3 = localStorage.getItem('wk_suno_key'); if (k3) document.getElementById('sunoKeyInput').value = k3;
     const m = localStorage.getItem('wk_model'); if (m) document.getElementById('modelSelect').value = m;
     setWebSearchEnabled(getWebSearchEnabled());
     setMemoryEnabled(getMemoryEnabled());
     setStreamingEnabled(getStreamingEnabled());
     updateModelBadge(); handleInputChange(); updateReplicateStatus();
     initHoldToSpeak();
+    if (typeof pdfjsLib !== 'undefined') pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     if (localStorage.getItem('wk_guest_mode') === '1') unlockApp('Guest', 'Guest Mode (not synced)', null);
+    currentVoiceLang = localStorage.getItem('wk_voice_lang') || 'en-NG';
   } catch(e){ console.warn('Init error', e); }
 }
 document.addEventListener('click', e => { const sw = e.target.closest('.theme-swatch'); if (sw) { const c = sw.dataset.color; localStorage.setItem('wk_theme', c); applyTheme(c); } });
@@ -1981,6 +2313,30 @@ document.querySelectorAll('.modal-bg').forEach(m => { m.addEventListener('click'
 document.getElementById('sharePopup')?.addEventListener('click', (e) => { if (e.target.id === 'sharePopup') closeSharePopup(); });
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
 else init();
+
+// ============ EXPOSE GLOBAL FUNCTIONS ============
+Object.assign(window, {
+  openImagesPanel, closeImagesPanel, openVideosPanel, closeVideosPanel,
+  openVideoGallery, closeVideoGallery, openLibraryPanel, closeLibraryPanel,
+  openVault, openMemoryPanel, closeMemoryPanel, openProjectsPanel, openSettings,
+  openSearchWebPanel, closeSearchWebPanel, openBuildAppPanel, closeBuildAppPanel,
+  openMusicPanel, closeMusicPanel, openPdfChatPanel, closePdfChatPanel,
+  openTranslatePanel, closeTranslatePanel, openDataAnalysisPanel, closeDataAnalysisPanel,
+  openDownloadHub, closeDownloadHub, renderVideoGallery, renderLibrary, renderProjects,
+  createNewProject, deleteVaultMemory, deleteMemoryItem, extractMemoryNow,
+  handleLikeMessage, handleDislikeMessage, submitDislikeFeedback, handleRegenerateMessage,
+  handleCopyMessage, handleShareMessage, handleEditMessage, handleDeleteMessage,
+  saveEditedMessage, confirmDeleteMessage, togglePinCurrentChat, renameCurrentChat,
+  saveRenamedChat, deleteCurrentChat, confirmDeleteChat, shareCurrentChat, shareTo,
+  closeSharePopup, openSharePopup, toggleSidebar, closeSidebar, toggleSection,
+  toggleTopProfileMenu, closeTopProfileMenu, handleProfilePhotoUpload, saveSettings,
+  toggleLightMode, toggleWebSearchSetting, toggleMemorySetting, toggleStreamingSetting,
+  applyTheme, exportData, importData, promptInstallApp, useSuggestion, insertQuickPrompt,
+  removeImg, toggleThinkMode, toggleSearchMode, toggleVoiceMode, addVaultMemory,
+  closeModal, filterChats, goToWelcome, handleSendOrCancel, handleInputChange,
+  handleKeyDown, handleFiles, applyAvatar, loadChatsFromLocalStorage, saveChats,
+  renderChats, updateModelBadge, updateReplicateStatus
+});
 </script>
 </body>
   </html>
