@@ -1466,47 +1466,25 @@ window.skipLoginAsGuest = skipLoginAsGuest;
 
 // ============ CHATS ============
 function loadChatsFromLocalStorage() {
-  try {
-    const s = localStorage.getItem('wk_chats');
-    if (s) {
-      const parsed = JSON.parse(s);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        chats = parsed;
-      }
-    }
-  } catch(e) { console.warn('Parse failed', e); }
-  
-  if (!Array.isArray(chats) || !chats.length) {
-    chats = [{ id:'chat-'+Date.now(), title:'New chat', messages:[], createdAt:Date.now() }];
-  }
-  if (!activeChatId || !chats.find(c => c.id === activeChatId)) {
-    activeChatId = chats[0].id;
-  }
-  renderChats();
-  renderMessages();
+  try { const s = localStorage.getItem('wk_chats'); if (s) chats = JSON.parse(s); } catch(e) { chats = []; }
+  if (!Array.isArray(chats) || !chats.length) chats = [{ id:'chat-'+Date.now(), title:'New chat', messages:[], createdAt:Date.now() }];
+  if (!activeChatId) activeChatId = chats[0].id;
+  renderChats(); renderMessages();
 }
 window.loadChatsFromLocalStorage = loadChatsFromLocalStorage;
 function saveChats() { 
-  try {
-    localStorage.setItem('wk_chats', JSON.stringify(chats)); 
-  } catch(e) { console.warn('Save local failed', e); }
-  
-  try { renderChats(); } catch(e) {}
-  
-  // ☁️ Auto-save to cloud (non-blocking, safe)
-  try {
-    if (window.WK_CLOUD && localStorage.getItem('wk_user_uid') && Array.isArray(chats)) {
-      const snapshot = {
-        chats: JSON.parse(JSON.stringify(chats)),  // deep copy
-        vault: Array.isArray(vaultMemories) ? [...vaultMemories] : [],
-        memory: Array.isArray(crossChatMemory) ? [...crossChatMemory] : [],
-        library: Array.isArray(library) ? [...library] : [],
-        projects: Array.isArray(projects) ? [...projects] : []
-      };
-      // Fire and forget — don't await
-      window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), snapshot);
-    }
-  } catch(e) { console.warn('Cloud save failed', e); }
+  localStorage.setItem('wk_chats', JSON.stringify(chats)); 
+  renderChats(); 
+  // ☁️ Auto-save to cloud
+  if (window.WK_CLOUD && localStorage.getItem('wk_user_uid')) {
+    window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), {
+      chats: chats,
+      vault: vaultMemories,
+      memory: crossChatMemory,
+      library: library,
+      projects: projects
+    });
+  }
 }
 function switchToChat(id) { activeChatId = id; renderChats(); renderMessages(); closeSidebar(); }
 function renderChats() {
@@ -1572,7 +1550,7 @@ function linkify(t) { return t.replace(/(https?:\/\/[^\s)]+)/g, '<a href="$1" ta
 function renderMarkdown(src) {
   let s = escapeHtml(String(src ?? ''));
   s = linkify(s);
-  s = s.replace(/```(\w+)?\n?([\s\S]*?)```/g, (m, lang, code) => buildCodeBlock(code.trim(), lang));
+  s = s.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
   s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
   s = s.replace(/^### (.*)$/gm, '<h4>$1</h4>');
   s = s.replace(/^## (.*)$/gm, '<h3>$1</h3>');
@@ -1801,70 +1779,36 @@ function renderVideoGallery() { const box = document.getElementById('videoGaller
 function updateReplicateStatus() { const el = document.getElementById('replicateStatus'); if (!el) return; const key = localStorage.getItem('wk_replicate_key'); el.textContent = key ? '✅ Replicate connected' : '💡 Add Replicate key for hyper-real images.'; }
 
 // ============ SEND MESSAGE ============
-  // ✅ Save LOCALLY first (fast)
-  try { localStorage.setItem('wk_chats', JSON.stringify(chats)); } catch(e) {}
-  renderChats(); 
-  renderMessages();
-  
-  // ✅ Then trigger AI response
+function sendMessage(textOverride) {
+  if (isSending) return;
+  const input = document.getElementById('messageInput');
+  const text = (textOverride !== undefined ? String(textOverride) : input.value).trim();
+  if (!text && !uploadedImages.length) return;
+  let chat = chats.find(c => c.id === activeChatId);
+  if (!chat) { createNewChat(); chat = chats.find(c => c.id === activeChatId); }
+  if (chat.title === 'New chat' && text) chat.title = text.slice(0,32);
+  const imgs = [...uploadedImages]; uploadedImages = []; updatePreview();
+  const userMsg = { role:'user', content: text || '📎 Attachment', images: imgs, createdAt: Date.now() };
+  chat.messages.push(userMsg);
+  input.value = ''; input.style.height = 'auto';
+  if (thinkMode) { thinkMode = false; document.getElementById('chipThink').classList.remove('active'); }
+  if (searchMode) { searchMode = false; document.getElementById('chipSearch').classList.remove('active'); }
+  saveChats(); renderMessages();
   triggerResponse(chat, userMsg);
-  
-  // ✅ Cloud save in background (don't block)
-  setTimeout(() => { try { saveChats(); } catch(e) {} }, 100);
- }
-
-// ============ CODE BLOCK WITH COPY + DOWNLOAD ============
-let __codeBlockCounter = 0;
-function buildCodeBlock(code, lang) {
-  const id = 'code-' + (++__codeBlockCounter);
-  const safeCode = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  const langLabel = (lang || 'text').toUpperCase();
-  const ext = lang === 'javascript' ? 'js' : lang === 'python' ? 'py' : lang === 'html' ? 'html' : lang === 'css' ? 'css' : lang === 'json' ? 'json' : 'txt';
-  
-  // Store code for copy/download
-  window.__wkCodeBlocks = window.__wkCodeBlocks || {};
-  window.__wkCodeBlocks[id] = code;
-  
-  return `<pre id="${id}">
-    <div class="code-header">
-      <div class="code-lang">${langLabel}</div>
-      <div class="code-actions">
-        <button class="code-action-btn" onclick="copyCodeBlock('${id}', this)"><i class="fas fa-copy"></i> Copy</button>
-        <button class="code-action-btn" onclick="downloadCodeBlock('${id}', 'wiseking-code.${ext}')"><i class="fas fa-download"></i> Download</button>
-      </div>
-    </div>
-    <code>${safeCode}</code>
-  </pre>`;
 }
 
-function copyCodeBlock(id, btn) {
-  const code = window.__wkCodeBlocks?.[id] || '';
-  wkCopyToClipboard(code).then(ok => {
-    if (ok) {
-      const orig = btn.innerHTML;
-      btn.classList.add('copied');
-      btn.innerHTML = '<i class="fas fa-check"></i> Copied';
-      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 1800);
-    } else {
-      showToast('⚠️ Copy failed');
-    }
-  });
+// ============ RENDER MESSAGES ============
+function renderMessages() {
+  const area = document.getElementById('messagesArea'); if (!area) return;
+  area.innerHTML = '';
+  const chat = chats.find(c => c.id === activeChatId);
+  if (!chat) { document.getElementById('welcomeScreen').style.display = 'flex'; return; }
+  const hasMsgs = chat.messages.length > 0;
+  document.getElementById('welcomeScreen').style.display = hasMsgs ? 'none' : 'flex';
+  document.getElementById('chatTitle').textContent = chat.title;
+  chat.messages.forEach((msg, idx) => area.appendChild(buildMessageEl(msg, idx, chat.id)));
+  const cs = document.getElementById('chatScroll'); cs.scrollTop = cs.scrollHeight;
 }
-window.copyCodeBlock = copyCodeBlock;
-
-function downloadCodeBlock(id, filename) {
-  const code = window.__wkCodeBlocks?.[id] || '';
-  try {
-    const blob = new Blob([code], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = filename;
-    document.body.appendChild(a); a.click();
-    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 100);
-    showToast('⬇️ Downloaded!');
-  } catch(e) { showToast('⚠️ Download failed'); }
-}
-window.downloadCodeBlock = downloadCodeBlock;
 
 function buildMessageEl(msg, idx, chatId) {
   const el = document.createElement('div'); el.className = 'message ' + msg.role;
