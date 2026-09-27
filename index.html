@@ -414,6 +414,14 @@
       <button class="nav-btn" onclick="openImagesPanel()"><span class="nav-icon gradient-1"><i class="fas fa-image"></i></span>Images</button>
       <button class="nav-btn" onclick="openVideosPanel()"><span class="nav-icon gradient-2"><i class="fas fa-video"></i></span>Videos</button>
       <button class="nav-btn" onclick="openVideoGallery()"><span class="nav-icon gradient-5"><i class="fas fa-film"></i></span>My Videos<span class="nav-badge" id="videoCountBadge">0</span></button>
+      <button class="nav-btn" onclick="openMusicPanel()"><span class="nav-icon gradient-8"><i class="fas fa-music"></i></span>Music<span class="nav-badge" id="musicCountBadge">0</span></button>
+      <button class="nav-btn" onclick="openPdfChatPanel()"><span class="nav-icon gradient-9"><i class="fas fa-file-pdf"></i></span>PDF Chat</button>
+      <button class="nav-btn" onclick="openTranslatePanel()"><span class="nav-icon gradient-3"><i class="fas fa-language"></i></span>Translate</button>
+      <button class="nav-btn" onclick="openDataAnalysisPanel()"><span class="nav-icon gradient-4"><i class="fas fa-chart-line"></i></span>Data Analysis</button>
+      <button class="nav-btn" onclick="openSearchWebPanel()"><span class="nav-icon gradient-3"><i class="fas fa-globe"></i></span>Search Web</button>
+      <button class="nav-btn" onclick="openBuildAppPanel()"><span class="nav-icon gradient-6"><i class="fas fa-code"></i></span>Build App</button>
+      <button class="nav-btn" onclick="openPricingPanel()"><span class="nav-icon" style="color:#fbbf24"><i class="fas fa-crown"></i></span>Upgrade Plan</button>
+      <button class="nav-btn" onclick="openDownloadHub()"><span class="nav-icon gradient-6"><i class="fas fa-download"></i></span>Downloads</button>
       <button class="nav-btn" onclick="openLibraryPanel()"><span class="nav-icon gradient-3"><i class="fas fa-shapes"></i></span>Library</button>
       <button class="nav-btn" onclick="openVault()"><span class="nav-icon gradient-4"><i class="fas fa-shield-halved"></i></span>Vault<span class="nav-badge" id="vaultCountBadge">0</span></button>
       <button class="nav-btn" onclick="openMemoryPanel()"><span class="nav-icon gradient-4"><i class="fas fa-brain"></i></span>Memory<span class="nav-badge" id="memoryCountBadge">0</span></button>
@@ -442,14 +450,15 @@
       </div>
       <div class="chat-actions">
         <button class="top-btn install-btn" id="installAppBtn" onclick="promptInstallApp()" style="display:none"><i class="fas fa-download"></i><span class="label"> Install</span></button>
-        <button class="top-btn" onclick="toggleChatSearch()"><i class="fas fa-magnifying-glass"></i><span class="label"> Find</span></button>
-        <button class="top-btn" onclick="goToWelcome()"><i class="fas fa-house"></i><span class="label"> Home</span></button>
-        <button class="top-btn" onclick="openVault()"><i class="fas fa-shield-halved"></i><span class="label"> Vault</span></button>
         <button class="top-btn" onclick="openSearchWebPanel()"><i class="fas fa-globe"></i><span class="label"> Search</span></button>
         <button class="top-btn" onclick="openBuildAppPanel()"><i class="fas fa-code"></i><span class="label"> Build</span></button>
+        <button class="top-btn" onclick="openVault()"><i class="fas fa-shield-halved"></i><span class="label"> Vault</span></button>
+        <button class="top-btn" onclick="openDownloadHub()"><i class="fas fa-cloud-arrow-down"></i><span class="label"> Downloads</span></button>
+        <button class="top-btn" onclick="toggleChatSearch()"><i class="fas fa-magnifying-glass"></i><span class="label"> Find</span></button>
+        <button class="top-btn" onclick="goToWelcome()"><i class="fas fa-house"></i><span class="label"> Home</span></button>
       </div>
       <div class="top-profile-container" id="topProfileContainer">
-        <div class="top-profile-avatar" id="topProfileAvatar" onclick="toggleTopProfileMenu(event)">👑</div>
+        <div class="top-profile-avatar" id="topProfileAvatar" role="button" tabindex="0">👑</div>
         <div class="profile-menu-popup" id="topProfileMenu">
           <div class="pm-header">
             <div class="pm-user-info">
@@ -459,13 +468,13 @@
             <button class="pm-close" onclick="closeTopProfileMenu()"><i class="fas fa-times"></i></button>
           </div>
           <div class="pm-body">
+            <button class="pm-item" onclick="openPricingPanel(); closeTopProfileMenu();"><i class="fas fa-crown" style="color:#fbbf24"></i> Upgrade Plan 👑</button>
             <button class="pm-item" onclick="document.getElementById('profilePhotoInput').click(); closeTopProfileMenu();"><i class="fas fa-camera"></i> Upload Photo</button>
             <input type="file" id="profilePhotoInput" accept="image/*" style="display:none" onchange="handleProfilePhotoUpload(event)">
             <button class="pm-item" onclick="openSettings(); closeTopProfileMenu();"><i class="fas fa-gear"></i> Settings</button>
             <div class="pm-divider"></div>
             <button class="pm-item" onclick="addAnotherAccount();"><i class="fas fa-user-plus"></i> Add Account</button>
             <button class="pm-item" onclick="switchAccount();"><i class="fas fa-right-left"></i> Switch Account</button>
-            <button class="pm-item" onclick="window.open('https://myaccount.google.com/', '_blank'); closeTopProfileMenu();"><i class="fas fa-external-link-alt"></i> Manage Account</button>
             <div class="pm-divider"></div>
             <button class="pm-item danger" onclick="askSignOut();"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
           </div>
@@ -484,7 +493,7 @@
         <div class="welcome" id="welcomeScreen">
           <div class="welcome-logo">👑</div>
           <h1>How can I help you today?</h1>
-          <p>I'm <strong>Wise King AI</strong>. I can see photos, remember our conversations, and reason across any task.</p>
+          <p>I'm <strong>Wise King AI</strong>. I can see photos, remember conversations, generate music, read PDFs, translate languages, and analyze data.</p>
           <div class="suggestions">
             <div class="suggestion-card" onclick="useSuggestion('Explain quantum computing in simple terms')"><i class="fas fa-atom"></i><div class="sc-title">Explain quantum computing</div><div class="sc-desc">In simple, clear terms</div></div>
             <div class="suggestion-card" onclick="useSuggestion('Write me an Afrobeat song about Kano city')"><i class="fas fa-music"></i><div class="sc-title">Write an Afrobeat song</div><div class="sc-desc">Full lyrics with structure</div></div>
@@ -514,10 +523,344 @@
           </div>
         </div>
         <input type="file" id="fileInput" accept="image/*,.pdf,.txt,.doc,.docx" style="display:none" multiple onchange="handleFiles(event)">
-        <div class="input-hint">Wise King Ai can make mistake,please-double-check-information</div>
+        <div class="input-hint">Wise King Ai can make mistake, please double-check information</div>
       </div>
     </div>
   </main>
+</div>
+
+<!-- ============ IMAGES PANEL ============ -->
+<div class="full-panel" id="imagesPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-image"></i> Image Generator</div>
+    <button class="btn ghost" onclick="closeImagesPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:8px">Describe the image you want:</p>
+      <input type="text" class="search-big" id="imagesPromptInput" placeholder="e.g. beautiful Hausa woman OR logo for Wise King" onkeydown="if(event.key==='Enter'){generateImageFromPanel()}">
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:12px" onclick="generateImageFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Generate Image</button>
+      <div id="imagesPanelResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ VIDEOS PANEL ============ -->
+<div class="full-panel" id="videosPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-video"></i> Video Prompt Creator</div>
+    <button class="btn ghost" onclick="closeVideosPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:8px">Describe the video scene:</p>
+      <input type="text" class="search-big" id="videosPromptInput" placeholder="e.g. golden sunset over Kano city, drone shot...">
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="generateVideoFromPanel()"><i class="fas fa-clapperboard"></i> Generate Video Prompt</button>
+      <div id="videoPanelResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ VIDEO GALLERY PANEL ============ -->
+<div class="full-panel" id="videoGalleryPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-film"></i> My Videos</div>
+    <button class="btn ghost" onclick="closeVideoGallery()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div id="videoGalleryContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MUSIC PANEL ============ -->
+<div class="full-panel" id="musicPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-music"></i> AI Music Studio 🎵</div>
+    <button class="btn ghost" onclick="closeMusicPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">🎼 Paste lyrics OR describe a style — AI will build your song prompt.</p>
+      <textarea class="search-big" id="musicInput" rows="6" placeholder="Paste your lyrics here OR describe the music style...&#10;&#10;Example:&#10;Style: Afrobeat, 120 BPM, guitar-driven, Kano vibe&#10;Lyrics:&#10;[Verse 1]&#10;In the streets of Kano city..." style="min-height:140px;resize:vertical;font-family:inherit"></textarea>
+      
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px">
+        <select class="input-field" id="musicGenre" style="margin-bottom:0">
+          <option value="">🎵 Genre</option>
+          <option>Afrobeat</option><option>Amapiano</option><option>Hip-hop</option>
+          <option>R&B</option><option>Gospel</option><option>Reggae</option>
+          <option>Pop</option><option>Dancehall</option><option>Traditional Hausa</option>
+          <option>Fuji</option><option>Highlife</option><option>Jazz</option>
+        </select>
+        <select class="input-field" id="musicMood" style="margin-bottom:0">
+          <option value="">💫 Mood</option>
+          <option>Happy & Uplifting</option><option>Romantic</option><option>Motivational</option>
+          <option>Spiritual</option><option>Party Vibe</option><option>Chill & Relaxed</option>
+          <option>Sad & Emotional</option><option>Epic</option>
+        </select>
+        <select class="input-field" id="musicTempo" style="margin-bottom:0">
+          <option value="">🥁 Tempo</option>
+          <option>Slow (60-80 BPM)</option><option>Mid-tempo (90-110 BPM)</option>
+          <option>Dance (115-130 BPM)</option><option>Fast (130+ BPM)</option>
+        </select>
+      </div>
+      
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn accent" style="flex:1;justify-content:center" onclick="generateMusicFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Build Music Prompt</button>
+        <button class="btn solid" style="flex:1;justify-content:center" onclick="generateLyricsFromPanel()"><i class="fas fa-pen-fancy"></i> Write Lyrics</button>
+      </div>
+      
+      <div id="musicPanelResults"></div>
+      <h3 style="margin:24px 0 12px;color:var(--accent-hover);font-size:15px">🎧 My Music Library</h3>
+      <div id="musicLibraryBox"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PDF CHAT PANEL ============ -->
+<div class="full-panel" id="pdfChatPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-file-pdf"></i> PDF Chat 📄</div>
+    <button class="btn ghost" onclick="closePdfChatPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="pdf-dropzone" id="pdfDropzone" onclick="document.getElementById('pdfFileInput').click()">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p><strong>Click to upload PDF</strong> or drag & drop</p>
+        <small>Read, summarize, and ask questions about any PDF</small>
+        <input type="file" id="pdfFileInput" accept=".pdf" style="display:none" onchange="handlePdfUpload(event)">
+      </div>
+      <div id="pdfFileInfo"></div>
+      <div id="pdfSummaryBox"></div>
+      <input type="text" class="search-big" id="pdfQuestionInput" placeholder="Ask anything about the PDF..." onkeydown="if(event.key==='Enter'){askPdfQuestion()}" style="margin-top:16px">
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="askPdfQuestion()"><i class="fas fa-question-circle"></i> Ask About PDF</button>
+      <div id="pdfChatResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TRANSLATE PANEL ============ -->
+<div class="full-panel" id="translatePanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-language"></i> Real-time Translation 🌍</div>
+    <button class="btn ghost" onclick="closeTranslatePanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="lang-selector">
+        <select class="lang-select" id="translateFrom">
+          <option value="auto">🔍 Auto-detect</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="ha">🇳🇬 Hausa</option>
+          <option value="ar">🇸🇦 Arabic</option>
+          <option value="fr">🇫🇷 French</option>
+          <option value="yo">🇳🇬 Yoruba</option>
+          <option value="ig">🇳🇬 Igbo</option>
+          <option value="sw">🌍 Swahili</option>
+          <option value="es">🇪🇸 Spanish</option>
+          <option value="pt">🇵🇹 Portuguese</option>
+          <option value="de">🇩🇪 German</option>
+          <option value="zh">🇨🇳 Chinese</option>
+          <option value="hi">🇮🇳 Hindi</option>
+          <option value="ru">🇷🇺 Russian</option>
+          <option value="ja">🇯🇵 Japanese</option>
+          <option value="tr">🇹🇷 Turkish</option>
+          <option value="ur">🇵🇰 Urdu</option>
+        </select>
+        <button class="lang-swap" onclick="swapLanguages()" title="Swap"><i class="fas fa-right-left"></i></button>
+        <select class="lang-select" id="translateTo">
+          <option value="en">🇬🇧 English</option>
+          <option value="ha">🇳🇬 Hausa</option>
+          <option value="ar">🇸🇦 Arabic</option>
+          <option value="fr">🇫🇷 French</option>
+          <option value="yo">🇳🇬 Yoruba</option>
+          <option value="ig">🇳🇬 Igbo</option>
+          <option value="sw">🌍 Swahili</option>
+          <option value="es">🇪🇸 Spanish</option>
+          <option value="pt">🇵🇹 Portuguese</option>
+          <option value="de">🇩🇪 German</option>
+          <option value="zh">🇨🇳 Chinese</option>
+          <option value="hi">🇮🇳 Hindi</option>
+          <option value="ru">🇷🇺 Russian</option>
+          <option value="ja">🇯🇵 Japanese</option>
+          <option value="tr">🇹🇷 Turkish</option>
+          <option value="ur">🇵🇰 Urdu</option>
+        </select>
+      </div>
+      <textarea class="search-big" id="translateInput" rows="6" placeholder="Type or paste text to translate..." style="min-height:130px;resize:vertical;font-family:inherit"></textarea>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn accent" style="flex:1;justify-content:center" onclick="doTranslate()"><i class="fas fa-language"></i> Translate Now</button>
+        <button class="btn solid" onclick="speakTranslation()"><i class="fas fa-volume-up"></i> Listen</button>
+        <button class="btn solid" onclick="startLiveTranslateVoice()"><i class="fas fa-microphone"></i> Voice</button>
+      </div>
+      <div id="translateResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DATA ANALYSIS PANEL ============ -->
+<div class="full-panel" id="dataAnalysisPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-chart-line"></i> Data Analysis 📊</div>
+    <button class="btn ghost" onclick="closeDataAnalysisPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="pdf-dropzone" id="dataDropzone" onclick="document.getElementById('dataFileInput').click()">
+        <i class="fas fa-file-csv"></i>
+        <p><strong>Upload CSV, Excel, or paste data</strong></p>
+        <small>Auto-generate stats, charts, and AI insights</small>
+        <input type="file" id="dataFileInput" accept=".csv,.xlsx,.xls,.json,.txt" style="display:none" onchange="handleDataUpload(event)">
+      </div>
+      <textarea class="search-big" id="dataPasteInput" rows="5" placeholder="Or paste CSV / table data here...&#10;&#10;Example:&#10;Name,Age,City&#10;Ibrahim,28,Kano&#10;Fatima,24,Lagos" style="min-height:120px;resize:vertical;font-family:'JetBrains Mono',monospace;font-size:12.5px"></textarea>
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="analyzePastedData()"><i class="fas fa-chart-bar"></i> Analyze Data</button>
+      <div id="dataAnalysisResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DOWNLOAD HUB PANEL ============ -->
+<div class="full-panel" id="downloadHubPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-cloud-arrow-down"></i> Downloads Hub 📥</div>
+    <button class="btn ghost" onclick="closeDownloadHub()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:14px">📱 Everything you create — download directly to your phone.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn solid" onclick="filterDownloads('all')">All</button>
+        <button class="btn solid" onclick="filterDownloads('image')"><i class="fas fa-image"></i> Images</button>
+        <button class="btn solid" onclick="filterDownloads('video')"><i class="fas fa-video"></i> Videos</button>
+        <button class="btn solid" onclick="filterDownloads('music')"><i class="fas fa-music"></i> Music</button>
+        <button class="btn solid" onclick="filterDownloads('audio')"><i class="fas fa-headphones"></i> Audio</button>
+      </div>
+      <div class="download-grid" id="downloadHubGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ LIBRARY PANEL ============ -->
+<div class="full-panel" id="libraryPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-shapes"></i> Library</div>
+    <button class="btn ghost" onclick="closeLibraryPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div id="libraryPanelResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PRICING PANEL ============ -->
+<div class="full-panel" id="pricingPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-crown"></i> Wise King Plans</div>
+    <button class="btn ghost" onclick="closePricingPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;text-align:center">Choose the plan that fits your journey. Upgrade anytime. 👑</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+        
+        <div class="result-card" style="text-align:center;position:relative">
+          <div style="font-size:40px;margin-bottom:8px">🌱</div>
+          <h3 style="font-size:18px;color:var(--text-primary);margin-bottom:4px">Free</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦0</div>
+          <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px">Forever free</div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Unlimited chats</li>
+            <li>✅ Image generation</li>
+            <li>✅ Voice & translation</li>
+            <li>✅ PDF chat</li>
+            <li>⚠️ 20 AI messages / day</li>
+          </ul>
+          <button class="btn solid" style="width:100%;justify-content:center" disabled>Current Plan</button>
+        </div>
+
+        <div class="result-card" style="text-align:center;border:2px solid var(--accent);position:relative;box-shadow:var(--shadow-glow)">
+          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent-gradient);color:white;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px">POPULAR 🔥</div>
+          <div style="font-size:40px;margin-bottom:8px">⚡</div>
+          <h3 style="font-size:18px;color:var(--text-primary);margin-bottom:4px">Pro</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦5,000<span style="font-size:14px;font-weight:400;color:var(--text-tertiary)">/month</span></div>
+          <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px">Best for daily users</div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Everything in Free</li>
+            <li>✅ Unlimited AI messages</li>
+            <li>✅ Music generation</li>
+            <li>✅ Priority speed</li>
+            <li>✅ Data analysis tools</li>
+          </ul>
+          <button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Pro', 5000)"><i class="fas fa-rocket"></i> Upgrade to Pro</button>
+        </div>
+
+        <div class="result-card" style="text-align:center">
+          <div style="font-size:40px;margin-bottom:8px">👑</div>
+          <h3 style="font-size:18px;color:var(--text-primary);margin-bottom:4px">Premium</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦15,000<span style="font-size:14px;font-weight:400;color:var(--text-tertiary)">/month</span></div>
+          <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px">For power users & business</div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Everything in Pro</li>
+            <li>✅ Custom AI models</li>
+            <li>✅ Business account</li>
+            <li>✅ 24/7 priority support</li>
+            <li>✅ API access</li>
+          </ul>
+          <button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Premium', 15000)"><i class="fas fa-crown"></i> Go Premium</button>
+        </div>
+        
+     </div>
+     <p style="font-size:12px;color:var(--text-tertiary);margin-top:20px;text-align:center">💳 Payments powered securely. Contact owner@wiseking.ai for enterprise.</p>
+    </div>
+  </div> 
+</div>  
+  
+<!-- ============ SEARCH WEB PANEL ============ -->
+<div class="full-panel" id="searchWebPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-globe"></i> Search the web</div>
+    <button class="btn ghost" onclick="closeSearchWebPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <input type="text" class="search-big" id="searchWebInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter'){doSearchWeb(this.value)}">
+      <div id="searchSuggestionsBox" style="margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px"></div>
+      <div id="askWiseKingShortcut" style="margin-bottom:20px;display:none"></div>
+      <div id="searchWebResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BUILD APP PANEL ============ -->
+<div class="full-panel" id="buildAppPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-code"></i> Build an app</div>
+    <button class="btn ghost" onclick="closeBuildAppPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <input type="text" class="search-big" id="buildAppInput" placeholder="Search or describe your app idea..." oninput="filterBuildIdeas(this.value)">
+      <div id="buildAppIdeas"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MEMORY PANEL ============ -->
+<div class="full-panel" id="memoryPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-brain"></i> Cross-Chat Memory</div>
+    <button class="btn ghost" onclick="closeMemoryPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">Wise King automatically learns facts from your chats.</p>
+      <button class="btn solid" style="width:100%;justify-content:center;margin-bottom:16px" onclick="extractMemoryNow()"><i class="fas fa-wand-magic-sparkles"></i> Extract Memory</button>
+      <div id="memoryPanelResults"></div>
+    </div>
+  </div>
 </div>
 
 <!-- POPUP MENUS -->
@@ -558,46 +901,7 @@
     </div>
   </div>
 </div>
-  
-<!-- SEARCH WEB PANEL -->
-<div class="full-panel" id="searchWebPanel">
-  <div class="panel-header">
-    <div class="panel-title"><i class="fas fa-globe"></i> Search Web</div>
-    <div style="display:flex;gap:8px">
-      <button class="btn ghost" onclick="closeSearchWebPanel()"><i class="fas fa-times"></i> Close</button>
-    </div>
-  </div>
-  <div class="panel-body">
-    <div class="panel-inner">
-      <div style="display:flex;gap:10px;margin-bottom:20px">
-        <input type="text" class="search-big" id="searchWebInput" placeholder="Search the web or ask Wise King AI anything..." onkeydown="if(event.key==='Enter') doSearchWeb(this.value)">
-        <button class="btn accent" onclick="doSearchWeb(document.getElementById('searchWebInput').value)"><i class="fas fa-search"></i> Search</button>
-      </div>
-      <div id="searchWebResults"></div>
-      <div id="askWiseKingShortcut" style="display:none;margin-top:12px"></div>
-      
-      <h4 style="margin:24px 0 12px;font-size:14px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em"><i class="fas fa-bolt"></i> Quick Shortcuts</h4>
-      <div id="searchSuggestionsBox" style="display:flex;gap:10px;flex-wrap:wrap"></div>
-    </div>
-  </div>
-</div>
 
-<!-- BUILD APP PANEL -->
-<div class="full-panel" id="buildAppPanel">
-  <div class="panel-header">
-    <div class="panel-title"><i class="fas fa-code"></i> Build App</div>
-    <div style="display:flex;gap:8px">
-      <button class="btn ghost" onclick="closeBuildAppPanel()"><i class="fas fa-times"></i> Close</button>
-    </div>
-  </div>
-  <div class="panel-body">
-    <div class="panel-inner">
-      <input type="text" class="search-big" id="buildAppInput" placeholder="Describe the app you want to build..." oninput="filterBuildIdeas(this.value)">
-      <div id="buildAppIdeas"></div>
-    </div>
-  </div>
-</div>
-  
 <div class="modal-bg" id="renameChatModal">
   <div class="modal" style="max-width:420px">
     <div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Rename chat</div><button class="modal-close" onclick="closeModal('renameChatModal')"><i class="fas fa-times"></i></button></div>
@@ -706,6 +1010,7 @@
       <div class="settings-card">
         <input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (optional)" autocomplete="off">
         <input type="password" class="input-field" id="replicateKeyInput" placeholder="Replicate API key (optional)" autocomplete="off">
+        <input type="password" class="input-field" id="sunoKeyInput" placeholder="Suno API key (optional for real music)" autocomplete="off" style="margin-bottom:0">
       </div>
     </div>
     <div class="settings-group">
@@ -757,17 +1062,53 @@
     window.__WK_ENV__.GEMINI_API_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
   }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 
-<!-- ============ FIREBASE + AUTH ============ -->
+<script>
+// Auto-highlight code blocks after every AI message
+function highlightCodeBlocks() {
+  if (typeof Prism === 'undefined') return;
+  document.querySelectorAll('.md pre code:not(.language-none):not([data-highlighted])').forEach(block => {
+    try { Prism.highlightElement(block); } catch(e) {}
+  });
+}
+
+// Watch for new messages and highlight automatically
+const observer = new MutationObserver(() => { setTimeout(highlightCodeBlocks, 80); });
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const area = document.getElementById('messagesArea');
+    if (area) observer.observe(area, { childList: true, subtree: true });
+    highlightCodeBlocks();
+  }, 800);
+});
+
+// Also highlight on every render
+const _origRender = window.renderMessages;
+if (typeof _origRender === 'function') {
+  window.renderMessages = function() {
+    _origRender.apply(this, arguments);
+    setTimeout(highlightCodeBlocks, 100);
+  };
+}
+</script>
+
+<!-- ============ FIREBASE ============ -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
   import { 
-    getAuth, signInWithPopup, signInWithRedirect, GoogleAuthProvider, signOut, onAuthStateChanged,
+    getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged,
     setPersistence, browserLocalPersistence,
     createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail
   } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
   import { 
-    getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp
+    getFirestore, doc, getDoc, setDoc, serverTimestamp
   } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -785,99 +1126,66 @@
   provider.setCustomParameters({ prompt: 'select_account' });
   setPersistence(auth, browserLocalPersistence).catch(() => {});
 
-  let lastUid = null;
-
   window.WK_CLOUD = {
     async loadUserData(uid) {
-      try {
-        const ref = doc(db, 'users', uid);
-        const snap = await getDoc(ref);
-        if (snap.exists()) return snap.data();
-        return null;
-      } catch (e) { console.warn('Load error:', e); return null; }
+      try { const ref = doc(db, 'users', uid); const snap = await getDoc(ref); return snap.exists() ? snap.data() : null; }
+      catch (e) { return null; }
     },
     async saveUserData(uid, data) {
-      try {
-        const ref = doc(db, 'users', uid);
-        await setDoc(ref, { ...data, updatedAt: serverTimestamp() }, { merge: true });
-        return true;
-      } catch (e) { console.warn('Save error:', e); return false; }
+      try { await setDoc(doc(db, 'users', uid), { ...data, updatedAt: serverTimestamp() }, { merge: true }); return true; }
+      catch (e) { return false; }
     }
   };
 
-  // ============ AUTH STATE LISTENER ============
   onAuthStateChanged(auth, async (user) => {
     if (user) {
-      lastUid = user.uid;
       localStorage.setItem('wk_logged_in', '1');
       localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
       localStorage.setItem('wk_user_email', user.email || '');
       localStorage.setItem('wk_user_uid', user.uid);
       localStorage.removeItem('wk_guest_mode');
 
-      // Load cloud data
       const cloud = await window.WK_CLOUD.loadUserData(user.uid);
       if (cloud) {
-        if (Array.isArray(cloud.chats)) {
-          localStorage.setItem('wk_chats', JSON.stringify(cloud.chats));
-          try { chats = cloud.chats; } catch(e) {}
-        }
+        if (Array.isArray(cloud.chats)) { localStorage.setItem('wk_chats', JSON.stringify(cloud.chats)); try { chats = cloud.chats; } catch(e) {} }
         if (Array.isArray(cloud.vault)) localStorage.setItem('wk_vault', JSON.stringify(cloud.vault));
         if (Array.isArray(cloud.memory)) localStorage.setItem('wk_cross_memory', JSON.stringify(cloud.memory));
         if (Array.isArray(cloud.library)) localStorage.setItem('wk_library', JSON.stringify(cloud.library));
         if (Array.isArray(cloud.projects)) localStorage.setItem('wk_projects', JSON.stringify(cloud.projects));
+        if (Array.isArray(cloud.music)) localStorage.setItem('wk_music', JSON.stringify(cloud.music));
       }
 
       if (typeof unlockApp === 'function') unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
       if (typeof loadChatsFromLocalStorage === 'function') loadChatsFromLocalStorage();
-      window.showToast('Welcome, ' + (user.displayName || 'Wise King User') + '! 🎉');
-    } else {
-      lastUid = null;
     }
   });
 
-  // ============ GOOGLE SIGN IN (FIXED FOR MOBILE) ============
   window.signInWithGoogle = function() {
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-    if (isMobile) {
-      // Mobile: Use redirect to fix "missing initial state" error
-      signInWithRedirect(auth, provider).catch((error) => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        localStorage.setItem('wk_logged_in', '1');
+        localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
+        localStorage.setItem('wk_user_email', user.email || '');
+        localStorage.setItem('wk_user_uid', user.uid);
+        localStorage.removeItem('wk_guest_mode');
+        window.showToast('Welcome, ' + (user.displayName || 'Wise King User') + '! 🎉');
+      })
+      .catch((error) => {
+        if (["auth/cancelled-popup-request","auth/popup-closed-by-user","auth/user-cancelled"].includes(error.code)) return;
         if (typeof showAuthError === 'function') showAuthError("Login failed: " + error.message);
       });
-    } else {
-      // Desktop: Use popup (faster)
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          const user = result.user;
-          localStorage.setItem('wk_logged_in', '1');
-          localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
-          localStorage.setItem('wk_user_email', user.email || '');
-          localStorage.setItem('wk_user_uid', user.uid);
-          localStorage.removeItem('wk_guest_mode');
-          window.showToast('Welcome, ' + (user.displayName || 'Wise King User') + '! 🎉');
-        })
-        .catch((error) => {
-          if (["auth/cancelled-popup-request","auth/popup-closed-by-user","auth/user-cancelled"].includes(error.code)) return;
-          let msg = "Login failed. ";
-          if (error.code === "auth/popup-blocked") msg = "Popup blocked. Please allow popups.";
-          else msg += error.message;
-          if (typeof showAuthError === 'function') showAuthError(msg);
-        });
-    }
   };
 
-  // ============ EMAIL SIGN IN ============
   window.emailSignIn = function() {
     const email = document.getElementById('signInEmail').value.trim();
     const password = document.getElementById('signInPassword').value.trim();
-    if (!email || !password) { showAuthError("Please enter both email and password."); return; }
-    const btn = document.getElementById('signInBtn');
-    const orig = btn.innerHTML;
+    if (!email || !password) return showAuthError("Please enter both email and password.");
+    const btn = document.getElementById('signInBtn'); const orig = btn.innerHTML;
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
+      .then((uc) => {
+        const user = uc.user;
         localStorage.setItem('wk_logged_in', '1');
         localStorage.setItem('wk_user_name', user.displayName || email.split('@')[0]);
         localStorage.setItem('wk_user_email', user.email);
@@ -887,29 +1195,25 @@
       })
       .catch((error) => {
         let msg = "Login failed. ";
-        if (error.code === 'auth/user-not-found') msg = "No account found with this email.";
-        else if (error.code === 'auth/wrong-password') msg = "Incorrect password. Try again.";
-        else if (error.code === 'auth/invalid-email') msg = "Invalid email format.";
+        if (error.code === 'auth/user-not-found') msg = "No account found.";
+        else if (error.code === 'auth/wrong-password') msg = "Incorrect password.";
         else if (error.code === 'auth/invalid-credential') msg = "Wrong email or password.";
         else msg += error.message;
-        showAuthError(msg);
-        btn.disabled = false; btn.innerHTML = orig;
+        showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
       });
   };
 
-  // ============ EMAIL SIGN UP ============
   window.emailSignUp = function() {
     const name = document.getElementById('signUpName').value.trim();
     const email = document.getElementById('signUpEmail').value.trim();
     const password = document.getElementById('signUpPassword').value.trim();
-    if (!name || !email || !password) { showAuthError("Please fill in all fields."); return; }
-    if (password.length < 6) { showAuthError("Password must be at least 6 characters."); return; }
-    const btn = document.getElementById('signUpBtn');
-    const orig = btn.innerHTML;
+    if (!name || !email || !password) return showAuthError("Please fill in all fields.");
+    if (password.length < 6) return showAuthError("Password must be at least 6 characters.");
+    const btn = document.getElementById('signUpBtn'); const orig = btn.innerHTML;
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
+      .then((uc) => {
+        const user = uc.user;
         localStorage.setItem('wk_logged_in', '1');
         localStorage.setItem('wk_user_name', name);
         localStorage.setItem('wk_user_email', user.email);
@@ -920,85 +1224,58 @@
       .catch((error) => {
         let msg = "Sign up failed. ";
         if (error.code === 'auth/email-already-in-use') msg = "This email is already registered.";
-        else if (error.code === 'auth/invalid-email') msg = "Invalid email format.";
-        else if (error.code === 'auth/weak-password') msg = "Password is too weak.";
+        else if (error.code === 'auth/weak-password') msg = "Password too weak.";
         else msg += error.message;
-        showAuthError(msg);
-        btn.disabled = false; btn.innerHTML = orig;
+        showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
       });
   };
 
-  // ============ PASSWORD RESET ============
   window.sendPasswordReset = function() {
     const email = document.getElementById('resetEmail').value.trim();
-    if (!email) { showAuthError("Please enter your email."); return; }
-    const btn = document.getElementById('resetBtn');
-    const orig = btn.innerHTML;
+    if (!email) return showAuthError("Please enter your email.");
+    const btn = document.getElementById('resetBtn'); const orig = btn.innerHTML;
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
     sendPasswordResetEmail(auth, email)
-      .then(() => { showAuthSuccess("Password reset email sent! Check your inbox."); btn.disabled = false; btn.innerHTML = orig; })
+      .then(() => { showAuthSuccess("Reset email sent!"); btn.disabled = false; btn.innerHTML = orig; })
       .catch((error) => { showAuthError("Error: " + error.message); btn.disabled = false; btn.innerHTML = orig; });
   };
 
-  // ============ ADD / SWITCH ACCOUNT ============
-  window.addAnotherAccount = function() {
-    if (typeof closeTopProfileMenu === 'function') closeTopProfileMenu();
-    window.showToast('Pick another Google account 👥');
-    provider.setCustomParameters({ prompt: 'select_account' });
-    setTimeout(() => window.signInWithGoogle(), 80);
-  };
-  window.switchAccount = function() {
-    if (typeof closeTopProfileMenu === 'function') closeTopProfileMenu();
-    window.showToast('Choose an account to switch 🔄');
-    provider.setCustomParameters({ prompt: 'select_account' });
-    setTimeout(() => window.signInWithGoogle(), 80);
-  };
+  window.addAnotherAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(() => window.signInWithGoogle(), 80); };
+  window.switchAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(() => window.signInWithGoogle(), 80); };
 
-  // ============ SIGN OUT ============
   window.askSignOut = function() {
-    if (typeof closeTopProfileMenu === 'function') closeTopProfileMenu();
+    closeTopProfileMenu();
     document.getElementById('settingsModal')?.classList.remove('show');
     try { closeSidebar(); } catch(e) {}
-    setTimeout(() => {
-      const modal = document.getElementById('signOutModal');
-      if (modal) { modal.classList.add('show'); modal.style.zIndex = '99999'; }
-    }, 100);
+    setTimeout(() => { const m = document.getElementById('signOutModal'); if (m) { m.classList.add('show'); m.style.zIndex = '99999'; } }, 100);
   };
 
   window.confirmSignOut = function() {
     document.getElementById('signOutModal').classList.remove('show');
     window.showToast('Signing out... 👋');
     signOut(auth).then(() => {
-      ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_library','wk_projects'].forEach(k => localStorage.removeItem(k));
+      ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_library','wk_projects','wk_music'].forEach(k => localStorage.removeItem(k));
       try { sessionStorage.clear(); } catch(e) {}
-      lastUid = null;
       if (typeof forceShowLoginScreen === 'function') forceShowLoginScreen();
     }).catch(() => { if (typeof forceShowLoginScreen === 'function') forceShowLoginScreen(); });
   };
-
-  window.signOutUser = window.confirmSignOut;
 
   window.forceShowLoginScreen = function() {
     const ls = document.getElementById('loginScreen');
     const ma = document.getElementById('mainApp');
     if (ma) { ma.style.opacity = '0'; ma.style.display = 'none'; }
     if (ls) { ls.classList.remove('hidden'); ls.style.display = 'flex'; ls.style.opacity = '1'; ls.style.pointerEvents = 'auto'; }
-    ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = '';
-    });
+    ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
     document.getElementById('authError')?.classList.remove('show');
     document.getElementById('authSuccess')?.classList.remove('show');
     try { chats = []; activeChatId = null; } catch(e) {}
     try { renderChats(); renderMessages(); } catch(e) {}
     try { switchAuthTab('signin'); } catch(e) {}
-    window.scrollTo(0, 0);
   };
 </script>
 
 <script>
-// ============ CORE LOGIC ============
-const ownerEmail = "kingnice314@gmail.com";
+// ============ CORE STATE ============
 const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
 
 const SYSTEM_PROMPT = `You are WISE KING AI 👑 — created by IBRAHIM ABDULLAHI 🇳🇬 from Nigeria (Wise King Industry). OWNER: Oga Ibrahim 🇳🇬💛.
@@ -1340,6 +1617,7 @@ let currentPdfName = '';
 let currentChart = null;
 let currentDownloadFilter = 'all';
 
+// ============ AUTH HELPERS ============
 function showAuthError(msg) { const el = document.getElementById('authError'); if (!el) return; el.textContent = msg; el.classList.add('show'); document.getElementById('authSuccess')?.classList.remove('show'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 6000); }
 function showAuthSuccess(msg) { const el = document.getElementById('authSuccess'); if (!el) return; el.textContent = msg; el.classList.add('show'); document.getElementById('authError')?.classList.remove('show'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 6000); }
 function clearAuthMessages() { document.getElementById('authError')?.classList.remove('show'); document.getElementById('authSuccess')?.classList.remove('show'); }
@@ -1413,13 +1691,14 @@ window.switchToChat = switchToChat;
 function renderChats() {
   const list = document.getElementById('chatsList'); if (!list) return;
   list.innerHTML = '';
-  const sorted = [...chats].sort((a,b) => (b.pinned?1:0)-(a.pinned?1:0) || b.createdAt-a.createdAt);
-  sorted.forEach(c => {
-    const el = document.createElement('div');
-    el.className = 'chat-item' + (c.id === activeChatId ? ' active' : '') + (c.pinned ? ' pinned' : '');
-    el.onclick = () => switchToChat(c.id);
-    el.innerHTML = `<div class="chat-title">${escapeHtml(c.title)}</div>${c.id === activeChatId ? '<div class="active-dot"></div>' : ''}<button class="chat-menu-btn" onclick="openChatMenu(event, '${c.id}')"><i class="fas fa-ellipsis-vertical"></i></button>`;
-    list.appendChild(el);
+  const sorted = [...chats].sort((a,b) => { const pa = a.pinned ? 1 : 0, pb = b.pinned ? 1 : 0; if (pa !== pb) return pb - pa; return (b.createdAt || 0) - (a.createdAt || 0); });
+  sorted.forEach(chat => {
+    const div = document.createElement('div');
+    div.className = 'chat-item' + (chat.id === activeChatId ? ' active' : '') + (chat.pinned ? ' pinned' : '');
+    div.innerHTML = `<span class="chat-title">${escapeHtml(chat.title)}</span>${chat.id === activeChatId ? '<span class="active-dot"></span>' : ''}<button class="chat-menu-btn"><i class="fas fa-ellipsis-vertical"></i></button>`;
+    div.querySelector('.chat-title').addEventListener('click', () => switchToChat(chat.id));
+    div.querySelector('.chat-menu-btn').addEventListener('click', (e) => { e.stopPropagation(); openChatMenu(e, chat.id); });
+    list.appendChild(div);
   });
 }
 window.renderChats = renderChats;
@@ -1467,6 +1746,60 @@ function shareTo(platform) {
   closeSharePopup();
 }
 document.addEventListener('click', (e) => { const menu = document.getElementById('chatPopupMenu'); if (!menu || !menu.classList.contains('show')) return; if (e.target.closest('#chatPopupMenu')) return; if (e.target.closest('.chat-menu-btn')) return; closeChatMenu(); }, true);
+  
+// ============ CODE BLOCK WITH COPY + DOWNLOAD ============
+let __codeBlockCounter = 0;
+window.__wkCodeBlocks = window.__wkCodeBlocks || {};
+
+function buildCodeBlock(code, lang) {
+  const id = 'code-' + (++__codeBlockCounter);
+  const safeCode = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const langLabel = (lang || 'text').toUpperCase();
+  const ext = lang === 'javascript' ? 'js' : lang === 'python' ? 'py' : lang === 'html' ? 'html' : lang === 'css' ? 'css' : lang === 'json' ? 'json' : 'txt';
+
+  // Store code for copy/download
+  window.__wkCodeBlocks[id] = code;
+
+  return `<pre id="${id}">
+    <div class="code-header">
+      <div class="code-lang">${langLabel}</div>
+      <div class="code-actions">
+        <button class="code-action-btn" onclick="copyCodeBlock('${id}', this)"><i class="fas fa-copy"></i> Copy</button>
+        <button class="code-action-btn" onclick="downloadCodeBlock('${id}', 'wiseking-code.${ext}')"><i class="fas fa-download"></i> Download</button>
+      </div>
+    </div>
+    <code>${safeCode}</code>
+  </pre>`;
+}
+
+function copyCodeBlock(id, btn) {
+  const code = window.__wkCodeBlocks?.[id] || '';
+  wkCopyToClipboard(code).then(ok => {
+    if (ok) {
+      const orig = btn.innerHTML;
+      btn.classList.add('copied');
+      btn.innerHTML = '<i class="fas fa-check"></i> Copied';
+      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 1800);
+    } else {
+      showToast('⚠️ Copy failed');
+    }
+  });
+}
+window.copyCodeBlock = copyCodeBlock;
+
+function downloadCodeBlock(id, filename) {
+  const code = window.__wkCodeBlocks?.[id] || '';
+  try {
+    const blob = new Blob([code], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 100);
+    showToast('⬇️ Downloaded!');
+  } catch(e) { showToast('⚠️ Download failed'); }
+}
+window.downloadCodeBlock = downloadCodeBlock;
 
 // ============ HELPERS ============
 function escapeHtml(t) { if (t === null || t === undefined) return ''; const d = document.createElement('div'); d.textContent = String(t); return d.innerHTML; }
@@ -1503,7 +1836,7 @@ function toggleSection(h) { h.classList.toggle('open'); h.nextElementSibling.cla
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
 
-// ============ PROFILE MENU ============
+// ============ PROFILE MENU (BULLETPROOF - works on all phones) ============
 function toggleTopProfileMenu(e) {
   if (e) { e.stopPropagation(); e.preventDefault(); }
   const menu = document.getElementById('topProfileMenu');
@@ -1516,6 +1849,7 @@ function closeTopProfileMenu() {
 window.toggleTopProfileMenu = toggleTopProfileMenu;
 window.closeTopProfileMenu = closeTopProfileMenu;
 
+// Attach handler to profile avatar when page loads
 function setupProfileButton() {
   const avatar = document.getElementById('topProfileAvatar');
   const menu = document.getElementById('topProfileMenu');
@@ -1528,10 +1862,12 @@ function setupProfileButton() {
     menu.classList.toggle('show');
   }
   
+  // Multi-approach binding — works on ALL browsers
   avatar.addEventListener('click', toggleMenu, false);
   avatar.addEventListener('touchend', function(e) { e.preventDefault(); toggleMenu(e); }, { passive: false });
   avatar.addEventListener('touchstart', function(e) { e.stopPropagation(); }, { passive: true });
   
+  // Close menu when tapping outside
   document.addEventListener('click', function(e) {
     if (!menu.classList.contains('show')) return;
     if (e.target.closest('#topProfileMenu')) return;
@@ -1551,10 +1887,11 @@ function applyAvatar(data) { ['sidebarAvatar','settingsAvatar','topProfileAvatar
 function handleProfilePhotoUpload(e) { const f = e.target.files[0]; if (!f) return; const fr = new FileReader(); fr.onload = ev => { localStorage.setItem('wk_user_avatar', ev.target.result); applyAvatar(ev.target.result); showToast('Photo updated'); }; fr.readAsDataURL(f); }
 
 // ============ SETTINGS ============
-function openSettings() { document.getElementById('settingsModal').classList.add('show'); closeSidebar(); const k1 = localStorage.getItem('wk_api_key'); if (k1) document.getElementById('apiKeyInput').value = k1; const k2 = localStorage.getItem('wk_replicate_key'); if (k2) document.getElementById('replicateKeyInput').value = k2; }
+function openSettings() { document.getElementById('settingsModal').classList.add('show'); closeSidebar(); const k1 = localStorage.getItem('wk_api_key'); if (k1) document.getElementById('apiKeyInput').value = k1; const k2 = localStorage.getItem('wk_replicate_key'); if (k2) document.getElementById('replicateKeyInput').value = k2; const k3 = localStorage.getItem('wk_suno_key'); if (k3) document.getElementById('sunoKeyInput').value = k3; }
 function saveSettings() { 
   const g = document.getElementById('apiKeyInput').value.trim(); if (g) localStorage.setItem('wk_api_key', g); else localStorage.removeItem('wk_api_key'); 
   const r = document.getElementById('replicateKeyInput').value.trim(); if (r) localStorage.setItem('wk_replicate_key', r); else localStorage.removeItem('wk_replicate_key'); 
+  const s = document.getElementById('sunoKeyInput').value.trim(); if (s) localStorage.setItem('wk_suno_key', s); else localStorage.removeItem('wk_suno_key'); 
   const m = document.getElementById('modelSelect').value; localStorage.setItem('wk_model', m); updateModelBadge(); closeModal('settingsModal'); showToast('✅ Saved'); 
 }
 function updateModelBadge() { const m = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite'; let label = 'Gemini 3.5 Flash-lite'; if (m.includes('3.1-flash')) label = 'Gemini 3.1 Flash'; else if (m.includes('2.5-flash')) label = 'Gemini 2.5 Flash'; document.getElementById('modelBadgeText').textContent = label; }
@@ -1582,75 +1919,138 @@ function toggleVoiceMode() {
   else { box.classList.remove('voice-mode'); if (micIcon) micIcon.className = 'fas fa-microphone'; setTimeout(() => document.getElementById('messageInput').focus(), 100); showToast('⌨️ Keyboard mode'); }
 }
 
-// ============ VOICE RECOGNITION ============
+// ============ TAP-TO-TALK VOICE RECOGNITION ============
+let voiceIsRecording = false;
+let voiceRecognition = null;
+let voiceFinalText = '';
+
 function initHoldToSpeak() {
   const pill = document.getElementById('gkHoldPill');
   const label = document.getElementById('gkHoldLabel');
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { if (pill) pill.style.display = 'none'; return; }
-  let recognition = null, isHolding = false, finalText = '', interimText = '';
+
   function cleanText(raw) {
     if (!raw) return '';
-    let t = raw.trim().replace(/\b(um|uh|erm|ah|hmm|eh)\b[,]?\s*/gi, '');
-    for (let i = 0; i < 6; i++) t = t.replace(/\b(\w+(?:\s+\w+){0,4})\s+\1\b/gi, '$1');
+    let t = raw.trim();
+    t = t.replace(/\b(um|uh|erm|ah|hmm|eh)\b[,]?\s*/gi, '');
+    for (let i = 0; i < 6; i++) {
+      t = t.replace(/\b(\w+(?:\s+\w+){0,4})\s+\1\b/gi, '$1');
+    }
     const sentences = t.split(/(?<=[.!?])\s+/);
-    const unique = []; const seen = new Set();
-    for (const s of sentences) { const k = s.toLowerCase().trim(); if (k && !seen.has(k)) { seen.add(k); unique.push(s); } }
-    t = unique.join(' ').replace(/\s+/g, ' ').trim();
+    const unique = [];
+    const seen = new Set();
+    for (const s of sentences) {
+      const key = s.toLowerCase().trim();
+      if (key && !seen.has(key)) { seen.add(key); unique.push(s); }
+    }
+    t = unique.join(' ');
+    t = t.replace(/\s+/g, ' ').trim();
     if (t) t = t.charAt(0).toUpperCase() + t.slice(1);
     return t;
   }
-  const startRec = (e) => {
-    e.preventDefault(); if (isHolding) return;
-    isHolding = true; finalText = ''; interimText = '';
-    pill.classList.add('holding'); label.textContent = '🎙️ Speak now...';
+
+  function startRecording() {
+    if (voiceIsRecording) return;
+    voiceIsRecording = true;
+    voiceFinalText = '';
+    pill.classList.add('holding');
+    label.innerHTML = '🎙️ Listening... tap again to stop';
+
     try {
-      recognition = new SR();
-      recognition.lang = currentVoiceLang;
-      recognition.continuous = false; recognition.interimResults = true; recognition.maxAlternatives = 1;
-      recognition.onresult = (ev) => {
-        interimText = '';
+      voiceRecognition = new SR();
+      voiceRecognition.lang = 'en-NG';
+      voiceRecognition.continuous = true;
+      voiceRecognition.interimResults = true;
+      voiceRecognition.maxAlternatives = 1;
+
+      voiceRecognition.onresult = (ev) => {
+        let interim = '';
         for (let i = ev.resultIndex; i < ev.results.length; i++) {
           const transcript = ev.results[i][0].transcript;
-          if (ev.results[i].isFinal) finalText += transcript + ' ';
-          else interimText += transcript;
+          if (ev.results[i].isFinal) {
+            voiceFinalText += transcript + ' ';
+          } else {
+            interim += transcript;
+          }
         }
-        const preview = (finalText + interimText).trim();
-        if (preview) label.textContent = preview.slice(0, 50) + (preview.length > 50 ? '...' : '');
+        const preview = (voiceFinalText + interim).trim();
+        if (preview) {
+          label.innerHTML = '🎙️ ' + preview.slice(0, 60) + (preview.length > 60 ? '...' : '');
+        }
       };
-      recognition.onerror = (ev) => console.warn('Voice error:', ev.error);
-      recognition.onend = () => { if (isHolding) { try { recognition.start(); } catch(e) {} } };
-      recognition.start();
-    } catch(err) { console.warn('Voice start failed', err); }
-  };
-  const stopRec = (e) => {
-    if (!isHolding) return;
-    if (e) e.preventDefault();
-    isHolding = false; pill.classList.remove('holding'); label.textContent = 'Hold to speak';
-    try { if (recognition) recognition.stop(); } catch(err) {}
+
+      voiceRecognition.onerror = (ev) => { 
+        console.warn('Voice error:', ev.error); 
+        if (ev.error === 'not-allowed') {
+          showToast('⚠️ Mic permission denied');
+          stopRecording();
+        }
+      };
+
+      voiceRecognition.onend = () => {
+        // If still supposed to be recording, restart
+        if (voiceIsRecording) {
+          try { voiceRecognition.start(); } catch(e) {}
+        }
+      };
+
+      voiceRecognition.start();
+      showToast('🎙️ Recording... speak now');
+    } catch(err) {
+      console.warn('Voice start failed', err);
+      voiceIsRecording = false;
+      pill.classList.remove('holding');
+      label.textContent = 'Hold to speak';
+    }
+  }
+
+  function stopRecording() {
+    if (!voiceIsRecording) return;
+    voiceIsRecording = false;
+    pill.classList.remove('holding');
+    label.textContent = 'Hold to speak';
+
+    try { if (voiceRecognition) voiceRecognition.stop(); } catch(err) {}
+
     setTimeout(() => {
-      const cleaned = cleanText(finalText);
+      const cleaned = cleanText(voiceFinalText);
       if (cleaned && cleaned.length > 1) {
+        // Switch to typing mode to show text
+        voiceMode = false;
         const box = document.getElementById('gkInputBox');
         if (box) box.classList.remove('voice-mode');
         const mi = document.getElementById('micIcon');
         if (mi) mi.className = 'fas fa-microphone';
-        voiceMode = false;
+        
         document.getElementById('messageInput').value = cleaned;
         handleInputChange();
-        showToast('✅ Captured');
-      } else showToast('Did not catch that — try again');
-      finalText = ''; interimText = ''; recognition = null;
+        showToast('✅ Captured — review & send');
+      } else {
+        showToast('Did not catch that — try again');
+      }
+      voiceFinalText = '';
+      voiceRecognition = null;
     }, 600);
-  };
-  pill.addEventListener('mousedown', startRec);
-  pill.addEventListener('mouseup', stopRec);
-  pill.addEventListener('mouseleave', stopRec);
-  pill.addEventListener('touchstart', startRec, {passive:false});
-  pill.addEventListener('touchend', stopRec, {passive:false});
-  pill.addEventListener('touchcancel', stopRec, {passive:false});
-}
+  }
 
+  // ✅ TAP TO START, TAP TO STOP (not hold)
+  const tapHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (voiceIsRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  };
+
+  // Support both mouse and touch
+  pill.addEventListener('click', tapHandler);
+  pill.addEventListener('touchstart', (e) => { e.preventDefault(); }, {passive:false});
+  pill.addEventListener('touchend', (e) => { e.preventDefault(); tapHandler(e); }, {passive:false});
+}  
+  
 // ============ VAULT ============
 function loadVault() { try { vaultMemories = JSON.parse(localStorage.getItem('wk_vault') || '[]'); } catch(e) { vaultMemories = []; } updateVaultBadge(); }
 function saveVault() { localStorage.setItem('wk_vault', JSON.stringify(vaultMemories)); updateVaultBadge(); if (window.WK_CLOUD && localStorage.getItem('wk_user_uid')) window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), { vault: vaultMemories }); }
@@ -1756,6 +2156,19 @@ function downloadText(encodedText, filename) {
 }
 window.downloadText = downloadText;
 
+// ============ PRICING PANEL ============
+function openPricingPanel() { document.getElementById('pricingPanel').classList.add('show'); closeSidebar(); }
+function closePricingPanel() { document.getElementById('pricingPanel').classList.remove('show'); }
+function upgradeToPlan(plan, amount) {
+  showToast(`🚀 ${plan} plan — ₦${amount.toLocaleString()}/month`);
+  setTimeout(() => {
+    alert(`✅ DEMO MODE\n\nPlan: ${plan}\nPrice: ₦${amount.toLocaleString()}/month\n\nTo enable real payments:\n1. Sign up at paystack.com\n2. Get your public key\n3. Contact developer to integrate`);
+  }, 500);
+}
+window.openPricingPanel = openPricingPanel;
+window.closePricingPanel = closePricingPanel;
+window.upgradeToPlan = upgradeToPlan;
+
 // ============ IMAGES / VIDEOS ============
 function openImagesPanel() { document.getElementById('imagesPanel').classList.add('show'); closeSidebar(); updateReplicateStatus(); }
 function closeImagesPanel() { document.getElementById('imagesPanel').classList.remove('show'); }
@@ -1817,7 +2230,7 @@ window.generateVideoFromPanel = generateVideoFromPanel;
 
 function updateReplicateStatus() { const el = document.getElementById('replicateStatus'); if (!el) return; const key = localStorage.getItem('wk_replicate_key'); el.textContent = key ? '✅ Replicate connected' : '💡 Add Replicate key for hyper-real images.'; }
 
-// ============ MUSIC ============
+// ============ MUSIC GENERATION ============
 function openMusicPanel() { document.getElementById('musicPanel').classList.add('show'); closeSidebar(); renderMusicLibrary(); }
 function closeMusicPanel() { document.getElementById('musicPanel').classList.remove('show'); }
 
@@ -1841,6 +2254,85 @@ window.renderMusicLibrary = renderMusicLibrary;
 
 function deleteMusicItem(i) { musicLibrary.splice(i, 1); saveMusic(); renderMusicLibrary(); showToast('Removed'); }
 window.deleteMusicItem = deleteMusicItem;
+
+async function generateMusicFromPanel() {
+  const input = document.getElementById('musicInput').value.trim();
+  if (!input) return showToast('Paste lyrics or describe music style');
+  const genre = document.getElementById('musicGenre').value;
+  const mood = document.getElementById('musicMood').value;
+  const tempo = document.getElementById('musicTempo').value;
+
+  const results = document.getElementById('musicPanelResults');
+  results.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Crafting your music prompt...</div>`;
+
+  const aiPrompt = `Create a detailed, professional music production prompt for an AI music generator.
+
+USER INPUT:
+${input}
+
+${genre ? `GENRE: ${genre}` : ''}
+${mood ? `MOOD: ${mood}` : ''}
+${tempo ? `TEMPO: ${tempo}` : ''}
+
+Format your response with these sections (use emojis and markdown):
+
+**🎵 Song Title Suggestion**
+**🎤 Genre & Sub-genre**
+**💃 Tempo & BPM**
+**🎼 Musical Key**
+**🥁 Instrumentation** (list drums, bass, melody, etc.)
+**🎹 Chord Progression** (if applicable)
+**🎤 Vocal Style** (male/female, tone, delivery)
+**📝 Lyrics** (if user provided lyrics, keep them EXACTLY; if not, write original lyrics with full structure: Intro, Verse 1, Pre-Chorus, Chorus, Verse 2, Bridge, Outro)
+**🎛️ Production Notes** (mixing, effects, atmosphere)
+**📱 Ready-to-Use Prompt for Suno/Udio** (a single dense paragraph they can paste into any AI music tool)
+
+Be warm and add 🙏 at the end.`;
+
+  const res = await sendMessageWithFallback(aiPrompt);
+  if (res.success) {
+    const titleMatch = res.reply.match(/\*\*🎵 Song Title[^\*]*\*\*[\s\S]*?(?=\n\*\*|$)/);
+    const title = titleMatch ? titleMatch[0].replace(/\*\*🎵 Song Title[^\*]*\*\*/,'').trim() : ('Wise King Song ' + (musicLibrary.length + 1));
+    
+    results.innerHTML = `
+      <div class="music-card">
+        <div class="music-title">🎵 ${escapeHtml(title)}</div>
+        <div class="music-meta">Just created • ${genre || 'Custom'} ${mood ? '• ' + mood : ''}</div>
+        <div class="md" style="margin-top:14px">${renderMarkdown(res.reply)}</div>
+        <div class="music-actions" style="margin-top:16px">
+          <button class="btn accent" onclick="downloadText('${encodeURIComponent(res.reply).slice(0,9000)}', 'wiseking-music-prompt-${Date.now()}.txt')"><i class="fas fa-download"></i> Download Prompt</button>
+          <button class="btn solid" onclick="wkCopyToClipboard(\`${res.reply.replace(/`/g,'\\`').slice(0,5000)}\`).then(()=>showToast('📋 Copied!'))"><i class="fas fa-copy"></i> Copy</button>
+          <button class="btn solid" onclick="openSunoLink()"><i class="fas fa-external-link-alt"></i> Open Suno</button>
+        </div>
+      </div>`;
+
+    musicLibrary.unshift({
+      title: title, genre: genre, mood: mood, tempo: tempo,
+      prompt: res.reply, input: input, createdAt: Date.now()
+    });
+    saveMusic(); renderMusicLibrary();
+    showToast('✅ Music prompt ready! 🎵');
+  } else results.innerHTML = `<div class="result-card"><p>⚠️ Failed. Try again.</p></div>`;
+}
+window.generateMusicFromPanel = generateMusicFromPanel;
+
+async function generateLyricsFromPanel() {
+  const input = document.getElementById('musicInput').value.trim();
+  if (!input) return showToast('Describe the song topic');
+  const genre = document.getElementById('musicGenre').value || 'Afrobeat';
+  const mood = document.getElementById('musicMood').value || 'Uplifting';
+  const results = document.getElementById('musicPanelResults');
+  results.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Writing lyrics...</div>`;
+  const res = await sendMessageWithFallback(`Write full song lyrics about: "${input}". Genre: ${genre}. Mood: ${mood}. Structure: [Intro], [Verse 1], [Pre-Chorus], [Chorus], [Verse 2], [Chorus], [Bridge], [Outro]. Use natural, singable language. If Nigerian/Hausa theme, sprinkle authentic expressions.`);
+  if (res.success) {
+    results.innerHTML = `<div class="music-card"><div class="music-title">📝 Your Lyrics</div><div class="md" style="margin-top:12px">${renderMarkdown(res.reply)}</div><div class="music-actions" style="margin-top:16px"><button class="btn accent" onclick="downloadText('${encodeURIComponent(res.reply).slice(0,9000)}', 'wiseking-lyrics-${Date.now()}.txt')"><i class="fas fa-download"></i> Download Lyrics</button><button class="btn solid" onclick="wkCopyToClipboard(\`${res.reply.replace(/`/g,'\\`').slice(0,5000)}\`).then(()=>showToast('📋 Copied!'))"><i class="fas fa-copy"></i> Copy</button></div></div>`;
+    showToast('✅ Lyrics ready! 📝');
+  } else results.innerHTML = `<div class="result-card"><p>⚠️ Failed. Try again.</p></div>`;
+}
+window.generateLyricsFromPanel = generateLyricsFromPanel;
+
+function openSunoLink() { window.open('https://suno.com/create', '_blank'); showToast('🎵 Paste your prompt on Suno!'); }
+window.openSunoLink = openSunoLink;
 
 // ============ PDF CHAT ============
 function openPdfChatPanel() { document.getElementById('pdfChatPanel').classList.add('show'); closeSidebar(); }
@@ -1998,6 +2490,217 @@ function startLiveTranslateVoice() {
 }
 window.startLiveTranslateVoice = startLiveTranslateVoice;
 
+// ============ DATA ANALYSIS ============
+function openDataAnalysisPanel() { document.getElementById('dataAnalysisPanel').classList.add('show'); closeSidebar(); }
+function closeDataAnalysisPanel() { document.getElementById('dataAnalysisPanel').classList.remove('show'); }
+
+async function handleDataUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    if (file.name.endsWith('.csv') || file.name.endsWith('.txt')) {
+      const text = await file.text();
+      parseCsvAndAnalyze(text, file.name);
+    } else if (file.name.endsWith('.json')) {
+      const text = await file.text();
+      const json = JSON.parse(text);
+      if (Array.isArray(json)) {
+        const headers = Object.keys(json[0] || {});
+        const rows = json.map(o => headers.map(h => o[h]));
+        analyzeTable([headers, ...rows], file.name);
+      } else showToast('JSON must be an array of objects');
+    } else if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+      const arrayBuffer = await file.arrayBuffer();
+      const wb = XLSX.read(arrayBuffer, { type: 'array' });
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      analyzeTable(rows, file.name);
+    }
+  } catch (err) { showToast('⚠️ ' + err.message); }
+}
+window.handleDataUpload = handleDataUpload;
+
+function parseCsvAndAnalyze(text, name) {
+  const lines = text.trim().split(/\r?\n/);
+  const rows = lines.map(line => parseCsvLine(line));
+  analyzeTable(rows, name);
+}
+
+function parseCsvLine(line) {
+  const result = []; let cur = ''; let inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"' && line[i+1] === '"') { cur += '"'; i++; }
+    else if (c === '"') inQ = !inQ;
+    else if (c === ',' && !inQ) { result.push(cur); cur = ''; }
+    else cur += c;
+  }
+  result.push(cur);
+  return result;
+}
+
+function analyzePastedData() {
+  const raw = document.getElementById('dataPasteInput').value.trim();
+  if (!raw) return showToast('Paste data first');
+  const lines = raw.split(/\r?\n/);
+  const rows = lines.map(l => l.split(',').map(c => c.trim()));
+  analyzeTable(rows, 'Pasted Data');
+}
+window.analyzePastedData = analyzePastedData;
+
+function analyzeTable(rows, name) {
+  if (!rows || rows.length < 2) return showToast('Not enough data');
+  const headers = rows[0].map(h => String(h || '').trim());
+  const data = rows.slice(1).filter(r => r.some(c => c !== '' && c !== undefined));
+  const results = document.getElementById('dataAnalysisResults');
+  
+  const numericCols = [];
+  headers.forEach((h, i) => {
+    const values = data.map(r => parseFloat(r[i])).filter(v => !isNaN(v));
+    if (values.length > data.length * 0.5) numericCols.push({ index: i, name: h, values });
+  });
+
+  let statsHtml = `<div class="data-stat-grid">
+    <div class="data-stat"><div class="ds-label">Rows</div><div class="ds-value">${data.length.toLocaleString()}</div></div>
+    <div class="data-stat"><div class="ds-label">Columns</div><div class="ds-value">${headers.length}</div></div>
+    <div class="data-stat"><div class="ds-label">Numeric Cols</div><div class="ds-value">${numericCols.length}</div></div>
+    <div class="data-stat"><div class="ds-label">Source</div><div class="ds-value" style="font-size:13px">${escapeHtml(name.slice(0,20))}</div></div>
+  </div>`;
+
+  let statsTable = '<div class="data-chart-wrap"><h4 style="margin-bottom:12px;color:var(--accent-hover);font-size:14px">📊 Column Statistics</h4><div style="overflow-x:auto"><table class="md" style="font-size:12.5px"><thead><tr><th>Column</th><th>Count</th><th>Mean</th><th>Min</th><th>Max</th><th>Sum</th></tr></thead><tbody>';
+  numericCols.forEach(c => {
+    const sum = c.values.reduce((a,b) => a+b, 0);
+    const mean = sum / c.values.length;
+    statsTable += `<tr><td><strong>${escapeHtml(c.name)}</strong></td><td>${c.values.length}</td><td>${mean.toFixed(2)}</td><td>${Math.min(...c.values).toFixed(2)}</td><td>${Math.max(...c.values).toFixed(2)}</td><td>${sum.toFixed(2)}</td></tr>`;
+  });
+  statsTable += '</tbody></table></div></div>';
+
+  let chartHtml = '';
+  if (numericCols.length > 0) {
+    const c = numericCols[0];
+    const labels = data.slice(0, 30).map((r, i) => r[0] || `Row ${i+1}`);
+    const values = data.slice(0, 30).map(r => parseFloat(r[c.index]) || 0);
+    chartHtml = `<div class="data-chart-wrap"><h4 style="margin-bottom:12px;color:var(--accent-hover);font-size:14px">📈 ${escapeHtml(c.name)} (first 30)</h4><canvas id="dataChart"></canvas></div>`;
+    setTimeout(() => {
+      const ctx = document.getElementById('dataChart');
+      if (!ctx) return;
+      if (currentChart) currentChart.destroy();
+      currentChart = new Chart(ctx, {
+        type: 'line',
+        data: { labels, datasets: [{ label: c.name, data: values, borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,0.15)', fill: true, tension: 0.35, pointRadius: 3 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#a1a1aa' } } }, scales: { x: { ticks: { color: '#71717a', maxRotation: 45, minRotation: 45 }, grid: { color: 'rgba(255,255,255,0.05)' } }, y: { ticks: { color: '#71717a' }, grid: { color: 'rgba(255,255,255,0.05)' } } } }
+      });
+    }, 100);
+  }
+
+  results.innerHTML = `<div class="result-card"><h4>✅ ${escapeHtml(name)}</h4></div>` + statsHtml + statsTable + chartHtml + `<div id="dataAIInsights"></div>`;
+  aiDataInsight(headers, data, numericCols);
+}
+
+async function aiDataInsight(headers, data, numericCols) {
+  const box = document.getElementById('dataAIInsights');
+  if (!box) return;
+  box.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Generating AI insights...</div>`;
+  const preview = data.slice(0, 15).map(r => r.join(' | ')).join('\n');
+  const summary = `Columns: ${headers.join(', ')}\nRows: ${data.length}\nSample:\n${headers.join(' | ')}\n${preview}\n\nNumeric stats: ${numericCols.map(c => `${c.name}: mean=${(c.values.reduce((a,b)=>a+b,0)/c.values.length).toFixed(2)}, min=${Math.min(...c.values).toFixed(2)}, max=${Math.max(...c.values).toFixed(2)}`).join('; ')}`;
+  const res = await sendMessageWithFallback(`Analyze this dataset and give insights. Format with emojis:\n\n**📊 Overview**\n**🔍 Key Patterns** (3-5)\n**💡 Insights** (3-5)\n**📈 Trends**\n**🎯 Recommendations**\n\nDATA:\n${summary}`);
+  if (res.success) box.innerHTML = `<div class="result-card"><h4>🧠 AI Insights</h4>${renderMarkdown(res.reply)}</div>`;
+  else box.innerHTML = `<div class="result-card"><p>⚠️ Insights failed.</p></div>`;
+}
+
+const dataDZ = document.getElementById('dataDropzone');
+if (dataDZ) {
+  ['dragenter','dragover'].forEach(ev => dataDZ.addEventListener(ev, e => { e.preventDefault(); dataDZ.classList.add('dragover'); }));
+  ['dragleave','drop'].forEach(ev => dataDZ.addEventListener(ev, e => { e.preventDefault(); dataDZ.classList.remove('dragover'); }));
+  dataDZ.addEventListener('drop', e => { const files = e.dataTransfer.files; if (files.length) handleDataUpload({target: {files: [files[0]]}}); });
+}
+
+// ============ DOWNLOAD HUB ============
+function openDownloadHub() { document.getElementById('downloadHubPanel').classList.add('show'); closeSidebar(); renderDownloadHub(); }
+function closeDownloadHub() { document.getElementById('downloadHubPanel').classList.remove('show'); }
+function filterDownloads(type) { currentDownloadFilter = type; renderDownloadHub(); }
+window.filterDownloads = filterDownloads;
+
+function renderDownloadHub() {
+  const grid = document.getElementById('downloadHubGrid'); if (!grid) return;
+  let items = [...library];
+  if (currentDownloadFilter !== 'all') items = items.filter(i => i.type === currentDownloadFilter);
+  const musicItems = musicLibrary.map(m => ({ type: 'music', title: m.title, prompt: m.prompt, audioUrl: m.audioUrl, createdAt: m.createdAt }));
+  if (currentDownloadFilter === 'all' || currentDownloadFilter === 'music' || currentDownloadFilter === 'audio') items = [...musicItems, ...items];
+  if (!items.length) { grid.innerHTML = '<div class="result-card" style="grid-column:1/-1"><p>Nothing here yet. Create images, videos, or music first!</p></div>'; return; }
+  grid.innerHTML = items.map((item, idx) => {
+    const isImage = item.type === 'image';
+    const isMusic = item.type === 'music';
+    const isVideo = item.type === 'video';
+    const preview = isImage && item.url ? `<img src="${item.url}" class="di-preview" style="object-fit:cover">` : `<div class="di-preview">${isMusic ? '🎵' : isVideo ? '🎬' : '📄'}</div>`;
+    const title = item.title || item.prompt || 'Untitled';
+    const dl = isImage ? `downloadFile('${item.url}', 'wiseking-image-${idx}.png')` :
+               isMusic && item.audioUrl ? `downloadFile('${item.audioUrl}', 'wiseking-music-${idx}.mp3')` :
+               `downloadText('${encodeURIComponent(item.prompt || item.text || '').slice(0,9000)}', 'wiseking-${item.type}-${idx}.txt')`;
+    return `<div class="download-item">
+      ${preview}
+      <div class="di-title">${escapeHtml(title.slice(0,40))}</div>
+      <div style="font-size:11px;color:var(--text-tertiary)">${item.type} • ${new Date(item.createdAt||Date.now()).toLocaleDateString()}</div>
+      <button class="di-btn" onclick="${dl}"><i class="fas fa-download"></i> Download</button>
+    </div>`;
+  }).join('');
+}
+
+// ============ SEARCH WEB PANEL ============
+function openSearchWebPanel() { document.getElementById('searchWebPanel').classList.add('show'); closeSidebar(); renderSearchSuggestions(); }
+function closeSearchWebPanel() { document.getElementById('searchWebPanel').classList.remove('show'); }
+
+function renderSearchSuggestions() {
+  const box = document.getElementById('searchSuggestionsBox'); if (!box) return;
+  const suggestions = [
+    { label: '📰 Latest Nigeria news', url: 'https://www.google.com/search?q=latest+nigeria+news', icon: 'fa-google', cls: 'google' },
+    { label: '💵 Naira to USD rate', url: 'https://www.google.com/search?q=naira+to+usd+rate+today', icon: 'fa-google', cls: 'google' },
+    { label: '🤖 Latest AI news 2026', url: 'https://www.google.com/search?q=latest+AI+news+2026', icon: 'fa-google', cls: 'google' },
+    { label: '🌦️ Weather in Lagos', url: 'https://www.google.com/search?q=weather+in+lagos', icon: 'fa-google', cls: 'google' },
+    { label: '📈 Crypto prices', url: 'https://www.google.com/search?q=crypto+prices+today', icon: 'fa-google', cls: 'google' },
+    { label: '📧 Gmail', url: 'https://mail.google.com', icon: 'fa-envelope', cls: 'gmail' },
+    { label: '🎬 Netflix', url: 'https://www.netflix.com', icon: 'fa-film', cls: 'netflix' },
+    { label: '🛒 Jumia', url: 'https://www.jumia.com.ng', icon: 'fa-shopping-cart', cls: 'jumia' },
+    { label: '📸 Instagram', url: 'https://instagram.com', icon: 'fa-instagram', cls: 'instagram' },
+    { label: '🐦 Twitter/X', url: 'https://twitter.com', icon: 'fa-x-twitter', cls: 'twitter' },
+    { label: '💬 WhatsApp', url: 'https://web.whatsapp.com', icon: 'fa-whatsapp', cls: 'whatsapp' },
+    { label: '🎵 Spotify', url: 'https://open.spotify.com', icon: 'fa-spotify', cls: 'spotify' },
+    { label: '📚 Quran', url: 'https://quran.com', icon: 'fa-book-quran', cls: 'wiki' },
+    { label: '📖 Wikipedia', url: 'https://en.wikipedia.org', icon: 'fa-wikipedia-w', cls: 'wiki' },
+    { label: '▶️ YouTube', url: 'https://www.youtube.com', icon: 'fa-youtube', cls: 'youtube' },
+    { label: '📺 BBC News', url: 'https://www.bbc.com/news', icon: 'fa-tower-broadcast', cls: 'bbc' }
+  ];
+  box.innerHTML = suggestions.map(s => `<a class="quick-chip ${s.cls}" href="${s.url}" target="_blank" rel="noopener"><i class="fab ${s.icon}"></i> ${s.label}</a>`).join('');
+}
+
+async function doSearchWeb(query) {
+  const results = document.getElementById('searchWebResults');
+  const shortcut = document.getElementById('askWiseKingShortcut');
+  if (!results) return;
+  const q = (query || '').trim();
+  if (!q) { results.innerHTML = ''; shortcut.style.display = 'none'; return; }
+  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Searching...</div>';
+  const res = await sendMessageWithFallback(`Search the live web: ${q}`);
+  if (res.success) {
+    results.innerHTML = `<div class="result-card"><h4><i class="fas fa-wand-magic-sparkles"></i> Answer</h4><p>${linkify(escapeHtml(res.reply)).replace(/\n/g,'<br>')}</p></div>`;
+    shortcut.style.display = 'block';
+    const e = q.replace(/'/g, "\\'");
+    shortcut.innerHTML = `<button class="btn accent" onclick="askWiseKingFromSearch('${e}')"><i class="fas fa-comments"></i> Continue in Chat</button>`;
+  } else results.innerHTML = `<div class="result-card"><p>⚠️ Search failed.</p></div>`;
+}
+window.doSearchWeb = doSearchWeb;
+function askWiseKingFromSearch(q) { closeSearchWebPanel(); insertQuickPrompt(q); }
+window.askWiseKingFromSearch = askWiseKingFromSearch;
+
+// ============ BUILD APP ============
+const BUILD_IDEAS = [ { t:'Business Landing Page', d:'Modern responsive landing' }, { t:'Portfolio Website', d:'Showcase your work' }, { t:'Restaurant Menu App', d:'Digital menu with cart' }, { t:'Todo List App', d:'Track daily tasks' }, { t:'Weather Dashboard', d:'Live weather API' }, { t:'E-commerce Store', d:'Full online shop' }, { t:'Chat Application', d:'Real-time messaging' } ];
+function openBuildAppPanel() { document.getElementById('buildAppPanel').classList.add('show'); closeSidebar(); filterBuildIdeas(''); }
+function closeBuildAppPanel() { document.getElementById('buildAppPanel').classList.remove('show'); }
+function filterBuildIdeas(q) { const box = document.getElementById('buildAppIdeas'); if (!box) return; const query = (q || '').toLowerCase(); const list = BUILD_IDEAS.filter(i => !query || i.t.toLowerCase().includes(query)); box.innerHTML = list.map(i => { const e = i.t.replace(/'/g, "\\'"); return `<div class="result-card" onclick="buildApp('${e}')" style="cursor:pointer"><h4>💡 ${escapeHtml(i.t)}</h4><p>${escapeHtml(i.d)}</p></div>`; }).join(''); }
+function buildApp(name) { closeBuildAppPanel(); insertQuickPrompt(`Build a complete single-file HTML app: ${name}.`); }
+window.filterBuildIdeas = filterBuildIdeas;
+window.buildApp = buildApp;
+
 // ============ SEND MESSAGE ============
 function sendMessage(textOverride) {
   if (isSending) return;
@@ -2151,114 +2854,6 @@ function toggleChatSearch() {
 }
 window.toggleChatSearch = toggleChatSearch;
 
-// ============ SEARCH WEB PANEL ============
-function openSearchWebPanel() { document.getElementById('searchWebPanel').classList.add('show'); closeSidebar(); renderSearchSuggestions(); }
-function closeSearchWebPanel() { document.getElementById('searchWebPanel').classList.remove('show'); }
-
-function renderSearchSuggestions() {
-  const box = document.getElementById('searchSuggestionsBox'); if (!box) return;
-  const suggestions = [
-    { label: '📰 Latest Nigeria news', url: 'https://www.google.com/search?q=latest+nigeria+news', icon: 'fa-google', cls: 'google' },
-    { label: '💵 Naira to USD rate', url: 'https://www.google.com/search?q=naira+to+usd+rate+today', icon: 'fa-google', cls: 'google' },
-    { label: '🤖 Latest AI news 2026', url: 'https://www.google.com/search?q=latest+AI+news+2026', icon: 'fa-google', cls: 'google' },
-    { label: '🌦️ Weather in Lagos', url: 'https://www.google.com/search?q=weather+in+lagos', icon: 'fa-google', cls: 'google' },
-    { label: '📈 Crypto prices', url: 'https://www.google.com/search?q=crypto+prices+today', icon: 'fa-google', cls: 'google' },
-    { label: '📧 Gmail', url: 'https://mail.google.com', icon: 'fa-envelope', cls: 'gmail' },
-    { label: '🎬 Netflix', url: 'https://www.netflix.com', icon: 'fa-film', cls: 'netflix' },
-    { label: '🛒 Jumia', url: 'https://www.jumia.com.ng', icon: 'fa-shopping-cart', cls: 'jumia' },
-    { label: '📸 Instagram', url: 'https://instagram.com', icon: 'fa-instagram', cls: 'instagram' },
-    { label: '🐦 Twitter/X', url: 'https://twitter.com', icon: 'fa-x-twitter', cls: 'twitter' },
-    { label: '💬 WhatsApp', url: 'https://web.whatsapp.com', icon: 'fa-whatsapp', cls: 'whatsapp' },
-    { label: '🎵 Spotify', url: 'https://open.spotify.com', icon: 'fa-spotify', cls: 'spotify' },
-    { label: '📚 Quran', url: 'https://quran.com', icon: 'fa-book-quran', cls: 'wiki' },
-    { label: '📖 Wikipedia', url: 'https://en.wikipedia.org', icon: 'fa-wikipedia-w', cls: 'wiki' },
-    { label: '▶️ YouTube', url: 'https://www.youtube.com', icon: 'fa-youtube', cls: 'youtube' },
-    { label: '📺 BBC News', url: 'https://www.bbc.com/news', icon: 'fa-tower-broadcast', cls: 'bbc' }
-  ];
-  box.innerHTML = suggestions.map(s => `<a class="quick-chip ${s.cls}" href="${s.url}" target="_blank" rel="noopener"><i class="fab ${s.icon}"></i> ${s.label}</a>`).join('');
-}
-
-async function doSearchWeb(query) {
-  const results = document.getElementById('searchWebResults');
-  const shortcut = document.getElementById('askWiseKingShortcut');
-  if (!results) return;
-  const q = (query || '').trim();
-  if (!q) { results.innerHTML = ''; shortcut.style.display = 'none'; return; }
-  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Searching...</div>';
-  const res = await sendMessageWithFallback(`Search the live web: ${q}`);
-  if (res.success) {
-    results.innerHTML = `<div class="result-card"><h4><i class="fas fa-wand-magic-sparkles"></i> Answer</h4><p>${linkify(escapeHtml(res.reply)).replace(/\n/g,'<br>')}</p></div>`;
-    shortcut.style.display = 'block';
-    const e = q.replace(/'/g, "\\'");
-    shortcut.innerHTML = `<button class="btn accent" onclick="askWiseKingFromSearch('${e}')"><i class="fas fa-comments"></i> Continue in Chat</button>`;
-  } else results.innerHTML = `<div class="result-card"><p>⚠️ Search failed.</p></div>`;
-}
-window.doSearchWeb = doSearchWeb;
-function askWiseKingFromSearch(q) { closeSearchWebPanel(); insertQuickPrompt(q); }
-window.askWiseKingFromSearch = askWiseKingFromSearch;
-
-// ============ BUILD APP ============
-const BUILD_IDEAS = [ { t:'Business Landing Page', d:'Modern responsive landing' }, { t:'Portfolio Website', d:'Showcase your work' }, { t:'Restaurant Menu App', d:'Digital menu with cart' }, { t:'Todo List App', d:'Track daily tasks' }, { t:'Weather Dashboard', d:'Live weather API' }, { t:'E-commerce Store', d:'Full online shop' }, { t:'Chat Application', d:'Real-time messaging' } ];
-function openBuildAppPanel() { document.getElementById('buildAppPanel').classList.add('show'); closeSidebar(); filterBuildIdeas(''); }
-function closeBuildAppPanel() { document.getElementById('buildAppPanel').classList.remove('show'); }
-function filterBuildIdeas(q) { const box = document.getElementById('buildAppIdeas'); if (!box) return; const query = (q || '').toLowerCase(); const list = BUILD_IDEAS.filter(i => !query || i.t.toLowerCase().includes(query)); box.innerHTML = list.map(i => { const e = i.t.replace(/'/g, "\\'"); return `<div class="result-card" onclick="buildApp('${e}')" style="cursor:pointer"><h4>💡 ${escapeHtml(i.t)}</h4><p>${escapeHtml(i.d)}</p></div>`; }).join(''); }
-function buildApp(name) { closeBuildAppPanel(); insertQuickPrompt(`Build a complete single-file HTML app: ${name}.`); }
-window.filterBuildIdeas = filterBuildIdeas;
-window.buildApp = buildApp;  // ============ SEARCH WEB PANEL ============
-function openSearchWebPanel() { document.getElementById('searchWebPanel').classList.add('show'); closeSidebar(); renderSearchSuggestions(); }
-function closeSearchWebPanel() { document.getElementById('searchWebPanel').classList.remove('show'); }
-
-function renderSearchSuggestions() {
-  const box = document.getElementById('searchSuggestionsBox'); if (!box) return;
-  const suggestions = [
-    { label: '📰 Latest Nigeria news', url: 'https://www.google.com/search?q=latest+nigeria+news', icon: 'fa-google', cls: 'google' },
-    { label: '💵 Naira to USD rate', url: 'https://www.google.com/search?q=naira+to+usd+rate+today', icon: 'fa-google', cls: 'google' },
-    { label: '🤖 Latest AI news 2026', url: 'https://www.google.com/search?q=latest+AI+news+2026', icon: 'fa-google', cls: 'google' },
-    { label: '🌦️ Weather in Lagos', url: 'https://www.google.com/search?q=weather+in+lagos', icon: 'fa-google', cls: 'google' },
-    { label: '📈 Crypto prices', url: 'https://www.google.com/search?q=crypto+prices+today', icon: 'fa-google', cls: 'google' },
-    { label: '📧 Gmail', url: 'https://mail.google.com', icon: 'fa-envelope', cls: 'gmail' },
-    { label: '🎬 Netflix', url: 'https://www.netflix.com', icon: 'fa-film', cls: 'netflix' },
-    { label: '🛒 Jumia', url: 'https://www.jumia.com.ng', icon: 'fa-shopping-cart', cls: 'jumia' },
-    { label: '📸 Instagram', url: 'https://instagram.com', icon: 'fa-instagram', cls: 'instagram' },
-    { label: '🐦 Twitter/X', url: 'https://twitter.com', icon: 'fa-x-twitter', cls: 'twitter' },
-    { label: '💬 WhatsApp', url: 'https://web.whatsapp.com', icon: 'fa-whatsapp', cls: 'whatsapp' },
-    { label: '🎵 Spotify', url: 'https://open.spotify.com', icon: 'fa-spotify', cls: 'spotify' },
-    { label: '📚 Quran', url: 'https://quran.com', icon: 'fa-book-quran', cls: 'wiki' },
-    { label: '📖 Wikipedia', url: 'https://en.wikipedia.org', icon: 'fa-wikipedia-w', cls: 'wiki' },
-    { label: '▶️ YouTube', url: 'https://www.youtube.com', icon: 'fa-youtube', cls: 'youtube' },
-    { label: '📺 BBC News', url: 'https://www.bbc.com/news', icon: 'fa-tower-broadcast', cls: 'bbc' }
-  ];
-  box.innerHTML = suggestions.map(s => `<a class="quick-chip ${s.cls}" href="${s.url}" target="_blank" rel="noopener"><i class="fab ${s.icon}"></i> ${s.label}</a>`).join('');
-}
-
-async function doSearchWeb(query) {
-  const results = document.getElementById('searchWebResults');
-  const shortcut = document.getElementById('askWiseKingShortcut');
-  if (!results) return;
-  const q = (query || '').trim();
-  if (!q) { results.innerHTML = ''; shortcut.style.display = 'none'; return; }
-  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Searching...</div>';
-  const res = await sendMessageWithFallback(`Search the live web: ${q}`);
-  if (res.success) {
-    results.innerHTML = `<div class="result-card"><h4><i class="fas fa-wand-magic-sparkles"></i> Answer</h4><p>${linkify(escapeHtml(res.reply)).replace(/\n/g,'<br>')}</p></div>`;
-    shortcut.style.display = 'block';
-    const e = q.replace(/'/g, "\\'");
-    shortcut.innerHTML = `<button class="btn accent" onclick="askWiseKingFromSearch('${e}')"><i class="fas fa-comments"></i> Continue in Chat</button>`;
-  } else results.innerHTML = `<div class="result-card"><p>⚠️ Search failed.</p></div>`;
-}
-window.doSearchWeb = doSearchWeb;
-function askWiseKingFromSearch(q) { closeSearchWebPanel(); insertQuickPrompt(q); }
-window.askWiseKingFromSearch = askWiseKingFromSearch;
-
-// ============ BUILD APP ============
-const BUILD_IDEAS = [ { t:'Business Landing Page', d:'Modern responsive landing' }, { t:'Portfolio Website', d:'Showcase your work' }, { t:'Restaurant Menu App', d:'Digital menu with cart' }, { t:'Todo List App', d:'Track daily tasks' }, { t:'Weather Dashboard', d:'Live weather API' }, { t:'E-commerce Store', d:'Full online shop' }, { t:'Chat Application', d:'Real-time messaging' } ];
-function openBuildAppPanel() { document.getElementById('buildAppPanel').classList.add('show'); closeSidebar(); filterBuildIdeas(''); }
-function closeBuildAppPanel() { document.getElementById('buildAppPanel').classList.remove('show'); }
-function filterBuildIdeas(q) { const box = document.getElementById('buildAppIdeas'); if (!box) return; const query = (q || '').toLowerCase(); const list = BUILD_IDEAS.filter(i => !query || i.t.toLowerCase().includes(query)); box.innerHTML = list.map(i => { const e = i.t.replace(/'/g, "\\'"); return `<div class="result-card" onclick="buildApp('${e}')" style="cursor:pointer"><h4>💡 ${escapeHtml(i.t)}</h4><p>${escapeHtml(i.d)}</p></div>`; }).join(''); }
-function buildApp(name) { closeBuildAppPanel(); insertQuickPrompt(`Build a complete single-file HTML app: ${name}.`); }
-window.filterBuildIdeas = filterBuildIdeas;
-window.buildApp = buildApp;  
-
 // ============ INIT ============
 function init() {
   try {
@@ -2268,6 +2863,7 @@ function init() {
     const av = localStorage.getItem('wk_user_avatar'); if (av) applyAvatar(av);
     const k1 = localStorage.getItem('wk_api_key'); if (k1) document.getElementById('apiKeyInput').value = k1;
     const k2 = localStorage.getItem('wk_replicate_key'); if (k2) document.getElementById('replicateKeyInput').value = k2;
+    const k3 = localStorage.getItem('wk_suno_key'); if (k3) document.getElementById('sunoKeyInput').value = k3;
     const m = localStorage.getItem('wk_model'); if (m) document.getElementById('modelSelect').value = m;
     setWebSearchEnabled(getWebSearchEnabled());
     setMemoryEnabled(getMemoryEnabled());
