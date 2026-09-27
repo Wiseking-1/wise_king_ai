@@ -15,101 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
 <style>
-  
-/* ============ SYNTAX HIGHLIGHTING (Colorful Code) ============ */
-.md pre {
-  background: #0d1117 !important;
-  border: 1px solid #30363d !important;
-  border-radius: 10px !important;
-  overflow: hidden !important;
-  margin: 14px 0 !important;
-}
-.md pre code {
-  display: block !important;
-  padding: 16px 18px !important;
-  overflow-x: auto !important;
-  font-family: 'JetBrains Mono', 'Courier New', monospace !important;
-  font-size: 13px !important;
-  line-height: 1.7 !important;
-  color: #e6edf3 !important;
-  background: transparent !important;
-  white-space: pre !important;
-}
-
-/* Keyword colors (function, const, let, if, return, etc.) */
-.md pre code .kw, .md pre code span[data-type="keyword"] { color: #ff7b72 !important; font-weight: 600; }
-/* Strings */
-.md pre code .str { color: #a5d6ff !important; }
-/* Numbers */
-.md pre code .num { color: #79c0ff !important; }
-/* Comments */
-.md pre code .com { color: #8b949e !important; font-style: italic; }
-/* Functions */
-.md pre code .fn { color: #d2a8ff !important; }
-/* Variables */
-.md pre code .var { color: #ffa657 !important; }
-/* Class/Tags */
-.md pre code .tag { color: #7ee787 !important; }
-/* Operators */
-.md pre code .op { color: #ff7b72 !important; }
-/* Default text */
-.md pre code { color: #e6edf3 !important; }
-
-/* Simple auto-coloring for basic code blocks */
-.md pre code[class*="language-"] {
-  /* Manual coloring will apply via JavaScript below */
- /* ============ SYNTAX HIGHLIGHTING (Colorful Code) ============ */
-}  
-.md pre {
-  background: #0d1117 !important;
-  border: 1px solid #30363d !important;
-  border-radius: 10px !important;
-  overflow: hidden !important;
-  margin: 14px 0 !important;
-}
-.md pre code {
-  display: block !important;
-  padding: 16px 18px !important;
-  overflow-x: auto !important;
-  font-family: 'JetBrains Mono', 'Courier New', monospace !important;
-  font-size: 13px !important;
-  line-height: 1.7 !important;
-  color: #e6edf3 !important;
-  background: transparent !important;
-  white-space: pre !important;
-}
-
-/* Keyword colors (function, const, let, if, return, etc.) */
-.md pre code .kw, .md pre code span[data-type="keyword"] { color: #ff7b72 !important; font-weight: 600; }
-/* Strings */
-.md pre code .str { color: #a5d6ff !important; }
-/* Numbers */
-.md pre code .num { color: #79c0ff !important; }
-/* Comments */
-.md pre code .com { color: #8b949e !important; font-style: italic; }
-/* Functions */
-.md pre code .fn { color: #d2a8ff !important; }
-/* Variables */
-.md pre code .var { color: #ffa657 !important; }
-/* Class/Tags */
-.md pre code .tag { color: #7ee787 !important; }
-/* Operators */
-.md pre code .op { color: #ff7b72 !important; }
-/* Default text */
-.md pre code { color: #e6edf3 !important; }
-
-/* Simple auto-coloring for basic code blocks */
-.md pre code[class*="language-"] {
-  /* Manual coloring will apply via JavaScript below */
-  }
   :root{
     --bg-primary:#0a0a0f;--bg-secondary:#111118;--bg-elevated:#1a1a24;--bg-input:#1e1e2a;--bg-hover:#252533;
     --border-subtle:rgba(255,255,255,0.06);--border-default:rgba(255,255,255,0.1);--border-strong:rgba(255,255,255,0.16);
@@ -267,7 +173,7 @@
   .msg-avatar.ai{background:var(--accent-gradient);color:white;box-shadow:0 0 0 1px var(--border-default),0 0 12px var(--accent-glow)}
   .msg-avatar.user{background:var(--bg-elevated);color:var(--text-secondary)}
   .msg-avatar img{width:100%;height:100%;object-fit:cover}
-  .msg-body{flex:1;min-width:0;max-widthc:100%;padding-left:0}
+  .msg-body{flex:1;min-width:0;max-width:100%;padding-left:0}
   .message.user .msg-body{display:flex;flex-direction:column;align-items:flex-end}
   .msg-name{font-size:12.5px;font-weight:600;color:var(--text-secondary);margin-bottom:4px;padding:0 4px;display:flex;align-items:center;gap:6px}
   .message.user .msg-name{text-align:right;flex-direction:row-reverse}
@@ -313,13 +219,6 @@
   .md th{background:var(--bg-elevated);font-weight:600}
   .md code{background:var(--bg-elevated);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:0.9em}
   .md pre{background:var(--bg-elevated);padding:0;border-radius:12px;overflow:hidden;margin:14px 0;border:1px solid var(--border-default)}
-  .md pre .code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#16161d;border-bottom:1px solid var(--border-subtle)}
-  .md pre .code-lang{font-size:12px;font-weight:700;color:var(--accent-hover);text-transform:uppercase;letter-spacing:0.08em;font-family:'JetBrains Mono',monospace}
-  .md pre .code-actions{display:flex;gap:6px}
-  .md pre .code-action-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);border:1px solid var(--border-default);color:var(--text-secondary);font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:8px;cursor:pointer;font-family:inherit;transition:all var(--transition-fast)}
-  .md pre .code-action-btn:hover{background:rgba(99,102,241,0.15);color:var(--accent-hover);border-color:var(--accent)}
-  .md pre .code-action-btn.copied{background:rgba(16,185,129,0.15);color:#6ee7b7;border-color:rgba(16,185,129,0.4)}
-  .md pre code{display:block;padding:14px 16px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.65;color:#e4e4e7;background:transparent}  .md pre{background:var(--bg-elevated);padding:0;border-radius:12px;overflow:hidden;margin:14px 0;border:1px solid var(--border-default)}
   .md pre .code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#16161d;border-bottom:1px solid var(--border-subtle)}
   .md pre .code-lang{font-size:12px;font-weight:700;color:var(--accent-hover);text-transform:uppercase;letter-spacing:0.08em;font-family:'JetBrains Mono',monospace}
   .md pre .code-actions{display:flex;gap:6px}
@@ -460,80 +359,7 @@
     .top-btn .label{display:none}
     .top-btn{padding:8px 10px}
     .profile-menu-popup{width:calc(100vw - 32px);right:-10px}
-  });
-}
-  
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-
-<script>
-// Auto-highlight code blocks after every AI message
-function highlightCodeBlocks() {
-  if (typeof Prism === 'undefined') return;
-  document.querySelectorAll('.md pre code:not(.language-none):not([data-highlighted])').forEach(block => {
-    try { Prism.}(block); } catch(e) {}
-  });
-}
-
-// Watch for new messages and highlight automatically
-const observer = new MutationObserver(() => { setTimeout(highlightCodeBlocks, 80); });
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    const area = document.getElementById('messagesArea');
-    if (area) observer.observe(area, { childList: true, subtree: true });
-    highlightCodeBlocks();
-  }, 800);
-});
-
-// Also highlight on every render
-const _origRender = window.renderMessages;
-if (typeof _origRender === 'function') {
-  window.renderMessages = function() {
-    _origRender.apply(this, arguments);
-    setTimeout(highlightCodeBlocks, 100);
-  };
-}
-</script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-
-<script>
-// Auto-highlight code blocks after every AI message
-function highlightCodeBlocks() {
-  if (typeof Prism === 'undefined') return;
-  document.querySelectorAll('.md pre code:not(.language-none):not([data-highlighted])').forEach(block => {
-    try { Prism.highlightElement(block); } catch(e) {}
-  });
-}
-
-// Watch for new messages and highlight automatically
-const observer = new MutationObserver(() => { setTimeout(highlightCodeBlocks, 80); });
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    const area = document.getElementById('messagesArea');
-    if (area) observer.observe(area, { childList: true, subtree: true });
-    highlightCodeBlocks();
-  }, 800);
-});
-
-// Also highlight on every render
-const _origRender = window.renderMessages;
-if (typeof _origRender === 'function') {
-  window.renderMessages = function() {
-    _origRender.apply(this, arguments);
-    setTimeout(highlightCodeBlocks, 100);
-  };
-}
-</script>
+  }
 </style>
 </head>
 <body>
@@ -893,11 +719,11 @@ if (typeof _origRender === 'function') {
   }
 </script>
 
-<!-- ============ FIREBASE + FIRESTORE ============ -->
+<!-- ============ FIREBASE + AUTH ============ -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
   import { 
-    getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged,
+    getAuth, signInWithPopup, signInWithRedirect, GoogleAuthProvider, signOut, onAuthStateChanged,
     setPersistence, browserLocalPersistence,
     createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail
   } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
@@ -922,7 +748,6 @@ if (typeof _origRender === 'function') {
 
   let lastUid = null;
 
-  // ============ CLOUD SYNC FUNCTIONS ============
   window.WK_CLOUD = {
     async loadUserData(uid) {
       try {
@@ -941,7 +766,7 @@ if (typeof _origRender === 'function') {
     }
   };
 
-  // ============ AUTH LISTENER WITH CLOUD SYNC ============
+  // ============ AUTH STATE LISTENER ============
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       lastUid = user.uid;
@@ -951,7 +776,7 @@ if (typeof _origRender === 'function') {
       localStorage.setItem('wk_user_uid', user.uid);
       localStorage.removeItem('wk_guest_mode');
 
-      // Load user's cloud data
+      // Load cloud data
       const cloud = await window.WK_CLOUD.loadUserData(user.uid);
       if (cloud) {
         if (Array.isArray(cloud.chats)) {
@@ -966,56 +791,23 @@ if (typeof _origRender === 'function') {
 
       if (typeof unlockApp === 'function') unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
       if (typeof loadChatsFromLocalStorage === 'function') loadChatsFromLocalStorage();
+      window.showToast('Welcome, ' + (user.displayName || 'Wise King User') + '! 🎉');
     } else {
       lastUid = null;
     }
   });
 
-  // ============ GOOGLE SIGN IN ============
+  // ============ GOOGLE SIGN IN (FIXED FOR MOBILE) ============
   window.signInWithGoogle = function() {
-      // Detect if it's a mobile device
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-    if (isMobile) {
-       // Mobile: Use redirect (fixes the "missing initial state" error)
-       signInWithRedirect(auth, provider)
-        .catch((error) => {
-          console.error("Redirect error:", error);
-          if (typeof showAuthError === 'function') showAuthError("Login failed: " + error.message);
-        });
-    } else {
-      // Desktop: Keep using popup (faster for desktop)
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          const user = result.user;
-          localStorage.setItem('wk_logged_in', '1');
-          localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
-          localStorage.setItem('wk_user_email', user.email || '');
-          localStorage.setItem('wk_user_uid', user.uid);
-          localStorage.removeItem('wk_guest_mode');
-          window.showToast('Welcome, ' + (user.displayName || 'Wise King User') + '! 🎉');
-        })
-        .catch((error) => {
-          if (["auth/cancelled-popup-request","auth/popup-closed-by-user","auth/user-cancelled"].includes(error.code)) return;
-          let msg = "Login failed. ";
-          if (error.code === "auth/popup-blocked") msg = "Popup blocked. Please allow popups.";
-          else msg += error.message;
-          if (typeof showAuthError === 'function') showAuthError(msg);
-        });
-    }
-  };  window.signInWithGoogle = function() {
-    // Detect if it's a mobile device
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
     if (isMobile) {
-      // Mobile: Use redirect (fixes the "missing initial state" error)
-      signInWithRedirect(auth, provider)
-        .catch((error) => {
-          console.error("Redirect error:", error);
-          if (typeof showAuthError === 'function') showAuthError("Login failed: " + error.message);
-        });
+      // Mobile: Use redirect to fix "missing initial state" error
+      signInWithRedirect(auth, provider).catch((error) => {
+        if (typeof showAuthError === 'function') showAuthError("Login failed: " + error.message);
+      });
     } else {
-      // Desktop: Keep using popup (faster for desktop)
+      // Desktop: Use popup (faster)
       signInWithPopup(auth, provider)
         .then((result) => {
           const user = result.user;
@@ -1147,7 +939,6 @@ if (typeof _origRender === 'function') {
 
   window.signOutUser = window.confirmSignOut;
 
-  // ============ FORCE LOGIN SCREEN ============
   window.forceShowLoginScreen = function() {
     const ls = document.getElementById('loginScreen');
     const ma = document.getElementById('mainApp');
@@ -1167,7 +958,7 @@ if (typeof _origRender === 'function') {
 </script>
 
 <script>
-// ============ CORE STATE ============
+// ============ CORE LOGIC ============
 const ownerEmail = "kingnice314@gmail.com";
 const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
 
@@ -1510,7 +1301,6 @@ let currentPdfName = '';
 let currentChart = null;
 let currentDownloadFilter = 'all';
 
-// ============ AUTH HELPERS ============
 function showAuthError(msg) { const el = document.getElementById('authError'); if (!el) return; el.textContent = msg; el.classList.add('show'); document.getElementById('authSuccess')?.classList.remove('show'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 6000); }
 function showAuthSuccess(msg) { const el = document.getElementById('authSuccess'); if (!el) return; el.textContent = msg; el.classList.add('show'); document.getElementById('authError')?.classList.remove('show'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 6000); }
 function clearAuthMessages() { document.getElementById('authError')?.classList.remove('show'); document.getElementById('authSuccess')?.classList.remove('show'); }
@@ -1581,23 +1371,20 @@ window.createNewChat = createNewChat;
 function switchToChat(id) { activeChatId = id; renderChats(); renderMessages(); closeSidebar(); }
 window.switchToChat = switchToChat;
 
-  renderChats, updateModelBadge, updateReplicateStatus, deleteMusicItem
-});
-
-// ============ COLORFUL CODE BLOCKS ============
-function highlightAllCode() {
-  if (typeof Prism === 'undefined') return;
-  document.querySelectorAll('.md pre code:not([data-highlighted])').forEach(function(block) {
-    try { Prism.highlightElement(block); } catch(e) {}
+function renderChats() {
+  const list = document.getElementById('chatsList'); if (!list) return;
+  list.innerHTML = '';
+  const sorted = [...chats].sort((a,b) => (b.pinned?1:0)-(a.pinned?1:0) || b.createdAt-a.createdAt);
+  sorted.forEach(c => {
+    const el = document.createElement('div');
+    el.className = 'chat-item' + (c.id === activeChatId ? ' active' : '') + (c.pinned ? ' pinned' : '');
+    el.onclick = () => switchToChat(c.id);
+    el.innerHTML = `<div class="chat-title">${escapeHtml(c.title)}</div>${c.id === activeChatId ? '<div class="active-dot"></div>' : ''}<button class="chat-menu-btn" onclick="openChatMenu(event, '${c.id}')"><i class="fas fa-ellipsis-vertical"></i></button>`;
+    list.appendChild(el);
   });
 }
-setInterval(highlightAllCode, 1500);
-</script>
-<script>
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', highlightAllCode);
-else highlightAllCode();
-</script>
-   
+window.renderChats = renderChats;
+
 function openChatMenu(e, chatId) {
   e.stopPropagation(); closeChatMenu(); popupMenuChatId = chatId;
   const menu = document.getElementById('chatPopupMenu');
@@ -1641,60 +1428,6 @@ function shareTo(platform) {
   closeSharePopup();
 }
 document.addEventListener('click', (e) => { const menu = document.getElementById('chatPopupMenu'); if (!menu || !menu.classList.contains('show')) return; if (e.target.closest('#chatPopupMenu')) return; if (e.target.closest('.chat-menu-btn')) return; closeChatMenu(); }, true);
-  
-// ============ CODE BLOCK WITH COPY + DOWNLOAD ============
-let __codeBlockCounter = 0;
-window.__wkCodeBlocks = window.__wkCodeBlocks || {};
-
-function buildCodeBlock(code, lang) {
-  const id = 'code-' + (++__codeBlockCounter);
-  const safeCode = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  const langLabel = (lang || 'text').toUpperCase();
-  const ext = lang === 'javascript' ? 'js' : lang === 'python' ? 'py' : lang === 'html' ? 'html' : lang === 'css' ? 'css' : lang === 'json' ? 'json' : 'txt';
-
-  // Store code for copy/download
-  window.__wkCodeBlocks[id] = code;
-
-  return `<pre id="${id}">
-    <div class="code-header">
-      <div class="code-lang">${langLabel}</div>
-      <div class="code-actions">
-        <button class="code-action-btn" onclick="copyCodeBlock('${id}', this)"><i class="fas fa-copy"></i> Copy</button>
-        <button class="code-action-btn" onclick="downloadCodeBlock('${id}', 'wiseking-code.${ext}')"><i class="fas fa-download"></i> Download</button>
-      </div>
-    </div>
-    <code>${safeCode}</code>
-  </pre>`;
-}
-
-function copyCodeBlock(id, btn) {
-  const code = window.__wkCodeBlocks?.[id] || '';
-  wkCopyToClipboard(code).then(ok => {
-    if (ok) {
-      const orig = btn.innerHTML;
-      btn.classList.add('copied');
-      btn.innerHTML = '<i class="fas fa-check"></i> Copied';
-      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 1800);
-    } else {
-      showToast('⚠️ Copy failed');
-    }
-  });
-}
-window.copyCodeBlock = copyCodeBlock;
-
-function downloadCodeBlock(id, filename) {
-  const code = window.__wkCodeBlocks?.[id] || '';
-  try {
-    const blob = new Blob([code], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = filename;
-    document.body.appendChild(a); a.click();
-    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 100);
-    showToast('⬇️ Downloaded!');
-  } catch(e) { showToast('⚠️ Download failed'); }
-}
-window.downloadCodeBlock = downloadCodeBlock;
 
 // ============ HELPERS ============
 function escapeHtml(t) { if (t === null || t === undefined) return ''; const d = document.createElement('div'); d.textContent = String(t); return d.innerHTML; }
@@ -1731,7 +1464,7 @@ function toggleSection(h) { h.classList.toggle('open'); h.nextElementSibling.cla
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
 
-// ============ PROFILE MENU (BULLETPROOF - works on all phones) ============
+// ============ PROFILE MENU ============
 function toggleTopProfileMenu(e) {
   if (e) { e.stopPropagation(); e.preventDefault(); }
   const menu = document.getElementById('topProfileMenu');
@@ -1744,7 +1477,6 @@ function closeTopProfileMenu() {
 window.toggleTopProfileMenu = toggleTopProfileMenu;
 window.closeTopProfileMenu = closeTopProfileMenu;
 
-// Attach handler to profile avatar when page loads
 function setupProfileButton() {
   const avatar = document.getElementById('topProfileAvatar');
   const menu = document.getElementById('topProfileMenu');
@@ -1757,12 +1489,10 @@ function setupProfileButton() {
     menu.classList.toggle('show');
   }
   
-  // Multi-approach binding — works on ALL browsers
   avatar.addEventListener('click', toggleMenu, false);
   avatar.addEventListener('touchend', function(e) { e.preventDefault(); toggleMenu(e); }, { passive: false });
   avatar.addEventListener('touchstart', function(e) { e.stopPropagation(); }, { passive: true });
   
-  // Close menu when tapping outside
   document.addEventListener('click', function(e) {
     if (!menu.classList.contains('show')) return;
     if (e.target.closest('#topProfileMenu')) return;
@@ -1782,11 +1512,10 @@ function applyAvatar(data) { ['sidebarAvatar','settingsAvatar','topProfileAvatar
 function handleProfilePhotoUpload(e) { const f = e.target.files[0]; if (!f) return; const fr = new FileReader(); fr.onload = ev => { localStorage.setItem('wk_user_avatar', ev.target.result); applyAvatar(ev.target.result); showToast('Photo updated'); }; fr.readAsDataURL(f); }
 
 // ============ SETTINGS ============
-function openSettings() { document.getElementById('settingsModal').classList.add('show'); closeSidebar(); const k1 = localStorage.getItem('wk_api_key'); if (k1) document.getElementById('apiKeyInput').value = k1; const k2 = localStorage.getItem('wk_replicate_key'); if (k2) document.getElementById('replicateKeyInput').value = k2; const k3 = localStorage.getItem('wk_suno_key'); if (k3) document.getElementById('sunoKeyInput').value = k3; }
+function openSettings() { document.getElementById('settingsModal').classList.add('show'); closeSidebar(); const k1 = localStorage.getItem('wk_api_key'); if (k1) document.getElementById('apiKeyInput').value = k1; const k2 = localStorage.getItem('wk_replicate_key'); if (k2) document.getElementById('replicateKeyInput').value = k2; }
 function saveSettings() { 
   const g = document.getElementById('apiKeyInput').value.trim(); if (g) localStorage.setItem('wk_api_key', g); else localStorage.removeItem('wk_api_key'); 
   const r = document.getElementById('replicateKeyInput').value.trim(); if (r) localStorage.setItem('wk_replicate_key', r); else localStorage.removeItem('wk_replicate_key'); 
-  const s = document.getElementById('sunoKeyInput').value.trim(); if (s) localStorage.setItem('wk_suno_key', s); else localStorage.removeItem('wk_suno_key'); 
   const m = document.getElementById('modelSelect').value; localStorage.setItem('wk_model', m); updateModelBadge(); closeModal('settingsModal'); showToast('✅ Saved'); 
 }
 function updateModelBadge() { const m = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite'; let label = 'Gemini 3.5 Flash-lite'; if (m.includes('3.1-flash')) label = 'Gemini 3.1 Flash'; else if (m.includes('2.5-flash')) label = 'Gemini 2.5 Flash'; document.getElementById('modelBadgeText').textContent = label; }
@@ -1813,7 +1542,7 @@ function toggleVoiceMode() {
   if (voiceMode) { box.classList.add('voice-mode'); if (micIcon) micIcon.className = 'fas fa-keyboard'; showToast('🎙️ Voice mode'); }
   else { box.classList.remove('voice-mode'); if (micIcon) micIcon.className = 'fas fa-microphone'; setTimeout(() => document.getElementById('messageInput').focus(), 100); showToast('⌨️ Keyboard mode'); }
 }
-    
+
 // ============ VOICE RECOGNITION ============
 function initHoldToSpeak() {
   const pill = document.getElementById('gkHoldPill');
@@ -1988,19 +1717,6 @@ function downloadText(encodedText, filename) {
 }
 window.downloadText = downloadText;
 
-// ============ PRICING PANEL ============
-function openPricingPanel() { document.getElementById('pricingPanel').classList.add('show'); closeSidebar(); }
-function closePricingPanel() { document.getElementById('pricingPanel').classList.remove('show'); }
-function upgradeToPlan(plan, amount) {
-  showToast(`🚀 ${plan} plan — ₦${amount.toLocaleString()}/month`);
-  setTimeout(() => {
-    alert(`✅ DEMO MODE\n\nPlan: ${plan}\nPrice: ₦${amount.toLocaleString()}/month\n\nTo enable real payments:\n1. Sign up at paystack.com\n2. Get your public key\n3. Contact developer to integrate`);
-  }, 500);
-}
-window.openPricingPanel = openPricingPanel;
-window.closePricingPanel = closePricingPanel;
-window.upgradeToPlan = upgradeToPlan;
-
 // ============ IMAGES / VIDEOS ============
 function openImagesPanel() { document.getElementById('imagesPanel').classList.add('show'); closeSidebar(); updateReplicateStatus(); }
 function closeImagesPanel() { document.getElementById('imagesPanel').classList.remove('show'); }
@@ -2062,7 +1778,7 @@ window.generateVideoFromPanel = generateVideoFromPanel;
 
 function updateReplicateStatus() { const el = document.getElementById('replicateStatus'); if (!el) return; const key = localStorage.getItem('wk_replicate_key'); el.textContent = key ? '✅ Replicate connected' : '💡 Add Replicate key for hyper-real images.'; }
 
-// ============ MUSIC GENERATION ============
+// ============ MUSIC ============
 function openMusicPanel() { document.getElementById('musicPanel').classList.add('show'); closeSidebar(); renderMusicLibrary(); }
 function closeMusicPanel() { document.getElementById('musicPanel').classList.remove('show'); }
 
@@ -2086,85 +1802,6 @@ window.renderMusicLibrary = renderMusicLibrary;
 
 function deleteMusicItem(i) { musicLibrary.splice(i, 1); saveMusic(); renderMusicLibrary(); showToast('Removed'); }
 window.deleteMusicItem = deleteMusicItem;
-
-async function generateMusicFromPanel() {
-  const input = document.getElementById('musicInput').value.trim();
-  if (!input) return showToast('Paste lyrics or describe music style');
-  const genre = document.getElementById('musicGenre').value;
-  const mood = document.getElementById('musicMood').value;
-  const tempo = document.getElementById('musicTempo').value;
-
-  const results = document.getElementById('musicPanelResults');
-  results.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Crafting your music prompt...</div>`;
-
-  const aiPrompt = `Create a detailed, professional music production prompt for an AI music generator.
-
-USER INPUT:
-${input}
-
-${genre ? `GENRE: ${genre}` : ''}
-${mood ? `MOOD: ${mood}` : ''}
-${tempo ? `TEMPO: ${tempo}` : ''}
-
-Format your response with these sections (use emojis and markdown):
-
-**🎵 Song Title Suggestion**
-**🎤 Genre & Sub-genre**
-**💃 Tempo & BPM**
-**🎼 Musical Key**
-**🥁 Instrumentation** (list drums, bass, melody, etc.)
-**🎹 Chord Progression** (if applicable)
-**🎤 Vocal Style** (male/female, tone, delivery)
-**📝 Lyrics** (if user provided lyrics, keep them EXACTLY; if not, write original lyrics with full structure: Intro, Verse 1, Pre-Chorus, Chorus, Verse 2, Bridge, Outro)
-**🎛️ Production Notes** (mixing, effects, atmosphere)
-**📱 Ready-to-Use Prompt for Suno/Udio** (a single dense paragraph they can paste into any AI music tool)
-
-Be warm and add 🙏 at the end.`;
-
-  const res = await sendMessageWithFallback(aiPrompt);
-  if (res.success) {
-    const titleMatch = res.reply.match(/\*\*🎵 Song Title[^\*]*\*\*[\s\S]*?(?=\n\*\*|$)/);
-    const title = titleMatch ? titleMatch[0].replace(/\*\*🎵 Song Title[^\*]*\*\*/,'').trim() : ('Wise King Song ' + (musicLibrary.length + 1));
-    
-    results.innerHTML = `
-      <div class="music-card">
-        <div class="music-title">🎵 ${escapeHtml(title)}</div>
-        <div class="music-meta">Just created • ${genre || 'Custom'} ${mood ? '• ' + mood : ''}</div>
-        <div class="md" style="margin-top:14px">${renderMarkdown(res.reply)}</div>
-        <div class="music-actions" style="margin-top:16px">
-          <button class="btn accent" onclick="downloadText('${encodeURIComponent(res.reply).slice(0,9000)}', 'wiseking-music-prompt-${Date.now()}.txt')"><i class="fas fa-download"></i> Download Prompt</button>
-          <button class="btn solid" onclick="wkCopyToClipboard(\`${res.reply.replace(/`/g,'\\`').slice(0,5000)}\`).then(()=>showToast('📋 Copied!'))"><i class="fas fa-copy"></i> Copy</button>
-          <button class="btn solid" onclick="openSunoLink()"><i class="fas fa-external-link-alt"></i> Open Suno</button>
-        </div>
-      </div>`;
-
-    musicLibrary.unshift({
-      title: title, genre: genre, mood: mood, tempo: tempo,
-      prompt: res.reply, input: input, createdAt: Date.now()
-    });
-    saveMusic(); renderMusicLibrary();
-    showToast('✅ Music prompt ready! 🎵');
-  } else results.innerHTML = `<div class="result-card"><p>⚠️ Failed. Try again.</p></div>`;
-}
-window.generateMusicFromPanel = generateMusicFromPanel;
-
-async function generateLyricsFromPanel() {
-  const input = document.getElementById('musicInput').value.trim();
-  if (!input) return showToast('Describe the song topic');
-  const genre = document.getElementById('musicGenre').value || 'Afrobeat';
-  const mood = document.getElementById('musicMood').value || 'Uplifting';
-  const results = document.getElementById('musicPanelResults');
-  results.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Writing lyrics...</div>`;
-  const res = await sendMessageWithFallback(`Write full song lyrics about: "${input}". Genre: ${genre}. Mood: ${mood}. Structure: [Intro], [Verse 1], [Pre-Chorus], [Chorus], [Verse 2], [Chorus], [Bridge], [Outro]. Use natural, singable language. If Nigerian/Hausa theme, sprinkle authentic expressions.`);
-  if (res.success) {
-    results.innerHTML = `<div class="music-card"><div class="music-title">📝 Your Lyrics</div><div class="md" style="margin-top:12px">${renderMarkdown(res.reply)}</div><div class="music-actions" style="margin-top:16px"><button class="btn accent" onclick="downloadText('${encodeURIComponent(res.reply).slice(0,9000)}', 'wiseking-lyrics-${Date.now()}.txt')"><i class="fas fa-download"></i> Download Lyrics</button><button class="btn solid" onclick="wkCopyToClipboard(\`${res.reply.replace(/`/g,'\\`').slice(0,5000)}\`).then(()=>showToast('📋 Copied!'))"><i class="fas fa-copy"></i> Copy</button></div></div>`;
-    showToast('✅ Lyrics ready! 📝');
-  } else results.innerHTML = `<div class="result-card"><p>⚠️ Failed. Try again.</p></div>`;
-}
-window.generateLyricsFromPanel = generateLyricsFromPanel;
-
-function openSunoLink() { window.open('https://suno.com/create', '_blank'); showToast('🎵 Paste your prompt on Suno!'); }
-window.openSunoLink = openSunoLink;
 
 // ============ PDF CHAT ============
 function openPdfChatPanel() { document.getElementById('pdfChatPanel').classList.add('show'); closeSidebar(); }
@@ -2321,217 +1958,6 @@ function startLiveTranslateVoice() {
   rec.start();
 }
 window.startLiveTranslateVoice = startLiveTranslateVoice;
-
-// ============ DATA ANALYSIS ============
-function openDataAnalysisPanel() { document.getElementById('dataAnalysisPanel').classList.add('show'); closeSidebar(); }
-function closeDataAnalysisPanel() { document.getElementById('dataAnalysisPanel').classList.remove('show'); }
-
-async function handleDataUpload(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  try {
-    if (file.name.endsWith('.csv') || file.name.endsWith('.txt')) {
-      const text = await file.text();
-      parseCsvAndAnalyze(text, file.name);
-    } else if (file.name.endsWith('.json')) {
-      const text = await file.text();
-      const json = JSON.parse(text);
-      if (Array.isArray(json)) {
-        const headers = Object.keys(json[0] || {});
-        const rows = json.map(o => headers.map(h => o[h]));
-        analyzeTable([headers, ...rows], file.name);
-      } else showToast('JSON must be an array of objects');
-    } else if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
-      const arrayBuffer = await file.arrayBuffer();
-      const wb = XLSX.read(arrayBuffer, { type: 'array' });
-      const sheet = wb.Sheets[wb.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-      analyzeTable(rows, file.name);
-    }
-  } catch (err) { showToast('⚠️ ' + err.message); }
-}
-window.handleDataUpload = handleDataUpload;
-
-function parseCsvAndAnalyze(text, name) {
-  const lines = text.trim().split(/\r?\n/);
-  const rows = lines.map(line => parseCsvLine(line));
-  analyzeTable(rows, name);
-}
-
-function parseCsvLine(line) {
-  const result = []; let cur = ''; let inQ = false;
-  for (let i = 0; i < line.length; i++) {
-    const c = line[i];
-    if (c === '"' && line[i+1] === '"') { cur += '"'; i++; }
-    else if (c === '"') inQ = !inQ;
-    else if (c === ',' && !inQ) { result.push(cur); cur = ''; }
-    else cur += c;
-  }
-  result.push(cur);
-  return result;
-}
-
-function analyzePastedData() {
-  const raw = document.getElementById('dataPasteInput').value.trim();
-  if (!raw) return showToast('Paste data first');
-  const lines = raw.split(/\r?\n/);
-  const rows = lines.map(l => l.split(',').map(c => c.trim()));
-  analyzeTable(rows, 'Pasted Data');
-}
-window.analyzePastedData = analyzePastedData;
-
-function analyzeTable(rows, name) {
-  if (!rows || rows.length < 2) return showToast('Not enough data');
-  const headers = rows[0].map(h => String(h || '').trim());
-  const data = rows.slice(1).filter(r => r.some(c => c !== '' && c !== undefined));
-  const results = document.getElementById('dataAnalysisResults');
-  
-  const numericCols = [];
-  headers.forEach((h, i) => {
-    const values = data.map(r => parseFloat(r[i])).filter(v => !isNaN(v));
-    if (values.length > data.length * 0.5) numericCols.push({ index: i, name: h, values });
-  });
-
-  let statsHtml = `<div class="data-stat-grid">
-    <div class="data-stat"><div class="ds-label">Rows</div><div class="ds-value">${data.length.toLocaleString()}</div></div>
-    <div class="data-stat"><div class="ds-label">Columns</div><div class="ds-value">${headers.length}</div></div>
-    <div class="data-stat"><div class="ds-label">Numeric Cols</div><div class="ds-value">${numericCols.length}</div></div>
-    <div class="data-stat"><div class="ds-label">Source</div><div class="ds-value" style="font-size:13px">${escapeHtml(name.slice(0,20))}</div></div>
-  </div>`;
-
-  let statsTable = '<div class="data-chart-wrap"><h4 style="margin-bottom:12px;color:var(--accent-hover);font-size:14px">📊 Column Statistics</h4><div style="overflow-x:auto"><table class="md" style="font-size:12.5px"><thead><tr><th>Column</th><th>Count</th><th>Mean</th><th>Min</th><th>Max</th><th>Sum</th></tr></thead><tbody>';
-  numericCols.forEach(c => {
-    const sum = c.values.reduce((a,b) => a+b, 0);
-    const mean = sum / c.values.length;
-    statsTable += `<tr><td><strong>${escapeHtml(c.name)}</strong></td><td>${c.values.length}</td><td>${mean.toFixed(2)}</td><td>${Math.min(...c.values).toFixed(2)}</td><td>${Math.max(...c.values).toFixed(2)}</td><td>${sum.toFixed(2)}</td></tr>`;
-  });
-  statsTable += '</tbody></table></div></div>';
-
-  let chartHtml = '';
-  if (numericCols.length > 0) {
-    const c = numericCols[0];
-    const labels = data.slice(0, 30).map((r, i) => r[0] || `Row ${i+1}`);
-    const values = data.slice(0, 30).map(r => parseFloat(r[c.index]) || 0);
-    chartHtml = `<div class="data-chart-wrap"><h4 style="margin-bottom:12px;color:var(--accent-hover);font-size:14px">📈 ${escapeHtml(c.name)} (first 30)</h4><canvas id="dataChart"></canvas></div>`;
-    setTimeout(() => {
-      const ctx = document.getElementById('dataChart');
-      if (!ctx) return;
-      if (currentChart) currentChart.destroy();
-      currentChart = new Chart(ctx, {
-        type: 'line',
-        data: { labels, datasets: [{ label: c.name, data: values, borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,0.15)', fill: true, tension: 0.35, pointRadius: 3 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#a1a1aa' } } }, scales: { x: { ticks: { color: '#71717a', maxRotation: 45, minRotation: 45 }, grid: { color: 'rgba(255,255,255,0.05)' } }, y: { ticks: { color: '#71717a' }, grid: { color: 'rgba(255,255,255,0.05)' } } } }
-      });
-    }, 100);
-  }
-
-  results.innerHTML = `<div class="result-card"><h4>✅ ${escapeHtml(name)}</h4></div>` + statsHtml + statsTable + chartHtml + `<div id="dataAIInsights"></div>`;
-  aiDataInsight(headers, data, numericCols);
-}
-
-async function aiDataInsight(headers, data, numericCols) {
-  const box = document.getElementById('dataAIInsights');
-  if (!box) return;
-  box.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Generating AI insights...</div>`;
-  const preview = data.slice(0, 15).map(r => r.join(' | ')).join('\n');
-  const summary = `Columns: ${headers.join(', ')}\nRows: ${data.length}\nSample:\n${headers.join(' | ')}\n${preview}\n\nNumeric stats: ${numericCols.map(c => `${c.name}: mean=${(c.values.reduce((a,b)=>a+b,0)/c.values.length).toFixed(2)}, min=${Math.min(...c.values).toFixed(2)}, max=${Math.max(...c.values).toFixed(2)}`).join('; ')}`;
-  const res = await sendMessageWithFallback(`Analyze this dataset and give insights. Format with emojis:\n\n**📊 Overview**\n**🔍 Key Patterns** (3-5)\n**💡 Insights** (3-5)\n**📈 Trends**\n**🎯 Recommendations**\n\nDATA:\n${summary}`);
-  if (res.success) box.innerHTML = `<div class="result-card"><h4>🧠 AI Insights</h4>${renderMarkdown(res.reply)}</div>`;
-  else box.innerHTML = `<div class="result-card"><p>⚠️ Insights failed.</p></div>`;
-}
-
-const dataDZ = document.getElementById('dataDropzone');
-if (dataDZ) {
-  ['dragenter','dragover'].forEach(ev => dataDZ.addEventListener(ev, e => { e.preventDefault(); dataDZ.classList.add('dragover'); }));
-  ['dragleave','drop'].forEach(ev => dataDZ.addEventListener(ev, e => { e.preventDefault(); dataDZ.classList.remove('dragover'); }));
-  dataDZ.addEventListener('drop', e => { const files = e.dataTransfer.files; if (files.length) handleDataUpload({target: {files: [files[0]]}}); });
-}
-
-// ============ DOWNLOAD HUB ============
-function openDownloadHub() { document.getElementById('downloadHubPanel').classList.add('show'); closeSidebar(); renderDownloadHub(); }
-function closeDownloadHub() { document.getElementById('downloadHubPanel').classList.remove('show'); }
-function filterDownloads(type) { currentDownloadFilter = type; renderDownloadHub(); }
-window.filterDownloads = filterDownloads;
-
-function renderDownloadHub() {
-  const grid = document.getElementById('downloadHubGrid'); if (!grid) return;
-  let items = [...library];
-  if (currentDownloadFilter !== 'all') items = items.filter(i => i.type === currentDownloadFilter);
-  const musicItems = musicLibrary.map(m => ({ type: 'music', title: m.title, prompt: m.prompt, audioUrl: m.audioUrl, createdAt: m.createdAt }));
-  if (currentDownloadFilter === 'all' || currentDownloadFilter === 'music' || currentDownloadFilter === 'audio') items = [...musicItems, ...items];
-  if (!items.length) { grid.innerHTML = '<div class="result-card" style="grid-column:1/-1"><p>Nothing here yet. Create images, videos, or music first!</p></div>'; return; }
-  grid.innerHTML = items.map((item, idx) => {
-    const isImage = item.type === 'image';
-    const isMusic = item.type === 'music';
-    const isVideo = item.type === 'video';
-    const preview = isImage && item.url ? `<img src="${item.url}" class="di-preview" style="object-fit:cover">` : `<div class="di-preview">${isMusic ? '🎵' : isVideo ? '🎬' : '📄'}</div>`;
-    const title = item.title || item.prompt || 'Untitled';
-    const dl = isImage ? `downloadFile('${item.url}', 'wiseking-image-${idx}.png')` :
-               isMusic && item.audioUrl ? `downloadFile('${item.audioUrl}', 'wiseking-music-${idx}.mp3')` :
-               `downloadText('${encodeURIComponent(item.prompt || item.text || '').slice(0,9000)}', 'wiseking-${item.type}-${idx}.txt')`;
-    return `<div class="download-item">
-      ${preview}
-      <div class="di-title">${escapeHtml(title.slice(0,40))}</div>
-      <div style="font-size:11px;color:var(--text-tertiary)">${item.type} • ${new Date(item.createdAt||Date.now()).toLocaleDateString()}</div>
-      <button class="di-btn" onclick="${dl}"><i class="fas fa-download"></i> Download</button>
-    </div>`;
-  }).join('');
-}
-
-// ============ SEARCH WEB PANEL ============
-function openSearchWebPanel() { document.getElementById('searchWebPanel').classList.add('show'); closeSidebar(); renderSearchSuggestions(); }
-function closeSearchWebPanel() { document.getElementById('searchWebPanel').classList.remove('show'); }
-
-function renderSearchSuggestions() {
-  const box = document.getElementById('searchSuggestionsBox'); if (!box) return;
-  const suggestions = [
-    { label: '📰 Latest Nigeria news', url: 'https://www.google.com/search?q=latest+nigeria+news', icon: 'fa-google', cls: 'google' },
-    { label: '💵 Naira to USD rate', url: 'https://www.google.com/search?q=naira+to+usd+rate+today', icon: 'fa-google', cls: 'google' },
-    { label: '🤖 Latest AI news 2026', url: 'https://www.google.com/search?q=latest+AI+news+2026', icon: 'fa-google', cls: 'google' },
-    { label: '🌦️ Weather in Lagos', url: 'https://www.google.com/search?q=weather+in+lagos', icon: 'fa-google', cls: 'google' },
-    { label: '📈 Crypto prices', url: 'https://www.google.com/search?q=crypto+prices+today', icon: 'fa-google', cls: 'google' },
-    { label: '📧 Gmail', url: 'https://mail.google.com', icon: 'fa-envelope', cls: 'gmail' },
-    { label: '🎬 Netflix', url: 'https://www.netflix.com', icon: 'fa-film', cls: 'netflix' },
-    { label: '🛒 Jumia', url: 'https://www.jumia.com.ng', icon: 'fa-shopping-cart', cls: 'jumia' },
-    { label: '📸 Instagram', url: 'https://instagram.com', icon: 'fa-instagram', cls: 'instagram' },
-    { label: '🐦 Twitter/X', url: 'https://twitter.com', icon: 'fa-x-twitter', cls: 'twitter' },
-    { label: '💬 WhatsApp', url: 'https://web.whatsapp.com', icon: 'fa-whatsapp', cls: 'whatsapp' },
-    { label: '🎵 Spotify', url: 'https://open.spotify.com', icon: 'fa-spotify', cls: 'spotify' },
-    { label: '📚 Quran', url: 'https://quran.com', icon: 'fa-book-quran', cls: 'wiki' },
-    { label: '📖 Wikipedia', url: 'https://en.wikipedia.org', icon: 'fa-wikipedia-w', cls: 'wiki' },
-    { label: '▶️ YouTube', url: 'https://www.youtube.com', icon: 'fa-youtube', cls: 'youtube' },
-    { label: '📺 BBC News', url: 'https://www.bbc.com/news', icon: 'fa-tower-broadcast', cls: 'bbc' }
-  ];
-  box.innerHTML = suggestions.map(s => `<a class="quick-chip ${s.cls}" href="${s.url}" target="_blank" rel="noopener"><i class="fab ${s.icon}"></i> ${s.label}</a>`).join('');
-}
-
-async function doSearchWeb(query) {
-  const results = document.getElementById('searchWebResults');
-  const shortcut = document.getElementById('askWiseKingShortcut');
-  if (!results) return;
-  const q = (query || '').trim();
-  if (!q) { results.innerHTML = ''; shortcut.style.display = 'none'; return; }
-  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Searching...</div>';
-  const res = await sendMessageWithFallback(`Search the live web: ${q}`);
-  if (res.success) {
-    results.innerHTML = `<div class="result-card"><h4><i class="fas fa-wand-magic-sparkles"></i> Answer</h4><p>${linkify(escapeHtml(res.reply)).replace(/\n/g,'<br>')}</p></div>`;
-    shortcut.style.display = 'block';
-    const e = q.replace(/'/g, "\\'");
-    shortcut.innerHTML = `<button class="btn accent" onclick="askWiseKingFromSearch('${e}')"><i class="fas fa-comments"></i> Continue in Chat</button>`;
-  } else results.innerHTML = `<div class="result-card"><p>⚠️ Search failed.</p></div>`;
-}
-window.doSearchWeb = doSearchWeb;
-function askWiseKingFromSearch(q) { closeSearchWebPanel(); insertQuickPrompt(q); }
-window.askWiseKingFromSearch = askWiseKingFromSearch;
-
-// ============ BUILD APP ============
-const BUILD_IDEAS = [ { t:'Business Landing Page', d:'Modern responsive landing' }, { t:'Portfolio Website', d:'Showcase your work' }, { t:'Restaurant Menu App', d:'Digital menu with cart' }, { t:'Todo List App', d:'Track daily tasks' }, { t:'Weather Dashboard', d:'Live weather API' }, { t:'E-commerce Store', d:'Full online shop' }, { t:'Chat Application', d:'Real-time messaging' } ];
-function openBuildAppPanel() { document.getElementById('buildAppPanel').classList.add('show'); closeSidebar(); filterBuildIdeas(''); }
-function closeBuildAppPanel() { document.getElementById('buildAppPanel').classList.remove('show'); }
-function filterBuildIdeas(q) { const box = document.getElementById('buildAppIdeas'); if (!box) return; const query = (q || '').toLowerCase(); const list = BUILD_IDEAS.filter(i => !query || i.t.toLowerCase().includes(query)); box.innerHTML = list.map(i => { const e = i.t.replace(/'/g, "\\'"); return `<div class="result-card" onclick="buildApp('${e}')" style="cursor:pointer"><h4>💡 ${escapeHtml(i.t)}</h4><p>${escapeHtml(i.d)}</p></div>`; }).join(''); }
-function buildApp(name) { closeBuildAppPanel(); insertQuickPrompt(`Build a complete single-file HTML app: ${name}.`); }
-window.filterBuildIdeas = filterBuildIdeas;
-window.buildApp = buildApp;
 
 // ============ SEND MESSAGE ============
 function sendMessage(textOverride) {
@@ -2695,7 +2121,6 @@ function init() {
     const av = localStorage.getItem('wk_user_avatar'); if (av) applyAvatar(av);
     const k1 = localStorage.getItem('wk_api_key'); if (k1) document.getElementById('apiKeyInput').value = k1;
     const k2 = localStorage.getItem('wk_replicate_key'); if (k2) document.getElementById('replicateKeyInput').value = k2;
-    const k3 = localStorage.getItem('wk_suno_key'); if (k3) document.getElementById('sunoKeyInput').value = k3;
     const m = localStorage.getItem('wk_model'); if (m) document.getElementById('modelSelect').value = m;
     setWebSearchEnabled(getWebSearchEnabled());
     setMemoryEnabled(getMemoryEnabled());
