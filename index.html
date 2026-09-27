@@ -558,7 +558,46 @@
     </div>
   </div>
 </div>
+  
+<!-- SEARCH WEB PANEL -->
+<div class="full-panel" id="searchWebPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-globe"></i> Search Web</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn ghost" onclick="closeSearchWebPanel()"><i class="fas fa-times"></i> Close</button>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div style="display:flex;gap:10px;margin-bottom:20px">
+        <input type="text" class="search-big" id="searchWebInput" placeholder="Search the web or ask Wise King AI anything..." onkeydown="if(event.key==='Enter') doSearchWeb(this.value)">
+        <button class="btn accent" onclick="doSearchWeb(document.getElementById('searchWebInput').value)"><i class="fas fa-search"></i> Search</button>
+      </div>
+      <div id="searchWebResults"></div>
+      <div id="askWiseKingShortcut" style="display:none;margin-top:12px"></div>
+      
+      <h4 style="margin:24px 0 12px;font-size:14px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em"><i class="fas fa-bolt"></i> Quick Shortcuts</h4>
+      <div id="searchSuggestionsBox" style="display:flex;gap:10px;flex-wrap:wrap"></div>
+    </div>
+  </div>
+</div>
 
+<!-- BUILD APP PANEL -->
+<div class="full-panel" id="buildAppPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-code"></i> Build App</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn ghost" onclick="closeBuildAppPanel()"><i class="fas fa-times"></i> Close</button>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <input type="text" class="search-big" id="buildAppInput" placeholder="Describe the app you want to build..." oninput="filterBuildIdeas(this.value)">
+      <div id="buildAppIdeas"></div>
+    </div>
+  </div>
+</div>
+  
 <div class="modal-bg" id="renameChatModal">
   <div class="modal" style="max-width:420px">
     <div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Rename chat</div><button class="modal-close" onclick="closeModal('renameChatModal')"><i class="fas fa-times"></i></button></div>
@@ -2111,6 +2150,114 @@ function toggleChatSearch() {
   }
 }
 window.toggleChatSearch = toggleChatSearch;
+
+// ============ SEARCH WEB PANEL ============
+function openSearchWebPanel() { document.getElementById('searchWebPanel').classList.add('show'); closeSidebar(); renderSearchSuggestions(); }
+function closeSearchWebPanel() { document.getElementById('searchWebPanel').classList.remove('show'); }
+
+function renderSearchSuggestions() {
+  const box = document.getElementById('searchSuggestionsBox'); if (!box) return;
+  const suggestions = [
+    { label: '📰 Latest Nigeria news', url: 'https://www.google.com/search?q=latest+nigeria+news', icon: 'fa-google', cls: 'google' },
+    { label: '💵 Naira to USD rate', url: 'https://www.google.com/search?q=naira+to+usd+rate+today', icon: 'fa-google', cls: 'google' },
+    { label: '🤖 Latest AI news 2026', url: 'https://www.google.com/search?q=latest+AI+news+2026', icon: 'fa-google', cls: 'google' },
+    { label: '🌦️ Weather in Lagos', url: 'https://www.google.com/search?q=weather+in+lagos', icon: 'fa-google', cls: 'google' },
+    { label: '📈 Crypto prices', url: 'https://www.google.com/search?q=crypto+prices+today', icon: 'fa-google', cls: 'google' },
+    { label: '📧 Gmail', url: 'https://mail.google.com', icon: 'fa-envelope', cls: 'gmail' },
+    { label: '🎬 Netflix', url: 'https://www.netflix.com', icon: 'fa-film', cls: 'netflix' },
+    { label: '🛒 Jumia', url: 'https://www.jumia.com.ng', icon: 'fa-shopping-cart', cls: 'jumia' },
+    { label: '📸 Instagram', url: 'https://instagram.com', icon: 'fa-instagram', cls: 'instagram' },
+    { label: '🐦 Twitter/X', url: 'https://twitter.com', icon: 'fa-x-twitter', cls: 'twitter' },
+    { label: '💬 WhatsApp', url: 'https://web.whatsapp.com', icon: 'fa-whatsapp', cls: 'whatsapp' },
+    { label: '🎵 Spotify', url: 'https://open.spotify.com', icon: 'fa-spotify', cls: 'spotify' },
+    { label: '📚 Quran', url: 'https://quran.com', icon: 'fa-book-quran', cls: 'wiki' },
+    { label: '📖 Wikipedia', url: 'https://en.wikipedia.org', icon: 'fa-wikipedia-w', cls: 'wiki' },
+    { label: '▶️ YouTube', url: 'https://www.youtube.com', icon: 'fa-youtube', cls: 'youtube' },
+    { label: '📺 BBC News', url: 'https://www.bbc.com/news', icon: 'fa-tower-broadcast', cls: 'bbc' }
+  ];
+  box.innerHTML = suggestions.map(s => `<a class="quick-chip ${s.cls}" href="${s.url}" target="_blank" rel="noopener"><i class="fab ${s.icon}"></i> ${s.label}</a>`).join('');
+}
+
+async function doSearchWeb(query) {
+  const results = document.getElementById('searchWebResults');
+  const shortcut = document.getElementById('askWiseKingShortcut');
+  if (!results) return;
+  const q = (query || '').trim();
+  if (!q) { results.innerHTML = ''; shortcut.style.display = 'none'; return; }
+  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Searching...</div>';
+  const res = await sendMessageWithFallback(`Search the live web: ${q}`);
+  if (res.success) {
+    results.innerHTML = `<div class="result-card"><h4><i class="fas fa-wand-magic-sparkles"></i> Answer</h4><p>${linkify(escapeHtml(res.reply)).replace(/\n/g,'<br>')}</p></div>`;
+    shortcut.style.display = 'block';
+    const e = q.replace(/'/g, "\\'");
+    shortcut.innerHTML = `<button class="btn accent" onclick="askWiseKingFromSearch('${e}')"><i class="fas fa-comments"></i> Continue in Chat</button>`;
+  } else results.innerHTML = `<div class="result-card"><p>⚠️ Search failed.</p></div>`;
+}
+window.doSearchWeb = doSearchWeb;
+function askWiseKingFromSearch(q) { closeSearchWebPanel(); insertQuickPrompt(q); }
+window.askWiseKingFromSearch = askWiseKingFromSearch;
+
+// ============ BUILD APP ============
+const BUILD_IDEAS = [ { t:'Business Landing Page', d:'Modern responsive landing' }, { t:'Portfolio Website', d:'Showcase your work' }, { t:'Restaurant Menu App', d:'Digital menu with cart' }, { t:'Todo List App', d:'Track daily tasks' }, { t:'Weather Dashboard', d:'Live weather API' }, { t:'E-commerce Store', d:'Full online shop' }, { t:'Chat Application', d:'Real-time messaging' } ];
+function openBuildAppPanel() { document.getElementById('buildAppPanel').classList.add('show'); closeSidebar(); filterBuildIdeas(''); }
+function closeBuildAppPanel() { document.getElementById('buildAppPanel').classList.remove('show'); }
+function filterBuildIdeas(q) { const box = document.getElementById('buildAppIdeas'); if (!box) return; const query = (q || '').toLowerCase(); const list = BUILD_IDEAS.filter(i => !query || i.t.toLowerCase().includes(query)); box.innerHTML = list.map(i => { const e = i.t.replace(/'/g, "\\'"); return `<div class="result-card" onclick="buildApp('${e}')" style="cursor:pointer"><h4>💡 ${escapeHtml(i.t)}</h4><p>${escapeHtml(i.d)}</p></div>`; }).join(''); }
+function buildApp(name) { closeBuildAppPanel(); insertQuickPrompt(`Build a complete single-file HTML app: ${name}.`); }
+window.filterBuildIdeas = filterBuildIdeas;
+window.buildApp = buildApp;  // ============ SEARCH WEB PANEL ============
+function openSearchWebPanel() { document.getElementById('searchWebPanel').classList.add('show'); closeSidebar(); renderSearchSuggestions(); }
+function closeSearchWebPanel() { document.getElementById('searchWebPanel').classList.remove('show'); }
+
+function renderSearchSuggestions() {
+  const box = document.getElementById('searchSuggestionsBox'); if (!box) return;
+  const suggestions = [
+    { label: '📰 Latest Nigeria news', url: 'https://www.google.com/search?q=latest+nigeria+news', icon: 'fa-google', cls: 'google' },
+    { label: '💵 Naira to USD rate', url: 'https://www.google.com/search?q=naira+to+usd+rate+today', icon: 'fa-google', cls: 'google' },
+    { label: '🤖 Latest AI news 2026', url: 'https://www.google.com/search?q=latest+AI+news+2026', icon: 'fa-google', cls: 'google' },
+    { label: '🌦️ Weather in Lagos', url: 'https://www.google.com/search?q=weather+in+lagos', icon: 'fa-google', cls: 'google' },
+    { label: '📈 Crypto prices', url: 'https://www.google.com/search?q=crypto+prices+today', icon: 'fa-google', cls: 'google' },
+    { label: '📧 Gmail', url: 'https://mail.google.com', icon: 'fa-envelope', cls: 'gmail' },
+    { label: '🎬 Netflix', url: 'https://www.netflix.com', icon: 'fa-film', cls: 'netflix' },
+    { label: '🛒 Jumia', url: 'https://www.jumia.com.ng', icon: 'fa-shopping-cart', cls: 'jumia' },
+    { label: '📸 Instagram', url: 'https://instagram.com', icon: 'fa-instagram', cls: 'instagram' },
+    { label: '🐦 Twitter/X', url: 'https://twitter.com', icon: 'fa-x-twitter', cls: 'twitter' },
+    { label: '💬 WhatsApp', url: 'https://web.whatsapp.com', icon: 'fa-whatsapp', cls: 'whatsapp' },
+    { label: '🎵 Spotify', url: 'https://open.spotify.com', icon: 'fa-spotify', cls: 'spotify' },
+    { label: '📚 Quran', url: 'https://quran.com', icon: 'fa-book-quran', cls: 'wiki' },
+    { label: '📖 Wikipedia', url: 'https://en.wikipedia.org', icon: 'fa-wikipedia-w', cls: 'wiki' },
+    { label: '▶️ YouTube', url: 'https://www.youtube.com', icon: 'fa-youtube', cls: 'youtube' },
+    { label: '📺 BBC News', url: 'https://www.bbc.com/news', icon: 'fa-tower-broadcast', cls: 'bbc' }
+  ];
+  box.innerHTML = suggestions.map(s => `<a class="quick-chip ${s.cls}" href="${s.url}" target="_blank" rel="noopener"><i class="fab ${s.icon}"></i> ${s.label}</a>`).join('');
+}
+
+async function doSearchWeb(query) {
+  const results = document.getElementById('searchWebResults');
+  const shortcut = document.getElementById('askWiseKingShortcut');
+  if (!results) return;
+  const q = (query || '').trim();
+  if (!q) { results.innerHTML = ''; shortcut.style.display = 'none'; return; }
+  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Searching...</div>';
+  const res = await sendMessageWithFallback(`Search the live web: ${q}`);
+  if (res.success) {
+    results.innerHTML = `<div class="result-card"><h4><i class="fas fa-wand-magic-sparkles"></i> Answer</h4><p>${linkify(escapeHtml(res.reply)).replace(/\n/g,'<br>')}</p></div>`;
+    shortcut.style.display = 'block';
+    const e = q.replace(/'/g, "\\'");
+    shortcut.innerHTML = `<button class="btn accent" onclick="askWiseKingFromSearch('${e}')"><i class="fas fa-comments"></i> Continue in Chat</button>`;
+  } else results.innerHTML = `<div class="result-card"><p>⚠️ Search failed.</p></div>`;
+}
+window.doSearchWeb = doSearchWeb;
+function askWiseKingFromSearch(q) { closeSearchWebPanel(); insertQuickPrompt(q); }
+window.askWiseKingFromSearch = askWiseKingFromSearch;
+
+// ============ BUILD APP ============
+const BUILD_IDEAS = [ { t:'Business Landing Page', d:'Modern responsive landing' }, { t:'Portfolio Website', d:'Showcase your work' }, { t:'Restaurant Menu App', d:'Digital menu with cart' }, { t:'Todo List App', d:'Track daily tasks' }, { t:'Weather Dashboard', d:'Live weather API' }, { t:'E-commerce Store', d:'Full online shop' }, { t:'Chat Application', d:'Real-time messaging' } ];
+function openBuildAppPanel() { document.getElementById('buildAppPanel').classList.add('show'); closeSidebar(); filterBuildIdeas(''); }
+function closeBuildAppPanel() { document.getElementById('buildAppPanel').classList.remove('show'); }
+function filterBuildIdeas(q) { const box = document.getElementById('buildAppIdeas'); if (!box) return; const query = (q || '').toLowerCase(); const list = BUILD_IDEAS.filter(i => !query || i.t.toLowerCase().includes(query)); box.innerHTML = list.map(i => { const e = i.t.replace(/'/g, "\\'"); return `<div class="result-card" onclick="buildApp('${e}')" style="cursor:pointer"><h4>💡 ${escapeHtml(i.t)}</h4><p>${escapeHtml(i.d)}</p></div>`; }).join(''); }
+function buildApp(name) { closeBuildAppPanel(); insertQuickPrompt(`Build a complete single-file HTML app: ${name}.`); }
+window.filterBuildIdeas = filterBuildIdeas;
+window.buildApp = buildApp;  
 
 // ============ INIT ============
 function init() {
