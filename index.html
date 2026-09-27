@@ -1124,41 +1124,6 @@ if (typeof _origRender === 'function') {
     setTimeout(highlightCodeBlocks, 100);
   };
 }
-</script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-
-<script>
-// Auto-highlight code blocks after every AI message
-function highlightCodeBlocks() {
-  if (typeof Prism === 'undefined') return;
-  document.querySelectorAll('.md pre code:not(.language-none):not([data-highlighted])').forEach(block => {
-    try { Prism.highlightElement(block); } catch(e) {}
-  });
-}
-
-// Watch for new messages and highlight automatically
-const observer = new MutationObserver(() => { setTimeout(highlightCodeBlocks, 80); });
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    const area = document.getElementById('messagesArea');
-    if (area) observer.observe(area, { childList: true, subtree: true });
-    highlightCodeBlocks();
-  }, 800);
-});
-
-// Also highlight on every render
-const _origRender = window.renderMessages;
-if (typeof _origRender === 'function') {
-  window.renderMessages = function() {
-    _origRender.apply(this, arguments);
-    setTimeout(highlightCodeBlocks, 100);
-  };
-}
 </script>
 
 <!-- ============ FIREBASE ============ -->
@@ -1863,20 +1828,6 @@ function downloadCodeBlock(id, filename) {
 }
 window.downloadCodeBlock = downloadCodeBlock;
 
-function downloadCodeBlock(id, filename) {
-  const code = window.__wkCodeBlocks?.[id] || '';
-  try {
-    const blob = new Blob([code], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = filename;
-    document.body.appendChild(a); a.click();
-    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 100);
-    showToast('⬇️ Downloaded!');
-  } catch(e) { showToast('⚠️ Download failed'); }
-}
-window.downloadCodeBlock = downloadCodeBlock;
-  
 // ============ HELPERS ============
 function escapeHtml(t) { if (t === null || t === undefined) return ''; const d = document.createElement('div'); d.textContent = String(t); return d.innerHTML; }
 window.escapeHtml = escapeHtml;
