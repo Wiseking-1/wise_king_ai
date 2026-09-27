@@ -973,23 +973,67 @@ if (typeof _origRender === 'function') {
 
   // ============ GOOGLE SIGN IN ============
   window.signInWithGoogle = function() {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const user = result.user;
-        localStorage.setItem('wk_logged_in', '1');
-        localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
-        localStorage.setItem('wk_user_email', user.email || '');
-        localStorage.setItem('wk_user_uid', user.uid);
-        localStorage.removeItem('wk_guest_mode');
-        window.showToast('Welcome, ' + (user.displayName || 'Wise King User') + '! 🎉');
-      })
-      .catch((error) => {
-        if (["auth/cancelled-popup-request","auth/popup-closed-by-user","auth/user-cancelled"].includes(error.code)) return;
-        let msg = "Login failed. ";
-        if (error.code === "auth/popup-blocked") msg = "Popup blocked. Please allow popups.";
-        else msg += error.message;
-        if (typeof showAuthError === 'function') showAuthError(msg);
-      });
+      // Detect if it's a mobile device
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    if (isMobile) {
+       // Mobile: Use redirect (fixes the "missing initial state" error)
+       signInWithRedirect(auth, provider)
+        .catch((error) => {
+          console.error("Redirect error:", error);
+          if (typeof showAuthError === 'function') showAuthError("Login failed: " + error.message);
+        });
+    } else {
+      // Desktop: Keep using popup (faster for desktop)
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const user = result.user;
+          localStorage.setItem('wk_logged_in', '1');
+          localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
+          localStorage.setItem('wk_user_email', user.email || '');
+          localStorage.setItem('wk_user_uid', user.uid);
+          localStorage.removeItem('wk_guest_mode');
+          window.showToast('Welcome, ' + (user.displayName || 'Wise King User') + '! 🎉');
+        })
+        .catch((error) => {
+          if (["auth/cancelled-popup-request","auth/popup-closed-by-user","auth/user-cancelled"].includes(error.code)) return;
+          let msg = "Login failed. ";
+          if (error.code === "auth/popup-blocked") msg = "Popup blocked. Please allow popups.";
+          else msg += error.message;
+          if (typeof showAuthError === 'function') showAuthError(msg);
+        });
+    }
+  };  window.signInWithGoogle = function() {
+    // Detect if it's a mobile device
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      // Mobile: Use redirect (fixes the "missing initial state" error)
+      signInWithRedirect(auth, provider)
+        .catch((error) => {
+          console.error("Redirect error:", error);
+          if (typeof showAuthError === 'function') showAuthError("Login failed: " + error.message);
+        });
+    } else {
+      // Desktop: Keep using popup (faster for desktop)
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const user = result.user;
+          localStorage.setItem('wk_logged_in', '1');
+          localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
+          localStorage.setItem('wk_user_email', user.email || '');
+          localStorage.setItem('wk_user_uid', user.uid);
+          localStorage.removeItem('wk_guest_mode');
+          window.showToast('Welcome, ' + (user.displayName || 'Wise King User') + '! 🎉');
+        })
+        .catch((error) => {
+          if (["auth/cancelled-popup-request","auth/popup-closed-by-user","auth/user-cancelled"].includes(error.code)) return;
+          let msg = "Login failed. ";
+          if (error.code === "auth/popup-blocked") msg = "Popup blocked. Please allow popups.";
+          else msg += error.message;
+          if (typeof showAuthError === 'function') showAuthError(msg);
+        });
+    }
   };
 
   // ============ EMAIL SIGN IN ============
