@@ -85,7 +85,7 @@
   .nav-btn{width:100%;display:flex;align-items:center;gap:14px;padding:12px 14px;margin-bottom:4px;background:transparent;border:none;color:var(--text-primary);font-size:15.5px;border-radius:var(--radius-full);cursor:pointer;transition:background var(--transition-fast);font-family:inherit;text-align:left;position:relative}
   .nav-btn:hover{background:var(--bg-elevated)}
   .nav-btn .nav-icon{width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px}
-  .gradient-1{color:#a78bfa}.gradient-2{color:#f472b6}.gradient-3{color:#60a5fa}.gradient-4{color:#34d399}.gradient-5{color:#fbbf24}.gradient-6{color:#f97316}.gradient-7{color:#9ca3af}
+  .gradient-1{color:#a78bfa}.gradient-2{color:#f472b6}.gradient-3{color:#60a5fa}.gradient-4{color:#34d399}.gradient-5{color:#fbbf24}.gradient-6{color:#f97316}.gradient-7{color:#9ca3af}.gradient-8{color:#ec4899}.gradient-9{color:#ef4444}
   .nav-btn .nav-badge{margin-left:auto;font-size:11px;padding:2px 8px;background:rgba(99,102,241,0.18);color:var(--accent-hover);border-radius:99px;font-weight:600}
   .sidebar-search{position:relative;margin-bottom:12px}
   .sidebar-search input{width:100%;padding:14px 14px 14px 48px;background:var(--bg-elevated);border:1px solid transparent;border-radius:var(--radius-full);color:var(--text-primary);font-size:15px;outline:none;font-family:inherit}
@@ -166,7 +166,7 @@
   .suggestion-card i{color:var(--accent-hover);font-size:14px;margin-bottom:6px;display:block}
   .suggestion-card .sc-title{font-size:13.5px;font-weight:600;margin-bottom:2px}
   .suggestion-card .sc-desc{font-size:12px;color:var(--text-tertiary)}
-  .message{display:flex;gap:14px;padding:8px 0;margin-bottom:8px;animation:msgIn 0.35s;position:relative}
+  .message{display:flex;gap:14px;padding:8px 0;margin-bottom:8px;animation:msgIn 0.35s;position:relative;align-items:flex-start;width:100%}
   @keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
   .message.user{flex-direction:row-reverse}
   .msg-avatar{width:34px;height:34px;border-radius:var(--radius-full);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;overflow:hidden;box-shadow:0 0 0 1px var(--border-default)}
@@ -226,7 +226,7 @@
   .md pre .code-action-btn:hover{background:rgba(99,102,241,0.15);color:var(--accent-hover);border-color:var(--accent)}
   .md pre .code-action-btn.copied{background:rgba(16,185,129,0.15);color:#6ee7b7;border-color:rgba(16,185,129,0.4)}
   .md pre code{display:block;padding:14px 16px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.65;color:#e4e4e7;background:transparent}
-  .input-dock{position:absolute;bottom:0;left:0;right:0;padding:12px 20px 16px;background:linear-gradient(to top,var(--bg-primary) 60%,transparent);pointer-events:none;z-index:20}
+  .input-dock{position:absolute;bottom:0;left:0;right:0;padding:12px 12px 24px;background:linear-gradient(to top,var(--bg-primary) 60%,transparent);pointer-events:none;z-index:20}
   .input-inner-wrap{max-width:780px;margin:0 auto;pointer-events:auto}
   .preview-area{display:none;gap:8px;flex-wrap:wrap;padding:8px 0}
   .preview-area.show{display:flex}
@@ -342,13 +342,67 @@
   .sp-telegram{background:linear-gradient(135deg,#229ED9,#0088cc)}
   .sp-x{background:linear-gradient(135deg,#000,#1a1a1a)}
   .share-cancel{width:100%;padding:12px;border-radius:var(--radius-md);background:var(--bg-elevated);border:1px solid var(--border-default);color:var(--text-primary);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
+  .music-card{background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:16px;margin-bottom:12px}
+  .music-title{font-size:15px;font-weight:700;color:var(--accent-hover);margin-bottom:6px}
+  .music-meta{font-size:12px;color:var(--text-tertiary);margin-bottom:10px}
+  .music-audio{width:100%;margin-top:8px;border-radius:8px}
+  .music-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .music-actions .btn{font-size:12px;padding:8px 14px}
+  .pdf-dropzone{border:2px dashed var(--border-strong);border-radius:var(--radius-lg);padding:40px 20px;text-align:center;cursor:pointer;margin-bottom:16px;transition:all var(--transition-fast);background:var(--bg-secondary)}
+  .pdf-dropzone:hover,.pdf-dropzone.dragover{border-color:var(--accent);background:var(--bg-elevated)}
+  .pdf-dropzone i{font-size:36px;color:var(--accent);margin-bottom:12px;display:block}
+  .pdf-dropzone p{font-size:14px;color:var(--text-primary);margin-bottom:4px}
+  .pdf-dropzone small{font-size:12px;color:var(--text-tertiary)}
+  .pdf-file-info{display:flex;align-items:center;gap:12px;padding:14px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-md);margin-bottom:16px}
+  .pdf-file-info i{font-size:24px;color:#ef4444}
+  .pdf-file-info .pfi-text{flex:1;font-size:13.5px;font-weight:600;color:var(--text-primary)}
+  .pdf-file-info .pfi-meta{display:block;font-size:11.5px;color:var(--text-tertiary);font-weight:400;margin-top:2px}
+  .lang-selector{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+  .lang-select{flex:1;padding:12px;background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-primary);font-size:14px;outline:none;font-family:inherit}
+  .lang-swap{width:40px;height:40px;border-radius:50%;background:var(--accent-gradient);border:none;color:white;font-size:15px;cursor:pointer;flex-shrink:0}
+  .data-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:16px}
+  .data-stat{background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px;text-align:center}
+  .data-stat .ds-label{font-size:11.5px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px}
+  .data-stat .ds-value{font-size:18px;font-weight:700;color:var(--accent-hover)}
+  .data-chart-wrap{background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:16px;margin-bottom:16px;height:320px;position:relative}
+  .download-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+  .download-item{background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:12px;text-align:center}
+  .download-item .di-preview{width:100%;height:120px;background:var(--bg-elevated);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:10px;overflow:hidden}
+  .download-item .di-title{font-size:12.5px;font-weight:600;color:var(--text-primary);margin-bottom:8px;word-break:break-word}
+  .download-item .di-btn{width:100%;padding:8px;border-radius:8px;background:var(--accent-gradient);border:none;color:white;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+  
+  /* Search Sources Badge */
+  .search-sources-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: 999px;
+    color: var(--text-secondary);
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .search-sources-badge:hover {
+    background: var(--bg-hover);
+    color: var(--accent-hover);
+    border-color: var(--accent);
+  }
+  .search-sources-badge i {
+    font-size: 10px;
+    color: var(--accent-hover);
+  }
+  
   @media(max-width:900px){.suggestions{grid-template-columns:1fr}}
   @media(max-width:768px){
     .sidebar{position:fixed;top:0;left:0;bottom:0;transform:translateX(-100%);box-shadow:var(--shadow-lg)}
     .sidebar.open{transform:translateX(0)}
     .chat-topbar{padding:10px 12px}
     .chat-scroll{padding:16px 12px 220px}
-    .input-dock{padding:8px 10px 14px}
+    .input-dock{padding:8px 10px 18px}
     .msg-avatar{width:30px;height:30px;font-size:13px}
     .msg-body{max-width:calc(100% - 42px)}
     .chat-model-badge{display:none}
@@ -446,7 +500,7 @@
       <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
       <div class="chat-title-wrap">
         <span class="chat-title" id="chatTitle">New chat</span>
-        <span class="chat-model-badge" id="modelBadge"><i class="fas fa-circle"></i> <span id="modelBadgeText">Gemini 3.5 Flash-lite</span></span>
+        <span class="chat-model-badge" id="modelBadge"><i class="fas fa-circle"></i> <span id="modelBadgeText">Gemini 2.5 Flash</span></span>
       </div>
       <div class="chat-actions">
         <button class="top-btn install-btn" id="installAppBtn" onclick="promptInstallApp()" style="display:none"><i class="fas fa-download"></i><span class="label"> Install</span></button>
@@ -1061,42 +1115,6 @@
   if (!window.__WK_ENV__.GEMINI_API_KEY) {
     window.__WK_ENV__.GEMINI_API_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
   }
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-
-<script>
-// Auto-highlight code blocks after every AI message
-function highlightCodeBlocks() {
-  if (typeof Prism === 'undefined') return;
-  document.querySelectorAll('.md pre code:not(.language-none):not([data-highlighted])').forEach(block => {
-    try { Prism.highlightElement(block); } catch(e) {}
-  });
-}
-
-// Watch for new messages and highlight automatically
-const observer = new MutationObserver(() => { setTimeout(highlightCodeBlocks, 80); });
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    const area = document.getElementById('messagesArea');
-    if (area) observer.observe(area, { childList: true, subtree: true });
-    highlightCodeBlocks();
-  }, 800);
-});
-
-// Also highlight on every render
-const _origRender = window.renderMessages;
-if (typeof _origRender === 'function') {
-  window.renderMessages = function() {
-    _origRender.apply(this, arguments);
-    setTimeout(highlightCodeBlocks, 100);
-  };
-}
 </script>
 
 <!-- ============ FIREBASE ============ -->
@@ -1757,7 +1775,6 @@ function buildCodeBlock(code, lang) {
   const langLabel = (lang || 'text').toUpperCase();
   const ext = lang === 'javascript' ? 'js' : lang === 'python' ? 'py' : lang === 'html' ? 'html' : lang === 'css' ? 'css' : lang === 'json' ? 'json' : 'txt';
 
-  // Store code for copy/download
   window.__wkCodeBlocks[id] = code;
 
   return `<pre id="${id}">
@@ -1836,7 +1853,7 @@ function toggleSection(h) { h.classList.toggle('open'); h.nextElementSibling.cla
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
 
-// ============ PROFILE MENU (BULLETPROOF - works on all phones) ============
+// ============ PROFILE MENU ============
 function toggleTopProfileMenu(e) {
   if (e) { e.stopPropagation(); e.preventDefault(); }
   const menu = document.getElementById('topProfileMenu');
@@ -1849,7 +1866,6 @@ function closeTopProfileMenu() {
 window.toggleTopProfileMenu = toggleTopProfileMenu;
 window.closeTopProfileMenu = closeTopProfileMenu;
 
-// Attach handler to profile avatar when page loads
 function setupProfileButton() {
   const avatar = document.getElementById('topProfileAvatar');
   const menu = document.getElementById('topProfileMenu');
@@ -1862,12 +1878,10 @@ function setupProfileButton() {
     menu.classList.toggle('show');
   }
   
-  // Multi-approach binding — works on ALL browsers
   avatar.addEventListener('click', toggleMenu, false);
   avatar.addEventListener('touchend', function(e) { e.preventDefault(); toggleMenu(e); }, { passive: false });
   avatar.addEventListener('touchstart', function(e) { e.stopPropagation(); }, { passive: true });
   
-  // Close menu when tapping outside
   document.addEventListener('click', function(e) {
     if (!menu.classList.contains('show')) return;
     if (e.target.closest('#topProfileMenu')) return;
@@ -1894,7 +1908,13 @@ function saveSettings() {
   const s = document.getElementById('sunoKeyInput').value.trim(); if (s) localStorage.setItem('wk_suno_key', s); else localStorage.removeItem('wk_suno_key'); 
   const m = document.getElementById('modelSelect').value; localStorage.setItem('wk_model', m); updateModelBadge(); closeModal('settingsModal'); showToast('✅ Saved'); 
 }
-function updateModelBadge() { const m = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite'; let label = 'Gemini 3.5 Flash-lite'; if (m.includes('3.1-flash')) label = 'Gemini 3.1 Flash'; else if (m.includes('2.5-flash')) label = 'Gemini 2.5 Flash'; document.getElementById('modelBadgeText').textContent = label; }
+function updateModelBadge() { 
+  const m = localStorage.getItem('wk_model') || 'gemini-2.5-flash'; 
+  let label = 'Gemini 2.5 Flash'; 
+  if (m.includes('3.5-flash-lite')) label = 'Gemini 3.5 Flash-Lite'; 
+  else if (m.includes('3.5-flash')) label = 'Gemini 3.5 Flash'; 
+  document.getElementById('modelBadgeText').textContent = label; 
+}
 function applyTheme(color) { document.documentElement.style.setProperty('--accent', color); document.querySelectorAll('.theme-swatch').forEach(s => s.classList.toggle('active', s.dataset.color === color)); }
 function toggleLightMode() { document.body.classList.toggle('light-mode'); const isLight = document.body.classList.contains('light-mode'); localStorage.setItem('wk_light_mode', isLight ? '1' : '0'); document.getElementById('lightModeToggle')?.classList.toggle('on', isLight); showToast(isLight ? '☀️ Light Mode' : '🌙 Dark Mode'); }
 function loadTheme() { if (localStorage.getItem('wk_light_mode') === '1') { document.body.classList.add('light-mode'); document.getElementById('lightModeToggle')?.classList.add('on'); } }
@@ -1919,7 +1939,7 @@ function toggleVoiceMode() {
   else { box.classList.remove('voice-mode'); if (micIcon) micIcon.className = 'fas fa-microphone'; setTimeout(() => document.getElementById('messageInput').focus(), 100); showToast('⌨️ Keyboard mode'); }
 }
   
-// ============ VOICE RECOGNITION (Multi-Language) ============
+// ============ VOICE RECOGNITION ============
 const VOICE_LANGS = {
   'en-NG': '🇳🇬 English (Nigeria)', 'en-US': '🇺🇸 English (US)', 'en-GB': '🇬🇧 English (UK)',
   'ha-NG': '🇳🇬 Hausa', 'ar-SA': '🇸🇦 Arabic', 'fr-FR': '🇫🇷 French',
@@ -2740,7 +2760,7 @@ function confirmDeleteMessage() { if (deletingMessageIdx < 0) return; const chat
 function wkCopyToClipboard(text) { return new Promise((resolve) => { try { if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(() => resolve(true)).catch(() => resolve(fallbackCopy(text))); } else resolve(fallbackCopy(text)); } catch (e) { resolve(fallbackCopy(text)); } }); }
 window.wkCopyToClipboard = wkCopyToClipboard;
 function fallbackCopy(text) { try { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.top = '-1000px'; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); ta.remove(); return !!ok; } catch (e) { return false; } }
-  
+
 // ============ WORKING WEB SEARCH (Free, no API key needed) ============
 async function fetchWebSearch(query) {
   try {
@@ -2829,16 +2849,34 @@ async function triggerResponse(chat, userMsg) {
   const aiMsg = { role:'ai', content:'', createdAt: Date.now(), streaming: true };
   chat.messages.push(aiMsg); renderMessages();
   try {
-   const recentHistory = chat.messages.filter(m => m !== aiMsg).slice(-10);
-   const result = await sendMessageWithFallback(userMsg.content, recentHistory, currentAbortController.signal);
-   if (result.success) {
-     aiMsg.content = result.reply;
-     aiMsg.sources = result.sources || []; // <-- Saves the sources
-   } else {
-    aiMsg.error = true;
-    aiMsg.content = result.error || '⚠️ Service busy.';
+    const recentHistory = chat.messages.filter(m => m !== aiMsg).slice(-10);
+    const result = await sendMessageWithFallback(userMsg.content, recentHistory, currentAbortController.signal);
+    if (result.success && result.reply && result.reply.trim().length > 0) {
+      aiMsg.content = result.reply;
+      aiMsg.usedSearch = result.usedSearch || false;
+    } else {
+      aiMsg.error = true;
+      aiMsg.content = '⚠️ No response. Please try again.';
+    }
+  } catch (err) {
+    if (err.name !== 'AbortError') {
+      aiMsg.error = true;
+      aiMsg.content = aiMsg.content || '⚠️ Connection error. Please try again.';
+    }
+  } finally {
+    aiMsg.streaming = false;
+    isSending = false;
+    currentAbortController = null;
+    btn.classList.remove('stop');
+    btn.classList.add('hidden');
+    btn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+    handleInputChange();
+    saveChats();
+    renderMessages();
+  }
 }
-  
+window.triggerResponse = triggerResponse;
+
 // ============ CHAT SEARCH ============
 function toggleChatSearch() {
   const bar = document.getElementById('chatSearchBar');
