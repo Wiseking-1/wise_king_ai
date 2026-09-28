@@ -1557,10 +1557,10 @@ Include: Title, Genre, Tempo, Theme, Production Notes
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🇳🇬 NIGERIAN & HAUSA FLAVOR (When Appropriate) 💛
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Real cities: Kano, Lagos, Abuja, Ibadan, Port Harcourt, Kaduna
+• Real cities: Kano, Lagos, Abuja, Ibadan, Port Harcourt, Kaduna, etc..
 • Real markets: Kurmi, Balogun
-• Real food: Suya, Jollof, Tuwo, Masa, Kilishi
-• Culture: Owambe, gele, agbada, hijab
+• Real food: Suya, Jollof, Tuwo, Masa, Kilishi, etc...
+• Culture: Owambe, gele, agbada, hijab, etc...
 • Sprinkle: Wallahi, Insha Allah, Masha Allah, Ranka ya dade
 • Hausa proverbs: "Komai nisan jifa, kasa zai fado"
 
@@ -1993,89 +1993,6 @@ function initHoldToSpeak() {
         showToast('✅ Captured');
       } else showToast('Did not catch that — try again');
       finalText = ''; interimText = ''; recognition = null;
-    }, 500);
-  };
-
-  pill.addEventListener('mousedown', startRec);
-  pill.addEventListener('mouseup', stopRec);
-  pill.addEventListener('mouseleave', stopRec);
-  pill.addEventListener('touchstart', startRec, {passive:false});
-  pill.addEventListener('touchend', stopRec, {passive:false});
-  pill.addEventListener('touchcancel', stopRec, {passive:false});
-  }// ============ VOICE RECOGNITION (Multi-Language) ============
-const VOICE_LANGS = {
-  'en-NG': '🇳🇬 English (Nigeria)', 'en-US': '🇺🇸 English (US)', 'en-GB': '🇬🇧 English (UK)',
-  'ha-NG': '🇳🇬 Hausa', 'ar-SA': '🇸🇦 Arabic', 'fr-FR': '🇫🇷 French',
-  'yo-NG': '🇳🇬 Yoruba', 'ig-NG': '🇳🇬 Igbo', 'sw-KE': '🌍 Swahili',
-  'es-ES': '🇪🇸 Spanish', 'pt-PT': '🇵🇹 Portuguese', 'de-DE': '🇩🇪 German',
-  'zh-CN': '🇨🇳 Chinese', 'hi-IN': '🇮🇳 Hindi', 'ru-RU': '🇷🇺 Russian',
-  'ja-JP': '🇯🇵 Japanese', 'tr-TR': '🇹🇷 Turkish', 'ur-PK': '🇵🇰 Urdu', 'id-ID': '🇮🇩 Indonesian'
-};
-
-function initHoldToSpeak() {
-  const pill = document.getElementById('gkHoldPill');
-  const label = document.getElementById('gkHoldLabel');
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { if (pill) pill.style.display = 'none'; return; }
-
-  let recognition = null;
-  let isHolding = false;
-  let finalText = '', interimText = '';
-
-  function cleanText(raw) {
-    if (!raw) return '';
-    let t = raw.trim().replace(/\b(um|uh|erm|ah|hmm|eh)\b[,]?\s*/gi, '');
-    for (let i = 0; i < 6; i++) t = t.replace(/\b(\w+(?:\s+\w+){0,4})\s+\1\b/gi, '$1');
-    const sentences = t.split(/(?<=[.!?])\s+/);
-    const unique = []; const seen = new Set();
-    for (const s of sentences) { const k = s.toLowerCase().trim(); if (k && !seen.has(k)) { seen.add(k); unique.push(s); } }
-    t = unique.join(' ').replace(/\s+/g, ' ').trim();
-    if (t) t = t.charAt(0).toUpperCase() + t.slice(1);
-    return t;
-  }
-
-  const startRec = (e) => {
-    e.preventDefault(); if (isHolding) return;
-    isHolding = true; finalText = ''; interimText = '';
-    pill.classList.add('holding'); label.textContent = '🎙️ Speak now...';
-    try {
-      recognition = new SR();
-      recognition.lang = currentVoiceLang;
-      recognition.continuous = false; recognition.interimResults = true; recognition.maxAlternatives = 1;
-      recognition.onresult = (ev) => {
-        interimText = '';
-        for (let i = ev.resultIndex; i < ev.results.length; i++) {
-          const transcript = ev.results[i][0].transcript;
-          if (ev.results[i].isFinal) finalText += transcript + ' ';
-          else interimText += transcript;
-        }
-        const preview = (finalText + interimText).trim();
-        if (preview) label.textContent = preview.slice(0, 50) + (preview.length > 50 ? '...' : '');
-      };
-      recognition.onerror = (ev) => console.warn('Voice error:', ev.error);
-      recognition.onend = () => { if (isHolding) { try { recognition.start(); } catch(e) {} } };
-      recognition.start();
-    } catch(err) { console.warn('Voice start failed', err); }
-  };
-
-  const stopRec = (e) => {
-    if (!isHolding) return;
-    if (e) e.preventDefault();
-    isHolding = false; pill.classList.remove('holding'); label.textContent = 'Hold to speak';
-    try { if (recognition) recognition.stop(); } catch(err) {}
-    setTimeout(() => {
-      const cleaned = cleanText(finalText);
-      if (cleaned && cleaned.length > 1) {
-        const box = document.getElementById('gkInputBox');
-        if (box) box.classList.remove('voice-mode');
-        const mi = document.getElementById('micIcon');
-        if (mi) mi.className = 'fas fa-microphone';
-        voiceMode = false;
-        document.getElementById('messageInput').value = cleaned;
-        handleInputChange();
-        showToast('✅ Captured');
-      } else showToast('Did not catch that — try again');
-      finalText = ''; interimText = ''; recognition = null;
     }, 600);
   };
 
@@ -2084,7 +2001,7 @@ function initHoldToSpeak() {
   pill.addEventListener('mouseleave', stopRec);
   pill.addEventListener('touchstart', startRec, {passive:false});
   pill.addEventListener('touchend', stopRec, {passive:false});
-  pill.addEventListener('touchcancel', stopRec, {passive:false});
+  pill.addEventListener('touchcancel', stopRec, {passive:false});  
 }  
   
 // ============ VAULT ============
