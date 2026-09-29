@@ -1342,7 +1342,70 @@ if (typeof _origRender === 'function') {
       .then(() => { showAuthSuccess("Reset email sent!"); btn.disabled = false; btn.innerHTML = orig; })
       .catch((error) => { showAuthError("Error: " + error.message); btn.disabled = false; btn.innerHTML = orig; });
   };
+  
+ // ============ FULL WORKING PROFILE MENU FUNCTIONS ============
+ window.openWallet = function() {
+   closeTopProfileMenu();
+   const plan = localStorage.getItem('wk_plan') || 'Free';
+   const credits = localStorage.getItem('wk_credits') || '0';
+   const html = `
+     <div class="data-stat" style="margin-bottom:14px;text-align:center">
+       <div class="ds-label">Current Plan</div>
+       <div class="ds-value">${plan}</div>
+     </div>
+    <div class="data-stat" style="margin-bottom:14px;text-align:center">
+      <div class="ds-label">Credit Balance</div>
+      <div class="ds-value">${credits} credits</div>
+    </div>
+    <p class="modal-text">1 credit = ₦10. Images use 3 credits, videos use 20 credits.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
+      <button class="btn accent" style="justify-content:center" onclick="wkBuyCredits(500)">₦500<br>50 cr</button>
+      <button class="btn accent" style="justify-content:center" onclick="wkBuyCredits(1000)">₦1,000<br>100 cr</button>
+      <button class="btn accent" style="justify-content:center" onclick="wkBuyCredits(2000)">₦2,000<br>200 cr</button>
+    </div>
+  `;
+  showGenericModal('walletModal', '<i class="fas fa-wallet"></i> Wallet', html);
+};
+  
+window.wkBuyCredits = function(n) {
+  showToast('💳 Buying ₦' + n.toLocaleString() + ' credits...');
+  setTimeout(() => {
+    const curr = parseInt(localStorage.getItem('wk_credits') || '0');
+    localStorage.setItem('wk_credits', curr + Math.floor(n/10));
+    showToast('✅ Added ' + Math.floor(n/10) + ' credits!');
+    closeModal('walletModal');
+  }, 1500);
+};
 
+window.openManageAccount = function() {
+  closeTopProfileMenu();
+  const name = localStorage.getItem('wk_user_name') || 'Not set';
+  const email = localStorage.getItem('wk_user_email') || 'Not signed in';
+  const plan = localStorage.getItem('wk_plan') || 'Free';
+  const credits = localStorage.getItem('wk_credits') || '0';
+  const joined = localStorage.getItem('wk_joined') || new Date().toLocaleDateString();
+  const row = (a, b) => '<div class="toggle-row"><div class="toggle-label">' + a + '</div><div style="color:var(--text-secondary);font-size:13.5px">' + escapeHtml(b) + '</div></div>';
+  const html = '<div class="settings-card">' +
+    row('Name', name) + row('Email', email) +
+    row('Plan', plan) + row('Credits', credits) +
+    row('Joined', joined) + '</div>' +
+    '<div class="modal-actions"><button class="btn accent" onclick="closeModal(\'accountModal\');openPricingPanel()">View Plans</button><button class="btn solid" onclick="closeModal(\'accountModal\');openWallet()">Wallet</button></div>';
+  showGenericModal('accountModal', '<i class="fas fa-user"></i> Manage Account', html);
+};
+
+window.showGenericModal = function(id, title, html) {
+  let m = document.getElementById(id);
+  if (!m) { 
+    m = document.createElement('div'); 
+    m.className = 'modal-bg'; 
+    m.id = id; 
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); }); 
+    document.body.appendChild(m); 
+  }
+  m.innerHTML = '<div class="modal"><div class="modal-head"><div class="modal-title">' + title + '</div><button class="modal-close" onclick="closeModal(\'' + id + '\')"><i class="fas fa-times"></i></button></div>' + html + '</div>';
+  m.classList.add('show');
+};
+  
   window.addAnotherAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(() => window.signInWithGoogle(), 80); };
   window.switchAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(() => window.signInWithGoogle(), 80); };
 
@@ -1379,7 +1442,8 @@ if (typeof _origRender === 'function') {
 
 <script>
 // ============ CORE STATE ============
-const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU'; 
+const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
+const ENV_DEEPSEEK_KEY = ''; // Optional: add your DeepSeek key here, or leave empty and users paste in settings
 
 const SYSTEM_PROMPT = `You are WISE KING AI 👑 — created by IBRAHIM ABDULLAHI 🇳🇬 from Nigeria (Wise King Industry). OWNER: Oga Ibrahim 🇳🇬💛.
 
@@ -1980,33 +2044,40 @@ function setupProfileButton() {
 }
 
 // ============ AVATAR ============
-function applyAvatar(data) { ['sidebarAvatar','settingsAvatar','topProfileAvatar','pmAvatar'].forEach(id => { const el = document.getElementById(id); if (el) { if (data.startsWith('http') || data.startsWith('data:')) el.innerHTML = `<img src="${data}">`; else el.textContent = data; } }); }
-function handleProfilePhotoUpload(e) { const f = e.target.files[0]; if (!f) return; const fr = new FileReader(); fr.onload = ev => { localStorage.setItem('wk_user_avatar', ev.target.result); applyAvatar(ev.target.result); showToast('Photo updated'); }; fr.readAsDataURL(f); }
+function applyAvatar(data) {
+  if (!data) data = '👑';
+  ['sidebarAvatar','settingsAvatar','topProfileAvatar','pmAvatar'].forEach(id => { 
+    const el = document.getElementById(id); 
+    if (el) { 
+      if (data.startsWith('http') || data.startsWith('data:')) {
+        el.innerHTML = '<img src="' + data + '" style="width:100%;height:100%;object-fit:cover">';
+      } else { 
+        el.textContent = data; 
+      } 
+    } 
+  });
+}
+window.applyAvatar = applyAvatar;
 
 // ============ SETTINGS ============
 function openSettings() { 
   document.getElementById('settingsModal').classList.add('show'); 
   closeSidebar(); 
   const k1 = localStorage.getItem('wk_api_key'); if (k1) document.getElementById('apiKeyInput').value = k1; 
+  const dk = localStorage.getItem('wk_deepseek_key'); if (dk && document.getElementById('deepseekKeyInput')) document.getElementById('deepseekKeyInput').value = dk;
   const k2 = localStorage.getItem('wk_replicate_key'); if (k2) document.getElementById('replicateKeyInput').value = k2; 
   const k3 = localStorage.getItem('wk_suno_key'); if (k3) document.getElementById('sunoKeyInput').value = k3; 
   const pk = localStorage.getItem('wk_paystack_key'); if (pk) document.getElementById('paystackKeyInput').value = pk;
 }
 function saveSettings() { 
   const g = document.getElementById('apiKeyInput').value.trim(); if (g) localStorage.setItem('wk_api_key', g); else localStorage.removeItem('wk_api_key'); 
+  const dkv = document.getElementById('deepseekKeyInput'); if (dkv) { const dk = dkv.value.trim(); if (dk) localStorage.setItem('wk_deepseek_key', dk); else localStorage.removeItem('wk_deepseek_key'); }
   const r = document.getElementById('replicateKeyInput').value.trim(); if (r) localStorage.setItem('wk_replicate_key', r); else localStorage.removeItem('wk_replicate_key'); 
   const s = document.getElementById('sunoKeyInput').value.trim(); if (s) localStorage.setItem('wk_suno_key', s); else localStorage.removeItem('wk_suno_key'); 
   const pk = document.getElementById('paystackKeyInput').value.trim(); if (pk) localStorage.setItem('wk_paystack_key', pk); else localStorage.removeItem('wk_paystack_key'); 
   const m = document.getElementById('modelSelect').value; localStorage.setItem('wk_model', m); 
   updateModelBadge(); closeModal('settingsModal'); showToast('✅ Saved'); 
-}
-function updateModelBadge() { 
-  const m = localStorage.getItem('wk_model') || 'gemini-2.5-flash'; 
-  let label = 'Gemini 2.5 Flash'; 
-  if (m.includes('3.5-flash-lite')) label = 'Gemini 3.5 Flash-Lite'; 
-  else if (m.includes('3.5-flash')) label = 'Gemini 3.5 Flash'; 
-  document.getElementById('modelBadgeText').textContent = label; 
-}
+}  
 function applyTheme(color) { document.documentElement.style.setProperty('--accent', color); document.querySelectorAll('.theme-swatch').forEach(s => s.classList.toggle('active', s.dataset.color === color)); }
 function toggleLightMode() { document.body.classList.toggle('light-mode'); const isLight = document.body.classList.contains('light-mode'); localStorage.setItem('wk_light_mode', isLight ? '1' : '0'); document.getElementById('lightModeToggle')?.classList.toggle('on', isLight); showToast(isLight ? '☀️ Light Mode' : '🌙 Dark Mode'); }
 function loadTheme() { if (localStorage.getItem('wk_light_mode') === '1') { document.body.classList.add('light-mode'); document.getElementById('lightModeToggle')?.classList.add('on'); } }
@@ -2952,7 +3023,9 @@ function wkCopyToClipboard(text) { return new Promise((resolve) => { try { if (n
 window.wkCopyToClipboard = wkCopyToClipboard;
 function fallbackCopy(text) { try { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.top = '-1000px'; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); ta.remove(); return !!ok; } catch (e) { return false; } }
 
-// ============ FAST AI RESPONSE ============
+// ============ FAST AI RESPONSE — INSTANT + FALLBACK + REAL DATE ============
+const ENV_DEEPSEEK_KEY = window.__WK_ENV__?.DEEPSEEK_API_KEY || '';
+
 async function fetchWebSearch(query) {
   try {
     const res = await fetch(`https://text.pollinations.ai/search?q=${encodeURIComponent(query)}`);
@@ -2962,21 +3035,54 @@ async function fetchWebSearch(query) {
   } catch (e) { return null; }
 }
 
+// --- DeepSeek fallback (used when Gemini fails) ---
+async function tryDeepSeekFallback(userText, chatHistory, signal) {
+  try {
+    const dsKey = (localStorage.getItem('wk_deepseek_key') || '').trim() || ENV_DEEPSEEK_KEY;
+    if (!dsKey) return { success: false };
+    const now = new Date();
+    const dateStr = now.toLocaleString('en-NG', { weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true });
+    const messages = [
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...(chatHistory || []).slice(-6).map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: (m.content || '').slice(0, 6000) })),
+      { role: 'user', content: `[Today is ${dateStr}.]\n\n${userText}` }
+    ];
+    const opts = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + dsKey },
+      body: JSON.stringify({ model: 'deepseek-chat', messages, max_tokens: 2000, temperature: 0.7 })
+    };
+    if (signal) opts.signal = signal;
+    const res = await fetch('https://api.deepseek.com/v1/chat/completions', opts);
+    if (!res.ok) return { success: false };
+    const data = await res.json();
+    const reply = data?.choices?.[0]?.message?.content || '';
+    if (!reply) return { success: false };
+    return { success: true, reply, usedSearch: false, provider: 'DeepSeek' };
+  } catch (e) { return { success: false }; }
+}
+window.tryDeepSeekFallback = tryDeepSeekFallback;
+
+// --- Main AI function: Gemini → DeepSeek fallback ---
 async function sendMessageWithFallback(userText, chatHistory = [], signal = null) {
   const apiKey = (localStorage.getItem('wk_api_key') || '').trim() || ENV_GEMINI_KEY;
   const model = localStorage.getItem('wk_model') || 'gemini-2.5-flash';
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-  
+
+  // Live search for news/weather/prices/etc.
   const liveKeywords = /\b(news|latest|today|now|current|weather|price|rate|score|match|update|2025|2026)\b/i;
   let searchContext = '';
   if (liveKeywords.test(userText)) {
     const results = await fetchWebSearch(userText);
     if (results) searchContext = `\n\n[LIVE WEB SEARCH RESULTS]:\n${results}\n[END]\n`;
   }
+
+  // Real date/time injection (so AI knows today correctly)
   const now = new Date();
   const dateTimeString = now.toLocaleString('en-NG', { weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true });
-  const finalPrompt = `[Today is ${dateTimeString}.]${searchContext}\n\nUser: ${userText}`;
-  
+  const hijriDate = new Intl.DateTimeFormat('en-TN-u-ca-islamic', { day:'numeric', month:'long', year:'numeric', weekday:'long' }).format(now);
+  const finalPrompt = `[Today is ${dateTimeString}. Hijri date: ${hijriDate}.]${searchContext}\n\nUser: ${userText}`;
+
   let attempts = 0;
   while (attempts < 2) {
     attempts++;
@@ -2992,17 +3098,23 @@ async function sendMessageWithFallback(userText, chatHistory = [], signal = null
       if (signal) fetchOpts.signal = signal;
       const response = await fetch(url, fetchOpts);
       if (!response.ok) {
-        if (response.status === 429 || response.status >= 500) { await new Promise(r => setTimeout(r, 500)); continue; }
+        // ⚡ Fast retry (200ms instead of 500ms)
+        if (response.status === 429 || response.status >= 500) { await new Promise(r => setTimeout(r, 200)); continue; }
         throw new Error(`HTTP ${response.status}`);
       }
       const data = await response.json();
       const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
       if (!reply) throw new Error("Empty");
-      return { success: true, reply, usedSearch: !!searchContext };
+      return { success: true, reply, usedSearch: !!searchContext, provider: 'Gemini' };
     } catch (err) {
       if (err.name === 'AbortError') throw err;
-      if (attempts >= 2) return { success: true, reply: `Ranka ya dade! I received: "${userText}". Let me know how I can help! 👑`, usedSearch: false };
-      await new Promise(r => setTimeout(r, 400));
+      // ⚡ If Gemini fails twice → try DeepSeek
+      if (attempts >= 2) {
+        const fallback = await tryDeepSeekFallback(userText, chatHistory, signal);
+        if (fallback.success) return fallback;
+        return { success: true, reply: `Ranka ya dade! I received: "${userText}". Let me know how I can help! 👑`, usedSearch: false };
+      }
+      await new Promise(r => setTimeout(r, 200));
     }
   }
 }
