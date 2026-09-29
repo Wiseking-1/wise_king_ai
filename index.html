@@ -3084,5 +3084,34 @@ window.triggerResponse = triggerResponse;
 function toggleChatSearch() { const bar = document.getElementById('chatSearchBar'); if (!bar) return; bar.classList.toggle('show'); if (bar.classList.contains('show')) { const input = document.getElementById('chatSearchInput'); if (input) { input.value = ''; input.focus(); } } }
 window.toggleChatSearch = toggleChatSearch;
 
-
+// ============ INIT ============
+function init() {
+  try {
+    loadVault(); loadLibrary(); loadCrossChatMemory(); loadProjects(); loadMusic();
+    loadChatsFromLocalStorage(); loadTheme();
+    const savedName = localStorage.getItem('wk_user_name'); if (savedName) document.getElementById('sidebarName').textContent = savedName;
+    const av = localStorage.getItem('wk_user_avatar'); if (av) applyAvatar(av);
+    const k1 = localStorage.getItem('wk_api_key'); if (k1) document.getElementById('apiKeyInput').value = k1;
+    const dk = localStorage.getItem('wk_deepseek_key'); if (dk) document.getElementById('deepseekKeyInput').value = dk;
+    const k2 = localStorage.getItem('wk_replicate_key'); if (k2) document.getElementById('replicateKeyInput').value = k2;
+    const k3 = localStorage.getItem('wk_suno_key'); if (k3) document.getElementById('sunoKeyInput').value = k3;
+    const m = localStorage.getItem('wk_model'); if (m) document.getElementById('modelSelect').value = m;
+    setWebSearchEnabled(getWebSearchEnabled()); setMemoryEnabled(getMemoryEnabled()); setStreamingEnabled(getStreamingEnabled());
+    updateModelBadge(); updatePlanBadge(); handleInputChange();
+    initHoldToSpeak(); setupProfileButton();
+    if (typeof pdfjsLib !== 'undefined') pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    if (localStorage.getItem('wk_guest_mode') === '1') unlockApp('Guest', 'Guest Mode (not synced)', null);
+    currentVoiceLang = localStorage.getItem('wk_voice_lang') || 'en-NG';
+  } catch(e){ console.warn('Init error', e); }
+}
+document.addEventListener('click', e => { const sw = e.target.closest('.theme-swatch'); if (sw) { const c = sw.dataset.color; localStorage.setItem('wk_theme', c); applyTheme(c); } });
+document.querySelectorAll('.modal-bg').forEach(m => { m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('show'); }); });
+document.getElementById('sharePopup')?.addEventListener('click', (e) => { if (e.target.id === 'sharePopup') closeSharePopup(); });
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();
+setTimeout(setupProfileButton, 500);
+setTimeout(setupProfileButton, 1500);
+</script>
+</body>
+</html>
                                                                                                                                                                              
