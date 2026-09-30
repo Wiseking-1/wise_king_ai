@@ -3030,10 +3030,17 @@ function initHoldToSpeak() {
         voiceMode = false;
         document.getElementById('messageInput').value = cleaned;
         handleInputChange();
-        showToast('✅ Captured');
-      } else showToast('Did not catch that — try again');
+        showToast('✅ Sent to Wise King AI...');setTimeout(() => { if (cleaned.trim().length > 0 && !isSending) { sendMessage(); } }, 400);
+        setTimeout(() => {
+          if (cleaned.trim().length > 0 && !isSending) {
+            sendMessage();
+          }
+        }, 400);
+      } else {
+        showToast('Did not catch that — try again');
+      }
       finalText = ''; interimText = ''; recognition = null;
-    }, 600);
+    }, 600);    
   };
   pill.addEventListener('mousedown', startRec);
   pill.addEventListener('mouseup', stopRec);
