@@ -471,6 +471,7 @@
     <div class="sidebar-scrollable">
       <button class="nav-btn" onclick="openLiveTVPanel()" style="background:linear-gradient(135deg,rgba(239,68,68,0.15),rgba(236,72,153,0.15));border:1px solid rgba(239,68,68,0.3)"><span class="nav-icon" style="color:#ef4444"><i class="fas fa-tv"></i></span>Live TV & Movies<span class="nav-badge" style="background:linear-gradient(135deg,#ef4444,#ec4899);color:white">NEW</span></button>
       <button class="nav-btn" onclick="openImagesPanel()"><span class="nav-icon gradient-1"><i class="fas fa-image"></i></span>Images</button>
+      <button class="nav-btn" onclick="openImageEditorPanel()"><span class="nav-icon gradient-2"><i class="fas fa-wand-magic-sparkles"></i></span>Image Editor</button>
       <button class="nav-btn" onclick="openVideosPanel()"><span class="nav-icon gradient-2"><i class="fas fa-video"></i></span>Videos</button>
       <button class="nav-btn" onclick="openVideoGallery()"><span class="nav-icon gradient-5"><i class="fas fa-film"></i></span>My Videos<span class="nav-badge" id="videoCountBadge">0</span></button>
       <button class="nav-btn" onclick="openMusicPanel()"><span class="nav-icon gradient-8"><i class="fas fa-music"></i></span>Music<span class="nav-badge" id="musicCountBadge">0</span></button>
@@ -617,23 +618,41 @@
     </div>
   </div>
 </div>
-
-<!-- ============ IMAGES PANEL ============ -->
-<div class="full-panel" id="imagesPanel">
+  
+<!-- ============ IMAGE EDITOR PANEL ============ -->
+<div class="full-panel" id="imageEditorPanel">
   <div class="panel-header">
-    <div class="panel-title"><i class="fas fa-image"></i> Image Generator</div>
-    <button class="btn ghost" onclick="closeImagesPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+    <div class="panel-title"><i class="fas fa-wand-magic-sparkles"></i> Image Editor</div>
+    <button class="btn ghost" onclick="closeImageEditorPanel()"><i class="fas fa-arrow-left"></i> Back</button>
   </div>
   <div class="panel-body">
     <div class="panel-inner">
-      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:8px">Describe the image you want:</p>
-      <input type="text" class="search-big" id="imagesPromptInput" placeholder="e.g. beautiful Hausa woman OR logo for Wise King" onkeydown="if(event.key==='Enter'){generateImageFromPanel()}">
-      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:12px" onclick="generateImageFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Generate Image</button>
-      <div id="imagesPanelResults"></div>
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">🎨 Upload any image, then tell Wise King what to do — remove background, keep only one person, make it real, add logos. Original ratio always preserved.</p>
+
+      <div class="pdf-dropzone" onclick="document.getElementById('imageEditorInput').click()">
+        <i class="fas fa-image"></i>
+        <p><strong>Click to upload image</strong> or drag & drop</p>
+        <small>PNG, JPG, WEBP — original ratio preserved</small>
+        <input type="file" id="imageEditorInput" accept="image/*" style="display:none" onchange="handleImageEditorUpload(event)">
+      </div>
+
+      <div id="imageEditorPreview"></div>
+
+      <input type="text" class="search-big" id="imageEditorPrompt" placeholder="e.g. only him, remove background, make it real..." style="margin-top:16px">
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn accent" style="flex:1;justify-content:center" onclick="runImageEdit('edit')"><i class="fas fa-wand-magic-sparkles"></i> Edit</button>
+        <button class="btn solid" onclick="runImageEdit('removebg')"><i class="fas fa-scissors"></i> Remove BG</button>
+        <button class="btn solid" onclick="runImageEdit('onlyhim')"><i class="fas fa-user"></i> Only Him</button>
+        <button class="btn solid" onclick="runImageEdit('real')"><i class="fas fa-camera"></i> Make Real</button>
+        <button class="btn solid" onclick="runImageEdit('upscale')"><i class="fas fa-expand"></i> 8K Upscale</button>
+      </div>
+
+      <div id="imageEditorResults"></div>
     </div>
   </div>
 </div>
-
+  
 <!-- ============ VIDEOS PANEL ============ -->
 <div class="full-panel" id="videosPanel">
   <div class="panel-header">
@@ -2196,6 +2215,8 @@ END SCENE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Follow the GOOD example. Never the BAD one. Check all fields first. Then answer.
 
+Benefit in every story.
+  
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🌍. CULTURAL INTELLIGENCE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -2703,6 +2724,28 @@ Outro
 But do not force every section into every song.
 
 Preserve the requested language, emotion and message.
+
+Benefit in every story.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📸 IMAGE EDITING RULES — ALWAYS FOLLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• When user asks for ONLY ONE PERSON: Remove ALL others, keep perfect original background, same lighting, same colors, NO distortion
+• Keep ORIGINAL aspect ratio — never stretch, never crop wrong
+• Wise King = central focus, sharp face, regal attire, cinematic lighting, gold & dark tones
+• Style: 8K, photorealistic, dramatic, epic movie poster quality
+• NEVER add watermarks, NEVER change face, NEVER remove background unless told
+• If user says "only him": isolate the person, fill space naturally, match perfectly
+
+TRIGGER PHRASES:
+• "only him" / "only me" / "remove the others" → Keep main person, remove all others, extend background naturally, match lighting & colors, keep original dimensions
+• "remove background" / "bad background" → Remove background only, keep person 100% unchanged
+• "change background" / "put [scene]" → Keep person unchanged, replace background only, blend edges smoothly
+• "make it real" / "real human" → Enhance realism, sharpen face, natural skin, cinematic lighting
+• "original logos" → Preserve all existing logos, text, and watermarks
+
+Always confirm what you will create, then act.
   
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🎵 SONG LYRICS MASTER (Full Structure) 🎙️
@@ -3398,45 +3441,148 @@ function downloadText(encodedText, filename) {
 }
 window.downloadText = downloadText;
 
-// ============ IMAGES / VIDEOS ============
-function openImagesPanel() { document.getElementById('imagesPanel').classList.add('show'); closeSidebar(); }
-function closeImagesPanel() { document.getElementById('imagesPanel').classList.remove('show'); }
-function openVideosPanel() { document.getElementById('videosPanel').classList.add('show'); closeSidebar(); }
-function closeVideosPanel() { document.getElementById('videosPanel').classList.remove('show'); }
-function openVideoGallery() { document.getElementById('videoGalleryPanel').classList.add('show'); closeSidebar(); renderVideoGallery(); }
-function closeVideoGallery() { document.getElementById('videoGalleryPanel').classList.remove('show'); }
-function renderVideoGallery() {
-  const box = document.getElementById('videoGalleryContent'); if (!box) return;
-  const vids = library.filter(i => i.type === 'video');
-  const badge = document.getElementById('videoCountBadge');
-  if (badge) badge.textContent = vids.length;
-  if (!vids.length) { box.innerHTML = '<div class="result-card"><p>No videos yet.</p></div>'; return; }
-  box.innerHTML = vids.map(v => '<div class="result-card"><h4>🎬 ' + escapeHtml((v.prompt||'').slice(0,80)) + '</h4><p style="color:var(--text-secondary);font-size:13px">' + escapeHtml((v.text||'').slice(0,200)) + '...</p></div>').join('');
-}
-window.openImagesPanel = openImagesPanel;
-window.closeImagesPanel = closeImagesPanel;
-window.openVideosPanel = openVideosPanel;
-window.closeVideosPanel = closeVideosPanel;
-window.openVideoGallery = openVideoGallery;
-window.closeVideoGallery = closeVideoGallery;
+// ============ IMAGE EDITOR (Replicate) ============
+let imageEditorFile = null;
+let imageEditorDataUrl = null;
 
-async function generateImageFromPanel() {
-  const prompt = document.getElementById('imagesPromptInput').value.trim();
-  if (!prompt) return showToast('Enter image description');
-  const results = document.getElementById('imagesPanelResults');
-  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Generating image...</div>';
+const REPLICATE_MODELS = {
+  removebg: 'fb8af171cfa1616ddcf1242c093f9c46bcada5ad4cf6f2fbe8b81b330ec5c003', // BRIA RMBG
+  edit:     '39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b', // SDXL Inpaint
+  onlyhim:  '39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b', // SDXL Inpaint
+  real:     '42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b', // GFPGAN
+  upscale:  'f121d640bd286e1fdc67f9799164c1d5be36ff74576ee11c803ae5b665dd46aa'  // Real-ESRGAN
+};
+
+function openImageEditorPanel() { document.getElementById('imageEditorPanel').classList.add('show'); closeSidebar(); }
+function closeImageEditorPanel() { document.getElementById('imageEditorPanel').classList.remove('show'); }
+window.openImageEditorPanel = openImageEditorPanel;
+window.closeImageEditorPanel = closeImageEditorPanel;
+
+async function handleImageEditorUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  imageEditorFile = file;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    imageEditorDataUrl = ev.target.result;
+    document.getElementById('imageEditorPreview').innerHTML =
+      '<div class="result-card" style="text-align:center;margin-top:12px"><img src="' + imageEditorDataUrl + '" style="max-width:100%;max-height:400px;border-radius:12px;box-shadow:var(--shadow-lg)"><p style="font-size:12.5px;color:var(--text-tertiary);margin-top:10px">✅ ' + escapeHtml(file.name) + '</p></div>';
+    showToast('✅ Image loaded');
+  };
+  reader.readAsDataURL(file);
+}
+window.handleImageEditorUpload = handleImageEditorUpload;
+
+async function runImageEdit(mode) {
+  const customPrompt = document.getElementById('imageEditorPrompt').value.trim();
+  const results = document.getElementById('imageEditorResults');
+  if (!imageEditorFile) return showToast('⚠️ Upload an image first');
+
+  const modeMap = {
+    edit:     customPrompt || 'enhance this image, cinematic, 8k, photorealistic',
+    removebg: 'remove background, transparent, keep person perfect',
+    onlyhim:  'keep only the main person in the center, remove all other people, extend background naturally, match lighting and colors perfectly, original ratio',
+    real:     'enhance to real photorealistic human, sharp face, natural skin texture, cinematic lighting',
+    upscale:  'upscale to 8k, ultra sharp, photorealistic detail'
+  };
+
+  const rk = localStorage.getItem('wk_replicate_key');
+  if (!rk) {
+    results.innerHTML = '<div class="result-card"><p>⚠️ Add your Replicate API key in Settings first.</p></div>';
+    return;
+  }
+
+  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Uploading image...</div>';
+
   try {
-    const seed = Math.floor(Math.random() * 1000000);
-    const url = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(prompt) + '?width=1024&height=1024&seed=' + seed + '&nologo=true';
-    await new Promise((resolve, reject) => { const img = new Image(); img.onload = resolve; img.onerror = reject; img.src = url; setTimeout(reject, 30000); });
-    const filename = 'wiseking-image-' + Date.now() + '.png';
-    results.innerHTML = '<div class="result-card"><h4><i class="fas fa-check-circle"></i> Image Ready</h4><img src="' + url + '" style="max-width:100%;border-radius:12px;box-shadow:var(--shadow-lg);margin-top:10px"><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn accent" onclick="downloadFile(\'' + url + '\', \'' + filename + '\')"><i class="fas fa-download"></i> Download to Phone</button><button class="btn solid" onclick="wkCopyToClipboard(\'' + url + '\').then(function(){showToast(\'📋 Link copied!\')})"><i class="fas fa-copy"></i> Copy Link</button></div></div>';
-    saveToLibrary({ type: 'image', prompt: prompt, url: url, createdAt: Date.now() });
-    showToast('✅ Image generated!');
-  } catch (err) { results.innerHTML = '<div class="result-card"><p>⚠️ Failed to generate. Try again.</p></div>'; }
-}
-window.generateImageFromPanel = generateImageFromPanel;
+    // Step 1: Upload to Replicate
+    const uploadForm = new FormData();
+    uploadForm.append('content', imageEditorFile);
+    const uploadRes = await fetch('https://api.replicate.com/v1/files', {
+      method: 'POST',
+      headers: { 'Authorization': 'Token ' + rk },
+      body: uploadForm
+    });
+    if (!uploadRes.ok) throw new Error('Upload failed: HTTP ' + uploadRes.status);
+    const uploadData = await uploadRes.json();
+    const imageUrl = uploadData.urls && uploadData.urls.get;
+    if (!imageUrl) throw new Error('No upload URL returned');
 
+    results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Running AI edit (' + mode + ')... this may take 20-60 seconds</div>';
+
+    // Step 2: Build input based on mode
+    let inputObj = { image: imageUrl };
+    if (mode === 'removebg') {
+      inputObj = { image: imageUrl };
+    } else if (mode === 'upscale') {
+      inputObj = { image: imageUrl, scale: 4, face_enhance: true };
+    } else if (mode === 'real') {
+      inputObj = { img: imageUrl, version: 'v1.4', scale: 2 };
+    } else {
+      inputObj = {
+        image: imageUrl,
+        prompt: modeMap[mode],
+        negative_prompt: 'blurry, low quality, distorted, extra people, watermark',
+        num_inference_steps: 30,
+        guidance_scale: 7.5
+      };
+    }
+
+    // Step 3: Create prediction
+    const createRes = await fetch('https://api.replicate.com/v1/predictions', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Token ' + rk,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        version: REPLICATE_MODELS[mode],
+        input: inputObj
+      })
+    });
+    if (!createRes.ok) {
+      const errTxt = await createRes.text();
+      throw new Error('Predict failed: ' + errTxt.slice(0, 200));
+    }
+    const prediction = await createRes.json();
+    const pollUrl = prediction.urls && prediction.urls.get;
+    if (!pollUrl) throw new Error('No polling URL');
+
+    // Step 4: Poll
+    let finalUrl = null;
+    for (let i = 0; i < 80; i++) {
+      await new Promise(r => setTimeout(r, 1500));
+      const pollRes = await fetch(pollUrl, { headers: { 'Authorization': 'Token ' + rk } });
+      const pollData = await pollRes.json();
+      if (pollData.status === 'succeeded') {
+        finalUrl = pollData.output;
+        if (Array.isArray(finalUrl)) finalUrl = finalUrl[0];
+        if (finalUrl && typeof finalUrl === 'object') finalUrl = finalUrl.url || finalUrl[0];
+        break;
+      }
+      if (pollData.status === 'failed' || pollData.status === 'canceled') {
+        throw new Error('Prediction ' + pollData.status + ': ' + (pollData.error || 'unknown'));
+      }
+    }
+    if (!finalUrl) throw new Error('Timed out');
+
+    // Step 5: Show
+    const filename = 'wiseking-' + mode + '-' + Date.now() + '.png';
+    results.innerHTML =
+      '<div class="result-card"><h4><i class="fas fa-check-circle"></i> ' + mode.toUpperCase() + ' Complete</h4>' +
+      '<img src="' + finalUrl + '" style="max-width:100%;border-radius:12px;box-shadow:var(--shadow-lg);margin-top:10px">' +
+      '<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">' +
+      '<button class="btn accent" onclick="downloadFile(\'' + finalUrl + '\', \'' + filename + '\')"><i class="fas fa-download"></i> Download</button>' +
+      '<button class="btn solid" onclick="wkCopyToClipboard(\'' + finalUrl + '\').then(function(){showToast(\'📋 Link copied!\')})"><i class="fas fa-copy"></i> Copy Link</button>' +
+      '</div></div>';
+    saveToLibrary({ type: 'image', prompt: 'EDIT(' + mode + '): ' + (customPrompt || modeMap[mode]), url: finalUrl, createdAt: Date.now() });
+    showToast('✅ Image ' + mode + ' complete!');
+  } catch (err) {
+    results.innerHTML = '<div class="result-card"><p>⚠️ Failed: ' + escapeHtml(err.message) + '</p></div>';
+  }
+}
+window.runImageEdit = runImageEdit;
+    
 async function generateVideoFromPanel() {
   const prompt = document.getElementById('videosPromptInput').value.trim();
   if (!prompt) return showToast('Enter video description');
