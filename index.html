@@ -4228,6 +4228,7 @@ function buildMessageEl(msg, idx, chatId) {
   el.appendChild(body);
   return el;
   }
+  
   const contentWrap = document.createElement('div'); contentWrap.className = 'msg-content-wrap';
   const content = document.createElement('div'); content.className = 'msg-content ' + (isAI ? 'ai' : 'user') + (msg.error ? ' error' : '');
   if (isThinking) { content.classList.add('thinking'); content.innerHTML = '<div class="thinking-label"><span class="thinking-dots"><span></span><span></span><span></span></span>Wise King is thinking...</div>'; }
