@@ -152,7 +152,7 @@
   .pm-item i{width:20px;text-align:center;font-size:16px;color:var(--text-secondary)}
   .pm-item.danger{color:#f87171}
   .pm-divider{height:1px;background:var(--border-subtle);margin:4px 12px}
-  .chat-scroll{flex:1;overflow-y:auto;padding:24px 20px 200px;scroll-behavior:smooth}
+  .chat-scroll{flex:1;overflow-y:auto;padding:16px 8px 200px;scroll-behavior:smooth}
   .chat-inner{max-width:780px;margin:0 auto}
   .welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 20px;min-height:60vh}
   .welcome-logo{width:72px;height:72px;border-radius:var(--radius-xl);background:var(--accent-gradient);display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:20px;box-shadow:var(--shadow-glow)}
@@ -173,7 +173,7 @@
   .msg-avatar.ai{background:var(--accent-gradient);color:white;box-shadow:0 0 0 1px var(--border-default),0 0 12px var(--accent-glow)}
   .msg-avatar.user{background:var(--bg-elevated);color:var(--text-secondary)}
   .msg-avatar img{width:100%;height:100%;object-fit:cover}
-  .msg-body{flex:1;min-width:0;max-width:100%;padding-left:0}
+  .msg-body{flex:1;min-width:0;max-width:100%;padding-left:0;padding-right:0;overflow-wrap:break-word;word-wrap:break-word}          
   .message.user .msg-body{display:flex;flex-direction:column;align-items:flex-end}
   .msg-name{font-size:12.5px;font-weight:600;color:var(--text-secondary);margin-bottom:4px;padding:0 4px;display:flex;align-items:center;gap:6px}
   .message.user .msg-name{text-align:right;flex-direction:row-reverse}
@@ -471,7 +471,6 @@
     <div class="sidebar-scrollable">
       <button class="nav-btn" onclick="openLiveTVPanel()" style="background:linear-gradient(135deg,rgba(239,68,68,0.15),rgba(236,72,153,0.15));border:1px solid rgba(239,68,68,0.3)"><span class="nav-icon" style="color:#ef4444"><i class="fas fa-tv"></i></span>Live TV & Movies<span class="nav-badge" style="background:linear-gradient(135deg,#ef4444,#ec4899);color:white">NEW</span></button>
       <button class="nav-btn" onclick="openImagesPanel()"><span class="nav-icon gradient-1"><i class="fas fa-image"></i></span>Images</button>
-      <button class="nav-btn" onclick="openImageEditorPanel()"><span class="nav-icon gradient-2"><i class="fas fa-wand-magic-sparkles"></i></span>Image Editor</button>
       <button class="nav-btn" onclick="openVideosPanel()"><span class="nav-icon gradient-2"><i class="fas fa-video"></i></span>Videos</button>
       <button class="nav-btn" onclick="openVideoGallery()"><span class="nav-icon gradient-5"><i class="fas fa-film"></i></span>My Videos<span class="nav-badge" id="videoCountBadge">0</span></button>
       <button class="nav-btn" onclick="openMusicPanel()"><span class="nav-icon gradient-8"><i class="fas fa-music"></i></span>Music<span class="nav-badge" id="musicCountBadge">0</span></button>
@@ -530,18 +529,18 @@
           </div>
           <div class="pm-body">
             <button class="pm-item" onclick="openPricingPanel(); closeTopProfileMenu();"><i class="fas fa-crown" style="color:#fbbf24"></i> Upgrade Plan 👑</button>
-            <button class="pm-item" onclick="document.getElementById('profilePhotoInput').click(); closeTopProfileMenu();"><i class="fas fa-camera"></i> Upload Photo</button>
+            <button class="pm-item" onclick="document.getElementById('profilePhotoInput').click(); closeTopProfileMenu();"><i class="fas fa-camera"></i> Upload / Change Photo</button>
             <input type="file" id="profilePhotoInput" accept="image/*" style="display:none" onchange="handleProfilePhotoUpload(event)">
             <button class="pm-item" onclick="openSettings(); closeTopProfileMenu();"><i class="fas fa-gear"></i> Settings</button>
-            <button class="pm-item" onclick="openWallet();"><i class="fas fa-wallet"></i> Wallet</button>
-            <button class="pm-item" onclick="openManageAccount();"><i class="fas fa-id-card"></i> Manage Account</button>
+            <button class="pm-item" onclick="openWallet(); closeTopProfileMenu();"><i class="fas fa-wallet"></i> Wallet</button>
+            <button class="pm-item" onclick="openManageAccount(); closeTopProfileMenu();"><i class="fas fa-id-card"></i> Manage Account</button>
             <div class="pm-divider"></div>
             <button class="pm-item" onclick="addAnotherAccount();"><i class="fas fa-user-plus"></i> Add Account</button>
             <button class="pm-item" onclick="switchAccount();"><i class="fas fa-right-left"></i> Switch Account</button>
             <button class="pm-item" onclick="window.open('https://myaccount.google.com/', '_blank'); closeTopProfileMenu();"><i class="fas fa-external-link-alt"></i> Google Account</button>
             <div class="pm-divider"></div>
             <button class="pm-item danger" onclick="askSignOut();"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
-          </div>
+          </div>      
         </div>
       </div>
     </div>
@@ -618,41 +617,23 @@
     </div>
   </div>
 </div>
-  
-<!-- ============ IMAGE EDITOR PANEL ============ -->
-<div class="full-panel" id="imageEditorPanel">
+
+<!-- ============ IMAGES PANEL ============ -->
+<div class="full-panel" id="imagesPanel">
   <div class="panel-header">
-    <div class="panel-title"><i class="fas fa-wand-magic-sparkles"></i> Image Editor</div>
-    <button class="btn ghost" onclick="closeImageEditorPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+    <div class="panel-title"><i class="fas fa-image"></i> Image Generator</div>
+    <button class="btn ghost" onclick="closeImagesPanel()"><i class="fas fa-arrow-left"></i> Back</button>
   </div>
   <div class="panel-body">
     <div class="panel-inner">
-      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">🎨 Upload any image, then tell Wise King what to do — remove background, keep only one person, make it real, add logos. Original ratio always preserved.</p>
-
-      <div class="pdf-dropzone" onclick="document.getElementById('imageEditorInput').click()">
-        <i class="fas fa-image"></i>
-        <p><strong>Click to upload image</strong> or drag & drop</p>
-        <small>PNG, JPG, WEBP — original ratio preserved</small>
-        <input type="file" id="imageEditorInput" accept="image/*" style="display:none" onchange="handleImageEditorUpload(event)">
-      </div>
-
-      <div id="imageEditorPreview"></div>
-
-      <input type="text" class="search-big" id="imageEditorPrompt" placeholder="e.g. only him, remove background, make it real..." style="margin-top:16px">
-
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
-        <button class="btn accent" style="flex:1;justify-content:center" onclick="runImageEdit('edit')"><i class="fas fa-wand-magic-sparkles"></i> Edit</button>
-        <button class="btn solid" onclick="runImageEdit('removebg')"><i class="fas fa-scissors"></i> Remove BG</button>
-        <button class="btn solid" onclick="runImageEdit('onlyhim')"><i class="fas fa-user"></i> Only Him</button>
-        <button class="btn solid" onclick="runImageEdit('real')"><i class="fas fa-camera"></i> Make Real</button>
-        <button class="btn solid" onclick="runImageEdit('upscale')"><i class="fas fa-expand"></i> 8K Upscale</button>
-      </div>
-
-      <div id="imageEditorResults"></div>
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:8px">Describe the image you want:</p>
+      <input type="text" class="search-big" id="imagesPromptInput" placeholder="e.g. beautiful Hausa woman OR logo for Wise King" onkeydown="if(event.key==='Enter'){generateImageFromPanel()}">
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:12px" onclick="generateImageFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Generate Image</button>
+      <div id="imagesPanelResults"></div>
     </div>
   </div>
 </div>
-  
+
 <!-- ============ VIDEOS PANEL ============ -->
 <div class="full-panel" id="videosPanel">
   <div class="panel-header">
@@ -2215,8 +2196,6 @@ END SCENE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Follow the GOOD example. Never the BAD one. Check all fields first. Then answer.
 
-Benefit in every story.
-  
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🌍. CULTURAL INTELLIGENCE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -2724,28 +2703,6 @@ Outro
 But do not force every section into every song.
 
 Preserve the requested language, emotion and message.
-
-Benefit in every story.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📸 IMAGE EDITING RULES — ALWAYS FOLLOW
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-• When user asks for ONLY ONE PERSON: Remove ALL others, keep perfect original background, same lighting, same colors, NO distortion
-• Keep ORIGINAL aspect ratio — never stretch, never crop wrong
-• Wise King = central focus, sharp face, regal attire, cinematic lighting, gold & dark tones
-• Style: 8K, photorealistic, dramatic, epic movie poster quality
-• NEVER add watermarks, NEVER change face, NEVER remove background unless told
-• If user says "only him": isolate the person, fill space naturally, match perfectly
-
-TRIGGER PHRASES:
-• "only him" / "only me" / "remove the others" → Keep main person, remove all others, extend background naturally, match lighting & colors, keep original dimensions
-• "remove background" / "bad background" → Remove background only, keep person 100% unchanged
-• "change background" / "put [scene]" → Keep person unchanged, replace background only, blend edges smoothly
-• "make it real" / "real human" → Enhance realism, sharpen face, natural skin, cinematic lighting
-• "original logos" → Preserve all existing logos, text, and watermarks
-
-Always confirm what you will create, then act.
   
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🎵 SONG LYRICS MASTER (Full Structure) 🎙️
@@ -3441,16 +3398,69 @@ function downloadText(encodedText, filename) {
 }
 window.downloadText = downloadText;
 
-// ============ IMAGE EDITOR (Replicate) ============
+// ============ IMAGES / VIDEOS ============
+function openImagesPanel() { document.getElementById('imagesPanel').classList.add('show'); closeSidebar(); }
+function closeImagesPanel() { document.getElementById('imagesPanel').classList.remove('show'); }
+function openVideosPanel() { document.getElementById('videosPanel').classList.add('show'); closeSidebar(); }
+function closeVideosPanel() { document.getElementById('videosPanel').classList.remove('show'); }
+function openVideoGallery() { document.getElementById('videoGalleryPanel').classList.add('show'); closeSidebar(); renderVideoGallery(); }
+function closeVideoGallery() { document.getElementById('videoGalleryPanel').classList.remove('show'); }
+function renderVideoGallery() {
+  const box = document.getElementById('videoGalleryContent'); if (!box) return;
+  const vids = library.filter(i => i.type === 'video');
+  const badge = document.getElementById('videoCountBadge');
+  if (badge) badge.textContent = vids.length;
+  if (!vids.length) { box.innerHTML = '<div class="result-card"><p>No videos yet.</p></div>'; return; }
+  box.innerHTML = vids.map(v => '<div class="result-card"><h4>🎬 ' + escapeHtml((v.prompt||'').slice(0,80)) + '</h4><p style="color:var(--text-secondary);font-size:13px">' + escapeHtml((v.text||'').slice(0,200)) + '...</p></div>').join('');
+}
+window.openImagesPanel = openImagesPanel;
+window.closeImagesPanel = closeImagesPanel;
+window.openVideosPanel = openVideosPanel;
+window.closeVideosPanel = closeVideosPanel;
+window.openVideoGallery = openVideoGallery;
+window.closeVideoGallery = closeVideoGallery;
+
+async function generateImageFromPanel() {
+  const prompt = document.getElementById('imagesPromptInput').value.trim();
+  if (!prompt) return showToast('Enter image description');
+  const results = document.getElementById('imagesPanelResults');
+  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Generating image...</div>';
+  try {
+    const seed = Math.floor(Math.random() * 1000000);
+    const url = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(prompt) + '?width=1024&height=1024&seed=' + seed + '&nologo=true';
+    await new Promise((resolve, reject) => { const img = new Image(); img.onload = resolve; img.onerror = reject; img.src = url; setTimeout(reject, 30000); });
+    const filename = 'wiseking-image-' + Date.now() + '.png';
+    results.innerHTML = '<div class="result-card"><h4><i class="fas fa-check-circle"></i> Image Ready</h4><img src="' + url + '" style="max-width:100%;border-radius:12px;box-shadow:var(--shadow-lg);margin-top:10px"><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn accent" onclick="downloadFile(\'' + url + '\', \'' + filename + '\')"><i class="fas fa-download"></i> Download to Phone</button><button class="btn solid" onclick="wkCopyToClipboard(\'' + url + '\').then(function(){showToast(\'📋 Link copied!\')})"><i class="fas fa-copy"></i> Copy Link</button></div></div>';
+    saveToLibrary({ type: 'image', prompt: prompt, url: url, createdAt: Date.now() });
+    showToast('✅ Image generated!');
+  } catch (err) { results.innerHTML = '<div class="result-card"><p>⚠️ Failed to generate. Try again.</p></div>'; }
+}
+window.generateImageFromPanel = generateImageFromPanel;
+
+async function generateVideoFromPanel() {
+  const prompt = document.getElementById('videosPromptInput').value.trim();
+  if (!prompt) return showToast('Enter video description');
+  const results = document.getElementById('videoPanelResults');
+  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Creating cinematic prompt...</div>';
+  const res = await sendMessageWithFallback('Create a detailed cinematic video prompt for: ' + prompt + '. Include Title, Style, Duration options, Setting, Characters, Dialogue (2 lines), Action Sequence, Visual Style, Mood. Format beautifully with emojis.');
+  if (res.success) {
+    results.innerHTML = '<div class="result-card"><h4>🎬 Your Video Prompt</h4>' + renderMarkdown(res.reply) + '</div>';
+    saveToLibrary({ type: 'video', prompt: prompt, text: res.reply, createdAt: Date.now() });
+    showToast('✅ Video prompt ready!');
+  } else results.innerHTML = '<div class="result-card"><p>⚠️ Failed. Try again.</p></div>';
+}
+window.generateVideoFromPanel = generateVideoFromPanel;
+  
+// ============ IMAGE EDITOR (Replicate via Catbox) ============
 let imageEditorFile = null;
 let imageEditorDataUrl = null;
 
 const REPLICATE_MODELS = {
-  removebg: 'fb8af171cfa1616ddcf1242c093f9c46bcada5ad4cf6f2fbe8b81b330ec5c003', // BRIA RMBG
-  edit:     '39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b', // SDXL Inpaint
-  onlyhim:  '39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b', // SDXL Inpaint
-  real:     '42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b', // GFPGAN
-  upscale:  'f121d640bd286e1fdc67f9799164c1d5be36ff74576ee11c803ae5b665dd46aa'  // Real-ESRGAN
+  removebg: 'fb8af171cfa1616ddcf1242c093f9c46bcada5ad4cf6f2fbe8b81b330ec5c003',
+  edit:     '39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b',
+  onlyhim:  '39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b',
+  real:     '42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b',
+  upscale:  'f121d640bd286e1fdc67f9799164c1d5be36ff74576ee11c803ae5b665dd46aa'
 };
 
 function openImageEditorPanel() { document.getElementById('imageEditorPanel').classList.add('show'); closeSidebar(); }
@@ -3492,33 +3502,23 @@ async function runImageEdit(mode) {
     return;
   }
 
-  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Uploading image...</div>';
-
   try {
-    // Step 1: Upload to Replicate
+    results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Uploading image...</div>';
     const uploadForm = new FormData();
-    uploadForm.append('content', imageEditorFile);
-    const uploadRes = await fetch('https://api.replicate.com/v1/files', {
-      method: 'POST',
-      headers: { 'Authorization': 'Token ' + rk },
-      body: uploadForm
-    });
+    uploadForm.append('reqtype', 'fileupload');
+    uploadForm.append('fileToUpload', imageEditorFile);
+    const uploadRes = await fetch('https://catbox.moe/user/api.php', { method: 'POST', body: uploadForm });
     if (!uploadRes.ok) throw new Error('Upload failed: HTTP ' + uploadRes.status);
-    const uploadData = await uploadRes.json();
-    const imageUrl = uploadData.urls && uploadData.urls.get;
-    if (!imageUrl) throw new Error('No upload URL returned');
+    const imageUrl = (await uploadRes.text()).trim();
+    if (!imageUrl.startsWith('http')) throw new Error('Upload returned: ' + imageUrl.slice(0, 80));
 
-    results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Running AI edit (' + mode + ')... this may take 20-60 seconds</div>';
+    results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Running AI edit (' + mode + ')... 20-60 seconds</div>';
 
-    // Step 2: Build input based on mode
     let inputObj = { image: imageUrl };
-    if (mode === 'removebg') {
-      inputObj = { image: imageUrl };
-    } else if (mode === 'upscale') {
-      inputObj = { image: imageUrl, scale: 4, face_enhance: true };
-    } else if (mode === 'real') {
-      inputObj = { img: imageUrl, version: 'v1.4', scale: 2 };
-    } else {
+    if (mode === 'removebg') { inputObj = { image: imageUrl }; }
+    else if (mode === 'upscale') { inputObj = { image: imageUrl, scale: 4, face_enhance: true }; }
+    else if (mode === 'real') { inputObj = { img: imageUrl, version: 'v1.4', scale: 2 }; }
+    else {
       inputObj = {
         image: imageUrl,
         prompt: modeMap[mode],
@@ -3528,75 +3528,36 @@ async function runImageEdit(mode) {
       };
     }
 
-    // Step 3: Create prediction
     const createRes = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
-      headers: {
-        'Authorization': 'Token ' + rk,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        version: REPLICATE_MODELS[mode],
-        input: inputObj
-      })
+      headers: { 'Authorization': 'Token ' + rk, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ version: REPLICATE_MODELS[mode], input: inputObj })
     });
-    if (!createRes.ok) {
-      const errTxt = await createRes.text();
-      throw new Error('Predict failed: ' + errTxt.slice(0, 200));
-    }
+    if (!createRes.ok) { const errTxt = await createRes.text(); throw new Error('Predict failed: ' + errTxt.slice(0, 200)); }
     const prediction = await createRes.json();
     const pollUrl = prediction.urls && prediction.urls.get;
     if (!pollUrl) throw new Error('No polling URL');
 
-    // Step 4: Poll
     let finalUrl = null;
     for (let i = 0; i < 80; i++) {
       await new Promise(r => setTimeout(r, 1500));
       const pollRes = await fetch(pollUrl, { headers: { 'Authorization': 'Token ' + rk } });
       const pollData = await pollRes.json();
-      if (pollData.status === 'succeeded') {
-        finalUrl = pollData.output;
-        if (Array.isArray(finalUrl)) finalUrl = finalUrl[0];
-        if (finalUrl && typeof finalUrl === 'object') finalUrl = finalUrl.url || finalUrl[0];
-        break;
-      }
-      if (pollData.status === 'failed' || pollData.status === 'canceled') {
-        throw new Error('Prediction ' + pollData.status + ': ' + (pollData.error || 'unknown'));
-      }
+      if (pollData.status === 'succeeded') { finalUrl = pollData.output; if (Array.isArray(finalUrl)) finalUrl = finalUrl[0]; if (finalUrl && typeof finalUrl === 'object') finalUrl = finalUrl.url || finalUrl[0]; break; }
+      if (pollData.status === 'failed' || pollData.status === 'canceled') throw new Error('Prediction ' + pollData.status + ': ' + (pollData.error || 'unknown'));
     }
     if (!finalUrl) throw new Error('Timed out');
 
-    // Step 5: Show
     const filename = 'wiseking-' + mode + '-' + Date.now() + '.png';
-    results.innerHTML =
-      '<div class="result-card"><h4><i class="fas fa-check-circle"></i> ' + mode.toUpperCase() + ' Complete</h4>' +
-      '<img src="' + finalUrl + '" style="max-width:100%;border-radius:12px;box-shadow:var(--shadow-lg);margin-top:10px">' +
-      '<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">' +
-      '<button class="btn accent" onclick="downloadFile(\'' + finalUrl + '\', \'' + filename + '\')"><i class="fas fa-download"></i> Download</button>' +
-      '<button class="btn solid" onclick="wkCopyToClipboard(\'' + finalUrl + '\').then(function(){showToast(\'📋 Link copied!\')})"><i class="fas fa-copy"></i> Copy Link</button>' +
-      '</div></div>';
+    results.innerHTML = '<div class="result-card"><h4><i class="fas fa-check-circle"></i> ' + mode.toUpperCase() + ' Complete</h4><img src="' + finalUrl + '" style="max-width:100%;border-radius:12px;box-shadow:var(--shadow-lg);margin-top:10px"><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn accent" onclick="downloadFile(\'' + finalUrl + '\', \'' + filename + '\')"><i class="fas fa-download"></i> Download</button><button class="btn solid" onclick="wkCopyToClipboard(\'' + finalUrl + '\').then(function(){showToast(\'📋 Link copied!\')})"><i class="fas fa-copy"></i> Copy Link</button></div></div>';
     saveToLibrary({ type: 'image', prompt: 'EDIT(' + mode + '): ' + (customPrompt || modeMap[mode]), url: finalUrl, createdAt: Date.now() });
     showToast('✅ Image ' + mode + ' complete!');
   } catch (err) {
     results.innerHTML = '<div class="result-card"><p>⚠️ Failed: ' + escapeHtml(err.message) + '</p></div>';
   }
 }
-window.runImageEdit = runImageEdit;
-    
-async function generateVideoFromPanel() {
-  const prompt = document.getElementById('videosPromptInput').value.trim();
-  if (!prompt) return showToast('Enter video description');
-  const results = document.getElementById('videoPanelResults');
-  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Creating cinematic prompt...</div>';
-  const res = await sendMessageWithFallback('Create a detailed cinematic video prompt for: ' + prompt + '. Include Title, Style, Duration options, Setting, Characters, Dialogue (2 lines), Action Sequence, Visual Style, Mood. Format beautifully with emojis.');
-  if (res.success) {
-    results.innerHTML = '<div class="result-card"><h4>🎬 Your Video Prompt</h4>' + renderMarkdown(res.reply) + '</div>';
-    saveToLibrary({ type: 'video', prompt: prompt, text: res.reply, createdAt: Date.now() });
-    showToast('✅ Video prompt ready!');
-  } else results.innerHTML = '<div class="result-card"><p>⚠️ Failed. Try again.</p></div>';
-}
-window.generateVideoFromPanel = generateVideoFromPanel;
-
+window.runImageEdit = runImageEdit;  
+  
 // ============ MUSIC GENERATION ============
 function openMusicPanel() { document.getElementById('musicPanel').classList.add('show'); closeSidebar(); renderMusicLibrary(); }
 function closeMusicPanel() { document.getElementById('musicPanel').classList.remove('show'); }
@@ -4009,16 +3970,27 @@ window.updatePlanBadge = updatePlanBadge;
 // ============ LIVE TV & MOVIES ============
 let currentTVFilter = 'all';
 const TV_CHANNELS = [
-  { id:'c1', title:'Arise News', type:'live', poster:'https://images.unsplash.com/photo-1495020689067-958852a7765e?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCfMNQzwvJ2jNgZgnkfPU_Pw', desc:'Nigeria 24/7 news' },
-  { id:'c2', title:'Channels TV', type:'live', poster:'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg', desc:'Live Nigerian news' },
-  { id:'c3', title:'Al Jazeera English', type:'live', poster:'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg', desc:'World news' },
-  { id:'c4', title:'BBC World News', type:'live', poster:'https://images.unsplash.com/photo-1526470498-9ae73c665de8?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCCj956IF62FbT7Gouszaj9w', desc:'Global news' },
+  // ============ 🔴 LIVE TV (24/7 REAL WORKING STREAMS) ============
+  { id:'c1', title:'Al Jazeera English', type:'live', poster:'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400', url:'https://www.youtube.com/embed/gCNeDWCI0vo', desc:'🌍 World news 24/7' },
+  { id:'c2', title:'France 24 English', type:'live', poster:'https://images.unsplash.com/photo-1495020689067-958852a7765e?w=400', url:'https://www.youtube.com/embed/h4j2bQNlR4U', desc:'🇫🇷 Global news' },
+  { id:'c3', title:'DW News', type:'live', poster:'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=400', url:'https://www.youtube.com/embed/p6nLQ5kRmvk', desc:'🇩🇪 Germany 24/7' },
+  { id:'c4', title:'Africanews', type:'live', poster:'https://images.unsplash.com/photo-1526470498-9ae73c665de8?w=400', url:'https://www.youtube.com/embed/gWa5gLLLZ88', desc:'🌍 African news' },
+  { id:'c5', title:'Bloomberg TV', type:'live', poster:'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400', url:'https://www.youtube.com/embed/iEpJwprxDdk', desc:'💰 Business news' },
+  { id:'c6', title:'Sky News', type:'live', poster:'https://images.unsplash.com/photo-1495020689067-958852a7765e?w=400', url:'https://www.youtube.com/embed/9Auq9mYxFEE', desc:'🇬🇧 UK breaking news' },
+  { id:'c7', title:'TRT World', type:'live', poster:'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=400', url:'https://www.youtube.com/embed/2UCG8Y3Y92M', desc:'🇹🇷 Turkey global' },
+  { id:'c8', title:'CGTN English', type:'live', poster:'https://images.unsplash.com/photo-1526470498-9ae73c665de8?w=400', url:'https://www.youtube.com/embed/wuFf8S6ZwB4', desc:'🇨🇳 China global' },
+
+  // ============ 🎬 MOVIES ============
   { id:'m1', title:'The Lion King', type:'movie', poster:'https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=400', url:'https://www.youtube.com/embed/lFzVJEksoDY', desc:'1994 • Animation' },
   { id:'m2', title:'Black Panther', type:'movie', poster:'https://images.unsplash.com/photo-1635805737707-575885ab0820?w=400', url:'https://www.youtube.com/embed/xjDjIWPwcPU', desc:'2018 • Action' },
   { id:'m3', title:'Coming to America', type:'movie', poster:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400', url:'https://www.youtube.com/embed/fvzHMxOtnNA', desc:'1988 • Comedy' },
   { id:'m4', title:'The Godfather', type:'movie', poster:'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400', url:'https://www.youtube.com/embed/sY1S34973zA', desc:'1972 • Classic' },
-  { id:'h1', title:'Kannywood Special 1', type:'hausa', poster:'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400', url:'https://www.youtube.com/embed/videoseries?list=PLmQ1M6H7j0H7Z5G5bGMQO4rV6G1jv1ZPq', desc:'🇳🇬 Hausa Film' },
-  { id:'h2', title:'Kannywood Special 2', type:'hausa', poster:'https://images.unsplash.com/photo-1594908900066-3f47337549d8?w=400', url:'https://www.youtube.com/embed/videoseries?list=PLmQ1M6H7j0H7Z5G5bGMQO4rV6G1jv1ZPq', desc:'🇳🇬 Hausa Film' },
+
+  // ============ 🇳🇬 HAUSA FILMS ============
+  { id:'h1', title:'Kannywood Special', type:'hausa', poster:'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400', url:'https://www.youtube.com/embed/videoseries?list=PLmQ1M6H7j0H7Z5G5bGMQO4rV6G1jv1ZPq', desc:'🇳🇬 Hausa Film' },
+  { id:'h2', title:'Hausa Drama', type:'hausa', poster:'https://images.unsplash.com/photo-1594908900066-3f47337549d8?w=400', url:'https://www.youtube.com/embed/videoseries?list=PLmQ1M6H7j0H7Z5G5bGMQO4rV6G1jv1ZPq', desc:'🇳🇬 Hausa Drama' },
+
+  // ============ 📺 SERIES ============
   { id:'s1', title:'Money Heist', type:'series', poster:'https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?w=400', url:'https://www.youtube.com/embed/hMANIarjT50', desc:'Series • Netflix' },
   { id:'s2', title:'Breaking Bad', type:'series', poster:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400', url:'https://www.youtube.com/embed/HhesaQXLuRY', desc:'Series • Drama' }
 ];
