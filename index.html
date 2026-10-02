@@ -176,7 +176,7 @@
   .msg-avatar.ai{background:var(--accent-gradient);color:white;box-shadow:0 0 0 1px var(--border-default),0 0 12px var(--accent-glow)}
   .msg-avatar.user{background:var(--bg-elevated);color:var(--text-secondary)}
   .msg-avatar img{width:100%;height:100%;object-fit:cover}
-  .msg-body{flex:1;min-width:0;max-width:100%;padding-left:0;padding-right:0;overflow-wrap:break-word;word-wrap:break-word}          
+  .msg-body{flex:1;min-width:0;max-widthc:100%;padding-left:0;padding-right:0;overflow-wrap:break-word;word-wrap:break-word}          
   .message.user .msg-body{display:flex;flex-direction:column;align-items:flex-end}
   .msg-name{font-size:12.5px;font-weight:600;color:var(--text-secondary);margin-bottom:4px;padding:0 4px;display:flex;align-items:center;gap:6px}
   .message.user .msg-name{text-align:right;flex-direction:row-reverse}
@@ -200,11 +200,16 @@
   .msg-content.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);color:#fca5a5}
   .msg-content.thinking{display:flex;align-items:center;gap:10px;padding:14px 18px;min-height:44px;background:var(--bg-secondary);border:1px solid var(--border-subtle);border-top-left-radius:4px}
   .thinking-label{font-size:13.5px;color:var(--text-secondary);font-weight:500;display:inline-flex;align-items:center;gap:8px}
-  .thinking-dots{display:inline-flex;gap:4px;align-items:center}
-  .thinking-dots span{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;animation:thinkBounce 1.2s infinite ease-in-out}
-  .thinking-dots span:nth-child(2){animation-delay:0.15s}
-  .thinking-dots span:nth-child(3){animation-delay:0.3s}
-  @keyframes thinkBounce{0%,80%,100%{transform:scale(0.6);opacity:0.45}40%{transform:scale(1);opacity:1}}
+  .thinking-dots{display:inline-flex;gap:5px;align-items:center}
+  .thinking-dots span{width:8px;height:8px;border-radius:50%;display:inline-block;animation:goldenPulse 1.4s infinite ease-in-out;background:linear-gradient(135deg,#fbbf24,#f59e0b);box-shadow:0 0 10px rgba(251,191,36,0.6)}
+  .thinking-dots span:nth-child(1){animation-delay:0s}
+  .thinking-dots span:nth-child(2){animation-delay:0.2s}
+  .thinking-dots span:nth-child(3){animation-delay:0.4s}
+  @keyframes goldenPulse{
+    0%,100%{transform:scale(0.7);opacity:0.5;box-shadow:0 0 6px rgba(251,191,36,0.4)}
+    50%{transform:scale(1.15);opacity:1;box-shadow:0 0 14px rgba(251,191,36,0.9)}
+  }
+  .thinking-crown{font-size:16px;animation:crownPulse 1.4s ease-in-out infinite;margin-right:6px;filter:drop-shadow(0 0 6px rgba(251,191,36,0.7))}
   .msg-action-bar{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
   .message.user .msg-action-bar{justify-content:flex-end}
   .msg-action-btn{background:transparent;border:1px solid var(--border-subtle);color:var(--text-secondary);font-size:11px;font-weight:500;padding:4px 8px;border-radius:var(--radius-sm);cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-family:inherit}
@@ -4173,58 +4178,62 @@ function buildMessageEl(msg, idx, chatId) {
   const el = document.createElement('div'); el.className = 'message ' + msg.role;
   const isAI = msg.role === 'ai';
   const isThinking = isAI && msg.streaming === true && !msg.content;
-
-  // Show avatar + name ONLY when AI is thinking, or for user messages when thinking
-  if (isThinking) {
-    const avatar = document.createElement('div'); avatar.className = 'msg-avatar ai';
-    avatar.innerHTML = '👑';
-    const body = document.createElement('div'); body.className = 'msg-body';
-    const name = document.createElement('div'); name.className = 'msg-name';
-    name.innerHTML = 'Wise King AI';
-    body.appendChild(name);
-    const contentWrap = document.createElement('div'); contentWrap.className = 'msg-content-wrap';
-    const content = document.createElement('div'); content.className = 'msg-content ai thinking';
-    content.innerHTML = '<div class="thinking-label"><span class="thinking-dots"><span></span><span></span><span></span></span>Wise King is thinking...</div>';
-    contentWrap.appendChild(content); body.appendChild(contentWrap);
-    el.appendChild(avatar); el.appendChild(body);
-    return el;
-  }
-
-  // Normal message — hide avatar + name for user, show only message bubble
-  const body = document.createElement('div'); body.className = 'msg-body';
-
-  if (isAI) {
-    const name = document.createElement('div'); name.className = 'msg-name';
-    name.innerHTML = 'Wise King AI' + (msg.edited ? ' <span class="edited-tag">(edited)</span>' : '');
-    body.appendChild(name);
-  }
-  const contentWrap = document.createElement('div'); contentWrap.className = 'msg-content-wrap';
-  const content = document.createElement('div'); content.className = 'msg-content ' + (isAI ? 'ai' : 'user') + (msg.error ? ' error' : '');
-  content.innerHTML = buildContentHtml(msg);
-  if (msg.images && msg.images.length > 0) {
-    const imgHtml = msg.images.map(src => '<img src="' + src + '" style="max-width:220px;border-radius:10px;margin-top:8px;display:block">').join('');
-    content.innerHTML = imgHtml + content.innerHTML;
-  }
-  contentWrap.appendChild(content); body.appendChild(contentWrap);
-
-  const actionBar = document.createElement('div'); actionBar.className = 'msg-action-bar';
-  if (isAI) {
-    actionBar.innerHTML = '<button class="msg-action-btn ' + (msg.feedback === 'up' ? 'active' : '') + '" onclick="handleLikeMessage(' + idx + ')"><i class="fas fa-thumbs-up"></i></button>' +
-      '<button class="msg-action-btn ' + (msg.feedback === 'down' ? 'active' : '') + '" onclick="handleDislikeMessage(' + idx + ')"><i class="fas fa-thumbs-down"></i></button>' +
-      '<button class="msg-action-btn" onclick="handleCopyMessage(' + idx + ')"><i class="fas fa-copy"></i></button>' +
-      '<button class="msg-action-btn" onclick="handleRegenerateMessage(\'' + chatId + '\', ' + idx + ')"><i class="fas fa-sync-alt"></i></button>' +
-      '<button class="msg-action-btn" onclick="handleShareMessage(' + idx + ')"><i class="fas fa-share"></i></button>' +
-      '<button class="msg-action-btn" onclick="downloadText(\'' + encodeURIComponent((msg.content||'').slice(0,9000)) + '\', \'wiseking-response-' + idx + '.txt\')"><i class="fas fa-download"></i></button>';
-  } else {
-    actionBar.innerHTML = '<button class="msg-action-btn" onclick="handleEditMessage(' + idx + ')" title="Edit"><i class="fas fa-pen"></i></button>' +
-      '<button class="msg-action-btn" onclick="handleCopyMessage(' + idx + ')" title="Copy"><i class="fas fa-copy"></i></button>' +
-      '<button class="msg-action-btn danger" onclick="handleDeleteMessage(' + idx + ')" title="Delete"><i class="fas fa-trash"></i></button>';
-  }
-  body.appendChild(actionBar);
-  el.appendChild(body);
-  return el;
+  
+  const avatar = document.createElement('div'); 
+  avatar.className = 'msg-avatar ' + (isAI ? 'ai' : 'user');
+  avatar.innerHTML = isAI ? '👑' : '<i class="fas fa-user"></i>';
+  
+  const body = document.createElement('div'); 
+  body.className = 'msg-body';
+  
+  // ❌ Removed name label — no "You" / "Wise King AI" shown
+  
+  const contentWrap = document.createElement('div'); 
+  contentWrap.className = 'msg-content-wrap';
+  
+  const content = document.createElement('div'); 
+  content.className = 'msg-content ' + (isAI ? 'ai' : 'user') + (msg.error ? ' error' : '');
+  
+  if (isThinking) { 
+    content.classList.add('thinking'); 
+    content.innerHTML = '<div class="thinking-label"><span class="thinking-crown">👑</span><span class="thinking-dots"><span></span><span></span><span></span></span></div>'; 
+  } else { 
+    content.innerHTML = buildContentHtml(msg); 
+    if (msg.images && msg.images.length > 0) { 
+      const imgHtml = msg.images.map(src => '<img src="' + src + '" style="max-width:220px;border-radius:10px;margin-top:8px;display:block">').join(''); 
+      content.innerHTML = imgHtml + content.innerHTML; 
+    } 
   }
   
+  contentWrap.appendChild(content); 
+  body.appendChild(contentWrap);
+  
+  if (!isThinking) {
+    const actionBar = document.createElement('div'); 
+    actionBar.className = 'msg-action-bar';
+    
+    if (isAI) {
+      actionBar.innerHTML = 
+        '<button class="msg-action-btn ' + (msg.feedback === 'up' ? 'active' : '') + '" onclick="handleLikeMessage(' + idx + ')"><i class="fas fa-thumbs-up"></i></button>' +
+        '<button class="msg-action-btn ' + (msg.feedback === 'down' ? 'active' : '') + '" onclick="handleDislikeMessage(' + idx + ')"><i class="fas fa-thumbs-down"></i></button>' +
+        '<button class="msg-action-btn" onclick="handleCopyMessage(' + idx + ')"><i class="fas fa-copy"></i></button>' +
+        '<button class="msg-action-btn" onclick="handleRegenerateMessage(\'' + chatId + '\', ' + idx + ')"><i class="fas fa-sync-alt"></i></button>' +
+        '<button class="msg-action-btn" onclick="handleShareMessage(' + idx + ')"><i class="fas fa-share"></i></button>' +
+        '<button class="msg-action-btn" onclick="downloadText(\'' + encodeURIComponent((msg.content||'').slice(0,9000)) + '\', \'wiseking-response-' + idx + '.txt\')"><i class="fas fa-download"></i></button>';
+    } else {
+      actionBar.innerHTML = 
+        '<button class="msg-action-btn" onclick="handleEditMessage(' + idx + ')" title="Edit"><i class="fas fa-pen"></i></button>' +
+        '<button class="msg-action-btn" onclick="handleCopyMessage(' + idx + ')" title="Copy"><i class="fas fa-copy"></i></button>' +
+        '<button class="msg-action-btn danger" onclick="handleDeleteMessage(' + idx + ')" title="Delete"><i class="fas fa-trash"></i></button>';
+    }
+    body.appendChild(actionBar);
+  }
+  
+  el.appendChild(avatar); 
+  el.appendChild(body);
+  return el;
+}  
+    
   const contentWrap = document.createElement('div'); contentWrap.className = 'msg-content-wrap';
   const content = document.createElement('div'); content.className = 'msg-content ' + (isAI ? 'ai' : 'user') + (msg.error ? ' error' : '');
   if (isThinking) { content.classList.add('thinking'); content.innerHTML = '<div class="thinking-label"><span class="thinking-dots"><span></span><span></span><span></span></span>Wise King is thinking...</div>'; }
