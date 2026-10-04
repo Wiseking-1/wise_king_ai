@@ -58,7 +58,8 @@ router.post('/signup', async (req, res) => {
     };
 
     users.push(user);
-
+    saveUsers();    
+    
     const token = createToken(user);
 
     return res.status(201).json({
