@@ -1,62 +1,77 @@
 import express from 'express';
-import OpenAI from 'openai';
 
 const router = express.Router();
 
-const defaultSystemPrompt = 'You are Wise King AI, a helpful and friendly assistant.';
-
-const mockReply = (message) => {
-  const trimmed = String(message || '').trim();
-
-  if (!trimmed) {
-    return 'How can I help you today?';
-  }
-
-  return `This is a demo response for: "${trimmed}"
-
-Your app is now connected to a backend. To switch from demo mode to live AI responses, add your OpenAI API key in the .env file and restart the server.`;
-};
+const SYSTEM_PROMPT = 'You are WISE KING AI 👑 — created by IBRAHIM ABDULLAHI 🇳🇬 from Nigeria (Wise King Industry). Be warm, wise, kind, and helpful. Reply in the user language. Use emojis and clear formatting.';
 
 router.post('/', async (req, res) => {
   try {
-    const { message, systemPrompt = defaultSystemPrompt } = req.body;
-
+    const { message, history } = req.body;
     if (!message || !String(message).trim()) {
       return res.status(400).json({ error: 'Message is required' });
     }
 
-    if (!process.env.OPENAI_API_KEY) {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
       return res.json({
-        reply: mockReply(message),
+        reply: '👑 Ranka ya dade! I received: "' + String(message).slice(0, 100) + '". (Demo mode — add GEMINI_API_KEY to .env for real AI)',
         model: 'demo-mode'
       });
     }
 
-    const client = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY
+    const contents = [];
+    if (Array.isArray(history)) {
+      history.slice(-6).forEach(function(m) {
+        contents.push({
+          role: m.role === 'user' ? 'user' : 'model',
+          parts: [{ text: String(m.content || '').slice(0, 6000) }]
+        });
+      });
+    }
+    const now = new Date();
+    const dateStr = now.toLocaleString('en-NG', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+      hour: '2-digit', minute: '2-digit', hour12: true
+    });
+    contents.push({
+      role: 'user',
+      parts: [{ text: '[Today is ' + dateStr + '.]\n\nUser: ' + message }]
     });
 
-    const completion = await client.chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: String(message) }
-      ],
-      temperature: 0.7
+    const geminiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + apiKey;
+
+    const response = await fetch(geminiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        contents: contents
+      })
     });
 
-    const reply = completion.choices?.[0]?.message?.content || 'No response generated.';
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error('Gemini error:', errText);
+      return res.status(500).json({ error: 'AI request failed', details: errText.slice(0, 200) });
+    }
 
-    return res.json({
-      reply,
-      model: 'gpt-4o-mini'
-    });
+    const data = await response.json();
+    const reply =
+      (data.candidates &&
+       data.candidates[0] &&
+       data.candidates[0].content &&
+       data.candidates[0].content.parts &&
+       data.candidates[0].content.parts[0] &&
+       data.candidates[0].content.parts[0].text) || '';
+
+    if (!reply) {
+      return res.status(500).json({ error: 'Empty AI response' });
+    }
+
+    return res.json({ reply: reply, model: 'gemini-2.5-flash' });
   } catch (error) {
     console.error('Chat route error:', error);
-    return res.status(500).json({
-      error: 'Failed to generate AI response',
-      details: error?.message || 'Unknown error'
-    });
+    return res.status(500).json({ error: 'Server error', details: error.message });
   }
 });
 
