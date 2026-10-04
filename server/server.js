@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 
 import chatRoutes from './routes/chat.js';
 import authRoutes from './routes/auth.js';
-import filesRoutes from './routes/files.js';
+import paymentRoutes from './routes/payments.js';
 
 dotenv.config();
 
@@ -25,13 +25,13 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
     app: 'Wise King AI',
-    mode: process.env.OPENAI_API_KEY ? 'live-openai' : 'demo-mode'
+    mode: process.env.GEMINI_API_KEY ? 'live-gemini' : 'demo-mode' 
   });
 });
 
 app.use('/api/chat', chatRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/files', filesRoutes);
+app.use('/api/payments', paymentRoutes);
 
 app.use(express.static(frontendDir));
 
