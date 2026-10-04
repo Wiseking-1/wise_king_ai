@@ -2,8 +2,33 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 const router = express.Router();
-const users = [];
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const USERS_FILE = path.join(__dirname, '..', 'users.json');
+
+let users = [];
+try {
+  if (fs.existsSync(USERS_FILE)) {
+    users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+  }
+} catch (e) {
+  console.error('Could not load users file:', e.message);
+  users = [];
+}
+
+function saveUsers() {
+  try {
+    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+  } catch (e) {
+    console.error('Could not save users file:', e.message);
+  }
+}
 
 const createToken = (user) => jwt.sign(
   { id: user.id, email: user.email },
