@@ -73,6 +73,12 @@
         box-shadow: 0 12px 30px rgba(99,102,241,0.4);
       }
 
+      .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
       .status {
         color: var(--muted);
         font-size: 13px;
@@ -91,6 +97,31 @@
         border-radius: 50%;
         background: var(--success);
         box-shadow: 0 0 10px rgba(16,185,129,0.7);
+      }
+
+      .status.offline .status-dot {
+        background: var(--danger);
+        box-shadow: 0 0 10px rgba(239,68,68,0.7);
+      }
+
+      .api-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(99,102,241,0.15);
+        border: 1px solid rgba(99,102,241,0.3);
+        color: var(--accent);
+        padding: 8px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s;
+      }
+
+      .api-btn:hover {
+        background: rgba(99,102,241,0.25);
+        border-color: rgba(99,102,241,0.5);
       }
 
       .chat-area {
@@ -150,6 +181,12 @@
 
       .bubble.ai {
         background: rgba(255,255,255,0.02);
+      }
+
+      .bubble.error {
+        background: rgba(239,68,68,0.1);
+        border-color: rgba(239,68,68,0.3);
+        color: #fca5a5;
       }
 
       .composer-wrap {
@@ -262,6 +299,162 @@
       .dot:nth-child(2) { animation-delay: .15s; }
       .dot:nth-child(3) { animation-delay: .3s; }
 
+      /* Modal Styles */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      }
+
+      .modal-overlay.show {
+        display: flex;
+      }
+
+      .modal {
+        background: var(--panel-2);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 28px;
+        width: min(440px, calc(100% - 32px));
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+
+      .modal-title {
+        font-size: 18px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        color: var(--muted);
+        font-size: 24px;
+        cursor: pointer;
+        padding: 0;
+      }
+
+      .modal-close:hover {
+        color: var(--text);
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 12px 14px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        color: var(--text);
+        font-size: 14px;
+        font-family: 'Courier New', monospace;
+        outline: none;
+        transition: all 0.2s;
+      }
+
+      .form-input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+      }
+
+      .form-input::placeholder {
+        color: var(--muted);
+      }
+
+      .form-hint {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 24px;
+      }
+
+      .btn {
+        padding: 10px 18px;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s;
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--border);
+        color: var(--muted);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text);
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: white;
+      }
+
+      .btn-primary:hover {
+        box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .alert {
+        padding: 12px 14px;
+        border-radius: 8px;
+        font-size: 13px;
+        margin-bottom: 16px;
+      }
+
+      .alert-error {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #fca5a5;
+      }
+
+      .alert-success {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #6ee7b7;
+      }
+
       @keyframes pulse {
         0%, 80%, 100% { transform: scale(0.7); opacity: 0.5; }
         40% { transform: scale(1); opacity: 1; }
@@ -284,6 +477,10 @@
         .status {
           display: none;
         }
+
+        .modal {
+          width: calc(100% - 24px);
+        }
       }
     </style>
   </head>
@@ -294,7 +491,15 @@
           <div class="brand-mark">👑</div>
           <span>Wise King AI</span>
         </div>
-        <div class="status"><span class="status-dot"></span> Connected to local API</div>
+        <div class="topbar-right">
+          <div class="status" id="status">
+            <span class="status-dot"></span>
+            <span id="statusText">Checking...</span>
+          </div>
+          <button class="api-btn" id="apiKeyBtn" onclick="openApiKeyModal()">
+            🔐 API Key
+          </button>
+        </div>
       </header>
 
       <main class="chat-area">
@@ -314,7 +519,58 @@
             <button class="chip" type="button">Code</button>
           </div>
         </div>
-        <div class="hint">Demo mode is active until OpenAI key is added in the backend .env file.</div>
+        <div class="hint" id="hint">Enter your OpenAI API key to get started →</div>
+      </div>
+    </div>
+
+    <!-- API Key Modal -->
+    <div class="modal-overlay" id="apiKeyModal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">🔐 OpenAI API Key</div>
+          <button class="modal-close" onclick="closeApiKeyModal()">×</button>
+        </div>
+
+        <div id="apiAlert"></div>
+
+        <form onsubmit="saveApiKey(event)">
+          <div class="form-group">
+            <label class="form-label">Your API Key</label>
+            <input
+              type="password"
+              id="apiKeyInput"
+              class="form-input"
+              placeholder="sk-..."
+              autocomplete="off"
+            />
+            <div class="form-hint">
+              Your key is stored locally in browser storage and never sent to any server except OpenAI.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Backend URL (Optional)</label>
+            <input
+              type="text"
+              id="backendUrl"
+              class="form-input"
+              placeholder="http://localhost:5000"
+              value="http://localhost:5000"
+            />
+            <div class="form-hint">
+              Leave default if running locally.
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeApiKeyModal()">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Save & Connect
+            </button>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -322,7 +578,71 @@
       const messagesEl = document.getElementById('messages');
       const promptEl = document.getElementById('prompt');
       const sendButton = document.getElementById('sendButton');
+      const statusEl = document.getElementById('status');
+      const statusText = document.getElementById('statusText');
+      const hintEl = document.getElementById('hint');
+      const apiKeyModal = document.getElementById('apiKeyModal');
+      const apiKeyInput = document.getElementById('apiKeyInput');
+      const backendUrlInput = document.getElementById('backendUrl');
+      const apiAlert = document.getElementById('apiAlert');
+
       let isSending = false;
+      let backendUrl = localStorage.getItem('backendUrl') || 'http://localhost:5000';
+      let hasApiKey = !!localStorage.getItem('openaiApiKey');
+
+      function updateStatus() {
+        if (hasApiKey) {
+          statusEl.classList.remove('offline');
+          statusText.textContent = 'Connected';
+          hintEl.textContent = 'Ready to chat';
+          promptEl.disabled = false;
+          sendButton.disabled = false;
+        } else {
+          statusEl.classList.add('offline');
+          statusText.textContent = 'No API Key';
+          hintEl.textContent = 'Enter your OpenAI API key to get started →';
+          promptEl.disabled = true;
+          sendButton.disabled = true;
+        }
+      }
+
+      function openApiKeyModal() {
+        apiKeyInput.value = localStorage.getItem('openaiApiKey') || '';
+        backendUrlInput.value = localStorage.getItem('backendUrl') || 'http://localhost:5000';
+        apiAlert.innerHTML = '';
+        apiKeyModal.classList.add('show');
+      }
+
+      function closeApiKeyModal() {
+        apiKeyModal.classList.remove('show');
+      }
+
+      function saveApiKey(event) {
+        event.preventDefault();
+        const key = apiKeyInput.value.trim();
+        const url = backendUrlInput.value.trim();
+
+        if (!key) {
+          showAlert('Please enter your OpenAI API key.', 'error');
+          return;
+        }
+
+        localStorage.setItem('openaiApiKey', key);
+        localStorage.setItem('backendUrl', url);
+        backendUrl = url;
+        hasApiKey = true;
+
+        showAlert('✓ API key saved successfully!', 'success');
+        setTimeout(() => {
+          closeApiKeyModal();
+          updateStatus();
+          addMessage('ai', 'API key configured! I\'m ready to help. Ask me anything.');
+        }, 800);
+      }
+
+      function showAlert(msg, type) {
+        apiAlert.innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
+      }
 
       function addMessage(role, text) {
         const wrapper = document.createElement('div');
@@ -366,12 +686,13 @@
       }
 
       async function sendToBackend(prompt) {
-        const res = await fetch('/api/chat', {
+        const res = await fetch(`${backendUrl}/api/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             message: prompt,
-            systemPrompt: 'You are Wise King AI, a helpful, friendly assistant.'
+            systemPrompt: 'You are Wise King AI, a helpful, friendly assistant from Nigeria.',
+            apiKey: localStorage.getItem('openaiApiKey')
           })
         });
 
@@ -384,6 +705,11 @@
       }
 
       async function handleSend() {
+        if (!hasApiKey) {
+          openApiKeyModal();
+          return;
+        }
+
         const prompt = promptEl.value.trim();
         if (!prompt || isSending) return;
 
@@ -400,7 +726,7 @@
           addMessage('ai', reply);
         } catch (error) {
           removeTypingIndicator();
-          addMessage('ai', `There was a problem connecting to the backend.\n\n${error.message}\n\nMake sure the server is running and your .env file is configured.`);
+          addMessage('ai', `Error: ${error.message}`);
         } finally {
           isSending = false;
           sendButton.disabled = false;
@@ -423,7 +749,16 @@
         promptEl.rows = lines;
       });
 
-      addMessage('ai', 'Welcome to Wise King AI. Ask me anything and I will route it through the backend API.');
+      // Close modal on Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeApiKeyModal();
+      });
+
+      // Initialize
+      updateStatus();
+      if (hasApiKey) {
+        addMessage('ai', 'Welcome back! Ready to chat.');
+      }
     </script>
   </body>
 </html>
