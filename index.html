@@ -1289,6 +1289,76 @@ function highlightCodeBlocks() {
 }
 </script>
 
+<script>
+
+// ============ COPY CODE FUNCTIONS ============
+function wkCopyToClipboard(text) {
+  return new Promise(function(resolve) {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text)
+          .then(function() { resolve(true); })
+          .catch(function() { resolve(fallbackCopy(text)); });
+      } else {
+        resolve(fallbackCopy(text));
+      }
+    } catch (e) {
+      resolve(fallbackCopy(text));
+    }
+  });
+}
+function fallbackCopy(text) {
+  try {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.top = '-1000px';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = document.execCommand('copy');
+    ta.remove();
+    return !!ok;
+  } catch (e) { return false; }
+}
+window.wkCopyToClipboard = wkCopyToClipboard;
+
+window.wkCopyCode = function(blockId, btn) {
+  var code = (window.__wkCodeBlocks && window.__wkCodeBlocks[blockId]) || '';
+  if (!code) { showToast('⚠️ Nothing to copy'); return; }
+  wkCopyToClipboard(code).then(function(ok) {
+    if (ok) {
+      var orig = btn.innerHTML;
+      btn.classList.add('copied');
+      btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+      setTimeout(function() {
+        btn.classList.remove('copied');
+        btn.innerHTML = orig;
+      }, 2000);
+      showToast('📋 Code copied!');
+    } else {
+      showToast('⚠️ Copy failed');
+    }
+  });
+};
+
+window.wkDownloadCode = function(blockId, filename) {
+  var code = (window.__wkCodeBlocks && window.__wkCodeBlocks[blockId]) || '';
+  if (!code) { showToast('⚠️ Nothing to download'); return; }
+  try {
+    var blob = new Blob([code], { type: 'text/plain' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+    showToast('⬇️ Downloaded!');
+  } catch(e) { showToast('⚠️ Download failed'); }
+};
+// ============ END COPY CODE FUNCTIONS ============
+
+// ============ SYNTAX HIGHLIGHTING ============
+function highlightCodeBlocks() {
+  
 <!-- ============ FIREBASE ============ -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
@@ -3164,48 +3234,6 @@ function renderMarkdown(src) function renderMarkdown(src) {
   
   return s;
 }
-  let s = escapeHtml(String(src || ''));
-  
-  // Step 1: Extract code blocks FIRST and protect them
-  const codeBlocks = [];
-  s = s.replace(/```(\w+)?\n?([\s\S]*?)```/g, function(match, lang, code) {
-    const id = 'WKK_CODEBLOCK_' + codeBlocks.length + '_END';
-    const language = (lang || 'text').toLowerCase();
-    const langLabel = language.toUpperCase();
-    const ext = language === 'javascript' || language === 'js' ? 'js' :
-                language === 'python' || language === 'py' ? 'py' :
-                language === 'html' ? 'html' :
-                language === 'css' ? 'css' :
-                language === 'json' ? 'json' : 'txt';
-    const safeCode = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    const blockId = 'code_' + Date.now() + '_' + codeBlocks.length;
-    window.__wkCodeBlocks = window.__wkCodeBlocks || {};
-    window.__wkCodeBlocks[blockId] = code;
-    const blockHtml = '<pre id="' + blockId + '"><div class="code-header"><div class="code-lang">' + langLabel + '</div><div class="code-actions"><button class="code-action-btn" onclick="wkCopyCode(\'' + blockId + '\', this)"><i class="fas fa-copy"></i> Copy</button><button class="code-action-btn" onclick="wkDownloadCode(\'' + blockId + '\', \'wiseking-code.' + ext + '\')"><i class="fas fa-download"></i> Download</button></div></div><code>' + safeCode + '</code></pre>';
-    codeBlocks.push(blockHtml);
-    return id;
-  });
-  
-  // Step 2: Apply other markdown (line breaks, links, etc)
-  s = linkify(s);
-  s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
-  s = s.replace(/^### (.*)$/gm, '<h4>$1</h4>');
-  s = s.replace(/^## (.*)$/gm, '<h3>$1</h3>');
-  s = s.replace(/^# (.*)$/gm, '<h2>$1</h2>');
-  s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  
-  // Step 3: Convert newlines to <br> (only outside code)
-  s = '<p>' + s.replace(/\n/g, '<br>') + '</p>';
-  
-  // Step 4: Put code blocks BACK (protecting their newlines)
-  codeBlocks.forEach(function(blockHtml, i) {
-    const id = 'WKK_CODEBLOCK_' + i + '_END';
-    s = s.replace(id, blockHtml);
-  });
-  
-  return s;
-  }
-
 window.renderMarkdown = renderMarkdown;
 function buildContentHtml(msg) { return '<div class="md">' + renderMarkdown(msg.content || '') + '</div>'; }
 
