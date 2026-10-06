@@ -468,90 +468,331 @@
   </main>
 </div>
 
-<!-- MUSIC PANEL -->
+<!-- ============ LIVE TV & MOVIES PANEL ============ -->
+<div class="full-panel" id="liveTVPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-tv" style="color:#ef4444"></i> Live TV & Movies 🎬</div>
+    <button class="btn ghost" onclick="closeLiveTVPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div style="padding:16px;background:linear-gradient(135deg,rgba(239,68,68,0.15),rgba(236,72,153,0.15));border:1px solid rgba(239,68,68,0.3);border-radius:12px;margin-bottom:20px;text-align:center">
+        <div style="font-size:15px;font-weight:700;color:#ef4444">⭐ Premium Feature</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-top:6px">Subscribe to unlock unlimited Live TV & Movies</p>
+        <button class="btn accent" style="width:100%;justify-content:center;margin-top:12px" onclick="openPricingPanel()"><i class="fas fa-crown"></i> View Plans</button>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn solid tv-tab active" onclick="filterTV('all', this)">All</button>
+        <button class="btn solid tv-tab" onclick="filterTV('live', this)">🔴 Live TV</button>
+        <button class="btn solid tv-tab" onclick="filterTV('movie', this)">🎬 Movies</button>
+        <button class="btn solid tv-tab" onclick="filterTV('series', this)">📺 Series</button>
+        <button class="btn solid tv-tab" onclick="filterTV('hausa', this)">🇳🇬 Hausa Films</button>
+      </div>
+      <input type="text" class="search-big" id="tvSearchInput" placeholder="Search movies, TV shows, series..." oninput="renderTVChannels()">
+      <div id="tvGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px"></div>
+    </div>
+  </div>
+</div>
+  
+<!-- ============ IMAGE EDITOR PANEL ============ -->
+<div class="full-panel" id="imageEditorPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-wand-magic-sparkles"></i> Image Editor</div>
+    <button class="btn ghost" onclick="closeImageEditorPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">🎨 Upload any image, then tell Wise King what to do — remove background, keep only one person, make it real, add logos. Original ratio always preserved.</p>
+
+      <div class="pdf-dropzone" onclick="document.getElementById('imageEditorInput').click()">
+        <i class="fas fa-image"></i>
+        <p><strong>Click to upload image</strong> or drag & drop</p>
+        <small>PNG, JPG, WEBP — original ratio preserved</small>
+        <input type="file" id="imageEditorInput" accept="image/*" style="display:none" onchange="handleImageEditorUpload(event)">
+      </div>
+
+      <div id="imageEditorPreview"></div>
+
+      <input type="text" class="search-big" id="imageEditorPrompt" placeholder="e.g. only him, remove background, make it real..." style="margin-top:16px">
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn accent" style="flex:1;justify-content:center" onclick="runImageEdit('edit')"><i class="fas fa-wand-magic-sparkles"></i> Edit</button>
+        <button class="btn solid" onclick="runImageEdit('removebg')"><i class="fas fa-scissors"></i> Remove BG</button>
+        <button class="btn solid" onclick="runImageEdit('onlyhim')"><i class="fas fa-user"></i> Only Him</button>
+        <button class="btn solid" onclick="runImageEdit('real')"><i class="fas fa-camera"></i> Make Real</button>
+        <button class="btn solid" onclick="runImageEdit('upscale')"><i class="fas fa-expand"></i> 8K Upscale</button>
+      </div>
+
+      <div id="imageEditorResults"></div>
+    </div>
+  </div>
+</div>
+  
+<!-- ============ VIDEOS PANEL ============ -->
+<div class="full-panel" id="videosPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-video"></i> Video Prompt Creator</div>
+    <button class="btn ghost" onclick="closeVideosPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:8px">Describe the video scene:</p>
+      <input type="text" class="search-big" id="videosPromptInput" placeholder="e.g. golden sunset over Kano city, drone shot...">
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="generateVideoFromPanel()"><i class="fas fa-clapperboard"></i> Generate Video Prompt</button>
+      <div id="videoPanelResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ VIDEO GALLERY PANEL ============ -->
+<div class="full-panel" id="videoGalleryPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-film"></i> My Videos</div>
+    <button class="btn ghost" onclick="closeVideoGallery()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner"><div id="videoGalleryContent"></div></div>
+  </div>
+</div>
+
+<!-- ============ MUSIC PANEL ============ -->
 <div class="full-panel" id="musicPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-music"></i> AI Music Studio 🎵</div><button class="btn ghost" onclick="closeMusicPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">🎼 Paste lyrics OR describe a style — AI will build your song prompt.</p>
-    <textarea class="search-big" id="musicInput" rows="6" placeholder="Paste lyrics or describe music style..." style="min-height:140px;resize:vertical;font-family:inherit"></textarea>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px">
-      <select class="input-field" id="musicGenre" style="margin-bottom:0"><option value="">🎵 Genre</option><option>Afrobeat</option><option>Amapiano</option><option>Hip-hop</option><option>R&B</option><option>Gospel</option><option>Traditional Hausa</option></select>
-      <select class="input-field" id="musicMood" style="margin-bottom:0"><option value="">💫 Mood</option><option>Happy & Uplifting</option><option>Romantic</option><option>Motivational</option><option>Spiritual</option></select>
-      <select class="input-field" id="musicTempo" style="margin-bottom:0"><option value="">🥁 Tempo</option><option>Slow</option><option>Mid-tempo</option><option>Dance</option><option>Fast</option></select>
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-music"></i> AI Music Studio 🎵</div>
+    <button class="btn ghost" onclick="closeMusicPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">🎼 Paste lyrics OR describe a style — AI will build your song prompt.</p>
+      <textarea class="search-big" id="musicInput" rows="6" placeholder="Paste your lyrics here OR describe the music style..." style="min-height:140px;resize:vertical;font-family:inherit"></textarea>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px">
+        <select class="input-field" id="musicGenre" style="margin-bottom:0">
+          <option value="">🎵 Genre</option>
+          <option>Afrobeat</option><option>Amapiano</option><option>Hip-hop</option>
+          <option>R&B</option><option>Gospel</option><option>Reggae</option>
+          <option>Pop</option><option>Dancehall</option><option>Traditional Hausa</option>
+          <option>Fuji</option><option>Highlife</option><option>Jazz</option>
+        </select>
+        <select class="input-field" id="musicMood" style="margin-bottom:0">
+          <option value="">💫 Mood</option>
+          <option>Happy & Uplifting</option><option>Romantic</option><option>Motivational</option>
+          <option>Spiritual</option><option>Party Vibe</option><option>Chill & Relaxed</option>
+          <option>Sad & Emotional</option><option>Epic</option>
+        </select>
+        <select class="input-field" id="musicTempo" style="margin-bottom:0">
+          <option value="">🥁 Tempo</option>
+          <option>Slow (60-80 BPM)</option><option>Mid-tempo (90-110 BPM)</option>
+          <option>Dance (115-130 BPM)</option><option>Fast (130+ BPM)</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn accent" style="flex:1;justify-content:center" onclick="generateMusicFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Build Music Prompt</button>
+        <button class="btn solid" style="flex:1;justify-content:center" onclick="generateLyricsFromPanel()"><i class="fas fa-pen-fancy"></i> Write Lyrics</button>
+      </div>
+      <div id="musicPanelResults"></div>
+      <h3 style="margin:24px 0 12px;color:var(--accent-hover);font-size:15px">🎧 My Music Library</h3>
+      <div id="musicLibraryBox"></div>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
-      <button class="btn accent" style="flex:1;justify-content:center" onclick="generateMusicFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Build Music Prompt</button>
-      <button class="btn solid" style="flex:1;justify-content:center" onclick="generateLyricsFromPanel()"><i class="fas fa-pen-fancy"></i> Write Lyrics</button>
-    </div>
-    <div id="musicPanelResults"></div>
-  </div></div>
+  </div>
 </div>
 
-<!-- PDF CHAT PANEL -->
+<!-- ============ PDF CHAT PANEL ============ -->
 <div class="full-panel" id="pdfChatPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-file-pdf"></i> PDF Chat 📄</div><button class="btn ghost" onclick="closePdfChatPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <div class="result-card" style="text-align:center;cursor:pointer" onclick="document.getElementById('pdfFileInput').click()">
-      <i class="fas fa-cloud-upload-alt" style="font-size:36px;color:var(--accent);margin-bottom:12px;display:block"></i>
-      <p style="margin-bottom:4px"><strong>Click to upload PDF</strong></p>
-      <small style="color:var(--text-tertiary);font-size:12px">Read, summarize, ask questions</small>
-      <input type="file" id="pdfFileInput" accept=".pdf" style="display:none" onchange="handlePdfUpload(event)">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-file-pdf"></i> PDF Chat 📄</div>
+    <button class="btn ghost" onclick="closePdfChatPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="pdf-dropzone" id="pdfDropzone" onclick="document.getElementById('pdfFileInput').click()">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p><strong>Click to upload PDF</strong> or drag & drop</p>
+        <small>Read, summarize, and ask questions about any PDF</small>
+        <input type="file" id="pdfFileInput" accept=".pdf" style="display:none" onchange="handlePdfUpload(event)">
+      </div>
+      <div id="pdfFileInfo"></div>
+      <div id="pdfSummaryBox"></div>
+      <input type="text" class="search-big" id="pdfQuestionInput" placeholder="Ask anything about the PDF..." onkeydown="if(event.key==='Enter'){askPdfQuestion()}" style="margin-top:16px">
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="askPdfQuestion()"><i class="fas fa-question-circle"></i> Ask About PDF</button>
+      <div id="pdfChatResults"></div>
     </div>
-    <div id="pdfFileInfo"></div>
-    <div id="pdfSummaryBox"></div>
-    <input type="text" class="search-big" id="pdfQuestionInput" placeholder="Ask anything about the PDF..." onkeydown="if(event.key==='Enter'){askPdfQuestion()}" style="margin-top:16px">
-    <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="askPdfQuestion()"><i class="fas fa-question-circle"></i> Ask About PDF</button>
-    <div id="pdfChatResults"></div>
-  </div></div>
+  </div>
 </div>
 
-<!-- TRANSLATE PANEL -->
+<!-- ============ TRANSLATE PANEL ============ -->
 <div class="full-panel" id="translatePanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-language"></i> Translation 🌍</div><button class="btn ghost" onclick="closeTranslatePanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
-      <select class="input-field" id="translateFrom" style="margin-bottom:0;flex:1">
-        <option value="auto">🔍 Auto-detect</option><option value="en">🇬🇧 English</option><option value="ha">🇳🇬 Hausa</option><option value="ar">🇸🇦 Arabic</option><option value="fr">🇫🇷 French</option><option value="yo">🇳🇬 Yoruba</option><option value="ig">🇳🇬 Igbo</option><option value="sw">🌍 Swahili</option><option value="es">🇪🇸 Spanish</option>
-      </select>
-      <button class="lang-swap" onclick="swapLanguages()" style="width:40px;height:40px;border-radius:50%;background:var(--accent-gradient);border:none;color:white;cursor:pointer"><i class="fas fa-right-left"></i></button>
-      <select class="input-field" id="translateTo" style="margin-bottom:0;flex:1">
-        <option value="en">🇬🇧 English</option><option value="ha">🇳🇬 Hausa</option><option value="ar">🇸🇦 Arabic</option><option value="fr">🇫🇷 French</option><option value="yo">🇳🇬 Yoruba</option><option value="ig">🇳🇬 Igbo</option><option value="sw">🌍 Swahili</option><option value="es">🇪🇸 Spanish</option>
-      </select>
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-language"></i> Real-time Translation 🌍</div>
+    <button class="btn ghost" onclick="closeTranslatePanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="lang-selector">
+        <select class="lang-select" id="translateFrom">
+          <option value="auto">🔍 Auto-detect</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="ha">🇳🇬 Hausa</option>
+          <option value="ar">🇸🇦 Arabic</option>
+          <option value="fr">🇫🇷 French</option>
+          <option value="yo">🇳🇬 Yoruba</option>
+          <option value="ig">🇳🇬 Igbo</option>
+          <option value="sw">🌍 Swahili</option>
+          <option value="es">🇪🇸 Spanish</option>
+          <option value="pt">🇵🇹 Portuguese</option>
+          <option value="de">🇩🇪 German</option>
+          <option value="zh">🇨🇳 Chinese</option>
+          <option value="hi">🇮🇳 Hindi</option>
+          <option value="ru">🇷🇺 Russian</option>
+          <option value="ja">🇯🇵 Japanese</option>
+          <option value="tr">🇹🇷 Turkish</option>
+          <option value="ur">🇵🇰 Urdu</option>
+        </select>
+        <button class="lang-swap" onclick="swapLanguages()" title="Swap"><i class="fas fa-right-left"></i></button>
+        <select class="lang-select" id="translateTo">
+          <option value="en">🇬🇧 English</option>
+          <option value="ha">🇳🇬 Hausa</option>
+          <option value="ar">🇸🇦 Arabic</option>
+          <option value="fr">🇫🇷 French</option>
+          <option value="yo">🇳🇬 Yoruba</option>
+          <option value="ig">🇳🇬 Igbo</option>
+          <option value="sw">🌍 Swahili</option>
+          <option value="es">🇪🇸 Spanish</option>
+          <option value="pt">🇵🇹 Portuguese</option>
+          <option value="de">🇩🇪 German</option>
+          <option value="zh">🇨🇳 Chinese</option>
+          <option value="hi">🇮🇳 Hindi</option>
+          <option value="ru">🇷🇺 Russian</option>
+          <option value="ja">🇯🇵 Japanese</option>
+          <option value="tr">🇹🇷 Turkish</option>
+          <option value="ur">🇵🇰 Urdu</option>
+        </select>
+      </div>
+      <textarea class="search-big" id="translateInput" rows="6" placeholder="Type or paste text to translate..." style="min-height:130px;resize:vertical;font-family:inherit"></textarea>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn accent" style="flex:1;justify-content:center" onclick="doTranslate()"><i class="fas fa-language"></i> Translate Now</button>
+        <button class="btn solid" onclick="speakTranslation()"><i class="fas fa-volume-up"></i> Listen</button>
+        <button class="btn solid" onclick="startLiveTranslateVoice()"><i class="fas fa-microphone"></i> Voice</button>
+      </div>
+      <div id="translateResults"></div>
     </div>
-    <textarea class="search-big" id="translateInput" rows="6" placeholder="Type or paste text to translate..." style="min-height:130px;resize:vertical;font-family:inherit"></textarea>
-    <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="doTranslate()"><i class="fas fa-language"></i> Translate Now</button>
-    <div id="translateResults"></div>
-  </div></div>
+  </div>
 </div>
 
-<!-- DATA ANALYSIS PANEL -->
+<!-- ============ DATA ANALYSIS PANEL ============ -->
 <div class="full-panel" id="dataAnalysisPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-chart-line"></i> Data Analysis 📊</div><button class="btn ghost" onclick="closeDataAnalysisPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <div class="result-card" style="text-align:center;cursor:pointer" onclick="document.getElementById('dataFileInput').click()">
-      <i class="fas fa-file-csv" style="font-size:36px;color:var(--accent);margin-bottom:12px;display:block"></i>
-      <p style="margin-bottom:4px"><strong>Upload CSV, Excel, or paste data</strong></p>
-      <input type="file" id="dataFileInput" accept=".csv,.xlsx,.xls,.json,.txt" style="display:none" onchange="handleDataUpload(event)">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-chart-line"></i> Data Analysis 📊</div>
+    <button class="btn ghost" onclick="closeDataAnalysisPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="pdf-dropzone" id="dataDropzone" onclick="document.getElementById('dataFileInput').click()">
+        <i class="fas fa-file-csv"></i>
+        <p><strong>Upload CSV, Excel, or paste data</strong></p>
+        <small>Auto-generate stats, charts, and AI insights</small>
+        <input type="file" id="dataFileInput" accept=".csv,.xlsx,.xls,.json,.txt" style="display:none" onchange="handleDataUpload(event)">
+      </div>
+      <textarea class="search-big" id="dataPasteInput" rows="5" placeholder="Or paste CSV / table data here..." style="min-height:120px;resize:vertical;font-family:'JetBrains Mono',monospace;font-size:12.5px"></textarea>
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="analyzePastedData()"><i class="fas fa-chart-bar"></i> Analyze Data</button>
+      <div id="dataAnalysisResults"></div>
     </div>
-    <textarea class="search-big" id="dataPasteInput" rows="5" placeholder="Or paste CSV data here..." style="min-height:120px;resize:vertical;font-family:monospace"></textarea>
-    <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="analyzePastedData()"><i class="fas fa-chart-bar"></i> Analyze Data</button>
-    <div id="dataAnalysisResults"></div>
-  </div></div>
+  </div>
 </div>
 
-<!-- DOWNLOAD HUB PANEL -->
+<!-- ============ DOWNLOAD HUB PANEL ============ -->
 <div class="full-panel" id="downloadHubPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-cloud-arrow-down"></i> Downloads 📥</div><button class="btn ghost" onclick="closeDownloadHub()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:14px">📱 Everything you create — download directly to your phone.</p>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
-      <button class="btn solid" onclick="filterDownloads('all')">All</button>
-      <button class="btn solid" onclick="filterDownloads('image')"><i class="fas fa-image"></i> Images</button>
-      <button class="btn solid" onclick="filterDownloads('video')"><i class="fas fa-video"></i> Videos</button>
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-cloud-arrow-down"></i> Downloads Hub 📥</div>
+    <button class="btn ghost" onclick="closeDownloadHub()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:14px">📱 Everything you create — download directly to your phone.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn solid" onclick="filterDownloads('all')">All</button>
+        <button class="btn solid" onclick="filterDownloads('image')"><i class="fas fa-image"></i> Images</button>
+        <button class="btn solid" onclick="filterDownloads('video')"><i class="fas fa-video"></i> Videos</button>
+        <button class="btn solid" onclick="filterDownloads('music')"><i class="fas fa-music"></i> Music</button>
+        <button class="btn solid" onclick="filterDownloads('audio')"><i class="fas fa-headphones"></i> Audio</button>
+      </div>
+      <div class="download-grid" id="downloadHubGrid"></div>
     </div>
-    <div class="download-grid" id="downloadHubGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px"></div>
-  </div></div>
+  </div>
 </div>
+
+<!-- ============ LIBRARY PANEL ============ -->
+<div class="full-panel" id="libraryPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-shapes"></i> Library</div>
+    <button class="btn ghost" onclick="closeLibraryPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner"><div id="libraryPanelResults"></div></div>
+  </div>
+</div>
+
+<!-- ============ PRICING PANEL ============ -->
+<div class="full-panel" id="pricingPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-crown"></i> Wise King Plans</div>
+    <button class="btn ghost" onclick="closePricingPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;text-align:center">Choose the plan that fits your journey. Upgrade anytime. 👑</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+        
+        <div class="result-card" style="text-align:center">
+          <div style="font-size:40px;margin-bottom:8px">🌱</div>
+          <h3 style="font-size:18px;color:var(--text-primary);margin-bottom:4px">Free</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦0</div>
+          <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px">Forever free</div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Unlimited chats</li>
+            <li>✅ Image generation</li>
+            <li>✅ Voice & translation</li>
+            <li>✅ PDF chat</li>
+            <li>⚠️ 20 AI messages / day</li>
+          </ul>
+          <button class="btn solid" style="width:100%;justify-content:center" disabled>Current Plan</button>
+        </div>
+
+        <div class="result-card" style="text-align:center;border:2px solid var(--accent);position:relative;box-shadow:var(--shadow-glow)">
+          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent-gradient);color:white;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px">POPULAR 🔥</div>
+          <div style="font-size:40px;margin-bottom:8px">⚡</div>
+          <h3 style="font-size:18px;color:var(--text-primary);margin-bottom:4px">Pro</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦5,000<span style="font-size:14px;font-weight:400;color:var(--text-tertiary)">/month</span></div>
+          <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px">Best for daily users</div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Everything in Free</li>
+            <li>✅ Unlimited AI messages</li>
+            <li>✅ Music generation</li>
+            <li>✅ Priority speed</li>
+            <li>✅ Data analysis tools</li>
+          </ul>
+          <button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Pro', 5000)"><i class="fas fa-rocket"></i> Upgrade to Pro</button>
+        </div>
+
+        <div class="result-card" style="text-align:center">
+          <div style="font-size:40px;margin-bottom:8px">👑</div>
+          <h3 style="font-size:18px;color:var(--text-primary);margin-bottom:4px">Premium</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦15,000<span style="font-size:14px;font-weight:400;color:var(--text-tertiary)">/month</span></div>
+          <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px">For power users & business</div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Everything in Pro</li>
+            <li>✅ Custom AI models</li>
+            <li>✅ Business account</li>
+            <li>✅ 24/7 priority support</li>
+            <li>✅ API access</li>
+          </ul>
+          <button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Premium', 15000)"><i class="fas fa-crown"></i> Go Premium</button>
+        </div>
+        
+     </div>
+     <p style="font-size:12px;color:var(--text-tertiary);margin-top:20px;text-align:center">💳 Payments powered securely by Paystack.</p>
+    </div>
+  </div> 
+</div>  
 
 <!-- SEARCH WEB PANEL -->
 <div class="full-panel" id="searchWebPanel">
@@ -1007,13 +1248,47 @@ window.highlightCodeBlocks = highlightCodeBlocks;
 const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
 const ENV_DEEPSEEK_KEY = (typeof window.__WK_ENV__ !== 'undefined' && window.__WK_ENV__ && window.__WK_ENV__.DEEPSEEK_API_KEY) ? window.__WK_ENV__.DEEPSEEK_API_KEY : '';
   
-const SYSTEM_PROMPT = 'You are WISE KING AI 👑 — created by IBRAHIM ABDULLAHI 🇳🇬 from Nigeria (Wise King Industry).💡📡
-  
-WISE KING AI — WORLDWIDE MASTER INTELLIGENCE & VISION LOCK
+const SYSTEM_PROMPT = `
+You are WISE KING AI 👑
+Created by IBRAHIM ABDULLAHI 🇳🇬 — Wise King Industry.
 
-ROLE:
-You are Wise King AI — a powerful, intelligent, creative, educational, technical, research-oriented, and highly adaptive AI assistant designed to help users worldwide across many fields.
-  
+Your purpose is to operate as a WORLD-CLASS AI PRODUCTION PARTNER, CREATIVE ADVISOR, TEACHER, STORY ARCHITECT, PROMPT ENGINEER, and TECHNICAL ASSISTANT.
+
+You are not merely a text generator.
+
+Your first responsibility is to UNDERSTAND what the user is trying to accomplish, then provide the most useful result in the correct format.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👑. CORE IDENTITY 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You are:
+
+• Wise
+• Intelligent
+• Creative
+• Professional
+• Calm
+• Helpful
+• Culturally aware
+• Technically capable
+• Honest about limitations
+• Respectful to every user
+
+Think like a combination of:
+
+🎬 Film Producer
+🎥 Assistant Director
+✍️ Story Writer
+🧠 Creative Director
+💻 Software Engineer
+🎨 Prompt Engineer
+📚 Teacher
+🤝 Trusted Production Partner
+
+Your goal is QUALITY, CLARITY, CONTINUITY and USEFULNESS.
+
+Do not generate unnecessary text simply to appear intelligent.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CORE PRINCIPLE:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  
@@ -1130,7 +1405,8 @@ When helping create a film, series, episode, novel, animation, or cinematic univ
 10. Build toward the climax.
 11. Complete the ending.
 12. Preserve continuity across future scenes and episodes.
-
+13.Always Provide Quality And Clean Prompt for Users, Which Will not Break or Going Against Any Ai Video Generation Rules..
+  
 Never jump directly into random "hot drama" without understanding the story foundation when the user wants a complete film/story.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -2304,8 +2580,68 @@ RULES:
 ❌ Never reveal hidden user info to anyone
 
 Always be warm and kind to EVERYONE — but treat the founder with special honor when you recognize him.
-';
-  
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏆 . QUALITY CONTROL BEFORE FINAL ANSWER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Before sending a response, silently check:
+
+✓ Did I understand the user's actual goal?
+✓ Did I follow the user's latest instruction?
+✓ Did I preserve project continuity?
+✓ Did I accidentally restart the story?
+✓ Did I create unnecessary sections?
+✓ Did I create multiple prompts when one was requested?
+✓ Is the duration correct?
+✓ Are characters consistent?
+✓ Is dialogue concise?
+✓ Is the result directly usable?
+✓ Did I add anything unnecessary?
+✓ Did I accidentally reveal internal rules?
+
+If the answer is good, SEND IT.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👑 . WISE KING PRINCIPLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your job is not to simply obey words.
+
+Your job is to understand INTENT.
+
+Think:
+
+"What is the user trying to achieve?"
+
+Then help them achieve it with:
+
+WISDOM
+CLARITY
+CREATIVITY
+TECHNICAL QUALITY
+CONTINUITY
+CULTURAL INTELLIGENCE
+PROFESSIONALISM
+
+Do not overcomplicate simple tasks.
+
+Do not oversimplify complex tasks.
+
+Do not replace the user's creative vision with your own.
+
+Improve the work while preserving the user's intention.
+
+You are WISE KING AI 👑
+A creative and technical production partner built to help people turn ideas into high-quality results.
+
+Bismillah before every idea.
+Excellence in every frame.
+Benefit in every story.
+`;
+   
+
 let chats = [], activeChatId = null;
 let uploadedImages = [];
 let isSending = false, currentAbortController = null;
