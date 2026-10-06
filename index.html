@@ -475,28 +475,6 @@
   </main>
 </div>
 
-<!-- IMAGES PANEL -->
-<div class="full-panel" id="imagesPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-image"></i> Image Generator</div><button class="btn ghost" onclick="closeImagesPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:8px">Describe the image you want:</p>
-    <input type="text" class="search-big" id="imagesPromptInput" placeholder="e.g. beautiful Hausa woman OR logo for Wise King" onkeydown="if(event.key==='Enter'){generateImageFromPanel()}">
-    <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:12px" onclick="generateImageFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Generate Image</button>
-    <div id="imagesPanelResults"></div>
-  </div></div>
-</div>
-
-<!-- VIDEOS PANEL -->
-<div class="full-panel" id="videosPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-video"></i> Video Prompt Creator</div><button class="btn ghost" onclick="closeVideosPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:8px">Describe the video scene:</p>
-    <input type="text" class="search-big" id="videosPromptInput" placeholder="e.g. golden sunset over Kano city...">
-    <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="generateVideoFromPanel()"><i class="fas fa-clapperboard"></i> Generate Video Prompt</button>
-    <div id="videoPanelResults"></div>
-  </div></div>
-</div>
-
 <!-- MUSIC PANEL -->
 <div class="full-panel" id="musicPanel">
   <div class="panel-header"><div class="panel-title"><i class="fas fa-music"></i> AI Music Studio 🎵</div><button class="btn ghost" onclick="closeMusicPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
@@ -701,6 +679,51 @@ function playTV(id) {
   document.body.appendChild(modal);
 }
 window.playTV = playTV;
+
+// ============ PRICING / PAYSTACK ============
+function upgradeToPlan(plan, amount) {
+  const userEmail = localStorage.getItem('wk_user_email') || 'guest@wiseking.ai';
+  const userName = localStorage.getItem('wk_user_name') || 'Wise King User';
+  let paystackKey = localStorage.getItem('wk_paystack_key');
+  if (!paystackKey) {
+    paystackKey = prompt('Enter your Paystack PUBLIC KEY (starts with pk_live_ or pk_test_):\n\nGet it from paystack.com → Settings → API Keys');
+    if (!paystackKey) { showToast('❌ Payment cancelled'); return; }
+    localStorage.setItem('wk_paystack_key', paystackKey);
+  }
+  showToast('💳 Opening payment for ' + plan + '...');
+  try {
+    const handler = PaystackPop.setup({
+      key: paystackKey,
+      email: userEmail,
+      amount: amount * 100,
+      currency: 'NGN',
+      ref: 'WK_' + Date.now() + '_' + Math.floor(Math.random() * 1000000),
+      metadata: { custom_fields: [ { display_name:"Customer Name", variable_name:"customer_name", value: userName }, { display_name:"Plan", variable_name:"plan", value: plan } ] },
+      callback: function(response) {
+        const ref = response.reference;
+        localStorage.setItem('wk_plan', plan);
+        localStorage.setItem('wk_plan_amount', amount);
+        localStorage.setItem('wk_plan_started', Date.now());
+        localStorage.setItem('wk_plan_ref', ref);
+        if (window.WK_CLOUD && localStorage.getItem('wk_user_uid')) {
+          window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), { plan: plan, planAmount: amount, planStarted: Date.now(), planRef: ref });
+        }
+        showToast('🎉 Welcome to ' + plan + '! Payment successful.');
+        setTimeout(function() { alert('✅ PAYMENT SUCCESSFUL!\n\nPlan: ' + plan + '\nAmount: ₦' + amount.toLocaleString() + '\nReference: ' + ref + '\n\nYour account has been upgraded. Enjoy! 👑'); updatePlanBadge(); closePricingPanel(); }, 500);
+      },
+      onClose: function() { showToast('❌ Payment cancelled'); }
+    });
+    handler.openIframe();
+  } catch(err) { showToast('⚠️ Payment error: ' + err.message); }
+}
+window.upgradeToPlan = upgradeToPlan;
+
+function updatePlanBadge() {
+  const plan = localStorage.getItem('wk_plan') || 'Free';
+  const badge = document.getElementById('userPlanBadge');
+  if (badge) badge.textContent = plan + ' plan';
+}
+window.updatePlanBadge = updatePlanBadge;  
   
 <!-- PRICING PANEL -->
 <div class="full-panel" id="pricingPanel">
@@ -728,6 +751,48 @@ window.playTV = playTV;
     </div>
   </div></div>
 </div>
+  
+<!-- USER PROFILE PANEL -->
+<div class="full-panel" id="userProfilePanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-user-circle"></i> My Profile</div>
+    <button class="btn ghost" onclick="closeUserProfile()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="result-card" style="text-align:center">
+        <div class="avatar" id="userProfileAvatar" style="width:80px;height:80px;font-size:32px;margin:0 auto 14px">WK</div>
+        <h3 id="userProfileName" style="font-size:20px;margin-bottom:6px">Wise King User</h3>
+        <p id="userProfileEmail" style="font-size:13.5px;color:var(--text-secondary);margin-bottom:14px">Not signed in</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+          <button class="btn accent" onclick="document.getElementById('profilePhotoInput').click()"><i class="fas fa-camera"></i> Change Photo</button>
+          <button class="btn solid" onclick="closeUserProfile();openPricingPanel()"><i class="fas fa-crown"></i> Upgrade Plan</button>
+        </div>
+      </div>
+
+      <div class="result-card">
+        <h4><i class="fas fa-chart-line"></i> Your Stats</h4>
+        <div class="toggle-row"><div class="toggle-label">Member Since</div><div id="userProfileJoined" style="color:var(--text-secondary)">—</div></div>
+        <div class="toggle-row"><div class="toggle-label">Total Chats</div><div id="userProfileChats" style="color:var(--text-secondary)">0</div></div>
+        <div class="toggle-row"><div class="toggle-label">Current Plan</div><div id="userProfilePlan" style="color:var(--accent-hover)">Free</div></div>
+        <div class="toggle-row"><div class="toggle-label">Messages Sent</div><div id="userProfileMsgs" style="color:var(--text-secondary)">0</div></div>
+      </div>
+
+      <div class="result-card">
+        <h4><i class="fas fa-user-tie"></i> AI Persona</h4>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">How should Wise King AI talk to you?</p>
+        <select class="input-field" id="aiPersonaSelect" onchange="saveAIPersona()">
+          <option value="wise-teacher">👨‍🏫 Wise Teacher — explains patiently</option>
+          <option value="friend">🤝 Close Friend — casual and warm</option>
+          <option value="advisor">💼 Business Advisor — professional</option>
+          <option value="creative">🎨 Creative Partner — imaginative</option>
+          <option value="student">📚 Fellow Student — learns with you</option>
+          <option value="mentor">🧘 Mentor — wisdom & guidance</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>                              
 
 <!-- MEMORY PANEL -->
 <div class="full-panel" id="memoryPanel">
@@ -1370,6 +1435,50 @@ window.applyAvatar = applyAvatar;
 function handleProfilePhotoUpload(e) { const f = e.target.files[0]; if (!f) return; const fr = new FileReader(); fr.onload = function(ev) { localStorage.setItem('wk_user_avatar', ev.target.result); applyAvatar(ev.target.result); showToast('Photo updated'); }; fr.readAsDataURL(f); }
 window.handleProfilePhotoUpload = handleProfilePhotoUpload;
 
+// ============ USER PROFILE ============
+function openUserProfile() {
+  document.getElementById('userProfilePanel').classList.add('show');
+  closeSidebar();
+  renderUserProfile();
+}
+function closeUserProfile() {
+  document.getElementById('userProfilePanel').classList.remove('show');
+}
+function renderUserProfile() {
+  const name = localStorage.getItem('wk_user_name') || 'Wise King User';
+  const email = localStorage.getItem('wk_user_email') || 'Not signed in';
+  const joined = localStorage.getItem('wk_joined') || new Date().toLocaleDateString();
+  const plan = localStorage.getItem('wk_plan') || 'Free';
+  const av = localStorage.getItem('wk_user_avatar') || '👑';
+
+  document.getElementById('userProfileName').textContent = name;
+  document.getElementById('userProfileEmail').textContent = email;
+  document.getElementById('userProfileJoined').textContent = joined;
+  document.getElementById('userProfilePlan').textContent = plan;
+  document.getElementById('userProfileChats').textContent = chats.length;
+  let msgCount = 0;
+  chats.forEach(function(c) { msgCount += (c.messages || []).length; });
+  document.getElementById('userProfileMsgs').textContent = msgCount;
+
+  const avatarEl = document.getElementById('userProfileAvatar');
+  if (av.startsWith('http') || av.startsWith('data:')) {
+    avatarEl.innerHTML = '<img src="' + av + '" style="width:100%;height:100%;object-fit:cover">';
+  } else {
+    avatarEl.textContent = av;
+  }
+
+  const persona = localStorage.getItem('wk_ai_persona') || 'wise-teacher';
+  document.getElementById('aiPersonaSelect').value = persona;
+}
+function saveAIPersona() {
+  const persona = document.getElementById('aiPersonaSelect').value;
+  localStorage.setItem('wk_ai_persona', persona);
+  showToast('✅ AI will be your ' + persona.replace('-', ' '));
+}
+window.openUserProfile = openUserProfile;
+window.closeUserProfile = closeUserProfile;
+window.saveAIPersona = saveAIPersona;
+  
 // ============ SETTINGS ============
 function openSettings() {
   document.getElementById('settingsModal').classList.add('show');
@@ -1562,42 +1671,6 @@ function downloadText(encodedText, filename) {
   } catch(e) { showToast('⚠️ Download failed'); }
 }
 window.downloadText = downloadText;
-
-// ============ IMAGES ============
-function openImagesPanel() { document.getElementById('imagesPanel').classList.add('show'); closeSidebar(); }
-function closeImagesPanel() { document.getElementById('imagesPanel').classList.remove('show'); }
-async function generateImageFromPanel() {
-  const prompt = document.getElementById('imagesPromptInput').value.trim();
-  if (!prompt) return showToast('Enter image description');
-  const results = document.getElementById('imagesPanelResults');
-  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Generating image...</div>';
-  try {
-    const seed = Math.floor(Math.random() * 1000000);
-    const url = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(prompt) + '?width=1024&height=1024&seed=' + seed + '&nologo=true';
-    await new Promise(function(resolve, reject) { const img = new Image(); img.onload = resolve; img.onerror = reject; img.src = url; setTimeout(reject, 30000); });
-    results.innerHTML = '<div class="result-card"><h4><i class="fas fa-check-circle"></i> Image Ready</h4><img src="' + url + '" style="max-width:100%;border-radius:12px;margin-top:10px"><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn accent" onclick="downloadFile(\'' + url + '\', \'wiseking-image-' + Date.now() + '.png\')"><i class="fas fa-download"></i> Download</button><button class="btn solid" onclick="wkCopyToClipboard(\'' + url + '\').then(function(){showToast(\'📋 Link copied!\')})"><i class="fas fa-copy"></i> Copy Link</button></div></div>';
-    saveToLibrary({ type: 'image', prompt: prompt, url: url, createdAt: Date.now() });
-    showToast('✅ Image generated!');
-  } catch (err) { results.innerHTML = '<div class="result-card"><p>⚠️ Failed. Try again.</p></div>'; }
-}
-window.openImagesPanel = openImagesPanel; window.closeImagesPanel = closeImagesPanel; window.generateImageFromPanel = generateImageFromPanel;
-
-// ============ VIDEOS ============
-function openVideosPanel() { document.getElementById('videosPanel').classList.add('show'); closeSidebar(); }
-function closeVideosPanel() { document.getElementById('videosPanel').classList.remove('show'); }
-async function generateVideoFromPanel() {
-  const prompt = document.getElementById('videosPromptInput').value.trim();
-  if (!prompt) return showToast('Enter video description');
-  const results = document.getElementById('videoPanelResults');
-  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Creating prompt...</div>';
-  const res = await sendMessageWithFallback('Create a detailed cinematic video prompt for: ' + prompt + '. Include Title, Style, Duration, Setting, Characters, Dialogue, Action Sequence, Visual Style, Mood.');
-  if (res.success) {
-    results.innerHTML = '<div class="result-card"><h4>🎬 Your Video Prompt</h4>' + renderMarkdown(res.reply) + '</div>';
-    saveToLibrary({ type: 'video', prompt: prompt, text: res.reply, createdAt: Date.now() });
-    showToast('✅ Video prompt ready!');
-  } else results.innerHTML = '<div class="result-card"><p>⚠️ Failed.</p></div>';
-}
-window.openVideosPanel = openVideosPanel; window.closeVideosPanel = closeVideosPanel; window.generateVideoFromPanel = generateVideoFromPanel;
 
 // ============ MUSIC ============
 function openMusicPanel() { document.getElementById('musicPanel').classList.add('show'); closeSidebar(); }
@@ -1809,51 +1882,6 @@ window.openBuildAppPanel = openBuildAppPanel;
 window.closeBuildAppPanel = closeBuildAppPanel;
 window.filterBuildIdeas = filterBuildIdeas;
 window.buildApp = buildApp;
-
-// ============ PRICING / PAYSTACK ============
-function upgradeToPlan(plan, amount) {
-  const userEmail = localStorage.getItem('wk_user_email') || 'guest@wiseking.ai';
-  const userName = localStorage.getItem('wk_user_name') || 'Wise King User';
-  let paystackKey = localStorage.getItem('wk_paystack_key');
-  if (!paystackKey) {
-    paystackKey = prompt('Enter your Paystack PUBLIC KEY (starts with pk_live_ or pk_test_):\n\nGet it from paystack.com → Settings → API Keys');
-    if (!paystackKey) { showToast('❌ Payment cancelled'); return; }
-    localStorage.setItem('wk_paystack_key', paystackKey);
-  }
-  showToast('💳 Opening payment for ' + plan + '...');
-  try {
-    const handler = PaystackPop.setup({
-      key: paystackKey,
-      email: userEmail,
-      amount: amount * 100,
-      currency: 'NGN',
-      ref: 'WK_' + Date.now() + '_' + Math.floor(Math.random() * 1000000),
-      metadata: { custom_fields: [ { display_name:"Customer Name", variable_name:"customer_name", value: userName }, { display_name:"Plan", variable_name:"plan", value: plan } ] },
-      callback: function(response) {
-        const ref = response.reference;
-        localStorage.setItem('wk_plan', plan);
-        localStorage.setItem('wk_plan_amount', amount);
-        localStorage.setItem('wk_plan_started', Date.now());
-        localStorage.setItem('wk_plan_ref', ref);
-        if (window.WK_CLOUD && localStorage.getItem('wk_user_uid')) {
-          window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), { plan: plan, planAmount: amount, planStarted: Date.now(), planRef: ref });
-        }
-        showToast('🎉 Welcome to ' + plan + '! Payment successful.');
-        setTimeout(function() { alert('✅ PAYMENT SUCCESSFUL!\n\nPlan: ' + plan + '\nAmount: ₦' + amount.toLocaleString() + '\nReference: ' + ref + '\n\nYour account has been upgraded. Enjoy! 👑'); updatePlanBadge(); closePricingPanel(); }, 500);
-      },
-      onClose: function() { showToast('❌ Payment cancelled'); }
-    });
-    handler.openIframe();
-  } catch(err) { showToast('⚠️ Payment error: ' + err.message); }
-}
-window.upgradeToPlan = upgradeToPlan;
-
-function updatePlanBadge() {
-  const plan = localStorage.getItem('wk_plan') || 'Free';
-  const badge = document.getElementById('userPlanBadge');
-  if (badge) badge.textContent = plan + ' plan';
-}
-window.updatePlanBadge = updatePlanBadge;
 
 // ============ LIVE TV & MOVIES ============
 let currentTVFilter = 'all';
