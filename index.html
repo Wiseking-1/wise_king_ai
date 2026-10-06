@@ -582,25 +582,151 @@
   </div></div>
 </div>
 
-<!-- SEARCH WEB PANEL -->
-<div class="full-panel" id="searchWebPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-globe"></i> Search the web</div><button class="btn ghost" onclick="closeSearchWebPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <input type="text" class="search-big" id="searchWebInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter'){doSearchWeb(this.value)}">
-    <div id="searchSuggestionsBox" style="margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px"></div>
-    <div id="searchWebResults"></div>
-  </div></div>
-</div>
+// ============ SEARCH WEB ============
+function openSearchWebPanel() { document.getElementById('searchWebPanel').classList.add('show'); closeSidebar(); renderSearchSuggestions(); }
+function closeSearchWebPanel() { document.getElementById('searchWebPanel').classList.remove('show'); }
+window.openSearchWebPanel = openSearchWebPanel;
+window.closeSearchWebPanel = closeSearchWebPanel;
 
-<!-- BUILD APP PANEL -->
-<div class="full-panel" id="buildAppPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-code"></i> Build an app</div><button class="btn ghost" onclick="closeBuildAppPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <input type="text" class="search-big" id="buildAppInput" placeholder="Describe your app idea...">
-    <div id="buildAppIdeas"></div>
-  </div></div>
-</div>
+function renderSearchSuggestions() {
+  const box = document.getElementById('searchSuggestionsBox'); if (!box) return;
+  const suggestions = [
+    { label:'📰 Latest Nigeria news', url:'https://www.google.com/search?q=latest+nigeria+news', icon:'fa-google' },
+    { label:'💵 Naira to USD rate', url:'https://www.google.com/search?q=naira+to+usd+rate+today', icon:'fa-google' },
+    { label:'🌦️ Weather in Lagos', url:'https://www.google.com/search?q=weather+in+lagos', icon:'fa-google' },
+    { label:'📈 Crypto prices', url:'https://www.google.com/search?q=crypto+prices+today', icon:'fa-google' },
+    { label:'📧 Gmail', url:'https://mail.google.com', icon:'fa-envelope' },
+    { label:'🛒 Jumia', url:'https://www.jumia.com.ng', icon:'fa-shopping-cart' },
+    { label:'📸 Instagram', url:'https://instagram.com', icon:'fa-instagram' },
+    { label:'💬 WhatsApp', url:'https://web.whatsapp.com', icon:'fa-whatsapp' },
+    { label:'📚 Quran', url:'https://quran.com', icon:'fa-book-quran' },
+    { label:'📖 Wikipedia', url:'https://en.wikipedia.org', icon:'fa-wikipedia-w' },
+    { label:'▶️ YouTube', url:'https://www.youtube.com', icon:'fa-youtube' },
+    { label:'📺 BBC News', url:'https://www.bbc.com/news', icon:'fa-tower-broadcast' }
+  ];
+  box.innerHTML = suggestions.map(s => '<a class="quick-chip" href="' + s.url + '" target="_blank" rel="noopener"><i class="fab ' + s.icon + '"></i> ' + s.label + '</a>').join('');
+}
 
+async function doSearchWeb(query) {
+  const results = document.getElementById('searchWebResults');
+  const shortcut = document.getElementById('askWiseKingShortcut');
+  if (!results) return;
+  const q = (query || '').trim();
+  if (!q) { results.innerHTML = ''; shortcut.style.display = 'none'; return; }
+  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Searching...</div>';
+  const res = await sendMessageWithFallback('Search the live web: ' + q);
+  if (res.success) {
+    results.innerHTML = '<div class="result-card"><h4><i class="fas fa-wand-magic-sparkles"></i> Answer</h4><p>' + linkify(escapeHtml(res.reply)).replace(/\n/g,'<br>') + '</p></div>';
+    shortcut.style.display = 'block';
+    shortcut.innerHTML = '<button class="btn accent" onclick="askWiseKingFromSearch(\'' + q.replace(/'/g, "\\'") + '\')"><i class="fas fa-comments"></i> Continue in Chat</button>';
+  } else results.innerHTML = '<div class="result-card"><p>⚠️ Search failed.</p></div>';
+}
+window.doSearchWeb = doSearchWeb;
+function askWiseKingFromSearch(q) { closeSearchWebPanel(); insertQuickPrompt(q); }
+window.askWiseKingFromSearch = askWiseKingFromSearch;
+
+// ============ BUILD APP ============
+const BUILD_IDEAS = [ { t:'Business Landing Page', d:'Modern responsive landing' }, { t:'Portfolio Website', d:'Showcase your work' }, { t:'Restaurant Menu App', d:'Digital menu with cart' }, { t:'Todo List App', d:'Track daily tasks' }, { t:'Weather Dashboard', d:'Live weather API' }, { t:'E-commerce Store', d:'Full online shop' } ];
+function openBuildAppPanel() { document.getElementById('buildAppPanel').classList.add('show'); closeSidebar(); filterBuildIdeas(''); }
+function closeBuildAppPanel() { document.getElementById('buildAppPanel').classList.remove('show'); }
+function filterBuildIdeas(q) { const box = document.getElementById('buildAppIdeas'); if (!box) return; const query = (q || '').toLowerCase(); const list = BUILD_IDEAS.filter(i => !query || i.t.toLowerCase().indexOf(query) >= 0); box.innerHTML = list.map(i => '<div class="result-card" onclick="buildApp(\'' + i.t.replace(/'/g, "\\'") + '\')" style="cursor:pointer"><h4>💡 ' + escapeHtml(i.t) + '</h4><p>' + escapeHtml(i.d) + '</p></div>').join(''); }
+function buildApp(name) { closeBuildAppPanel(); insertQuickPrompt('Build a complete single-file HTML app: ' + name + '.'); }
+window.openBuildAppPanel = openBuildAppPanel;
+window.closeBuildAppPanel = closeBuildAppPanel;
+window.filterBuildIdeas = filterBuildIdeas;
+window.buildApp = buildApp;
+
+// ============ PRICING / PAYSTACK ============
+function upgradeToPlan(plan, amount) {
+  const userEmail = localStorage.getItem('wk_user_email') || 'guest@wiseking.ai';
+  const userName = localStorage.getItem('wk_user_name') || 'Wise King User';
+  let paystackKey = localStorage.getItem('wk_paystack_key');
+  if (!paystackKey) {
+    paystackKey = prompt('Enter your Paystack PUBLIC KEY (starts with pk_live_ or pk_test_):\n\nGet it from paystack.com → Settings → API Keys');
+    if (!paystackKey) { showToast('❌ Payment cancelled'); return; }
+    localStorage.setItem('wk_paystack_key', paystackKey);
+  }
+  showToast('💳 Opening payment for ' + plan + '...');
+  try {
+    const handler = PaystackPop.setup({
+      key: paystackKey,
+      email: userEmail,
+      amount: amount * 100,
+      currency: 'NGN',
+      ref: 'WK_' + Date.now() + '_' + Math.floor(Math.random() * 1000000),
+      metadata: { custom_fields: [ { display_name:"Customer Name", variable_name:"customer_name", value: userName }, { display_name:"Plan", variable_name:"plan", value: plan } ] },
+      callback: function(response) {
+        const ref = response.reference;
+        localStorage.setItem('wk_plan', plan);
+        localStorage.setItem('wk_plan_amount', amount);
+        localStorage.setItem('wk_plan_started', Date.now());
+        localStorage.setItem('wk_plan_ref', ref);
+        if (window.WK_CLOUD && localStorage.getItem('wk_user_uid')) {
+          window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), { plan: plan, planAmount: amount, planStarted: Date.now(), planRef: ref });
+        }
+        showToast('🎉 Welcome to ' + plan + '! Payment successful.');
+        setTimeout(function() { alert('✅ PAYMENT SUCCESSFUL!\n\nPlan: ' + plan + '\nAmount: ₦' + amount.toLocaleString() + '\nReference: ' + ref + '\n\nYour account has been upgraded. Enjoy! 👑'); updatePlanBadge(); closePricingPanel(); }, 500);
+      },
+      onClose: function() { showToast('❌ Payment cancelled'); }
+    });
+    handler.openIframe();
+  } catch(err) { showToast('⚠️ Payment error: ' + err.message); }
+}
+window.upgradeToPlan = upgradeToPlan;
+
+function updatePlanBadge() {
+  const plan = localStorage.getItem('wk_plan') || 'Free';
+  const badge = document.getElementById('userPlanBadge');
+  if (badge) badge.textContent = plan + ' plan';
+}
+window.updatePlanBadge = updatePlanBadge;
+
+// ============ LIVE TV & MOVIES ============
+let currentTVFilter = 'all';
+const TV_CHANNELS = [
+  { id:'c1', title:'Arise News', type:'live', poster:'https://images.unsplash.com/photo-1495020689067-958852a7765e?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCfMNQzwvJ2jNgZgnkfPU_Pw', desc:'Nigeria 24/7 news' },
+  { id:'c2', title:'Channels TV', type:'live', poster:'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg', desc:'Live Nigerian news' },
+  { id:'c3', title:'Al Jazeera English', type:'live', poster:'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg', desc:'World news' },
+  { id:'c4', title:'BBC World News', type:'live', poster:'https://images.unsplash.com/photo-1526470498-9ae73c665de8?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCCj956IF62FbT7Gouszaj9w', desc:'Global news' },
+  { id:'m1', title:'The Lion King', type:'movie', poster:'https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=400', url:'https://www.youtube.com/embed/lFzVJEksoDY', desc:'1994 • Animation' },
+  { id:'m2', title:'Black Panther', type:'movie', poster:'https://images.unsplash.com/photo-1635805737707-575885ab0820?w=400', url:'https://www.youtube.com/embed/xjDjIWPwcPU', desc:'2018 • Action' },
+  { id:'m3', title:'Coming to America', type:'movie', poster:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400', url:'https://www.youtube.com/embed/fvzHMxOtnNA', desc:'1988 • Comedy' },
+  { id:'m4', title:'The Godfather', type:'movie', poster:'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400', url:'https://www.youtube.com/embed/sY1S34973zA', desc:'1972 • Classic' },
+  { id:'h1', title:'Kannywood Special 1', type:'hausa', poster:'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400', url:'https://www.youtube.com/embed/videoseries?list=PLmQ1M6H7j0H7Z5G5bGMQO4rV6G1jv1ZPq', desc:'🇳🇬 Hausa Film' },
+  { id:'h2', title:'Kannywood Special 2', type:'hausa', poster:'https://images.unsplash.com/photo-1594908900066-3f47337549d8?w=400', url:'https://www.youtube.com/embed/videoseries?list=PLmQ1M6H7j0H7Z5G5bGMQO4rV6G1jv1ZPq', desc:'🇳🇬 Hausa Film' },
+  { id:'s1', title:'Money Heist', type:'series', poster:'https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?w=400', url:'https://www.youtube.com/embed/hMANIarjT50', desc:'Series • Netflix' },
+  { id:'s2', title:'Breaking Bad', type:'series', poster:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400', url:'https://www.youtube.com/embed/HhesaQXLuRY', desc:'Series • Drama' }
+];
+
+function openLiveTVPanel() { document.getElementById('liveTVPanel').classList.add('show'); closeSidebar(); renderTVChannels(); }
+function closeLiveTVPanel() { document.getElementById('liveTVPanel').classList.remove('show'); const grid = document.getElementById('tvGrid'); if (grid) grid.innerHTML = ''; }
+function filterTV(type, btn) { currentTVFilter = type; document.querySelectorAll('.tv-tab').forEach(t => t.classList.remove('active')); if (btn) btn.classList.add('active'); renderTVChannels(); }
+window.openLiveTVPanel = openLiveTVPanel;
+window.closeLiveTVPanel = closeLiveTVPanel;
+window.filterTV = filterTV;
+
+function renderTVChannels() {
+  const grid = document.getElementById('tvGrid'); if (!grid) return;
+  const q = (document.getElementById('tvSearchInput')?.value || '').toLowerCase();
+  let list = TV_CHANNELS;
+  if (currentTVFilter !== 'all') list = list.filter(c => c.type === currentTVFilter);
+  if (q) list = list.filter(c => c.title.toLowerCase().indexOf(q) >= 0 || c.desc.toLowerCase().indexOf(q) >= 0);
+  if (!list.length) { grid.innerHTML = '<p style="color:var(--text-secondary);grid-column:1/-1;text-align:center;padding:40px">No results found.</p>'; return; }
+  grid.innerHTML = list.map(c => '<div class="tv-card" onclick="playTV(\'' + c.id + '\')" style="cursor:pointer;background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;transition:all 0.2s"><div style="position:relative;aspect-ratio:2/3;background:var(--bg-elevated);overflow:hidden"><img src="' + c.poster + '" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.style.display=\'none\'">' + (c.type === 'live' ? '<span style="position:absolute;top:8px;left:8px;background:#ef4444;color:white;font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px">● LIVE</span>' : '') + '<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.85),transparent);display:flex;align-items:flex-end;padding:10px"><div style="color:white"><div style="font-size:13px;font-weight:700">' + c.title + '</div><div style="font-size:10.5px;opacity:0.75;margin-top:2px">' + c.desc + '</div></div></div></div></div>').join('');
+}
+window.renderTVChannels = renderTVChannels;
+
+function playTV(id) {
+  const ch = TV_CHANNELS.find(c => c.id === id);
+  if (!ch) return;
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px';
+  modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+  modal.innerHTML = '<div style="width:100%;max-width:900px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="color:white;font-size:16px;font-weight:700">' + ch.title + '</div><button onclick="this.closest(\'div\').parentElement.parentElement.remove()" style="background:transparent;border:none;color:white;font-size:24px;cursor:pointer">✕</button></div><div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px"><iframe src="' + ch.url + '?autoplay=1" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none" allow="autoplay; encrypted-media" allowfullscreen></iframe></div></div>';
+  document.body.appendChild(modal);
+}
+window.playTV = playTV;
+  
 <!-- PRICING PANEL -->
 <div class="full-panel" id="pricingPanel">
   <div class="panel-header"><div class="panel-title"><i class="fas fa-crown"></i> Wise King Plans</div><button class="btn ghost" onclick="closePricingPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
@@ -1314,8 +1440,18 @@ function toggleVoiceMode() {
 }
 window.toggleThinkMode = toggleThinkMode;
 window.toggleSearchMode = toggleSearchMode;
-window.toggleVoiceMode = toggleVoiceMode;
-
+window.toggleVoiceMode = toggleVoiceMode;  
+  
+// ============ VOICE RECOGNITION (Multi-Language) ============
+const VOICE_LANGS = {
+  'en-NG': '🇳🇬 English (Nigeria)', 'en-US': '🇺🇸 English (US)', 'en-GB': '🇬🇧 English (UK)',
+  'ha-NG': '🇳🇬 Hausa', 'ar-SA': '🇸🇦 Arabic', 'fr-FR': '🇫🇷 French',
+  'yo-NG': '🇳🇬 Yoruba', 'ig-NG': '🇳🇬 Igbo', 'sw-KE': '🌍 Swahili',
+  'es-ES': '🇪🇸 Spanish', 'pt-PT': '🇵🇹 Portuguese', 'de-DE': '🇩🇪 German',
+  'zh-CN': '🇨🇳 Chinese', 'hi-IN': '🇮🇳 Hindi', 'ru-RU': '🇷🇺 Russian',
+  'ja-JP': '🇯🇵 Japanese', 'tr-TR': '🇹🇷 Turkish', 'ur-PK': '🇵🇰 Urdu', 'id-ID': '🇮🇩 Indonesian'
+};  
+  
 // ============ VOICE RECOGNITION ============
 function initHoldToSpeak() {
   const pill = document.getElementById('gkHoldPill');
@@ -1648,71 +1784,147 @@ window.openDownloadHub = openDownloadHub; window.closeDownloadHub = closeDownloa
 // ============ SEARCH WEB ============
 function openSearchWebPanel() { document.getElementById('searchWebPanel').classList.add('show'); closeSidebar(); renderSearchSuggestions(); }
 function closeSearchWebPanel() { document.getElementById('searchWebPanel').classList.remove('show'); }
+window.openSearchWebPanel = openSearchWebPanel;
+window.closeSearchWebPanel = closeSearchWebPanel;
+
 function renderSearchSuggestions() {
   const box = document.getElementById('searchSuggestionsBox'); if (!box) return;
   const suggestions = [
-    { label:'📰 Nigeria news', url:'https://www.google.com/search?q=latest+nigeria+news' },
-    { label:'💵 Naira rate', url:'https://www.google.com/search?q=naira+to+usd+rate+today' },
-    { label:'🌦️ Weather Lagos', url:'https://www.google.com/search?q=weather+in+lagos' },
-    { label:'📧 Gmail', url:'https://mail.google.com' },
-    { label:'🛒 Jumia', url:'https://www.jumia.com.ng' },
-    { label:'📸 Instagram', url:'https://instagram.com' },
-    { label:'💬 WhatsApp', url:'https://web.whatsapp.com' },
-    { label:'📖 Wikipedia', url:'https://en.wikipedia.org' },
-    { label:'▶️ YouTube', url:'https://www.youtube.com' },
-    { label:'📺 BBC News', url:'https://www.bbc.com/news' }
+    { label:'📰 Latest Nigeria news', url:'https://www.google.com/search?q=latest+nigeria+news', icon:'fa-google' },
+    { label:'💵 Naira to USD rate', url:'https://www.google.com/search?q=naira+to+usd+rate+today', icon:'fa-google' },
+    { label:'🌦️ Weather in Lagos', url:'https://www.google.com/search?q=weather+in+lagos', icon:'fa-google' },
+    { label:'📈 Crypto prices', url:'https://www.google.com/search?q=crypto+prices+today', icon:'fa-google' },
+    { label:'📧 Gmail', url:'https://mail.google.com', icon:'fa-envelope' },
+    { label:'🛒 Jumia', url:'https://www.jumia.com.ng', icon:'fa-shopping-cart' },
+    { label:'📸 Instagram', url:'https://instagram.com', icon:'fa-instagram' },
+    { label:'💬 WhatsApp', url:'https://web.whatsapp.com', icon:'fa-whatsapp' },
+    { label:'📚 Quran', url:'https://quran.com', icon:'fa-book-quran' },
+    { label:'📖 Wikipedia', url:'https://en.wikipedia.org', icon:'fa-wikipedia-w' },
+    { label:'▶️ YouTube', url:'https://www.youtube.com', icon:'fa-youtube' },
+    { label:'📺 BBC News', url:'https://www.bbc.com/news', icon:'fa-tower-broadcast' }
   ];
-  box.innerHTML = suggestions.map(function(s) { return '<a class="quick-chip" href="' + s.url + '" target="_blank" rel="noopener">' + s.label + '</a>'; }).join('');
+  box.innerHTML = suggestions.map(s => '<a class="quick-chip" href="' + s.url + '" target="_blank" rel="noopener"><i class="fab ' + s.icon + '"></i> ' + s.label + '</a>').join('');
 }
+
 async function doSearchWeb(query) {
   const results = document.getElementById('searchWebResults');
+  const shortcut = document.getElementById('askWiseKingShortcut');
   if (!results) return;
   const q = (query || '').trim();
-  if (!q) { results.innerHTML = ''; return; }
+  if (!q) { results.innerHTML = ''; shortcut.style.display = 'none'; return; }
   results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Searching...</div>';
   const res = await sendMessageWithFallback('Search the live web: ' + q);
-  if (res.success) results.innerHTML = '<div class="result-card"><h4><i class="fas fa-wand-magic-sparkles"></i> Answer</h4><p>' + linkify(escapeHtml(res.reply)).replace(/\n/g,'<br>') + '</p></div>';
-  else results.innerHTML = '<div class="result-card"><p>⚠️ Search failed.</p></div>';
+  if (res.success) {
+    results.innerHTML = '<div class="result-card"><h4><i class="fas fa-wand-magic-sparkles"></i> Answer</h4><p>' + linkify(escapeHtml(res.reply)).replace(/\n/g,'<br>') + '</p></div>';
+    shortcut.style.display = 'block';
+    shortcut.innerHTML = '<button class="btn accent" onclick="askWiseKingFromSearch(\'' + q.replace(/'/g, "\\'") + '\')"><i class="fas fa-comments"></i> Continue in Chat</button>';
+  } else results.innerHTML = '<div class="result-card"><p>⚠️ Search failed.</p></div>';
 }
-window.openSearchWebPanel = openSearchWebPanel; window.closeSearchWebPanel = closeSearchWebPanel; window.doSearchWeb = doSearchWeb;
+window.doSearchWeb = doSearchWeb;
+function askWiseKingFromSearch(q) { closeSearchWebPanel(); insertQuickPrompt(q); }
+window.askWiseKingFromSearch = askWiseKingFromSearch;
 
 // ============ BUILD APP ============
+const BUILD_IDEAS = [ { t:'Business Landing Page', d:'Modern responsive landing' }, { t:'Portfolio Website', d:'Showcase your work' }, { t:'Restaurant Menu App', d:'Digital menu with cart' }, { t:'Todo List App', d:'Track daily tasks' }, { t:'Weather Dashboard', d:'Live weather API' }, { t:'E-commerce Store', d:'Full online shop' } ];
 function openBuildAppPanel() { document.getElementById('buildAppPanel').classList.add('show'); closeSidebar(); filterBuildIdeas(''); }
 function closeBuildAppPanel() { document.getElementById('buildAppPanel').classList.remove('show'); }
-const BUILD_IDEAS = [
-  { t:'Business Landing Page', d:'Modern responsive landing' },
-  { t:'Portfolio Website', d:'Showcase your work' },
-  { t:'Todo List App', d:'Track daily tasks' },
-  { t:'Weather Dashboard', d:'Live weather API' },
-  { t:'E-commerce Store', d:'Full online shop' }
-];
-function filterBuildIdeas(q) { const box = document.getElementById('buildAppIdeas'); if (!box) return; const query = (q || '').toLowerCase(); const list = BUILD_IDEAS.filter(function(i) { return !query || i.t.toLowerCase().indexOf(query) >= 0; }); box.innerHTML = list.map(function(i) { return '<div class="result-card" onclick="buildApp(\'' + i.t.replace(/'/g, "\\'") + '\')" style="cursor:pointer"><h4>💡 ' + escapeHtml(i.t) + '</h4><p>' + escapeHtml(i.d) + '</p></div>'; }).join(''); }
+function filterBuildIdeas(q) { const box = document.getElementById('buildAppIdeas'); if (!box) return; const query = (q || '').toLowerCase(); const list = BUILD_IDEAS.filter(i => !query || i.t.toLowerCase().indexOf(query) >= 0); box.innerHTML = list.map(i => '<div class="result-card" onclick="buildApp(\'' + i.t.replace(/'/g, "\\'") + '\')" style="cursor:pointer"><h4>💡 ' + escapeHtml(i.t) + '</h4><p>' + escapeHtml(i.d) + '</p></div>').join(''); }
 function buildApp(name) { closeBuildAppPanel(); insertQuickPrompt('Build a complete single-file HTML app: ' + name + '.'); }
-window.openBuildAppPanel = openBuildAppPanel; window.closeBuildAppPanel = closeBuildAppPanel; window.filterBuildIdeas = filterBuildIdeas; window.buildApp = buildApp;
+window.openBuildAppPanel = openBuildAppPanel;
+window.closeBuildAppPanel = closeBuildAppPanel;
+window.filterBuildIdeas = filterBuildIdeas;
+window.buildApp = buildApp;
 
 // ============ PRICING / PAYSTACK ============
-function openPricingPanel() { document.getElementById('pricingPanel').classList.add('show'); closeSidebar(); }
-function closePricingPanel() { document.getElementById('pricingPanel').classList.remove('show'); }
 function upgradeToPlan(plan, amount) {
   const userEmail = localStorage.getItem('wk_user_email') || 'guest@wiseking.ai';
+  const userName = localStorage.getItem('wk_user_name') || 'Wise King User';
   let paystackKey = localStorage.getItem('wk_paystack_key');
-  if (!paystackKey) { showToast('Set Paystack key in Settings first'); return; }
+  if (!paystackKey) {
+    paystackKey = prompt('Enter your Paystack PUBLIC KEY (starts with pk_live_ or pk_test_):\n\nGet it from paystack.com → Settings → API Keys');
+    if (!paystackKey) { showToast('❌ Payment cancelled'); return; }
+    localStorage.setItem('wk_paystack_key', paystackKey);
+  }
+  showToast('💳 Opening payment for ' + plan + '...');
   try {
     const handler = PaystackPop.setup({
-      key: paystackKey, email: userEmail, amount: amount * 100, currency: 'NGN',
-      ref: 'WK_' + Date.now(),
+      key: paystackKey,
+      email: userEmail,
+      amount: amount * 100,
+      currency: 'NGN',
+      ref: 'WK_' + Date.now() + '_' + Math.floor(Math.random() * 1000000),
+      metadata: { custom_fields: [ { display_name:"Customer Name", variable_name:"customer_name", value: userName }, { display_name:"Plan", variable_name:"plan", value: plan } ] },
       callback: function(response) {
+        const ref = response.reference;
         localStorage.setItem('wk_plan', plan);
-        showToast('🎉 Welcome to ' + plan + '!');
-        setTimeout(function() { alert('✅ PAYMENT SUCCESSFUL!\n\nPlan: ' + plan + '\nRef: ' + response.reference); updatePlanBadge(); closePricingPanel(); }, 500);
+        localStorage.setItem('wk_plan_amount', amount);
+        localStorage.setItem('wk_plan_started', Date.now());
+        localStorage.setItem('wk_plan_ref', ref);
+        if (window.WK_CLOUD && localStorage.getItem('wk_user_uid')) {
+          window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), { plan: plan, planAmount: amount, planStarted: Date.now(), planRef: ref });
+        }
+        showToast('🎉 Welcome to ' + plan + '! Payment successful.');
+        setTimeout(function() { alert('✅ PAYMENT SUCCESSFUL!\n\nPlan: ' + plan + '\nAmount: ₦' + amount.toLocaleString() + '\nReference: ' + ref + '\n\nYour account has been upgraded. Enjoy! 👑'); updatePlanBadge(); closePricingPanel(); }, 500);
       },
-      onClose: function() { showToast('❌ Cancelled'); }
+      onClose: function() { showToast('❌ Payment cancelled'); }
     });
     handler.openIframe();
-  } catch(err) { showToast('⚠️ Error: ' + err.message); }
+  } catch(err) { showToast('⚠️ Payment error: ' + err.message); }
 }
-function updatePlanBadge() { const plan = localStorage.getItem('wk_plan') || 'Free'; const b = document.getElementById('userPlanBadge'); if (b) b.textContent = plan + ' plan'; }
-window.openPricingPanel = openPricingPanel; window.closePricingPanel = closePricingPanel; window.upgradeToPlan = upgradeToPlan; window.updatePlanBadge = updatePlanBadge;
+window.upgradeToPlan = upgradeToPlan;
+
+function updatePlanBadge() {
+  const plan = localStorage.getItem('wk_plan') || 'Free';
+  const badge = document.getElementById('userPlanBadge');
+  if (badge) badge.textContent = plan + ' plan';
+}
+window.updatePlanBadge = updatePlanBadge;
+
+// ============ LIVE TV & MOVIES ============
+let currentTVFilter = 'all';
+const TV_CHANNELS = [
+  { id:'c1', title:'Arise News', type:'live', poster:'https://images.unsplash.com/photo-1495020689067-958852a7765e?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCfMNQzwvJ2jNgZgnkfPU_Pw', desc:'Nigeria 24/7 news' },
+  { id:'c2', title:'Channels TV', type:'live', poster:'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg', desc:'Live Nigerian news' },
+  { id:'c3', title:'Al Jazeera English', type:'live', poster:'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg', desc:'World news' },
+  { id:'c4', title:'BBC World News', type:'live', poster:'https://images.unsplash.com/photo-1526470498-9ae73c665de8?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCCj956IF62FbT7Gouszaj9w', desc:'Global news' },
+  { id:'m1', title:'The Lion King', type:'movie', poster:'https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=400', url:'https://www.youtube.com/embed/lFzVJEksoDY', desc:'1994 • Animation' },
+  { id:'m2', title:'Black Panther', type:'movie', poster:'https://images.unsplash.com/photo-1635805737707-575885ab0820?w=400', url:'https://www.youtube.com/embed/xjDjIWPwcPU', desc:'2018 • Action' },
+  { id:'m3', title:'Coming to America', type:'movie', poster:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400', url:'https://www.youtube.com/embed/fvzHMxOtnNA', desc:'1988 • Comedy' },
+  { id:'m4', title:'The Godfather', type:'movie', poster:'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400', url:'https://www.youtube.com/embed/sY1S34973zA', desc:'1972 • Classic' },
+  { id:'h1', title:'Kannywood Special 1', type:'hausa', poster:'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400', url:'https://www.youtube.com/embed/videoseries?list=PLmQ1M6H7j0H7Z5G5bGMQO4rV6G1jv1ZPq', desc:'🇳🇬 Hausa Film' },
+  { id:'h2', title:'Kannywood Special 2', type:'hausa', poster:'https://images.unsplash.com/photo-1594908900066-3f47337549d8?w=400', url:'https://www.youtube.com/embed/videoseries?list=PLmQ1M6H7j0H7Z5G5bGMQO4rV6G1jv1ZPq', desc:'🇳🇬 Hausa Film' },
+  { id:'s1', title:'Money Heist', type:'series', poster:'https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?w=400', url:'https://www.youtube.com/embed/hMANIarjT50', desc:'Series • Netflix' },
+  { id:'s2', title:'Breaking Bad', type:'series', poster:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400', url:'https://www.youtube.com/embed/HhesaQXLuRY', desc:'Series • Drama' }
+];
+
+function openLiveTVPanel() { document.getElementById('liveTVPanel').classList.add('show'); closeSidebar(); renderTVChannels(); }
+function closeLiveTVPanel() { document.getElementById('liveTVPanel').classList.remove('show'); const grid = document.getElementById('tvGrid'); if (grid) grid.innerHTML = ''; }
+function filterTV(type, btn) { currentTVFilter = type; document.querySelectorAll('.tv-tab').forEach(t => t.classList.remove('active')); if (btn) btn.classList.add('active'); renderTVChannels(); }
+window.openLiveTVPanel = openLiveTVPanel;
+window.closeLiveTVPanel = closeLiveTVPanel;
+window.filterTV = filterTV;
+
+function renderTVChannels() {
+  const grid = document.getElementById('tvGrid'); if (!grid) return;
+  const q = (document.getElementById('tvSearchInput')?.value || '').toLowerCase();
+  let list = TV_CHANNELS;
+  if (currentTVFilter !== 'all') list = list.filter(c => c.type === currentTVFilter);
+  if (q) list = list.filter(c => c.title.toLowerCase().indexOf(q) >= 0 || c.desc.toLowerCase().indexOf(q) >= 0);
+  if (!list.length) { grid.innerHTML = '<p style="color:var(--text-secondary);grid-column:1/-1;text-align:center;padding:40px">No results found.</p>'; return; }
+  grid.innerHTML = list.map(c => '<div class="tv-card" onclick="playTV(\'' + c.id + '\')" style="cursor:pointer;background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;transition:all 0.2s"><div style="position:relative;aspect-ratio:2/3;background:var(--bg-elevated);overflow:hidden"><img src="' + c.poster + '" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.style.display=\'none\'">' + (c.type === 'live' ? '<span style="position:absolute;top:8px;left:8px;background:#ef4444;color:white;font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px">● LIVE</span>' : '') + '<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.85),transparent);display:flex;align-items:flex-end;padding:10px"><div style="color:white"><div style="font-size:13px;font-weight:700">' + c.title + '</div><div style="font-size:10.5px;opacity:0.75;margin-top:2px">' + c.desc + '</div></div></div></div></div>').join('');
+}
+window.renderTVChannels = renderTVChannels;
+
+function playTV(id) {
+  const ch = TV_CHANNELS.find(c => c.id === id);
+  if (!ch) return;
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px';
+  modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+  modal.innerHTML = '<div style="width:100%;max-width:900px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="color:white;font-size:16px;font-weight:700">' + ch.title + '</div><button onclick="this.closest(\'div\').parentElement.parentElement.remove()" style="background:transparent;border:none;color:white;font-size:24px;cursor:pointer">✕</button></div><div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px"><iframe src="' + ch.url + '?autoplay=1" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none" allow="autoplay; encrypted-media" allowfullscreen></iframe></div></div>';
+  document.body.appendChild(modal);
+}
+window.playTV = playTV;
 
 // ============ LIVE AI CALL ============
 let callRecognition = null, callActive = false, callMuted = false, callSpeaking = false, callRestartTimer = null;
