@@ -633,97 +633,6 @@ window.openBuildAppPanel = openBuildAppPanel;
 window.closeBuildAppPanel = closeBuildAppPanel;
 window.filterBuildIdeas = filterBuildIdeas;
 window.buildApp = buildApp;
-
-// ============ LIVE TV & MOVIES ============
-let currentTVFilter = 'all';
-const TV_CHANNELS = [
-  { id:'c1', title:'Arise News', type:'live', poster:'https://images.unsplash.com/photo-1495020689067-958852a7765e?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCfMNQzwvJ2jNgZgnkfPU_Pw', desc:'Nigeria 24/7 news' },
-  { id:'c2', title:'Channels TV', type:'live', poster:'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg', desc:'Live Nigerian news' },
-  { id:'c3', title:'Al Jazeera English', type:'live', poster:'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg', desc:'World news' },
-  { id:'c4', title:'BBC World News', type:'live', poster:'https://images.unsplash.com/photo-1526470498-9ae73c665de8?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCCj956IF62FbT7Gouszaj9w', desc:'Global news' },
-  { id:'m1', title:'The Lion King', type:'movie', poster:'https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=400', url:'https://www.youtube.com/embed/lFzVJEksoDY', desc:'1994 • Animation' },
-  { id:'m2', title:'Black Panther', type:'movie', poster:'https://images.unsplash.com/photo-1635805737707-575885ab0820?w=400', url:'https://www.youtube.com/embed/xjDjIWPwcPU', desc:'2018 • Action' },
-  { id:'m3', title:'Coming to America', type:'movie', poster:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400', url:'https://www.youtube.com/embed/fvzHMxOtnNA', desc:'1988 • Comedy' },
-  { id:'m4', title:'The Godfather', type:'movie', poster:'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400', url:'https://www.youtube.com/embed/sY1S34973zA', desc:'1972 • Classic' },
-  { id:'h1', title:'Kannywood Special 1', type:'hausa', poster:'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400', url:'https://www.youtube.com/embed/videoseries?list=PLmQ1M6H7j0H7Z5G5bGMQO4rV6G1jv1ZPq', desc:'🇳🇬 Hausa Film' },
-  { id:'h2', title:'Kannywood Special 2', type:'hausa', poster:'https://images.unsplash.com/photo-1594908900066-3f47337549d8?w=400', url:'https://www.youtube.com/embed/videoseries?list=PLmQ1M6H7j0H7Z5G5bGMQO4rV6G1jv1ZPq', desc:'🇳🇬 Hausa Film' },
-  { id:'s1', title:'Money Heist', type:'series', poster:'https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?w=400', url:'https://www.youtube.com/embed/hMANIarjT50', desc:'Series • Netflix' },
-  { id:'s2', title:'Breaking Bad', type:'series', poster:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400', url:'https://www.youtube.com/embed/HhesaQXLuRY', desc:'Series • Drama' }
-];
-
-function openLiveTVPanel() { document.getElementById('liveTVPanel').classList.add('show'); closeSidebar(); renderTVChannels(); }
-function closeLiveTVPanel() { document.getElementById('liveTVPanel').classList.remove('show'); const grid = document.getElementById('tvGrid'); if (grid) grid.innerHTML = ''; }
-function filterTV(type, btn) { currentTVFilter = type; document.querySelectorAll('.tv-tab').forEach(t => t.classList.remove('active')); if (btn) btn.classList.add('active'); renderTVChannels(); }
-window.openLiveTVPanel = openLiveTVPanel;
-window.closeLiveTVPanel = closeLiveTVPanel;
-window.filterTV = filterTV;
-
-function renderTVChannels() {
-  const grid = document.getElementById('tvGrid'); if (!grid) return;
-  const q = (document.getElementById('tvSearchInput')?.value || '').toLowerCase();
-  let list = TV_CHANNELS;
-  if (currentTVFilter !== 'all') list = list.filter(c => c.type === currentTVFilter);
-  if (q) list = list.filter(c => c.title.toLowerCase().indexOf(q) >= 0 || c.desc.toLowerCase().indexOf(q) >= 0);
-  if (!list.length) { grid.innerHTML = '<p style="color:var(--text-secondary);grid-column:1/-1;text-align:center;padding:40px">No results found.</p>'; return; }
-  grid.innerHTML = list.map(c => '<div class="tv-card" onclick="playTV(\'' + c.id + '\')" style="cursor:pointer;background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;transition:all 0.2s"><div style="position:relative;aspect-ratio:2/3;background:var(--bg-elevated);overflow:hidden"><img src="' + c.poster + '" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.style.display=\'none\'">' + (c.type === 'live' ? '<span style="position:absolute;top:8px;left:8px;background:#ef4444;color:white;font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px">● LIVE</span>' : '') + '<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.85),transparent);display:flex;align-items:flex-end;padding:10px"><div style="color:white"><div style="font-size:13px;font-weight:700">' + c.title + '</div><div style="font-size:10.5px;opacity:0.75;margin-top:2px">' + c.desc + '</div></div></div></div></div>').join('');
-}
-window.renderTVChannels = renderTVChannels;
-
-function playTV(id) {
-  const ch = TV_CHANNELS.find(c => c.id === id);
-  if (!ch) return;
-  const modal = document.createElement('div');
-  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px';
-  modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
-  modal.innerHTML = '<div style="width:100%;max-width:900px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="color:white;font-size:16px;font-weight:700">' + ch.title + '</div><button onclick="this.closest(\'div\').parentElement.parentElement.remove()" style="background:transparent;border:none;color:white;font-size:24px;cursor:pointer">✕</button></div><div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px"><iframe src="' + ch.url + '?autoplay=1" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none" allow="autoplay; encrypted-media" allowfullscreen></iframe></div></div>';
-  document.body.appendChild(modal);
-}
-window.playTV = playTV;
-
-// ============ PRICING / PAYSTACK ============
-function upgradeToPlan(plan, amount) {
-  const userEmail = localStorage.getItem('wk_user_email') || 'guest@wiseking.ai';
-  const userName = localStorage.getItem('wk_user_name') || 'Wise King User';
-  let paystackKey = localStorage.getItem('wk_paystack_key');
-  if (!paystackKey) {
-    paystackKey = prompt('Enter your Paystack PUBLIC KEY (starts with pk_live_ or pk_test_):\n\nGet it from paystack.com → Settings → API Keys');
-    if (!paystackKey) { showToast('❌ Payment cancelled'); return; }
-    localStorage.setItem('wk_paystack_key', paystackKey);
-  }
-  showToast('💳 Opening payment for ' + plan + '...');
-  try {
-    const handler = PaystackPop.setup({
-      key: paystackKey,
-      email: userEmail,
-      amount: amount * 100,
-      currency: 'NGN',
-      ref: 'WK_' + Date.now() + '_' + Math.floor(Math.random() * 1000000),
-      metadata: { custom_fields: [ { display_name:"Customer Name", variable_name:"customer_name", value: userName }, { display_name:"Plan", variable_name:"plan", value: plan } ] },
-      callback: function(response) {
-        const ref = response.reference;
-        localStorage.setItem('wk_plan', plan);
-        localStorage.setItem('wk_plan_amount', amount);
-        localStorage.setItem('wk_plan_started', Date.now());
-        localStorage.setItem('wk_plan_ref', ref);
-        if (window.WK_CLOUD && localStorage.getItem('wk_user_uid')) {
-          window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), { plan: plan, planAmount: amount, planStarted: Date.now(), planRef: ref });
-        }
-        showToast('🎉 Welcome to ' + plan + '! Payment successful.');
-        setTimeout(function() { alert('✅ PAYMENT SUCCESSFUL!\n\nPlan: ' + plan + '\nAmount: ₦' + amount.toLocaleString() + '\nReference: ' + ref + '\n\nYour account has been upgraded. Enjoy! 👑'); updatePlanBadge(); closePricingPanel(); }, 500);
-      },
-      onClose: function() { showToast('❌ Payment cancelled'); }
-    });
-    handler.openIframe();
-  } catch(err) { showToast('⚠️ Payment error: ' + err.message); }
-}
-window.upgradeToPlan = upgradeToPlan;
-
-function updatePlanBadge() {
-  const plan = localStorage.getItem('wk_plan') || 'Free';
-  const badge = document.getElementById('userPlanBadge');
-  if (badge) badge.textContent = plan + ' plan';
-}
-window.updatePlanBadge = updatePlanBadge;  
   
 <!-- PRICING PANEL -->
 <div class="full-panel" id="pricingPanel">
@@ -1672,6 +1581,60 @@ function downloadText(encodedText, filename) {
 }
 window.downloadText = downloadText;
 
+// ============================================================
+// IMAGE GENERATION
+// ============================================================
+function buildImageUrl(prompt, seed) { const enhanced = prompt + ', hyper-realistic, 8k, photorealistic, professional photography, cinematic lighting'; const s = seed || Math.floor(Math.random() * 1000000); return `https://image.pollinations.ai/prompt/${encodeURIComponent(enhanced)}?width=1024&height=1024&seed=${s}&nologo=true&enhance=true`; }
+async function replicateRun(modelOwner, modelName, input, apiKey) { const createRes = await fetch(`https://api.replicate.com/v1/models/${modelOwner}/${modelName}/predictions`, { method: 'POST', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ input }) }); if (!createRes.ok) { let errText = ''; try { const j = await createRes.json(); errText = j.detail || j.error || JSON.stringify(j); } catch(e){ errText = await createRes.text().catch(()=>''); } throw new Error(`Replicate ${createRes.status}: ${errText || 'create failed'}`); } let pred = await createRes.json(); let tries = 0; const MAX_TRIES = 150; while (pred.status !== 'succeeded' && pred.status !== 'failed' && pred.status !== 'canceled' && tries < MAX_TRIES) { await new Promise(r => setTimeout(r, 2000)); try { const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${pred.id}`, { headers: { 'Authorization': `Bearer ${apiKey}` } }); if (pollRes.ok) pred = await pollRes.json(); } catch(e) {} tries++; } if (pred.status !== 'succeeded') { const errDetail = pred.error || pred.detail || pred.status; throw new Error(`Replicate ${pred.status}: ${errDetail}`); } const out = pred.output; if (Array.isArray(out)) return out[out.length - 1]; if (typeof out === 'string') return out; if (out && typeof out === 'object') { if (out.url) return out.url; if (out[0]) return out[0]; } throw new Error('Replicate returned no output'); }
+async function generateImageInChat(chat, prompt, sourceImageDataUrl) {
+  const repKey = (localStorage.getItem('wk_replicate_key') || '').trim();
+  const isLogo = detectLogoIntent(prompt);
+  const enhancedPrompt = buildEnhancedPrompt(prompt, isLogo ? 'logo' : 'photo');
+  const placeholder = { role:'ai', content: repKey ? (sourceImageDataUrl ? '🎨 Applying style...' : (isLogo ? '🎨 Designing logo...' : '🎨 Generating hyper-realistic image...')) : '🎨 Generating image...', type:'image-loading', createdAt: Date.now() };
+  chat.messages.push(placeholder); saveChats(); renderMessages();
+  try {
+    let imageUrl;
+    if (repKey) {
+      try {
+        if (sourceImageDataUrl) { imageUrl = await replicateRun('timothybrooks', 'instruct-pix2pix', { image: sourceImageDataUrl, prompt: enhancedPrompt, num_inference_steps: 30, image_guidance_scale: 1.5, guidance_scale: 7 }, repKey); }
+        else { imageUrl = await replicateRun('black-forest-labs', 'flux-schnell', { prompt: enhancedPrompt, num_outputs: 1, aspect_ratio: '1:1', output_format: 'png', output_quality: 100, go_fast: true, guidance: isLogo ? 3.5 : 3.0, num_inference_steps: 4 }, repKey); }
+      } catch (replicateErr) {
+        console.warn('[WiseKing] Replicate failed:', replicateErr.message);
+        placeholder.content = `⚠️ Replicate: ${replicateErr.message}\n\n⏳ Trying free generator...`;
+        renderMessages();
+        await new Promise(r => setTimeout(r, 800));
+        imageUrl = buildImageUrl(enhancedPrompt);
+        await new Promise((resolve) => { const img = new Image(); img.onload = resolve; img.onerror = resolve; img.src = imageUrl; setTimeout(resolve, 20000); });
+      }
+    } else { imageUrl = buildImageUrl(enhancedPrompt); await new Promise((resolve) => { const img = new Image(); img.onload = resolve; img.onerror = resolve; img.src = imageUrl; setTimeout(resolve, 20000); }); }
+    if (!imageUrl) throw new Error('No image URL returned');
+    placeholder.type = 'image'; placeholder.content = sourceImageDataUrl ? `Styled: "${prompt}"` : (isLogo ? `Logo: "${prompt}"` : `Image: "${prompt}"`); placeholder.imageUrl = imageUrl; placeholder.prompt = prompt;
+    saveToLibrary({ type:'image', prompt, url: imageUrl, createdAt: Date.now() });
+  } catch (err) { placeholder.type = 'error'; placeholder.content = `⚠️ Failed: ${err.message || 'unknown error'}`; }
+  saveChats(); renderMessages();
+}
+async function handleBgRemovalInChat(chat, imageDataUrl) { const placeholder = { role:'ai', content:'✂️ Removing background...', type:'image-loading', createdAt: Date.now() }; chat.messages.push(placeholder); saveChats(); renderMessages(); try { if (!window.removeBackground) throw new Error('Not loaded'); const blob = await fetch(imageDataUrl).then(r => r.blob()); const resultBlob = await window.removeBackground(blob); const url = URL.createObjectURL(resultBlob); placeholder.type = 'image'; placeholder.content = '✅ Background removed:'; placeholder.imageUrl = url; } catch (err) { placeholder.type = 'error'; placeholder.content = '⚠️ Failed.'; } saveChats(); renderMessages(); }
+async function generateImageFromPanel() {
+  const prompt = document.getElementById('imagesPromptInput').value.trim();
+  if (!prompt) return showToast('Enter image description');
+  const results = document.getElementById('imagesPanelResults');
+  const repKey = (localStorage.getItem('wk_replicate_key') || '').trim();
+  const isLogo = detectLogoIntent(prompt);
+  const enhancedPrompt = buildEnhancedPrompt(prompt, isLogo ? 'logo' : 'photo');
+  results.innerHTML = `<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Generating...</div>`;
+  try {
+    let url;
+    if (repKey) {
+      try { url = await replicateRun('black-forest-labs', 'flux-schnell', { prompt: enhancedPrompt, num_outputs: 1, aspect_ratio: '1:1', output_format: 'png', output_quality: 100, go_fast: true, guidance: isLogo ? 3.5 : 3.0, num_inference_steps: 4 }, repKey); }
+      catch (repErr) { results.innerHTML = `<div class="gen-image-loading"><i class="fas fa-exclamation-triangle"></i>Replicate: ${escapeHtml(repErr.message)}<br>⏳ Trying free...</div>`; await new Promise(r => setTimeout(r, 1500)); url = buildImageUrl(enhancedPrompt); await new Promise((res) => { const img = new Image(); img.onload = res; img.onerror = res; img.src = url; setTimeout(res, 20000); }); }
+    } else { url = buildImageUrl(enhancedPrompt); await new Promise((res) => { const img = new Image(); img.onload = res; img.onerror = res; img.src = url; setTimeout(res, 20000); }); }
+    if (!url) throw new Error('No image URL');
+    results.innerHTML = `<div class="result-card"><h4><i class="fas fa-check-circle"></i> ${isLogo ? 'Logo ready' : 'Image ready'}</h4><img src="${url}" style="max-width:100%;border-radius:12px;box-shadow:var(--shadow-lg)"><div class="image-result-actions"><a class="btn accent" href="${url}" download="wiseking-${Date.now()}.png"><i class="fas fa-download"></i> Download</a><button class="btn solid" onclick="shareImage('${url.replace(/'/g,"\\'")}')"><i class="fas fa-share"></i> Share</button></div></div>`;
+    saveToLibrary({ type:'image', prompt, url, createdAt: Date.now() });
+  } catch (err) { results.innerHTML = `<div class="result-card"><p>⚠️ Failed: ${escapeHtml(err.message || 'unknown')}</p></div>`; }
+}
+async function generateVideoFromPanel() { const prompt = document.getElementById('videosPromptInput').value.trim(); if (!prompt) return showToast('Describe the video'); const repKey = (localStorage.getItem('wk_replicate_key') || '').trim(); const results = document.getElementById('videoPanelResults'); if (!repKey) { results.innerHTML = '<div class="result-card"><h4><i class="fas fa-info-circle"></i> Replicate key required</h4><p>Add a Replicate API key in Settings.</p></div>'; return; } results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Generating video...</div>'; try { const output = await replicateRun('lucataco', 'animate-diff', { prompt, num_frames: 16, num_inference_steps: 25, guidance_scale: 7.5 }, repKey); const videoUrl = Array.isArray(output) ? output[0] : output; results.innerHTML = `<div class="result-card"><h4><i class="fas fa-film"></i> Video ready</h4><video src="${videoUrl}" controls style="max-width:100%;border-radius:12px"></video><div class="image-result-actions"><a class="btn accent" href="${videoUrl}" download="wiseking-${Date.now()}.mp4"><i class="fas fa-download"></i> Download</a></div></div>`; saveToLibrary({ type:'video', prompt, url: videoUrl, createdAt: Date.now() }); } catch (err) { results.innerHTML = `<div class="result-card"><p>⚠️ Video failed: ${escapeHtml(String(err.message || err))}</p></div>`; } }
+  
 // ============ MUSIC ============
 function openMusicPanel() { document.getElementById('musicPanel').classList.add('show'); closeSidebar(); }
 function closeMusicPanel() { document.getElementById('musicPanel').classList.remove('show'); }
@@ -2013,6 +1976,12 @@ function sendMessage(textOverride) {
 }
 window.sendMessage = sendMessage;
 
+// ============================================================
+// CLIPBOARD
+// ============================================================
+function wkCopyToClipboard(text) { return new Promise((resolve) => { try { if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(() => resolve(true)).catch(() => resolve(fallbackCopy(text))); } else resolve(fallbackCopy(text)); } catch (e) { resolve(fallbackCopy(text)); } }); }
+function fallbackCopy(text) { try { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.top = '-1000px'; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); ta.remove(); return !!ok; } catch (e) { return false; } }
+  
 // ============ RENDER MESSAGES ============
 function renderMessages() {
   const area = document.getElementById('messagesArea'); if (!area) return;
