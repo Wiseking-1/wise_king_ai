@@ -582,6 +582,26 @@
   </div></div>
 </div>
 
+<!-- SEARCH WEB PANEL -->
+<div class="full-panel" id="searchWebPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-globe"></i> Search the web</div><button class="btn ghost" onclick="closeSearchWebPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner">
+    <input type="text" class="search-big" id="searchWebInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter'){doSearchWeb(this.value)}">
+    <div id="searchSuggestionsBox" style="margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px"></div>
+    <div id="searchWebResults"></div>
+  </div></div>
+</div>
+
+<!-- BUILD APP PANEL -->
+<div class="full-panel" id="buildAppPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-code"></i> Build an app</div><button class="btn ghost" onclick="closeBuildAppPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner">
+    <input type="text" class="search-big" id="buildAppInput" placeholder="Describe your app idea...">
+    <div id="buildAppIdeas"></div>
+  </div> 
+ </div> 
+</div>
+ 
 // ============ SEARCH WEB ============
 function openSearchWebPanel() { document.getElementById('searchWebPanel').classList.add('show'); closeSidebar(); renderSearchSuggestions(); }
 function closeSearchWebPanel() { document.getElementById('searchWebPanel').classList.remove('show'); }
@@ -635,51 +655,6 @@ window.openBuildAppPanel = openBuildAppPanel;
 window.closeBuildAppPanel = closeBuildAppPanel;
 window.filterBuildIdeas = filterBuildIdeas;
 window.buildApp = buildApp;
-
-// ============ PRICING / PAYSTACK ============
-function upgradeToPlan(plan, amount) {
-  const userEmail = localStorage.getItem('wk_user_email') || 'guest@wiseking.ai';
-  const userName = localStorage.getItem('wk_user_name') || 'Wise King User';
-  let paystackKey = localStorage.getItem('wk_paystack_key');
-  if (!paystackKey) {
-    paystackKey = prompt('Enter your Paystack PUBLIC KEY (starts with pk_live_ or pk_test_):\n\nGet it from paystack.com → Settings → API Keys');
-    if (!paystackKey) { showToast('❌ Payment cancelled'); return; }
-    localStorage.setItem('wk_paystack_key', paystackKey);
-  }
-  showToast('💳 Opening payment for ' + plan + '...');
-  try {
-    const handler = PaystackPop.setup({
-      key: paystackKey,
-      email: userEmail,
-      amount: amount * 100,
-      currency: 'NGN',
-      ref: 'WK_' + Date.now() + '_' + Math.floor(Math.random() * 1000000),
-      metadata: { custom_fields: [ { display_name:"Customer Name", variable_name:"customer_name", value: userName }, { display_name:"Plan", variable_name:"plan", value: plan } ] },
-      callback: function(response) {
-        const ref = response.reference;
-        localStorage.setItem('wk_plan', plan);
-        localStorage.setItem('wk_plan_amount', amount);
-        localStorage.setItem('wk_plan_started', Date.now());
-        localStorage.setItem('wk_plan_ref', ref);
-        if (window.WK_CLOUD && localStorage.getItem('wk_user_uid')) {
-          window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), { plan: plan, planAmount: amount, planStarted: Date.now(), planRef: ref });
-        }
-        showToast('🎉 Welcome to ' + plan + '! Payment successful.');
-        setTimeout(function() { alert('✅ PAYMENT SUCCESSFUL!\n\nPlan: ' + plan + '\nAmount: ₦' + amount.toLocaleString() + '\nReference: ' + ref + '\n\nYour account has been upgraded. Enjoy! 👑'); updatePlanBadge(); closePricingPanel(); }, 500);
-      },
-      onClose: function() { showToast('❌ Payment cancelled'); }
-    });
-    handler.openIframe();
-  } catch(err) { showToast('⚠️ Payment error: ' + err.message); }
-}
-window.upgradeToPlan = upgradeToPlan;
-
-function updatePlanBadge() {
-  const plan = localStorage.getItem('wk_plan') || 'Free';
-  const badge = document.getElementById('userPlanBadge');
-  if (badge) badge.textContent = plan + ' plan';
-}
-window.updatePlanBadge = updatePlanBadge;
 
 // ============ LIVE TV & MOVIES ============
 let currentTVFilter = 'all';
