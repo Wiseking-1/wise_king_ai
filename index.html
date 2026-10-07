@@ -702,253 +702,335 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
 </div>
 
 <!-- MODALS -->
-<div class="modal-bg" id="editMessageModal"><div class="modal" style="max-width:520px"><div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Edit message</div><button class="modal-close" onclick="closeModal('editMessageModal')"><i class="fas fa-times"></i></button></div><p class="modal-text">Editing will regenerate the AI response.</p><textarea class="input-field" id="editMessageInput" rows="4" style="min-height:120px;resize:vertical"></textarea><div class="modal-actions"><button class="btn ghost" onclick="closeModal('editMessageModal')">Cancel</button><button class="btn accent" onclick="saveEditedMessage()"><i class="fas fa-check"></i> Save & Regenerate</button></div></div></div>
+<div class="modal-bg" id="signOutModal"><div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">⚠️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Sign out?</div><p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">Your session will close.</p><div class="modal-actions" style="justify-content:center;gap:12px"><button class="btn ghost" onclick="closeModal('signOutModal')">Cancel</button><button class="btn danger" onclick="confirmSignOut()">Sign Out</button></div></div></div>
 
-<div class="modal-bg" id="renameChatModal"><div class="modal" style="max-width:420px"><div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Rename chat</div><button class="modal-close" onclick="closeModal('renameChatModal')"><i class="fas fa-times"></i></button></div><input type="text" class="input-field" id="renameChatInput" placeholder="Enter new
+<div class="modal-bg" id="deleteChatModal"><div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">🗑️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete chat?</div><p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">This cannot be undone.</p><div class="modal-actions" style="justify-content:center;gap:12px"><button class="btn ghost" onclick="closeModal('deleteChatModal')">Cancel</button><button class="btn danger" onclick="confirmDeleteChat()">Delete</button></div></div></div>
 
+<div class="modal-bg" id="renameChatModal"><div class="modal" style="max-width:420px"><div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Rename chat</div><button class="modal-close" onclick="closeModal('renameChatModal')"><i class="fas fa-times"></i></button></div><input type="text" class="input-field" id="renameChatInput" placeholder="Enter new name" maxlength="60"><div class="modal-actions"><button class="btn ghost" onclick="closeModal('renameChatModal')">Cancel</button><button class="btn accent" onclick="saveRenamedChat()"><i class="fas fa-check"></i> Save</button></div></div></div>
+
+<div class="modal-bg" id="editMessageModal"><div class="modal" style="max-width:520px"><div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Edit message</div><button class="modal-close" onclick="closeModal('editMessageModal')"><i class="fas fa-times"></i></button></div><textarea class="input-field" id="editMessageInput" rows="4" style="min-height:120px;resize:vertical"></textarea><div class="modal-actions"><button class="btn ghost" onclick="closeModal('editMessageModal')">Cancel</button><button class="btn accent" onclick="saveEditedMessage()"><i class="fas fa-check"></i> Save</button></div></div></div>
+
+<div class="modal-bg" id="deleteMessageModal"><div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">🗑️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete message?</div><div class="modal-actions" style="justify-content:center;gap:12px"><button class="btn ghost" onclick="closeModal('deleteMessageModal')">Cancel</button><button class="btn danger" onclick="confirmDeleteMessage()">Delete</button></div></div></div>
+
+<div class="modal-bg" id="vaultModal"><div class="modal"><div class="modal-head"><div class="modal-title"><i class="fas fa-shield-halved"></i> Master Vault</div><button class="modal-close" onclick="closeModal('vaultModal')"><i class="fas fa-times"></i></button></div><p class="modal-text">Permanent memories the AI never forgets.</p><div class="settings-card" style="margin-bottom:16px"><textarea class="input-field" id="vaultNewInput" rows="3" placeholder="e.g., My name is Ibrahim..." style="resize:vertical;min-height:70px;margin-bottom:10px"></textarea><button class="btn accent" style="width:100%;justify-content:center" onclick="addVaultMemory()"><i class="fas fa-plus"></i> Lock memory</button></div><div id="vaultList"></div><div class="modal-actions"><button class="btn solid" onclick="closeModal('vaultModal')">Close</button></div></div></div>
+
+<div class="modal-bg" id="settingsModal">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-cog"></i> Settings</div><button class="modal-close" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button></div>
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-palette"></i> Appearance</div>
+      <div class="settings-card">
+        <div class="toggle-row"><div class="toggle-label">Light Mode</div><div class="toggle-switch" id="lightModeToggle" onclick="toggleLightMode()"></div></div>
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-key"></i> API Keys</div>
+      <div class="settings-card">
+        <input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (optional)" autocomplete="off">
+        <input type="password" class="input-field" id="deepseekKeyInput" placeholder="DeepSeek API key (optional fallback)" autocomplete="off">
+        <input type="password" class="input-field" id="replicateKeyInput" placeholder="Replicate API key (optional)" autocomplete="off">
+        <input type="password" class="input-field" id="paystackKeyInput" placeholder="Paystack public key (optional)" autocomplete="off" style="margin-bottom:0">
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div>
+      <div class="settings-card">
+        <select class="input-field" id="modelSelect" style="margin-bottom:0">
+          <option value="gemini-2.5-flash">Gemini 2.5 Flash ⚡ (Recommended)</option>
+          <option value="gemini-3.5-flash">Gemini 3.5 Flash</option>
+          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions" style="justify-content:space-between">
+      <button class="btn ghost" style="color:#f87171" onclick="closeModal('settingsModal'); setTimeout(() => askSignOut(), 150);"><i class="fas fa-sign-out-alt"></i> Sign out</button>
+      <button class="btn accent" onclick="saveSettings()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ============ EXTERNAL LIBS ============ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
+<!-- ============ CORE STATE + COPY FUNCTIONS ============ -->
 <script>
+// ============ COPY FUNCTIONS ============
+function fallbackCopy(text) {
+  try {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.top = '-1000px';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = document.execCommand('copy');
+    ta.remove();
+    return !!ok;
+  } catch (e) { return false; }
+}
+function wkCopyToClipboard(text) {
+  return new Promise(function(resolve) {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(function() { resolve(true); }).catch(function() { resolve(fallbackCopy(text)); });
+      } else { resolve(fallbackCopy(text)); }
+    } catch (e) { resolve(fallbackCopy(text)); }
+  });
+}
+window.wkCopyToClipboard = wkCopyToClipboard;
+window.fallbackCopy = fallbackCopy;
+
 window.__wkCodeBlocks = window.__wkCodeBlocks || {};
-function fallbackCopy(text){try{var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.top='-1000px';document.body.appendChild(ta);ta.select();var ok=document.execCommand('copy');ta.remove();return !!ok;}catch(e){return false;}}
-function wkCopyToClipboard(text){return new Promise(function(resolve){try{if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(function(){resolve(true);}).catch(function(){resolve(fallbackCopy(text));});}else{resolve(fallbackCopy(text));}}catch(e){resolve(fallbackCopy(text));}});}
-window.wkCopyToClipboard=wkCopyToClipboard;
-window.wkCopyCode=function(blockId,btn){
-  var code=(window.__wkCodeBlocks&&window.__wkCodeBlocks[blockId])||'';
-  if(!code){if(typeof showToast==='function')showToast('⚠️ Nothing to copy');return;}
-  wkCopyToClipboard(code).then(function(ok){
-    if(ok){var orig=btn.innerHTML;btn.classList.add('copied');btn.innerHTML='<i class="fas fa-check"></i> Copied!';setTimeout(function(){btn.classList.remove('copied');btn.innerHTML=orig;},1200);if(typeof showToast==='function')showToast('📋 Code copied!');}
-    else{if(typeof showToast==='function')showToast('⚠️ Copy failed');}
+window.wkCopyCode = function(blockId, btn) {
+  var code = (window.__wkCodeBlocks && window.__wkCodeBlocks[blockId]) || '';
+  if (!code) { if (typeof showToast === 'function') showToast('⚠️ Nothing to copy'); return; }
+  wkCopyToClipboard(code).then(function(ok) {
+    if (ok) {
+      var orig = btn.innerHTML;
+      btn.classList.add('copied');
+      btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+      setTimeout(function() { btn.classList.remove('copied'); btn.innerHTML = orig; }, 2000);
+      if (typeof showToast === 'function') showToast('📋 Code copied!');
+    } else { if (typeof showToast === 'function') showToast('⚠️ Copy failed'); }
   });
 };
-window.wkDownloadCode=function(blockId,filename){
-  var code=(window.__wkCodeBlocks&&window.__wkCodeBlocks[blockId])||'';
-  if(!code){if(typeof showToast==='function')showToast('⚠️ Nothing to download');return;}
-  try{var blob=new Blob([code],{type:'text/plain'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(url);},1000);if(typeof showToast==='function')showToast('⬇️ Downloaded!');}catch(e){if(typeof showToast==='function')showToast('⚠️ Download failed');}
+window.wkDownloadCode = function(blockId, filename) {
+  var code = (window.__wkCodeBlocks && window.__wkCodeBlocks[blockId]) || '';
+  if (!code) { if (typeof showToast === 'function') showToast('⚠️ Nothing to download'); return; }
+  try {
+    var blob = new Blob([code], { type: 'text/plain' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+    if (typeof showToast === 'function') showToast('⬇️ Downloaded!');
+  } catch(e) { if (typeof showToast === 'function') showToast('⚠️ Download failed'); }
 };
-window.wkRunCode=function(blockId){
-  var code=(window.__wkCodeBlocks&&window.__wkCodeBlocks[blockId])||'';
-  if(!code)return showToast('⚠️ Nothing to run');
-  var blob=new Blob([code],{type:'text/html'});
-  var url=URL.createObjectURL(blob);
-  window.open(url,'_blank');
-  setTimeout(function(){URL.revokeObjectURL(url);},60000);
-  showToast('▶️ Running in new tab');
-};
-function highlightCodeBlocks(){if(typeof Prism==='undefined')return;document.querySelectorAll('.md pre code:not([data-highlighted])').forEach(function(block){try{Prism.highlightElement(block);}catch(e){}});}
-window.highlightCodeBlocks=highlightCodeBlocks;
+
+// ============ SYNTAX HIGHLIGHTING ============
+function highlightCodeBlocks() {
+  if (typeof Prism === 'undefined') return;
+  document.querySelectorAll('.md pre code:not(.language-none):not([data-highlighted])').forEach(function(block) {
+    try { Prism.highlightElement(block); } catch(e) {}
+  });
+}
+window.highlightCodeBlocks = highlightCodeBlocks;
 </script>
 
+<!-- ============ FIREBASE ============ -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU",
-  authDomain: "wise-king-ai-259fc.firebaseapp.com",
-  projectId: "wise-king-ai-259fc",
-  storageBucket: "wise-king-ai-259fc.firebasestorage.app",
-  messagingSenderId: "19851699752",
-  appId: "1:19851699752:web:6735280bf59561e8ffb71d"
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({ prompt: 'select_account' });
-setPersistence(auth, browserLocalPersistence).catch(function(){});
+  const firebaseConfig = {
+    apiKey: "AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU",
+    authDomain: "wise-king-ai-259fc.firebaseapp.com",
+    projectId: "wise-king-ai-259fc",
+    storageBucket: "wise-king-ai-259fc.firebasestorage.app",
+    messagingSenderId: "19851699752",
+    appId: "1:19851699752:web:6735280bf59561e8ffb71d"
+  };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  setPersistence(auth, browserLocalPersistence).catch(function() {});
 
-window.WK_CLOUD = {
-  async loadUserData(uid) { try { const ref = doc(db, 'users', uid); const snap = await getDoc(ref); return snap.exists() ? snap.data() : null; } catch (e) { return null; } },
-  async saveUserData(uid, data) { try { await setDoc(doc(db, 'users', uid), Object.assign({}, data, { updatedAt: serverTimestamp() }), { merge: true }); return true; } catch (e) { return false; } }
-};
-
-window.__showWelcomePopup = function(name, photoURL) {
-  const popup = document.getElementById('welcomePopup');
-  const nameEl = document.getElementById('wpName');
-  const avatarEl = document.getElementById('wpAvatar');
-  if (!popup) return;
-  if (nameEl) nameEl.textContent = name || 'Friend';
-  if (avatarEl) {
-    avatarEl.innerHTML = '';
-    if (photoURL) {
-      const img = document.createElement('img');
-      img.src = photoURL;
-      img.onerror = function() { avatarEl.textContent = '👑'; };
-      avatarEl.appendChild(img);
-    } else { avatarEl.textContent = '👑'; }
-  }
-  popup.classList.add('show');
-  setTimeout(function() { if (popup.classList.contains('show')) popup.classList.remove('show'); }, 6500);
-};
-window.closeWelcomePopup = function() {
-  const popup = document.getElementById('welcomePopup');
-  if (popup) popup.classList.remove('show');
-};
-
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    const isNewSession = !sessionStorage.getItem('wk_welcome_shown');
-    localStorage.setItem('wk_logged_in', '1');
-    localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
-    localStorage.setItem('wk_user_email', user.email || '');
-    localStorage.setItem('wk_user_uid', user.uid);
-    localStorage.removeItem('wk_guest_mode');
-    if (!localStorage.getItem('wk_joined')) localStorage.setItem('wk_joined', new Date().toLocaleDateString());
-    const cloud = await window.WK_CLOUD.loadUserData(user.uid);
-    if (cloud) {
-      if (Array.isArray(cloud.chats)) { localStorage.setItem('wk_chats', JSON.stringify(cloud.chats)); try { chats = cloud.chats; } catch(e) {} }
-      if (Array.isArray(cloud.vault)) localStorage.setItem('wk_vault', JSON.stringify(cloud.vault));
-      if (Array.isArray(cloud.memory)) localStorage.setItem('wk_cross_memory', JSON.stringify(cloud.memory));
-      if (cloud.avatar) localStorage.setItem('wk_user_avatar', cloud.avatar);
+  window.WK_CLOUD = {
+    async loadUserData(uid) {
+      try { const ref = doc(db, 'users', uid); const snap = await getDoc(ref); return snap.exists() ? snap.data() : null; } catch (e) { return null; }
+    },
+    async saveUserData(uid, data) {
+      try { await setDoc(doc(db, 'users', uid), Object.assign({}, data, { updatedAt: serverTimestamp() }), { merge: true }); return true; } catch (e) { return false; }
     }
-    if (typeof unlockApp === 'function') unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
-    if (typeof loadChatsFromLocalStorage === 'function') loadChatsFromLocalStorage();
-    setTimeout(function() { activeChatId = null; if (typeof renderMessages === 'function') renderMessages(); }, 300);
-    if (isNewSession) {
-      sessionStorage.setItem('wk_welcome_shown', '1');
-      setTimeout(function() { window.__showWelcomePopup(user.displayName || 'Friend', user.photoURL); }, 500);
+  };
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      localStorage.setItem('wk_logged_in', '1');
+      localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
+      localStorage.setItem('wk_user_email', user.email || '');
+      localStorage.setItem('wk_user_uid', user.uid);
+      localStorage.removeItem('wk_guest_mode');
+      if (!localStorage.getItem('wk_joined')) localStorage.setItem('wk_joined', new Date().toLocaleDateString());
+
+      const cloud = await window.WK_CLOUD.loadUserData(user.uid);
+      if (cloud) {
+        if (Array.isArray(cloud.chats)) { localStorage.setItem('wk_chats', JSON.stringify(cloud.chats)); try { chats = cloud.chats; } catch(e) {} }
+        if (Array.isArray(cloud.vault)) localStorage.setItem('wk_vault', JSON.stringify(cloud.vault));
+        if (Array.isArray(cloud.memory)) localStorage.setItem('wk_cross_memory', JSON.stringify(cloud.memory));
+        if (Array.isArray(cloud.library)) localStorage.setItem('wk_library', JSON.stringify(cloud.library));
+      }
+
+      if (typeof unlockApp === 'function') unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
+      if (typeof loadChatsFromLocalStorage === 'function') loadChatsFromLocalStorage();
+      setTimeout(() => {
+        activeChatId = null;
+        if (typeof renderMessages === 'function') renderMessages();
+      }, 300);
     }
-  }
-});
-
-window.signInWithGoogle = function() {
-  signInWithPopup(auth, provider).then(function(result) {
-    const user = result.user;
-    localStorage.setItem('wk_logged_in', '1');
-    localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
-    localStorage.setItem('wk_user_email', user.email || '');
-    localStorage.setItem('wk_user_uid', user.uid);
-    localStorage.removeItem('wk_guest_mode');
-    sessionStorage.removeItem('wk_welcome_shown');
-    window.showToast('Welcome, ' + (user.displayName || 'Wise King User') + '! 🎉');
-  }).catch(function(error) {
-    if (["auth/cancelled-popup-request","auth/popup-closed-by-user","auth/user-cancelled"].includes(error.code)) return;
-    if (typeof showAuthError === 'function') showAuthError("Login failed: " + error.message);
   });
-};
 
-window.emailSignIn = function() {
-  const email = document.getElementById('signInEmail').value.trim();
-  const password = document.getElementById('signInPassword').value.trim();
-  if (!email || !password) return showAuthError("Please enter both email and password.");
-  const btn = document.getElementById('signInBtn'); const orig = btn.innerHTML;
-  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
-  signInWithEmailAndPassword(auth, email, password).then(function(uc) {
-    const user = uc.user;
-    localStorage.setItem('wk_logged_in', '1');
-    localStorage.setItem('wk_user_name', user.displayName || email.split('@')[0]);
-    localStorage.setItem('wk_user_email', user.email);
-    localStorage.setItem('wk_user_uid', user.uid);
-    localStorage.removeItem('wk_guest_mode');
-    sessionStorage.removeItem('wk_welcome_shown');
-    window.showToast('Welcome back! 🎉');
-  }).catch(function(error) {
-    let msg = "Login failed. ";
-    if (error.code === 'auth/user-not-found') msg = "No account found.";
-    else if (error.code === 'auth/wrong-password') msg = "Incorrect password.";
-    else if (error.code === 'auth/invalid-credential') msg = "Wrong email or password.";
-    else msg += error.message;
-    showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
-  });
-};
+  window.signInWithGoogle = function() {
+    signInWithPopup(auth, provider).then(function(result) {
+      const user = result.user;
+      localStorage.setItem('wk_logged_in', '1');
+      localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
+      localStorage.setItem('wk_user_email', user.email || '');
+      localStorage.setItem('wk_user_uid', user.uid);
+      localStorage.removeItem('wk_guest_mode');
+      window.showToast('Welcome, ' + (user.displayName || 'Wise King User') + '! 🎉');
+    }).catch(function(error) {
+      if (["auth/cancelled-popup-request","auth/popup-closed-by-user","auth/user-cancelled"].includes(error.code)) return;
+      if (typeof showAuthError === 'function') showAuthError("Login failed: " + error.message);
+    });
+  };
 
-window.emailSignUp = function() {
-  const name = document.getElementById('signUpName').value.trim();
-  const email = document.getElementById('signUpEmail').value.trim();
-  const password = document.getElementById('signUpPassword').value.trim();
-  if (!name || !email || !password) return showAuthError("Please fill in all fields.");
-  if (password.length < 6) return showAuthError("Password must be at least 6 characters.");
-  const btn = document.getElementById('signUpBtn'); const orig = btn.innerHTML;
-  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
-  createUserWithEmailAndPassword(auth, email, password).then(function(uc) {
-    const user = uc.user;
-    localStorage.setItem('wk_logged_in', '1');
-    localStorage.setItem('wk_user_name', name);
-    localStorage.setItem('wk_user_email', user.email);
-    localStorage.setItem('wk_user_uid', user.uid);
-    localStorage.removeItem('wk_guest_mode');
-    sessionStorage.removeItem('wk_welcome_shown');
-    window.showToast('Account created! Welcome, ' + name + ' 🎉');
-  }).catch(function(error) {
-    let msg = "Sign up failed. ";
-    if (error.code === 'auth/email-already-in-use') msg = "This email is already registered.";
-    else if (error.code === 'auth/weak-password') msg = "Password too weak.";
-    else msg += error.message;
-    showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
-  });
-};
+  window.emailSignIn = function() {
+    const email = document.getElementById('signInEmail').value.trim();
+    const password = document.getElementById('signInPassword').value.trim();
+    if (!email || !password) return showAuthError("Please enter both email and password.");
+    const btn = document.getElementById('signInBtn'); const orig = btn.innerHTML;
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+    signInWithEmailAndPassword(auth, email, password).then(function(uc) {
+      const user = uc.user;
+      localStorage.setItem('wk_logged_in', '1');
+      localStorage.setItem('wk_user_name', user.displayName || email.split('@')[0]);
+      localStorage.setItem('wk_user_email', user.email);
+      localStorage.setItem('wk_user_uid', user.uid);
+      localStorage.removeItem('wk_guest_mode');
+      window.showToast('Welcome back! 🎉');
+    }).catch(function(error) {
+      let msg = "Login failed. ";
+      if (error.code === 'auth/user-not-found') msg = "No account found.";
+      else if (error.code === 'auth/wrong-password') msg = "Incorrect password.";
+      else if (error.code === 'auth/invalid-credential') msg = "Wrong email or password.";
+      else msg += error.message;
+      showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
+    });
+  };
 
-window.sendPasswordReset = function() {
-  const email = document.getElementById('resetEmail').value.trim();
-  if (!email) return showAuthError("Please enter your email.");
-  const btn = document.getElementById('resetBtn'); const orig = btn.innerHTML;
-  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-  sendPasswordResetEmail(auth, email).then(function() { showAuthSuccess("Reset email sent!"); btn.disabled = false; btn.innerHTML = orig; }).catch(function(error) { showAuthError("Error: " + error.message); btn.disabled = false; btn.innerHTML = orig; });
-};
+  window.emailSignUp = function() {
+    const name = document.getElementById('signUpName').value.trim();
+    const email = document.getElementById('signUpEmail').value.trim();
+    const password = document.getElementById('signUpPassword').value.trim();
+    if (!name || !email || !password) return showAuthError("Please fill in all fields.");
+    if (password.length < 6) return showAuthError("Password must be at least 6 characters.");
+    const btn = document.getElementById('signUpBtn'); const orig = btn.innerHTML;
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+    createUserWithEmailAndPassword(auth, email, password).then(function(uc) {
+      const user = uc.user;
+      localStorage.setItem('wk_logged_in', '1');
+      localStorage.setItem('wk_user_name', name);
+      localStorage.setItem('wk_user_email', user.email);
+      localStorage.setItem('wk_user_uid', user.uid);
+      localStorage.removeItem('wk_guest_mode');
+      window.showToast('Account created! Welcome, ' + name + ' 🎉');
+    }).catch(function(error) {
+      let msg = "Sign up failed. ";
+      if (error.code === 'auth/email-already-in-use') msg = "This email is already registered.";
+      else if (error.code === 'auth/weak-password') msg = "Password too weak.";
+      else msg += error.message;
+      showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
+    });
+  };
 
-window.addAnotherAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(function() { window.signInWithGoogle(); }, 80); };
-window.switchAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(function() { window.signInWithGoogle(); }, 80); };
+  window.sendPasswordReset = function() {
+    const email = document.getElementById('resetEmail').value.trim();
+    if (!email) return showAuthError("Please enter your email.");
+    const btn = document.getElementById('resetBtn'); const orig = btn.innerHTML;
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    sendPasswordResetEmail(auth, email).then(function() { showAuthSuccess("Reset email sent!"); btn.disabled = false; btn.innerHTML = orig; }).catch(function(error) { showAuthError("Error: " + error.message); btn.disabled = false; btn.innerHTML = orig; });
+  };
 
-window.askSignOut = function() {
-  closeTopProfileMenu();
-  const m = document.getElementById('settingsModal'); if (m) m.classList.remove('show');
-  try { closeSidebar(); } catch(e) {}
-  setTimeout(function() { const sm = document.getElementById('signOutModal'); if (sm) { sm.classList.add('show'); sm.style.zIndex = '99999'; } }, 100);
-};
+  window.addAnotherAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(function() { window.signInWithGoogle(); }, 80); };
+  window.switchAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(function() { window.signInWithGoogle(); }, 80); };
 
-window.confirmSignOut = function() {
-  document.getElementById('signOutModal').classList.remove('show');
-  window.showToast('Signing out... 👋');
-  signOut(auth).then(function() {
-    ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_chats','wk_vault','wk_cross_memory'].forEach(function(k) { localStorage.removeItem(k); });
-    try { sessionStorage.clear(); } catch(e) {}
-    if (typeof forceShowLoginScreen === 'function') forceShowLoginScreen();
-  }).catch(function() { if (typeof forceShowLoginScreen === 'function') forceShowLoginScreen(); });
-};
+  window.askSignOut = function() {
+    closeTopProfileMenu();
+    const m = document.getElementById('settingsModal'); if (m) m.classList.remove('show');
+    try { closeSidebar(); } catch(e) {}
+    setTimeout(function() { const sm = document.getElementById('signOutModal'); if (sm) { sm.classList.add('show'); sm.style.zIndex = '99999'; } }, 100);
+  };
 
-window.forceShowLoginScreen = function() {
-  const ls = document.getElementById('loginScreen');
-  const ma = document.getElementById('mainApp');
-  if (ma) { ma.style.opacity = '0'; ma.style.display = 'none'; }
-  if (ls) { ls.classList.remove('hidden'); ls.style.display = 'flex'; ls.style.opacity = '1'; ls.style.pointerEvents = 'auto'; }
-  ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(function(id) { const el = document.getElementById(id); if (el) el.value = ''; });
-  const ae = document.getElementById('authError'); if (ae) ae.classList.remove('show');
-  const as = document.getElementById('authSuccess'); if (as) as.classList.remove('show');
-  try { chats = []; activeChatId = null; } catch(e) {}
-  try { renderChats(); renderMessages(); } catch(e) {}
-  try { switchAuthTab('signin'); } catch(e) {}
-};
+  window.confirmSignOut = function() {
+    document.getElementById('signOutModal').classList.remove('show');
+    window.showToast('Signing out... 👋');
+    signOut(auth).then(function() {
+      ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_library'].forEach(function(k) { localStorage.removeItem(k); });
+      try { sessionStorage.clear(); } catch(e) {}
+      if (typeof forceShowLoginScreen === 'function') forceShowLoginScreen();
+    }).catch(function() { if (typeof forceShowLoginScreen === 'function') forceShowLoginScreen(); });
+  };
 
-window.openManageAccount = function() {
-  closeTopProfileMenu();
-  const name = localStorage.getItem('wk_user_name') || 'Not set';
-  const email = localStorage.getItem('wk_user_email') || 'Not signed in';
-  const plan = localStorage.getItem('wk_plan') || 'Free';
-  const joined = localStorage.getItem('wk_joined') || new Date().toLocaleDateString();
-  const html = '<div class="settings-card"><div class="toggle-row"><div class="toggle-label">Name</div><div style="color:var(--text-secondary)">' + (window.escapeHtml ? escapeHtml(name) : name) + '</div></div>' +
-    '<div class="toggle-row"><div class="toggle-label">Email</div><div style="color:var(--text-secondary)">' + (window.escapeHtml ? escapeHtml(email) : email) + '</div></div>' +
-    '<div class="toggle-row"><div class="toggle-label">Plan</div><div style="color:var(--text-secondary)">' + plan + '</div></div>' +
-    '<div class="toggle-row"><div class="toggle-label">Joined</div><div style="color:var(--text-secondary)">' + joined + '</div></div></div>';
-  showGenericModal('accountModal', '<i class="fas fa-user"></i> Manage Account', html);
-};
+  window.forceShowLoginScreen = function() {
+    const ls = document.getElementById('loginScreen');
+    const ma = document.getElementById('mainApp');
+    if (ma) { ma.style.opacity = '0'; ma.style.display = 'none'; }
+    if (ls) { ls.classList.remove('hidden'); ls.style.display = 'flex'; ls.style.opacity = '1'; ls.style.pointerEvents = 'auto'; }
+    ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(function(id) { const el = document.getElementById(id); if (el) el.value = ''; });
+    const ae = document.getElementById('authError'); if (ae) ae.classList.remove('show');
+    const as = document.getElementById('authSuccess'); if (as) as.classList.remove('show');
+    try { chats = []; activeChatId = null; } catch(e) {}
+    try { renderChats(); renderMessages(); } catch(e) {}
+    try { switchAuthTab('signin'); } catch(e) {}
+  };
 
-window.showGenericModal = function(id, title, html) {
-  let m = document.getElementById(id);
-  if (!m) {
-    m = document.createElement('div');
-    m.className = 'modal-bg';
-    m.id = id;
-    m.addEventListener('click', function(e) { if (e.target === m) m.classList.remove('show'); });
-    document.body.appendChild(m);
-  }
-  m.innerHTML = '<div class="modal"><div class="modal-head"><div class="modal-title">' + title + '</div><button class="modal-close" onclick="closeModal(\'' + id + '\')"><i class="fas fa-times"></i></button></div>' + html + '</div>';
-  m.classList.add('show');
-};
+  window.openWallet = function() {
+    closeTopProfileMenu();
+    const plan = localStorage.getItem('wk_plan') || 'Free';
+    const credits = localStorage.getItem('wk_credits') || '0';
+    const html = '<div style="text-align:center;margin-bottom:14px"><div style="font-size:11px;color:var(--text-tertiary);text-transform:uppercase">Current Plan</div><div style="font-size:18px;font-weight:700;color:var(--accent-hover)">' + plan + '</div></div>' +
+      '<div style="text-align:center;margin-bottom:14px"><div style="font-size:11px;color:var(--text-tertiary);text-transform:uppercase">Credits</div><div style="font-size:18px;font-weight:700;color:var(--accent-hover)">' + credits + '</div></div>';
+    showGenericModal('walletModal', '<i class="fas fa-wallet"></i> Wallet', html);
+  };
+
+  window.openManageAccount = function() {
+    closeTopProfileMenu();
+    const name = localStorage.getItem('wk_user_name') || 'Not set';
+    const email = localStorage.getItem('wk_user_email') || 'Not signed in';
+    const plan = localStorage.getItem('wk_plan') || 'Free';
+    const joined = localStorage.getItem('wk_joined') || new Date().toLocaleDateString();
+    const html = '<div class="settings-card"><div class="toggle-row"><div class="toggle-label">Name</div><div style="color:var(--text-secondary)">' + (window.escapeHtml ? escapeHtml(name) : name) + '</div></div>' +
+      '<div class="toggle-row"><div class="toggle-label">Email</div><div style="color:var(--text-secondary)">' + (window.escapeHtml ? escapeHtml(email) : email) + '</div></div>' +
+      '<div class="toggle-row"><div class="toggle-label">Plan</div><div style="color:var(--text-secondary)">' + plan + '</div></div>' +
+      '<div class="toggle-row"><div class="toggle-label">Joined</div><div style="color:var(--text-secondary)">' + joined + '</div></div></div>';
+    showGenericModal('accountModal', '<i class="fas fa-user"></i> Manage Account', html);
+  };
+
+  window.showGenericModal = function(id, title, html) {
+    let m = document.getElementById(id);
+    if (!m) {
+      m = document.createElement('div');
+      m.className = 'modal-bg';
+      m.id = id;
+      m.addEventListener('click', function(e) { if (e.target === m) m.classList.remove('show'); });
+      document.body.appendChild(m);
+    }
+    m.innerHTML = '<div class="modal"><div class="modal-head"><div class="modal-title">' + title + '</div><button class="modal-close" onclick="closeModal(\'' + id + '\')"><i class="fas fa-times"></i></button></div>' + html + '</div>';
+    m.classList.add('show');
+  };
 </script>
 
+<!-- ============ MAIN APP LOGIC ============ -->
 <script>
 const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
-const ENV_DEEPSEEK_KEY = '';
+const ENV_DEEPSEEK_KEY = (typeof window.__WK_ENV__ !== 'undefined' && window.__WK_ENV__ && window.__WK_ENV__.DEEPSEEK_API_KEY) ? window.__WK_ENV__.DEEPSEEK_API_KEY : '';;
 
 const SYSTEM_PROMPT = `You are WISE KING AI 👑 — created by IBRAHIM ABDULLAHI 🇳🇬 (Wise King Industry).
 You are a world-class AI Production Partner, Creative Advisor, Teacher, Story Architect, Prompt Engineer, and Technical Assistant.
@@ -1559,50 +1641,6 @@ function handleProfilePhotoUpload(e){
 }
 window.handleProfilePhotoUpload=handleProfilePhotoUpload;
 
-// ============ USER PROFILE ============
-function openUserProfile() {
-  document.getElementById('userProfilePanel').classList.add('show');
-  closeSidebar();
-  renderUserProfile();
-}
-function closeUserProfile() {
-  document.getElementById('userProfilePanel').classList.remove('show');
-}
-function renderUserProfile() {
-  const name = localStorage.getItem('wk_user_name') || 'Wise King User';
-  const email = localStorage.getItem('wk_user_email') || 'Not signed in';
-  const joined = localStorage.getItem('wk_joined') || new Date().toLocaleDateString();
-  const plan = localStorage.getItem('wk_plan') || 'Free';
-  const av = localStorage.getItem('wk_user_avatar') || '👑';
-
-  document.getElementById('userProfileName').textContent = name;
-  document.getElementById('userProfileEmail').textContent = email;
-  document.getElementById('userProfileJoined').textContent = joined;
-  document.getElementById('userProfilePlan').textContent = plan;
-  document.getElementById('userProfileChats').textContent = chats.length;
-  let msgCount = 0;
-  chats.forEach(function(c) { msgCount += (c.messages || []).length; });
-  document.getElementById('userProfileMsgs').textContent = msgCount;
-
-  const avatarEl = document.getElementById('userProfileAvatar');
-  if (av.startsWith('http') || av.startsWith('data:')) {
-    avatarEl.innerHTML = '<img src="' + av + '" style="width:100%;height:100%;object-fit:cover">';
-  } else {
-    avatarEl.textContent = av;
-  }
-
-  const persona = localStorage.getItem('wk_ai_persona') || 'wise-teacher';
-  document.getElementById('aiPersonaSelect').value = persona;
-}
-function saveAIPersona() {
-  const persona = document.getElementById('aiPersonaSelect').value;
-  localStorage.setItem('wk_ai_persona', persona);
-  showToast('✅ AI will be your ' + persona.replace('-', ' '));
-}
-window.openUserProfile = openUserProfile;
-window.closeUserProfile = closeUserProfile;
-window.saveAIPersona = saveAIPersona;
-  
 // ============ SETTINGS ============
 function openSettings() {
   document.getElementById('settingsModal').classList.add('show');
@@ -1632,12 +1670,9 @@ function updateModelBadge() {
   document.getElementById('modelBadgeText').textContent = label;
 }
 window.updateModelBadge = updateModelBadge;
-  
 function applyTheme(color) { document.documentElement.style.setProperty('--accent', color); document.querySelectorAll('.theme-swatch').forEach(function(s) { s.classList.toggle('active', s.dataset.color === color); }); }
 function toggleLightMode() { document.body.classList.toggle('light-mode'); const isLight = document.body.classList.contains('light-mode'); localStorage.setItem('wk_light_mode', isLight ? '1' : '0'); document.getElementById('lightModeToggle')?.classList.toggle('on', isLight); showToast(isLight ? '☀️ Light' : '🌙 Dark'); }
 function loadTheme() { if (localStorage.getItem('wk_light_mode') === '1') { document.body.classList.add('light-mode'); document.getElementById('lightModeToggle')?.classList.add('on'); } }
-window.toggleLightMode=toggleLightMode;
-
 function getWebSearchEnabled(){return localStorage.getItem('wk_web_search')!=='0';}
 function setWebSearchEnabled(e){localStorage.setItem('wk_web_search',e?'1':'0');document.getElementById('webSearchToggle')?.classList.toggle('on',e);}
 function toggleWebSearchSetting(){const n=!getWebSearchEnabled();setWebSearchEnabled(n);showToast(n?'🌐 Web ON':'🚫 OFF');}
