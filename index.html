@@ -398,639 +398,250 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
 }
 </style>
 </head>
-<body>
 
-<!-- LOGIN SCREEN -->
-<div id="loginScreen">
-  <div class="login-card">
-    <div class="login-logo">👑</div>
-    <h1 class="login-title">Welcome to Wise King AI</h1>
-    <p class="login-subtitle">Your conversations, memories, and creations — synced forever.</p>
-    <div class="auth-error" id="authError"></div>
-    <div class="auth-success" id="authSuccess"></div>
-    <button class="social-btn" onclick="signInWithGoogle()"><i class="fab fa-google" style="color:#ea4335"></i> Continue with Google</button>
-    <div class="auth-divider">OR</div>
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tabSignIn" onclick="switchAuthTab('signin')">Sign In</button>
-      <button class="auth-tab" id="tabSignUp" onclick="switchAuthTab('signup')">Sign Up</button>
-    </div>
-    <div class="auth-panel active" id="panelSignIn">
-      <div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" class="auth-input" id="signInEmail" placeholder="Email address"></div>
-      <div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" class="auth-input" id="signInPassword" placeholder="Password"></div>
-      <button class="auth-link" style="align-self:flex-end;margin-bottom:4px" onclick="showResetPasswordForm()">Forgot password?</button>
-      <button class="auth-submit" id="signInBtn" onclick="emailSignIn()"><i class="fas fa-right-to-bracket"></i> Sign In</button>
-    </div>
-    <div class="auth-panel" id="panelSignUp">
-      <div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" class="auth-input" id="signUpName" placeholder="Full name"></div>
-      <div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" class="auth-input" id="signUpEmail" placeholder="Email address"></div>
-      <div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" class="auth-input" id="signUpPassword" placeholder="Password (min 6 chars)"></div>
-      <button class="auth-submit" id="signUpBtn" onclick="emailSignUp()"><i class="fas fa-user-plus"></i> Create Account</button>
-    </div>
-    <div class="auth-panel" id="panelReset">
-      <div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" class="auth-input" id="resetEmail" placeholder="Your email address"></div>
-      <button class="auth-submit" id="resetBtn" onclick="sendPasswordReset()"><i class="fas fa-paper-plane"></i> Send Reset Link</button>
-      <button class="auth-link" onclick="switchAuthTab('signin')">Back to sign in</button>
-    </div>
-    <button class="skip-auth" onclick="skipLoginAsGuest()">Continue as Guest (Local Mode)</button>
-  </div>
-</div>
-
-<!-- WELCOME POPUP -->
-<div id="welcomePopup" class="welcome-popup-bg">
-  <div class="welcome-popup-card">
-    <div class="wp-avatar" id="wpAvatar">👑</div>
-    <h2 class="wp-title">Welcome, <span id="wpName">Friend</span>! 🎉</h2>
-    <p class="wp-message">You are now signed in to <strong>Wise King AI</strong>.<br>Your chats and memories will sync across devices.</p>
-    <button class="wp-btn" onclick="closeWelcomePopup()"><i class="fas fa-comments"></i> Start Chatting</button>
-  </div>
-</div>
-
-<!-- MAIN APP -->
-<div class="app" id="mainApp" style="opacity:0;transition:opacity .4s">
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <div class="brand"><div class="brand-logo">👑</div><div class="brand-name">Wise King Ai 👑</div></div>
-      <button class="sidebar-close-btn" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="sidebar-fixed-top">
-      <button class="nav-btn" onclick="createNewChat()"><span class="nav-icon"><i class="fas fa-pen-to-square"></i></span>New chat</button>
-      <div class="sidebar-search"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search chats" oninput="filterChats()"></div>
-    </div>
-    <div class="sidebar-scrollable">
-      <button class="nav-btn" onclick="openMusicPanel()"><span class="nav-icon gradient-8"><i class="fas fa-music"></i></span>Music</button>
-      <button class="nav-btn" onclick="openPdfChatPanel()"><span class="nav-icon gradient-9"><i class="fas fa-file-pdf"></i></span>PDF Chat</button>
-      <button class="nav-btn" onclick="openTranslatePanel()"><span class="nav-icon gradient-3"><i class="fas fa-language"></i></span>Translate</button>
-      <button class="nav-btn" onclick="openDataAnalysisPanel()"><span class="nav-icon gradient-4"><i class="fas fa-chart-line"></i></span>Data Analysis</button>
-      <button class="nav-btn" onclick="openSearchWebPanel()"><span class="nav-icon gradient-3"><i class="fas fa-globe"></i></span>Search Web</button>
-      <button class="nav-btn" onclick="openBuildAppPanel()"><span class="nav-icon gradient-6"><i class="fas fa-code"></i></span>Build App</button>
-      <button class="nav-btn" onclick="openLiveTVPanel()"><span class="nav-icon" style="color:#ef4444"><i class="fas fa-tv"></i></span>Live TV</button>
-      <button class="nav-btn" onclick="openPricingPanel()"><span class="nav-icon" style="color:#fbbf24"><i class="fas fa-crown"></i></span>Upgrade Plan</button>
-      <button class="nav-btn" onclick="openDownloadHub()"><span class="nav-icon gradient-6"><i class="fas fa-download"></i></span>Downloads</button>
-      <button class="nav-btn" onclick="openVault()"><span class="nav-icon gradient-4"><i class="fas fa-shield-halved"></i></span>Vault<span class="nav-badge" id="vaultCountBadge">0</span></button>
-      <button class="nav-btn" onclick="openMemoryPanel()"><span class="nav-icon gradient-4"><i class="fas fa-brain"></i></span>Memory<span class="nav-badge" id="memoryCountBadge">0</span></button>
-      <button class="nav-btn" onclick="openSettings()"><span class="nav-icon gradient-7"><i class="fas fa-sliders"></i></span>Settings</button>
-      <div class="section">
-        <div class="section-header open" onclick="toggleSection(this)"><div class="left">Recent</div><i class="fas fa-chevron-down arrow"></i></div>
-        <div class="section-body open"><div id="chatsList"></div></div>
-      </div>
-    </div>
-    <div class="sidebar-footer">
-      <div class="user-chip" onclick="openSettings()">
-        <div class="avatar" id="sidebarAvatar">WK</div>
-        <div class="user-info"><div class="user-name" id="sidebarName">Wise King User</div><div class="user-plan" id="userPlanBadge">Free plan</div></div>
-      </div>
-      <button class="icon-action" onclick="openSettings()"><i class="fas fa-cog"></i></button>
-    </div>
-  </aside>
-
-  <main class="chat-main">
-    <div class="chat-topbar">
-      <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-      <div class="chat-title-wrap">
-        <span class="chat-title" id="chatTitle">New chat</span>
-        <span class="chat-model-badge" id="modelBadge"><i class="fas fa-circle"></i> <span id="modelBadgeText">Gemini 2.5 Flash</span></span>
-      </div>
-      <div class="chat-actions">
-        <button class="top-btn install-btn" id="installAppBtn" onclick="promptInstallApp()" style="display:none"><i class="fas fa-download"></i><span class="label"> Install</span></button>
-        <button class="top-btn" onclick="startAICall()" style="background:linear-gradient(135deg,#10b981,#059669);color:white;border:none"><i class="fas fa-phone"></i><span class="label"> Call AI</span></button>
-        <button class="top-btn" onclick="openSearchWebPanel()"><i class="fas fa-globe"></i><span class="label"> Search</span></button>
-        <button class="top-btn" onclick="openBuildAppPanel()"><i class="fas fa-code"></i><span class="label"> Build</span></button>
-        <button class="top-btn" onclick="openVault()"><i class="fas fa-shield-halved"></i><span class="label"> Vault</span></button>
-        <button class="top-btn" onclick="goToWelcome()"><i class="fas fa-house"></i><span class="label"> Home</span></button>
-      </div>
-      <div class="top-profile-container" id="topProfileContainer">
-        <div class="top-profile-avatar" id="topProfileAvatar" role="button" tabindex="0">👑</div>
-        <div class="profile-menu-popup" id="topProfileMenu">
-          <div class="pm-header">
-            <div class="pm-user-info">
-              <div class="pm-avatar" id="pmAvatar">👑</div>
-              <div class="pm-details"><div class="pm-name" id="pmName">Wise King User</div><div class="pm-email" id="pmEmail">Not signed in</div></div>
-            </div>
-            <button class="pm-close" onclick="closeTopProfileMenu()"><i class="fas fa-times"></i></button>
-          </div>
-          <div class="pm-body">
-            <button class="pm-item" onclick="document.getElementById('profilePhotoInput').click(); closeTopProfileMenu();"><i class="fas fa-camera"></i> Upload Photo</button>
-            <input type="file" id="profilePhotoInput" accept="image/*" style="display:none" onchange="handleProfilePhotoUpload(event)">
-            <button class="pm-item" onclick="openPricingPanel(); closeTopProfileMenu();"><i class="fas fa-crown" style="color:#fbbf24"></i> Upgrade Plan 👑</button>
-            <button class="pm-item" onclick="openManageAccount(); closeTopProfileMenu();"><i class="fas fa-id-card"></i> Manage Account</button>
-            <div class="pm-divider"></div>
-            <button class="pm-item" onclick="addAnotherAccount(); closeTopProfileMenu();"><i class="fas fa-user-plus"></i> Add Account</button>
-            <button class="pm-item" onclick="switchAccount(); closeTopProfileMenu();"><i class="fas fa-right-left"></i> Switch Account</button>
-            <div class="pm-divider"></div>
-            <button class="pm-item" onclick="openSettings(); closeTopProfileMenu();"><i class="fas fa-gear"></i> Settings</button>
-            <button class="pm-item danger" onclick="askSignOut();"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="chat-scroll" id="chatScroll">
-      <div class="chat-inner" id="chatInner">
-        <div class="welcome" id="welcomeScreen">
-          <div class="welcome-logo">👑</div>
-          <h1>How can I help you today?</h1>
-          <p>I'm <strong>Wise King AI</strong>. I can see photos, remember conversations, generate music, read PDFs, translate languages, and analyze data.</p>
-          <div class="suggestions">
-            <div class="suggestion-card" onclick="useSuggestion('Build me a simple to-do list app in HTML')"><i class="fas fa-code"></i><div class="sc-title">Build an app</div><div class="sc-desc">"Build me a to-do list app"</div></div>
-            <div class="suggestion-card" onclick="useSuggestion('Explain how AI works in simple Hausa')"><i class="fas fa-language"></i><div class="sc-title">Explain in Hausa</div><div class="sc-desc">"How does AI work?"</div></div>
-            <div class="suggestion-card" onclick="useSuggestion('Write a short motivational story about a young Nigerian entrepreneur')"><i class="fas fa-book"></i><div class="sc-title">Write a story</div><div class="sc-desc">"A Nigerian entrepreneur"</div></div>
-            <div class="suggestion-card" onclick="useSuggestion('What is the latest news in Nigeria today?')"><i class="fas fa-newspaper"></i><div class="sc-title">Latest news</div><div class="sc-desc">"Nigeria today"</div></div>
-          </div>
-        </div>
-        <div id="messagesArea"></div>
-      </div>
-    </div>
-
-    <div class="input-dock">
-      <div class="input-inner-wrap">
-        <div class="preview-area" id="previewArea"></div>
-        <div class="gk-input-box" id="gkInputBox">
-          <div class="gk-text-row">
-            <textarea class="gk-textarea" id="messageInput" rows="1" placeholder="Ask Wise King AI Anything..." onkeydown="handleKeyDown(event)" oninput="handleInputChange()"></textarea>
-            <button class="gk-send-btn hidden" id="sendBtn" onclick="handleSendOrCancel()"><i class="fas fa-arrow-up"></i></button>
-          </div>
-          <div class="gk-hold-pill" id="gkHoldPill"><i class="fas fa-microphone"></i> <span id="gkHoldLabel">Hold to speak</span></div>
-          <div class="gk-options-row">
-            <button class="gk-chip" id="chipThink" onclick="toggleThinkMode()"><i class="fas fa-brain"></i> Think</button>
-            <button class="gk-chip" id="chipSearch" onclick="toggleSearchMode()"><i class="fas fa-globe"></i> Search</button>
-            <div class="gk-options-spacer"></div>
-            <button class="gk-input-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()" title="Attach image / PDF / file"><i class="fas fa-plus"></i></button>
-            <button class="gk-input-btn" id="micBtn" onclick="toggleVoiceMode()" title="Voice / Keyboard"><i class="fas fa-microphone" id="micIcon"></i></button>
-          </div>
-        </div>
-        <input type="file" id="fileInput" accept="image/*,.pdf,.txt,.md,.json,.csv,.js,.html,.css,.py,.doc,.docx,audio/*" style="display:none" multiple onchange="handleFiles(event)">
-        <div class="input-hint">Wise King AI can make mistakes, please verify information</div>
-      </div>
-    </div>
-  </main>
-</div>
-
-<!-- FULLSCREEN PANELS -->
-<div class="full-panel" id="musicPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-music"></i> AI Music Studio</div><button class="btn ghost" onclick="closeMusicPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">Paste lyrics OR describe the style — AI builds your song prompt.</p>
-    <textarea class="search-big" id="musicInput" rows="6" placeholder="Lyrics or music style..." style="min-height:140px;resize:vertical;font-family:inherit"></textarea>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px">
-      <select class="input-field" id="musicGenre" style="margin-bottom:0"><option value="">Genre</option><option>Afrobeat</option><option>Amapiano</option><option>Hip-hop</option><option>R&B</option><option>Gospel</option><option>Reggae</option><option>Pop</option><option>Traditional Hausa</option></select>
-      <select class="input-field" id="musicMood" style="margin-bottom:0"><option value="">Mood</option><option>Happy</option><option>Romantic</option><option>Motivational</option><option>Spiritual</option><option>Party</option><option>Chill</option><option>Sad</option></select>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
-      <button class="btn accent" style="flex:1;justify-content:center" onclick="generateMusicFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Build Prompt</button>
-      <button class="btn solid" style="flex:1;justify-content:center" onclick="generateLyricsFromPanel()"><i class="fas fa-pen-fancy"></i> Write Lyrics</button>
-    </div>
-    <div id="musicPanelResults"></div>
-    <h3 style="margin:24px 0 12px;color:var(--accent-hover);font-size:15px">My Music Library</h3>
-    <div id="musicLibraryBox"></div>
-  </div></div>
-</div>
-
-<div class="full-panel" id="pdfChatPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-file-pdf"></i> PDF Chat</div><button class="btn ghost" onclick="closePdfChatPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <div class="pdf-dropzone" onclick="document.getElementById('pdfFileInput').click()"><i class="fas fa-cloud-upload-alt"></i><p><strong>Click to upload PDF</strong></p><small>Read, summarize, ask questions</small><input type="file" id="pdfFileInput" accept=".pdf" style="display:none" onchange="handlePdfUpload(event)"></div>
-    <div id="pdfFileInfo"></div>
-    <div id="pdfSummaryBox"></div>
-    <input type="text" class="search-big" id="pdfQuestionInput" placeholder="Ask anything about the PDF..." onkeydown="if(event.key==='Enter'){askPdfQuestion()}" style="margin-top:16px">
-    <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="askPdfQuestion()"><i class="fas fa-question-circle"></i> Ask About PDF</button>
-    <div id="pdfChatResults"></div>
-  </div></div>
-</div>
-
-<div class="full-panel" id="translatePanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-language"></i> Translation</div><button class="btn ghost" onclick="closeTranslatePanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <div class="lang-selector">
-      <select class="lang-select" id="translateFrom"><option value="auto">Auto-detect</option><option value="en">English</option><option value="ha">Hausa</option><option value="ar">Arabic</option><option value="fr">French</option><option value="yo">Yoruba</option><option value="ig">Igbo</option><option value="sw">Swahili</option><option value="es">Spanish</option><option value="pt">Portuguese</option><option value="de">German</option><option value="zh">Chinese</option><option value="hi">Hindi</option><option value="ru">Russian</option><option value="ja">Japanese</option><option value="tr">Turkish</option><option value="ur">Urdu</option></select>
-      <button class="lang-swap" onclick="swapLanguages()"><i class="fas fa-right-left"></i></button>
-      <select class="lang-select" id="translateTo"><option value="en">English</option><option value="ha">Hausa</option><option value="ar">Arabic</option><option value="fr">French</option><option value="yo">Yoruba</option><option value="ig">Igbo</option><option value="sw">Swahili</option><option value="es">Spanish</option><option value="pt">Portuguese</option><option value="de">German</option><option value="zh">Chinese</option><option value="hi">Hindi</option><option value="ru">Russian</option><option value="ja">Japanese</option><option value="tr">Turkish</option><option value="ur">Urdu</option></select>
-    </div>
-    <textarea class="search-big" id="translateInput" rows="6" placeholder="Type or paste text..." style="min-height:130px;resize:vertical;font-family:inherit"></textarea>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
-      <button class="btn accent" style="flex:1;justify-content:center" onclick="doTranslate()"><i class="fas fa-language"></i> Translate</button>
-      <button class="btn solid" onclick="startLiveTranslateVoice()"><i class="fas fa-microphone"></i> Voice</button>
-    </div>
-    <div id="translateResults"></div>
-  </div></div>
-</div>
-
-<div class="full-panel" id="dataAnalysisPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-chart-line"></i> Data Analysis</div><button class="btn ghost" onclick="closeDataAnalysisPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <div class="pdf-dropzone" onclick="document.getElementById('dataFileInput').click()"><i class="fas fa-file-csv"></i><p><strong>Upload CSV, Excel, or JSON</strong></p><input type="file" id="dataFileInput" accept=".csv,.xlsx,.xls,.json,.txt" style="display:none" onchange="handleDataUpload(event)"></div>
-    <textarea class="search-big" id="dataPasteInput" rows="5" placeholder="Or paste CSV data..." style="min-height:120px;resize:vertical;font-family:monospace;font-size:12.5px"></textarea>
-    <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="analyzePastedData()"><i class="fas fa-chart-bar"></i> Analyze</button>
-    <div id="dataAnalysisResults"></div>
-  </div></div>
-</div>
-
-<div class="full-panel" id="downloadHubPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-cloud-arrow-down"></i> Downloads</div><button class="btn ghost" onclick="closeDownloadHub()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner"><div class="download-grid" id="downloadHubGrid"></div></div></div>
-</div>
-
-<div class="full-panel" id="pricingPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-crown"></i> Wise King Plans</div><button class="btn ghost" onclick="closePricingPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;text-align:center">Choose your plan. Upgrade anytime. 👑</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
-      <div class="result-card" style="text-align:center"><div style="font-size:40px;margin-bottom:8px">🌱</div><h3 style="font-size:18px;margin-bottom:4px">Free</h3><div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦0</div><ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px"><li>✅ Unlimited chats</li><li>✅ Voice & translation</li><li>✅ PDF & photo analysis</li><li>⚠️ 20 AI messages/day</li></ul><button class="btn solid" style="width:100%;justify-content:center" disabled>Current</button></div>
-      <div class="result-card" style="text-align:center;border:2px solid var(--accent);position:relative"><div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent-gradient);color:white;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px">POPULAR 🔥</div><div style="font-size:40px;margin-bottom:8px">⚡</div><h3 style="font-size:18px;margin-bottom:4px">Pro</h3><div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦5,000<span style="font-size:14px;font-weight:400;color:var(--text-tertiary)">/month</span></div><ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px"><li>✅ Everything in Free</li><li>✅ Unlimited AI messages</li><li>✅ Priority speed</li></ul><button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Pro', 5000)"><i class="fas fa-rocket"></i> Upgrade</button></div>
-      <div class="result-card" style="text-align:center"><div style="font-size:40px;margin-bottom:8px">👑</div><h3 style="font-size:18px;margin-bottom:4px">Premium</h3><div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦15,000<span style="font-size:14px;font-weight:400;color:var(--text-tertiary)">/month</span></div><ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px"><li>✅ Everything in Pro</li><li>✅ Custom AI models</li><li>✅ 24/7 priority support</li></ul><button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Premium', 15000)"><i class="fas fa-crown"></i> Go Premium</button></div>
-    </div>
-    <p style="font-size:12px;color:var(--text-tertiary);margin-top:20px;text-align:center">💳 Payments powered by Paystack.</p>
-  </div></div>
-</div>
-
-<div class="full-panel" id="searchWebPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-globe"></i> Search Web</div><button class="btn ghost" onclick="closeSearchWebPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <input type="text" class="search-big" id="searchWebInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter'){doSearchWeb(this.value)}">
-    <div id="searchSuggestionsBox" style="margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px"></div>
-    <div id="askWiseKingShortcut" style="margin-bottom:20px;display:none"></div>
-    <div id="searchWebResults"></div>
-  </div></div>
-</div>
-
-<div class="full-panel" id="buildAppPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-code"></i> Build an App</div><button class="btn ghost" onclick="closeBuildAppPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <input type="text" class="search-big" id="buildAppInput" placeholder="Search app ideas..." oninput="filterBuildIdeas(this.value)">
-    <div id="buildAppIdeas"></div>
-  </div></div>
-</div>
-
-<div class="full-panel" id="liveTVPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-tv"></i> Live TV & Movies</div><button class="btn ghost" onclick="closeLiveTVPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
-      <button class="btn solid" onclick="filterTV('all',this)">All</button>
-      <button class="btn solid" onclick="filterTV('live',this)">🔴 Live</button>
-      <button class="btn solid" onclick="filterTV('movie',this)">🎬 Movies</button>
-      <button class="btn solid" onclick="filterTV('series',this)">📺 Series</button>
-    </div>
-    <input type="text" class="search-big" id="tvSearchInput" placeholder="Search..." oninput="renderTVChannels()">
-    <div id="tvGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px"></div>
-  </div></div>
-</div>
-
-<div class="full-panel" id="memoryPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-brain"></i> Memory</div><button class="btn ghost" onclick="closeMemoryPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner"><div id="memoryPanelResults"></div></div></div>
-</div>
-
-<!-- POPUP MENU -->
-<div class="popup-menu" id="chatPopupMenu">
-  <button class="popup-menu-item" id="chatPinBtn" onclick="togglePinCurrentChat()"><i class="fas fa-thumbtack"></i> <span id="chatPinLabel">Pin chat</span></button>
-  <button class="popup-menu-item" onclick="renameCurrentChat()"><i class="fas fa-pen"></i> Rename</button>
-  <button class="popup-menu-item" onclick="deleteCurrentChat()"><i class="fas fa-trash"></i> Delete</button>
-  <button class="popup-menu-item" onclick="shareCurrentChat()"><i class="fas fa-share"></i> Share</button>
-</div>
-
-<!-- SHARE POPUP -->
-<div id="sharePopup">
-  <div class="share-card">
-    <div class="share-head"><div class="share-title"><i class="fas fa-share-nodes"></i> Share to</div><button class="share-close" onclick="closeSharePopup()"><i class="fas fa-times"></i></button></div>
-    <div class="share-grid">
-      <button class="share-platform" onclick="shareTo('whatsapp')"><div class="sp-icon sp-whatsapp"><i class="fab fa-whatsapp"></i></div><div class="sp-name">WhatsApp</div></button>
-      <button class="share-platform" onclick="shareTo('facebook')"><div class="sp-icon sp-facebook"><i class="fab fa-facebook-f"></i></div><div class="sp-name">Facebook</div></button>
-      <button class="share-platform" onclick="shareTo('telegram')"><div class="sp-icon sp-telegram"><i class="fab fa-telegram-plane"></i></div><div class="sp-name">Telegram</div></button>
-      <button class="share-platform" onclick="shareTo('x')"><div class="sp-icon sp-x"><i class="fab fa-x-twitter"></i></div><div class="sp-name">X</div></button>
-    </div>
-    <button class="share-cancel" onclick="closeSharePopup()">Cancel</button>
-  </div>
-</div>
-
-<!-- MODALS -->
-<div class="modal-bg" id="signOutModal"><div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">⚠️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Sign out?</div><p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">Your session will close.</p><div class="modal-actions" style="justify-content:center;gap:12px"><button class="btn ghost" onclick="closeModal('signOutModal')">Cancel</button><button class="btn danger" onclick="confirmSignOut()">Sign Out</button></div></div></div>
-
-<div class="modal-bg" id="deleteChatModal"><div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">🗑️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete chat?</div><p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">This cannot be undone.</p><div class="modal-actions" style="justify-content:center;gap:12px"><button class="btn ghost" onclick="closeModal('deleteChatModal')">Cancel</button><button class="btn danger" onclick="confirmDeleteChat()">Delete</button></div></div></div>
-
-<div class="modal-bg" id="renameChatModal"><div class="modal" style="max-width:420px"><div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Rename chat</div><button class="modal-close" onclick="closeModal('renameChatModal')"><i class="fas fa-times"></i></button></div><input type="text" class="input-field" id="renameChatInput" placeholder="Enter new name" maxlength="60"><div class="modal-actions"><button class="btn ghost" onclick="closeModal('renameChatModal')">Cancel</button><button class="btn accent" onclick="saveRenamedChat()"><i class="fas fa-check"></i> Save</button></div></div></div>
-
-<div class="modal-bg" id="editMessageModal"><div class="modal" style="max-width:520px"><div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Edit message</div><button class="modal-close" onclick="closeModal('editMessageModal')"><i class="fas fa-times"></i></button></div><textarea class="input-field" id="editMessageInput" rows="4" style="min-height:120px;resize:vertical"></textarea><div class="modal-actions"><button class="btn ghost" onclick="closeModal('editMessageModal')">Cancel</button><button class="btn accent" onclick="saveEditedMessage()"><i class="fas fa-check"></i> Save</button></div></div></div>
-
-<div class="modal-bg" id="deleteMessageModal"><div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">🗑️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete message?</div><div class="modal-actions" style="justify-content:center;gap:12px"><button class="btn ghost" onclick="closeModal('deleteMessageModal')">Cancel</button><button class="btn danger" onclick="confirmDeleteMessage()">Delete</button></div></div></div>
-
-<div class="modal-bg" id="vaultModal"><div class="modal"><div class="modal-head"><div class="modal-title"><i class="fas fa-shield-halved"></i> Master Vault</div><button class="modal-close" onclick="closeModal('vaultModal')"><i class="fas fa-times"></i></button></div><p class="modal-text">Permanent memories the AI never forgets.</p><div class="settings-card" style="margin-bottom:16px"><textarea class="input-field" id="vaultNewInput" rows="3" placeholder="e.g., My name is Ibrahim..." style="resize:vertical;min-height:70px;margin-bottom:10px"></textarea><button class="btn accent" style="width:100%;justify-content:center" onclick="addVaultMemory()"><i class="fas fa-plus"></i> Lock memory</button></div><div id="vaultList"></div><div class="modal-actions"><button class="btn solid" onclick="closeModal('vaultModal')">Close</button></div></div></div>
-
-<div class="modal-bg" id="settingsModal">
-  <div class="modal">
-    <div class="modal-head"><div class="modal-title"><i class="fas fa-cog"></i> Settings</div><button class="modal-close" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button></div>
-    <div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-palette"></i> Appearance</div>
-      <div class="settings-card">
-        <div class="toggle-row"><div class="toggle-label">Light Mode</div><div class="toggle-switch" id="lightModeToggle" onclick="toggleLightMode()"></div></div>
-      </div>
-    </div>
-    <div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-key"></i> API Keys</div>
-      <div class="settings-card">
-        <input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (optional)" autocomplete="off">
-        <input type="password" class="input-field" id="deepseekKeyInput" placeholder="DeepSeek API key (optional fallback)" autocomplete="off">
-        <input type="password" class="input-field" id="replicateKeyInput" placeholder="Replicate API key (optional)" autocomplete="off">
-        <input type="password" class="input-field" id="paystackKeyInput" placeholder="Paystack public key (optional)" autocomplete="off" style="margin-bottom:0">
-      </div>
-    </div>
-    <div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div>
-      <div class="settings-card">
-        <select class="input-field" id="modelSelect" style="margin-bottom:0">
-          <option value="gemini-2.5-flash">Gemini 2.5 Flash ⚡ (Recommended)</option>
-          <option value="gemini-3.5-flash">Gemini 3.5 Flash</option>
-          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite</option>
-        </select>
-      </div>
-    </div>
-    <div class="modal-actions" style="justify-content:space-between">
-      <button class="btn ghost" style="color:#f87171" onclick="closeModal('settingsModal'); setTimeout(() => askSignOut(), 150);"><i class="fas fa-sign-out-alt"></i> Sign out</button>
-      <button class="btn accent" onclick="saveSettings()">Save</button>
-    </div>
-  </div>
-</div>
-
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
-
-<!-- ============ EXTERNAL LIBS ============ -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-<script src="https://js.paystack.co/v1/inline.js"></script>
-
-<!-- ============ CORE STATE + COPY FUNCTIONS ============ -->
 <script>
-// ============ COPY FUNCTIONS ============
-function fallbackCopy(text) {
-  try {
-    var ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.top = '-1000px';
-    document.body.appendChild(ta);
-    ta.select();
-    var ok = document.execCommand('copy');
-    ta.remove();
-    return !!ok;
-  } catch (e) { return false; }
-}
-function wkCopyToClipboard(text) {
-  return new Promise(function(resolve) {
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text).then(function() { resolve(true); }).catch(function() { resolve(fallbackCopy(text)); });
-      } else { resolve(fallbackCopy(text)); }
-    } catch (e) { resolve(fallbackCopy(text)); }
-  });
-}
-window.wkCopyToClipboard = wkCopyToClipboard;
-window.fallbackCopy = fallbackCopy;
-
 window.__wkCodeBlocks = window.__wkCodeBlocks || {};
-window.wkCopyCode = function(blockId, btn) {
-  var code = (window.__wkCodeBlocks && window.__wkCodeBlocks[blockId]) || '';
-  if (!code) { if (typeof showToast === 'function') showToast('⚠️ Nothing to copy'); return; }
-  wkCopyToClipboard(code).then(function(ok) {
-    if (ok) {
-      var orig = btn.innerHTML;
-      btn.classList.add('copied');
-      btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-      setTimeout(function() { btn.classList.remove('copied'); btn.innerHTML = orig; }, 2000);
-      if (typeof showToast === 'function') showToast('📋 Code copied!');
-    } else { if (typeof showToast === 'function') showToast('⚠️ Copy failed'); }
+function fallbackCopy(text){try{var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.top='-1000px';document.body.appendChild(ta);ta.select();var ok=document.execCommand('copy');ta.remove();return !!ok;}catch(e){return false;}}
+function wkCopyToClipboard(text){return new Promise(function(resolve){try{if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(function(){resolve(true);}).catch(function(){resolve(fallbackCopy(text));});}else{resolve(fallbackCopy(text));}}catch(e){resolve(fallbackCopy(text));}});}
+window.wkCopyToClipboard=wkCopyToClipboard;
+window.wkCopyCode=function(blockId,btn){
+  var code=(window.__wkCodeBlocks&&window.__wkCodeBlocks[blockId])||'';
+  if(!code){if(typeof showToast==='function')showToast('⚠️ Nothing to copy');return;}
+  wkCopyToClipboard(code).then(function(ok){
+    if(ok){var orig=btn.innerHTML;btn.classList.add('copied');btn.innerHTML='<i class="fas fa-check"></i> Copied!';setTimeout(function(){btn.classList.remove('copied');btn.innerHTML=orig;},1200);if(typeof showToast==='function')showToast('📋 Code copied!');}
+    else{if(typeof showToast==='function')showToast('⚠️ Copy failed');}
   });
 };
-window.wkDownloadCode = function(blockId, filename) {
-  var code = (window.__wkCodeBlocks && window.__wkCodeBlocks[blockId]) || '';
-  if (!code) { if (typeof showToast === 'function') showToast('⚠️ Nothing to download'); return; }
-  try {
-    var blob = new Blob([code], { type: 'text/plain' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url; a.download = filename;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
-    if (typeof showToast === 'function') showToast('⬇️ Downloaded!');
-  } catch(e) { if (typeof showToast === 'function') showToast('⚠️ Download failed'); }
+window.wkDownloadCode=function(blockId,filename){
+  var code=(window.__wkCodeBlocks&&window.__wkCodeBlocks[blockId])||'';
+  if(!code){if(typeof showToast==='function')showToast('⚠️ Nothing to download');return;}
+  try{var blob=new Blob([code],{type:'text/plain'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(url);},1000);if(typeof showToast==='function')showToast('⬇️ Downloaded!');}catch(e){if(typeof showToast==='function')showToast('⚠️ Download failed');}
 };
-
-// ============ SYNTAX HIGHLIGHTING ============
-function highlightCodeBlocks() {
-  if (typeof Prism === 'undefined') return;
-  document.querySelectorAll('.md pre code:not(.language-none):not([data-highlighted])').forEach(function(block) {
-    try { Prism.highlightElement(block); } catch(e) {}
-  });
-}
-window.highlightCodeBlocks = highlightCodeBlocks;
+window.wkRunCode=function(blockId){
+  var code=(window.__wkCodeBlocks&&window.__wkCodeBlocks[blockId])||'';
+  if(!code)return showToast('⚠️ Nothing to run');
+  var blob=new Blob([code],{type:'text/html'});
+  var url=URL.createObjectURL(blob);
+  window.open(url,'_blank');
+  setTimeout(function(){URL.revokeObjectURL(url);},60000);
+  showToast('▶️ Running in new tab');
+};
+function highlightCodeBlocks(){if(typeof Prism==='undefined')return;document.querySelectorAll('.md pre code:not([data-highlighted])').forEach(function(block){try{Prism.highlightElement(block);}catch(e){}});}
+window.highlightCodeBlocks=highlightCodeBlocks;
 </script>
 
-<!-- ============ FIREBASE ============ -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU",
-    authDomain: "wise-king-ai-259fc.firebaseapp.com",
-    projectId: "wise-king-ai-259fc",
-    storageBucket: "wise-king-ai-259fc.firebasestorage.app",
-    messagingSenderId: "19851699752",
-    appId: "1:19851699752:web:6735280bf59561e8ffb71d"
-  };
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  const provider = new GoogleAuthProvider();
-  provider.setCustomParameters({ prompt: 'select_account' });
-  setPersistence(auth, browserLocalPersistence).catch(function() {});
+const firebaseConfig = {
+  apiKey: "AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU",
+  authDomain: "wise-king-ai-259fc.firebaseapp.com",
+  projectId: "wise-king-ai-259fc",
+  storageBucket: "wise-king-ai-259fc.firebasestorage.app",
+  messagingSenderId: "19851699752",
+  appId: "1:19851699752:web:6735280bf59561e8ffb71d"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+provider.setCustomParameters({ prompt: 'select_account' });
+setPersistence(auth, browserLocalPersistence).catch(function(){});
 
-  window.WK_CLOUD = {
-    async loadUserData(uid) {
-      try { const ref = doc(db, 'users', uid); const snap = await getDoc(ref); return snap.exists() ? snap.data() : null; } catch (e) { return null; }
-    },
-    async saveUserData(uid, data) {
-      try { await setDoc(doc(db, 'users', uid), Object.assign({}, data, { updatedAt: serverTimestamp() }), { merge: true }); return true; } catch (e) { return false; }
+window.WK_CLOUD = {
+  async loadUserData(uid) { try { const ref = doc(db, 'users', uid); const snap = await getDoc(ref); return snap.exists() ? snap.data() : null; } catch (e) { return null; } },
+  async saveUserData(uid, data) { try { await setDoc(doc(db, 'users', uid), Object.assign({}, data, { updatedAt: serverTimestamp() }), { merge: true }); return true; } catch (e) { return false; } }
+};
+
+window.__showWelcomePopup = function(name, photoURL) {
+  const popup = document.getElementById('welcomePopup');
+  const nameEl = document.getElementById('wpName');
+  const avatarEl = document.getElementById('wpAvatar');
+  if (!popup) return;
+  if (nameEl) nameEl.textContent = name || 'Friend';
+  if (avatarEl) {
+    avatarEl.innerHTML = '';
+    if (photoURL) {
+      const img = document.createElement('img');
+      img.src = photoURL;
+      img.onerror = function() { avatarEl.textContent = '👑'; };
+      avatarEl.appendChild(img);
+    } else { avatarEl.textContent = '👑'; }
+  }
+  popup.classList.add('show');
+  setTimeout(function() { if (popup.classList.contains('show')) popup.classList.remove('show'); }, 6500);
+};
+window.closeWelcomePopup = function() {
+  const popup = document.getElementById('welcomePopup');
+  if (popup) popup.classList.remove('show');
+};
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    const isNewSession = !sessionStorage.getItem('wk_welcome_shown');
+    localStorage.setItem('wk_logged_in', '1');
+    localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
+    localStorage.setItem('wk_user_email', user.email || '');
+    localStorage.setItem('wk_user_uid', user.uid);
+    localStorage.removeItem('wk_guest_mode');
+    if (!localStorage.getItem('wk_joined')) localStorage.setItem('wk_joined', new Date().toLocaleDateString());
+    const cloud = await window.WK_CLOUD.loadUserData(user.uid);
+    if (cloud) {
+      if (Array.isArray(cloud.chats)) { localStorage.setItem('wk_chats', JSON.stringify(cloud.chats)); try { chats = cloud.chats; } catch(e) {} }
+      if (Array.isArray(cloud.vault)) localStorage.setItem('wk_vault', JSON.stringify(cloud.vault));
+      if (Array.isArray(cloud.memory)) localStorage.setItem('wk_cross_memory', JSON.stringify(cloud.memory));
+      if (cloud.avatar) localStorage.setItem('wk_user_avatar', cloud.avatar);
     }
-  };
-
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      localStorage.setItem('wk_logged_in', '1');
-      localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
-      localStorage.setItem('wk_user_email', user.email || '');
-      localStorage.setItem('wk_user_uid', user.uid);
-      localStorage.removeItem('wk_guest_mode');
-      if (!localStorage.getItem('wk_joined')) localStorage.setItem('wk_joined', new Date().toLocaleDateString());
-
-      const cloud = await window.WK_CLOUD.loadUserData(user.uid);
-      if (cloud) {
-        if (Array.isArray(cloud.chats)) { localStorage.setItem('wk_chats', JSON.stringify(cloud.chats)); try { chats = cloud.chats; } catch(e) {} }
-        if (Array.isArray(cloud.vault)) localStorage.setItem('wk_vault', JSON.stringify(cloud.vault));
-        if (Array.isArray(cloud.memory)) localStorage.setItem('wk_cross_memory', JSON.stringify(cloud.memory));
-        if (Array.isArray(cloud.library)) localStorage.setItem('wk_library', JSON.stringify(cloud.library));
-      }
-
-      if (typeof unlockApp === 'function') unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
-      if (typeof loadChatsFromLocalStorage === 'function') loadChatsFromLocalStorage();
-      setTimeout(() => {
-        activeChatId = null;
-        if (typeof renderMessages === 'function') renderMessages();
-      }, 300);
+    if (typeof unlockApp === 'function') unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
+    if (typeof loadChatsFromLocalStorage === 'function') loadChatsFromLocalStorage();
+    setTimeout(function() { activeChatId = null; if (typeof renderMessages === 'function') renderMessages(); }, 300);
+    if (isNewSession) {
+      sessionStorage.setItem('wk_welcome_shown', '1');
+      setTimeout(function() { window.__showWelcomePopup(user.displayName || 'Friend', user.photoURL); }, 500);
     }
+  }
+});
+
+window.signInWithGoogle = function() {
+  signInWithPopup(auth, provider).then(function(result) {
+    const user = result.user;
+    localStorage.setItem('wk_logged_in', '1');
+    localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
+    localStorage.setItem('wk_user_email', user.email || '');
+    localStorage.setItem('wk_user_uid', user.uid);
+    localStorage.removeItem('wk_guest_mode');
+    sessionStorage.removeItem('wk_welcome_shown');
+    window.showToast('Welcome, ' + (user.displayName || 'Wise King User') + '! 🎉');
+  }).catch(function(error) {
+    if (["auth/cancelled-popup-request","auth/popup-closed-by-user","auth/user-cancelled"].includes(error.code)) return;
+    if (typeof showAuthError === 'function') showAuthError("Login failed: " + error.message);
   });
+};
 
-  window.signInWithGoogle = function() {
-    signInWithPopup(auth, provider).then(function(result) {
-      const user = result.user;
-      localStorage.setItem('wk_logged_in', '1');
-      localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
-      localStorage.setItem('wk_user_email', user.email || '');
-      localStorage.setItem('wk_user_uid', user.uid);
-      localStorage.removeItem('wk_guest_mode');
-      window.showToast('Welcome, ' + (user.displayName || 'Wise King User') + '! 🎉');
-    }).catch(function(error) {
-      if (["auth/cancelled-popup-request","auth/popup-closed-by-user","auth/user-cancelled"].includes(error.code)) return;
-      if (typeof showAuthError === 'function') showAuthError("Login failed: " + error.message);
-    });
-  };
+window.emailSignIn = function() {
+  const email = document.getElementById('signInEmail').value.trim();
+  const password = document.getElementById('signInPassword').value.trim();
+  if (!email || !password) return showAuthError("Please enter both email and password.");
+  const btn = document.getElementById('signInBtn'); const orig = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+  signInWithEmailAndPassword(auth, email, password).then(function(uc) {
+    const user = uc.user;
+    localStorage.setItem('wk_logged_in', '1');
+    localStorage.setItem('wk_user_name', user.displayName || email.split('@')[0]);
+    localStorage.setItem('wk_user_email', user.email);
+    localStorage.setItem('wk_user_uid', user.uid);
+    localStorage.removeItem('wk_guest_mode');
+    sessionStorage.removeItem('wk_welcome_shown');
+    window.showToast('Welcome back! 🎉');
+  }).catch(function(error) {
+    let msg = "Login failed. ";
+    if (error.code === 'auth/user-not-found') msg = "No account found.";
+    else if (error.code === 'auth/wrong-password') msg = "Incorrect password.";
+    else if (error.code === 'auth/invalid-credential') msg = "Wrong email or password.";
+    else msg += error.message;
+    showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
+  });
+};
 
-  window.emailSignIn = function() {
-    const email = document.getElementById('signInEmail').value.trim();
-    const password = document.getElementById('signInPassword').value.trim();
-    if (!email || !password) return showAuthError("Please enter both email and password.");
-    const btn = document.getElementById('signInBtn'); const orig = btn.innerHTML;
-    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
-    signInWithEmailAndPassword(auth, email, password).then(function(uc) {
-      const user = uc.user;
-      localStorage.setItem('wk_logged_in', '1');
-      localStorage.setItem('wk_user_name', user.displayName || email.split('@')[0]);
-      localStorage.setItem('wk_user_email', user.email);
-      localStorage.setItem('wk_user_uid', user.uid);
-      localStorage.removeItem('wk_guest_mode');
-      window.showToast('Welcome back! 🎉');
-    }).catch(function(error) {
-      let msg = "Login failed. ";
-      if (error.code === 'auth/user-not-found') msg = "No account found.";
-      else if (error.code === 'auth/wrong-password') msg = "Incorrect password.";
-      else if (error.code === 'auth/invalid-credential') msg = "Wrong email or password.";
-      else msg += error.message;
-      showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
-    });
-  };
+window.emailSignUp = function() {
+  const name = document.getElementById('signUpName').value.trim();
+  const email = document.getElementById('signUpEmail').value.trim();
+  const password = document.getElementById('signUpPassword').value.trim();
+  if (!name || !email || !password) return showAuthError("Please fill in all fields.");
+  if (password.length < 6) return showAuthError("Password must be at least 6 characters.");
+  const btn = document.getElementById('signUpBtn'); const orig = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+  createUserWithEmailAndPassword(auth, email, password).then(function(uc) {
+    const user = uc.user;
+    localStorage.setItem('wk_logged_in', '1');
+    localStorage.setItem('wk_user_name', name);
+    localStorage.setItem('wk_user_email', user.email);
+    localStorage.setItem('wk_user_uid', user.uid);
+    localStorage.removeItem('wk_guest_mode');
+    sessionStorage.removeItem('wk_welcome_shown');
+    window.showToast('Account created! Welcome, ' + name + ' 🎉');
+  }).catch(function(error) {
+    let msg = "Sign up failed. ";
+    if (error.code === 'auth/email-already-in-use') msg = "This email is already registered.";
+    else if (error.code === 'auth/weak-password') msg = "Password too weak.";
+    else msg += error.message;
+    showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
+  });
+};
 
-  window.emailSignUp = function() {
-    const name = document.getElementById('signUpName').value.trim();
-    const email = document.getElementById('signUpEmail').value.trim();
-    const password = document.getElementById('signUpPassword').value.trim();
-    if (!name || !email || !password) return showAuthError("Please fill in all fields.");
-    if (password.length < 6) return showAuthError("Password must be at least 6 characters.");
-    const btn = document.getElementById('signUpBtn'); const orig = btn.innerHTML;
-    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
-    createUserWithEmailAndPassword(auth, email, password).then(function(uc) {
-      const user = uc.user;
-      localStorage.setItem('wk_logged_in', '1');
-      localStorage.setItem('wk_user_name', name);
-      localStorage.setItem('wk_user_email', user.email);
-      localStorage.setItem('wk_user_uid', user.uid);
-      localStorage.removeItem('wk_guest_mode');
-      window.showToast('Account created! Welcome, ' + name + ' 🎉');
-    }).catch(function(error) {
-      let msg = "Sign up failed. ";
-      if (error.code === 'auth/email-already-in-use') msg = "This email is already registered.";
-      else if (error.code === 'auth/weak-password') msg = "Password too weak.";
-      else msg += error.message;
-      showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
-    });
-  };
+window.sendPasswordReset = function() {
+  const email = document.getElementById('resetEmail').value.trim();
+  if (!email) return showAuthError("Please enter your email.");
+  const btn = document.getElementById('resetBtn'); const orig = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+  sendPasswordResetEmail(auth, email).then(function() { showAuthSuccess("Reset email sent!"); btn.disabled = false; btn.innerHTML = orig; }).catch(function(error) { showAuthError("Error: " + error.message); btn.disabled = false; btn.innerHTML = orig; });
+};
 
-  window.sendPasswordReset = function() {
-    const email = document.getElementById('resetEmail').value.trim();
-    if (!email) return showAuthError("Please enter your email.");
-    const btn = document.getElementById('resetBtn'); const orig = btn.innerHTML;
-    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-    sendPasswordResetEmail(auth, email).then(function() { showAuthSuccess("Reset email sent!"); btn.disabled = false; btn.innerHTML = orig; }).catch(function(error) { showAuthError("Error: " + error.message); btn.disabled = false; btn.innerHTML = orig; });
-  };
+window.addAnotherAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(function() { window.signInWithGoogle(); }, 80); };
+window.switchAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(function() { window.signInWithGoogle(); }, 80); };
 
-  window.addAnotherAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(function() { window.signInWithGoogle(); }, 80); };
-  window.switchAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(function() { window.signInWithGoogle(); }, 80); };
+window.askSignOut = function() {
+  closeTopProfileMenu();
+  const m = document.getElementById('settingsModal'); if (m) m.classList.remove('show');
+  try { closeSidebar(); } catch(e) {}
+  setTimeout(function() { const sm = document.getElementById('signOutModal'); if (sm) { sm.classList.add('show'); sm.style.zIndex = '99999'; } }, 100);
+};
 
-  window.askSignOut = function() {
-    closeTopProfileMenu();
-    const m = document.getElementById('settingsModal'); if (m) m.classList.remove('show');
-    try { closeSidebar(); } catch(e) {}
-    setTimeout(function() { const sm = document.getElementById('signOutModal'); if (sm) { sm.classList.add('show'); sm.style.zIndex = '99999'; } }, 100);
-  };
+window.confirmSignOut = function() {
+  document.getElementById('signOutModal').classList.remove('show');
+  window.showToast('Signing out... 👋');
+  signOut(auth).then(function() {
+    ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_chats','wk_vault','wk_cross_memory'].forEach(function(k) { localStorage.removeItem(k); });
+    try { sessionStorage.clear(); } catch(e) {}
+    if (typeof forceShowLoginScreen === 'function') forceShowLoginScreen();
+  }).catch(function() { if (typeof forceShowLoginScreen === 'function') forceShowLoginScreen(); });
+};
 
-  window.confirmSignOut = function() {
-    document.getElementById('signOutModal').classList.remove('show');
-    window.showToast('Signing out... 👋');
-    signOut(auth).then(function() {
-      ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_library'].forEach(function(k) { localStorage.removeItem(k); });
-      try { sessionStorage.clear(); } catch(e) {}
-      if (typeof forceShowLoginScreen === 'function') forceShowLoginScreen();
-    }).catch(function() { if (typeof forceShowLoginScreen === 'function') forceShowLoginScreen(); });
-  };
+window.forceShowLoginScreen = function() {
+  const ls = document.getElementById('loginScreen');
+  const ma = document.getElementById('mainApp');
+  if (ma) { ma.style.opacity = '0'; ma.style.display = 'none'; }
+  if (ls) { ls.classList.remove('hidden'); ls.style.display = 'flex'; ls.style.opacity = '1'; ls.style.pointerEvents = 'auto'; }
+  ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(function(id) { const el = document.getElementById(id); if (el) el.value = ''; });
+  const ae = document.getElementById('authError'); if (ae) ae.classList.remove('show');
+  const as = document.getElementById('authSuccess'); if (as) as.classList.remove('show');
+  try { chats = []; activeChatId = null; } catch(e) {}
+  try { renderChats(); renderMessages(); } catch(e) {}
+  try { switchAuthTab('signin'); } catch(e) {}
+};
 
-  window.forceShowLoginScreen = function() {
-    const ls = document.getElementById('loginScreen');
-    const ma = document.getElementById('mainApp');
-    if (ma) { ma.style.opacity = '0'; ma.style.display = 'none'; }
-    if (ls) { ls.classList.remove('hidden'); ls.style.display = 'flex'; ls.style.opacity = '1'; ls.style.pointerEvents = 'auto'; }
-    ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(function(id) { const el = document.getElementById(id); if (el) el.value = ''; });
-    const ae = document.getElementById('authError'); if (ae) ae.classList.remove('show');
-    const as = document.getElementById('authSuccess'); if (as) as.classList.remove('show');
-    try { chats = []; activeChatId = null; } catch(e) {}
-    try { renderChats(); renderMessages(); } catch(e) {}
-    try { switchAuthTab('signin'); } catch(e) {}
-  };
+window.openManageAccount = function() {
+  closeTopProfileMenu();
+  const name = localStorage.getItem('wk_user_name') || 'Not set';
+  const email = localStorage.getItem('wk_user_email') || 'Not signed in';
+  const plan = localStorage.getItem('wk_plan') || 'Free';
+  const joined = localStorage.getItem('wk_joined') || new Date().toLocaleDateString();
+  const html = '<div class="settings-card"><div class="toggle-row"><div class="toggle-label">Name</div><div style="color:var(--text-secondary)">' + (window.escapeHtml ? escapeHtml(name) : name) + '</div></div>' +
+    '<div class="toggle-row"><div class="toggle-label">Email</div><div style="color:var(--text-secondary)">' + (window.escapeHtml ? escapeHtml(email) : email) + '</div></div>' +
+    '<div class="toggle-row"><div class="toggle-label">Plan</div><div style="color:var(--text-secondary)">' + plan + '</div></div>' +
+    '<div class="toggle-row"><div class="toggle-label">Joined</div><div style="color:var(--text-secondary)">' + joined + '</div></div></div>';
+  showGenericModal('accountModal', '<i class="fas fa-user"></i> Manage Account', html);
+};
 
-  window.openWallet = function() {
-    closeTopProfileMenu();
-    const plan = localStorage.getItem('wk_plan') || 'Free';
-    const credits = localStorage.getItem('wk_credits') || '0';
-    const html = '<div style="text-align:center;margin-bottom:14px"><div style="font-size:11px;color:var(--text-tertiary);text-transform:uppercase">Current Plan</div><div style="font-size:18px;font-weight:700;color:var(--accent-hover)">' + plan + '</div></div>' +
-      '<div style="text-align:center;margin-bottom:14px"><div style="font-size:11px;color:var(--text-tertiary);text-transform:uppercase">Credits</div><div style="font-size:18px;font-weight:700;color:var(--accent-hover)">' + credits + '</div></div>';
-    showGenericModal('walletModal', '<i class="fas fa-wallet"></i> Wallet', html);
-  };
-
-  window.openManageAccount = function() {
-    closeTopProfileMenu();
-    const name = localStorage.getItem('wk_user_name') || 'Not set';
-    const email = localStorage.getItem('wk_user_email') || 'Not signed in';
-    const plan = localStorage.getItem('wk_plan') || 'Free';
-    const joined = localStorage.getItem('wk_joined') || new Date().toLocaleDateString();
-    const html = '<div class="settings-card"><div class="toggle-row"><div class="toggle-label">Name</div><div style="color:var(--text-secondary)">' + (window.escapeHtml ? escapeHtml(name) : name) + '</div></div>' +
-      '<div class="toggle-row"><div class="toggle-label">Email</div><div style="color:var(--text-secondary)">' + (window.escapeHtml ? escapeHtml(email) : email) + '</div></div>' +
-      '<div class="toggle-row"><div class="toggle-label">Plan</div><div style="color:var(--text-secondary)">' + plan + '</div></div>' +
-      '<div class="toggle-row"><div class="toggle-label">Joined</div><div style="color:var(--text-secondary)">' + joined + '</div></div></div>';
-    showGenericModal('accountModal', '<i class="fas fa-user"></i> Manage Account', html);
-  };
-
-  window.showGenericModal = function(id, title, html) {
-    let m = document.getElementById(id);
-    if (!m) {
-      m = document.createElement('div');
-      m.className = 'modal-bg';
-      m.id = id;
-      m.addEventListener('click', function(e) { if (e.target === m) m.classList.remove('show'); });
-      document.body.appendChild(m);
-    }
-    m.innerHTML = '<div class="modal"><div class="modal-head"><div class="modal-title">' + title + '</div><button class="modal-close" onclick="closeModal(\'' + id + '\')"><i class="fas fa-times"></i></button></div>' + html + '</div>';
-    m.classList.add('show');
-  };
+window.showGenericModal = function(id, title, html) {
+  let m = document.getElementById(id);
+  if (!m) {
+    m = document.createElement('div');
+    m.className = 'modal-bg';
+    m.id = id;
+    m.addEventListener('click', function(e) { if (e.target === m) m.classList.remove('show'); });
+    document.body.appendChild(m);
+  }
+  m.innerHTML = '<div class="modal"><div class="modal-head"><div class="modal-title">' + title + '</div><button class="modal-close" onclick="closeModal(\'' + id + '\')"><i class="fas fa-times"></i></button></div>' + html + '</div>';
+  m.classList.add('show');
+};
 </script>
 
-<!-- ============ MAIN APP LOGIC ============ -->
 <script>
 const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
-const ENV_DEEPSEEK_KEY = (typeof window.__WK_ENV__ !== 'undefined' && window.__WK_ENV__ && window.__WK_ENV__.DEEPSEEK_API_KEY) ? window.__WK_ENV__.DEEPSEEK_API_KEY : '';;
+const ENV_DEEPSEEK_KEY = '';
 
 const SYSTEM_PROMPT = `You are WISE KING AI 👑 — created by IBRAHIM ABDULLAHI 🇳🇬 (Wise King Industry).
 You are a world-class AI Production Partner, Creative Advisor, Teacher, Story Architect, Prompt Engineer, and Technical Assistant.
@@ -1259,7 +870,6 @@ Excellence in every frame.
 Benefit in every story.
 Ranka ya dade! 👑🇳🇬💛
 `;
-
 
 let chats = [], activeChatId = null;
 let uploadedFiles = [];
@@ -1643,18 +1253,10 @@ function handleProfilePhotoUpload(e){
 window.handleProfilePhotoUpload=handleProfilePhotoUpload;
 
 function openSettings(){
-  try{
-    const sm=document.getElementById('settingsModal');
-    if(!sm)return;
-    const k1=localStorage.getItem('wk_api_key');if(k1&&document.getElementById('apiKeyInput'))document.getElementById('apiKeyInput').value=k1;
-    const dk=localStorage.getItem('wk_deepseek_key');if(dk&&document.getElementById('deepseekKeyInput'))document.getElementById('deepseekKeyInput').value=dk;
-    const m=localStorage.getItem('wk_model');if(m&&document.getElementById('modelSelect'))document.getElementById('modelSelect').value=m;
-    try{closeSidebar();}catch(e){}
-    setTimeout(function(){sm.classList.add('show');sm.style.zIndex='99999';},80);
-  }catch(err){
-    console.warn('Settings error:',err);
-    if(typeof showToast==='function')showToast('⚠️ Could not open settings');
-  }
+  document.getElementById('settingsModal').classList.add('show');
+  closeSidebar();
+  const k1=localStorage.getItem('wk_api_key');if(k1)document.getElementById('apiKeyInput').value=k1;
+  const dk=localStorage.getItem('wk_deepseek_key');if(dk)document.getElementById('deepseekKeyInput').value=dk;
 }
 window.openSettings=openSettings;
 
@@ -1667,10 +1269,10 @@ function saveSettings(){
 window.saveSettings=saveSettings;
 
 function updateModelBadge(){
-  const m=localStorage.getItem('wk_model')||'gemini-3.5-flash';
-  let label='Gemini 3.5 Flash';
-  if(m.indexOf('2.5')>=0)label='Gemini 2.5 Flash';
-  else if(m.indexOf('3.5')>=0)label='Gemini 3.5 Flash';
+  const m=localStorage.getItem('wk_model')||'gemini-2.5-flash';
+  let label='Gemini 2.5 Flash';
+  if(m.indexOf('2.0')>=0)label='Gemini 2.0 Flash';
+  else if(m.indexOf('1.5')>=0)label='Gemini 1.5 Flash';
   document.getElementById('modelBadgeText').textContent=label;
 }
 window.updateModelBadge=updateModelBadge;
@@ -1681,7 +1283,18 @@ window.toggleLightMode=toggleLightMode;
 
 function getWebSearchEnabled(){return localStorage.getItem('wk_web_search')!=='0';}
 function setWebSearchEnabled(e){localStorage.setItem('wk_web_search',e?'1':'0');document.getElementById('webSearchToggle')?.classList.toggle('on',e);}
-function toggleWebSearchSetting(){const const input=document.getElementById('vaultNewInput');const text=input.value.trim();if(!text)return showToast('Type a memory first');vaultMemories.unshift(text);saveVault();renderVault();input.value='';showToast('🔒 Locked');}
+function toggleWebSearchSetting(){const n=!getWebSearchEnabled();setWebSearchEnabled(n);showToast(n?'🌐 Web ON':'🚫 OFF');}
+function getMemoryEnabled(){return localStorage.getItem('wk_memory_on')!=='0';}
+function setMemoryEnabled(e){localStorage.setItem('wk_memory_on',e?'1':'0');document.getElementById('memoryToggle')?.classList.toggle('on',e);}
+function toggleMemorySetting(){const n=!getMemoryEnabled();setMemoryEnabled(n);showToast(n?'🧠 Memory ON':'🚫 OFF');}
+window.toggleWebSearchSetting=toggleWebSearchSetting;window.toggleMemorySetting=toggleMemorySetting;
+
+function loadVault(){try{vaultMemories=JSON.parse(localStorage.getItem('wk_vault')||'[]');}catch(e){vaultMemories=[];}updateVaultBadge();}
+function saveVault(){localStorage.setItem('wk_vault',JSON.stringify(vaultMemories));updateVaultBadge();if(window.WK_CLOUD&&localStorage.getItem('wk_user_uid'))window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'),{vault:vaultMemories});}
+function updateVaultBadge(){const b=document.getElementById('vaultCountBadge');if(b)b.textContent=vaultMemories.length;}
+function openVault(){document.getElementById('vaultModal').classList.add('show');renderVault();}
+function renderVault(){const list=document.getElementById('vaultList');if(!list)return;if(!vaultMemories.length){list.innerHTML='<div class="vault-empty">No locked memories yet.</div>';return;}list.innerHTML=vaultMemories.map((m,i)=>'<div class="vault-item"><div class="vi-text">'+escapeHtml(m)+'</div><button class="vi-del" onclick="deleteVaultMemory('+i+')"><i class="fas fa-trash"></i></button></div>').join('');}
+function addVaultMemory(){const input=document.getElementById('vaultNewInput');const text=input.value.trim();if(!text)return showToast('Type a memory first');vaultMemories.unshift(text);saveVault();renderVault();input.value='';showToast('🔒 Locked');}
 function deleteVaultMemory(i){vaultMemories.splice(i,1);saveVault();renderVault();showToast('Removed');}
 window.openVault=openVault;window.deleteVaultMemory=deleteVaultMemory;window.addVaultMemory=addVaultMemory;
 
@@ -1724,6 +1337,18 @@ async function generateMusicFromPanel(){
 }
 window.generateMusicFromPanel=generateMusicFromPanel;
 
+async function generateLyricsFromPanel(){
+  const input=document.getElementById('musicInput').value.trim();
+  if(!input)return showToast('Describe the song topic');
+  const genre=document.getElementById('musicGenre').value||'Afrobeat';
+  const results=document.getElementById('musicPanelResults');
+  results.innerHTML='<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i><br>Writing lyrics...</div>';
+  const res=await sendMessageWithFallback('Write full song lyrics about: "'+input+'". Genre: '+genre);
+  if(res.success){results.innerHTML='<div class="music-card"><div class="md">'+renderMarkdown(res.reply)+'</div></div>';showToast('✅ Lyrics ready!');}
+  else results.innerHTML='<div class="result-card"><p>⚠️ Failed.</p></div>';
+}
+window.generateLyricsFromPanel=generateLyricsFromPanel;
+
 function openPdfChatPanel(){document.getElementById('pdfChatPanel').classList.add('show');closeSidebar();}
 function closePdfChatPanel(){document.getElementById('pdfChatPanel').classList.remove('show');}
 window.openPdfChatPanel=openPdfChatPanel;window.closePdfChatPanel=closePdfChatPanel;
@@ -1736,7 +1361,7 @@ async function handlePdfUpload(e){
   info.innerHTML='<div class="result-card"><i class="fas fa-file-pdf"></i> '+escapeHtml(file.name)+' • Extracting...</div>';
   try{
     const arrayBuffer=await file.arrayBuffer();
-    const pdfawait pdfjsLib.getDocument({data:arrayBuffer}).promise;
+    const pdf=await pdfjsLib.getDocument({data:arrayBuffer}).promise;
     let fullText='';
     const maxPages=Math.min(pdf.numPages,50);
     for(let i=1;i<=maxPages;i++){
@@ -1798,51 +1423,18 @@ async function doTranslate(){
 }
 window.doTranslate=doTranslate;
 
-// ============ LIVE TV ============
-let currentTVFilter = 'all';
-const TV_CHANNELS = [
-  { id:'c1', title:'Arise News', type:'live', poster:'https://images.unsplash.com/photo-1495020689067-958852a7765e?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCfMNQzwvJ2jNgZgnkfPU_Pw', desc:'Nigeria 24/7 news' },
-  { id:'c2', title:'Channels TV', type:'live', poster:'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg', desc:'Live Nigerian news' },
-  { id:'c3', title:'Al Jazeera English', type:'live', poster:'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg', desc:'World news' },
-  { id:'c4', title:'BBC World News', type:'live', poster:'https://images.unsplash.com/photo-1526470498-9ae73c665de8?w=400', url:'https://www.youtube.com/embed/live_stream?channel=UCCj956IF62FbT7Gouszaj9w', desc:'Global news' },
-  { id:'m1', title:'The Lion King', type:'movie', poster:'https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=400', url:'https://www.youtube.com/embed/lFzVJEksoDY', desc:'1994 • Animation' },
-  { id:'m2', title:'Black Panther', type:'movie', poster:'https://images.unsplash.com/photo-1635805737707-575885ab0820?w=400', url:'https://www.youtube.com/embed/xjDjIWPwcPU', desc:'2018 • Action' },
-  { id:'m3', title:'Coming to America', type:'movie', poster:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400', url:'https://www.youtube.com/embed/fvzHMxOtnNA', desc:'1988 • Comedy' },
-  { id:'m4', title:'The Godfather', type:'movie', poster:'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400', url:'https://www.youtube.com/embed/sY1S34973zA', desc:'1972 • Classic' },
-  { id:'h1', title:'Kannywood Special 1', type:'hausa', poster:'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400', url:'https://www.youtube.com/embed/videoseries?list=PLmQ1M6H7j0H7Z5G5bGMQO4rV6G1jv1ZPq', desc:'🇳🇬 Hausa Film' },
-  { id:'h2', title:'Kannywood Special 2', type:'hausa', poster:'https://images.unsplash.com/photo-1594908900066-3f47337549d8?w=400', url:'https://www.youtube.com/embed/videoseries?list=PLmQ1M6H7j0H7Z5G5bGMQO4rV6G1jv1ZPq', desc:'🇳🇬 Hausa Film' },
-  { id:'s1', title:'Money Heist', type:'series', poster:'https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?w=400', url:'https://www.youtube.com/embed/hMANIarjT50', desc:'Series • Netflix' },
-  { id:'s2', title:'Breaking Bad', type:'series', poster:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400', url:'https://www.youtube.com/embed/HhesaQXLuRY', desc:'Series • Drama' }
-];
-
-function openLiveTVPanel() { document.getElementById('liveTVPanel').classList.add('show'); closeSidebar(); renderTVChannels(); }
-function closeLiveTVPanel() { document.getElementById('liveTVPanel').classList.remove('show'); const grid = document.getElementById('tvGrid'); if (grid) grid.innerHTML = ''; }
-function filterTV(type, btn) { currentTVFilter = type; document.querySelectorAll('.tv-tab').forEach(t => t.classList.remove('active')); if (btn) btn.classList.add('active'); renderTVChannels(); }
-window.openLiveTVPanel = openLiveTVPanel;
-window.closeLiveTVPanel = closeLiveTVPanel;
-window.filterTV = filterTV;
-
-function renderTVChannels() {
-  const grid = document.getElementById('tvGrid'); if (!grid) return;
-  const q = (document.getElementById('tvSearchInput')?.value || '').toLowerCase();
-  let list = TV_CHANNELS;
-  if (currentTVFilter !== 'all') list = list.filter(c => c.type === currentTVFilter);
-  if (q) list = list.filter(c => c.title.toLowerCase().indexOf(q) >= 0 || c.desc.toLowerCase().indexOf(q) >= 0);
-  if (!list.length) { grid.innerHTML = '<p style="color:var(--text-secondary);grid-column:1/-1;text-align:center;padding:40px">No results found.</p>'; return; }
-  grid.innerHTML = list.map(c => '<div class="tv-card" onclick="playTV(\'' + c.id + '\')" style="cursor:pointer;background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;transition:all 0.2s"><div style="position:relative;aspect-ratio:2/3;background:var(--bg-elevated);overflow:hidden"><img src="' + c.poster + '" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.style.display=\'none\'">' + (c.type === 'live' ? '<span style="position:absolute;top:8px;left:8px;background:#ef4444;color:white;font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px">● LIVE</span>' : '') + '<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.85),transparent);display:flex;align-items:flex-end;padding:10px"><div style="color:white"><div style="font-size:13px;font-weight:700">' + c.title + '</div><div style="font-size:10.5px;opacity:0.75;margin-top:2px">' + c.desc + '</div></div></div></div></div>').join('');
+function startLiveTranslateVoice(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR)return showToast('Voice not supported');
+  const rec=new SR();
+  const fromLang=document.getElementById('translateFrom').value;
+  const langMap={en:'en-US',ha:'ha-NG',ar:'ar-SA',fr:'fr-FR',yo:'yo-NG',ig:'ig-NG',sw:'sw-KE',es:'es-ES'};
+  rec.lang=langMap[fromLang]||'en-US';
+  showToast('🎙️ Listening...');
+  rec.onresult=(ev)=>{document.getElementById('translateInput').value=ev.results[0][0].transcript;doTranslate();};
+  rec.start();
 }
-window.renderTVChannels = renderTVChannels;
-
-function playTV(id) {
-  const ch = TV_CHANNELS.find(c => c.id === id);
-  if (!ch) return;
-  const modal = document.createElement('div');
-  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px';
-  modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
-  modal.innerHTML = '<div style="width:100%;max-width:900px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="color:white;font-size:16px;font-weight:700">' + ch.title + '</div><button onclick="this.closest(\'div\').parentElement.parentElement.remove()" style="background:transparent;border:none;color:white;font-size:24px;cursor:pointer">✕</button></div><div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px"><iframe src="' + ch.url + '?autoplay=1" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none" allow="autoplay; encrypted-media" allowfullscreen></iframe></div></div>';
-  document.body.appendChild(modal);
-}
-window.playTV = playTV;
+window.startLiveTranslateVoice=startLiveTranslateVoice;
 
 function openDataAnalysisPanel(){document.getElementById('dataAnalysisPanel').classList.add('show');closeSidebar();}
 function closeDataAnalysisPanel(){document.getElementById('dataAnalysisPanel').classList.remove('show');}
@@ -1927,47 +1519,22 @@ function downloadText(encodedText,filename){
 }
 window.downloadText=downloadText;
 
-// ============ SEARCH WEB ============
-function openSearchWebPanel() { document.getElementById('searchWebPanel').classList.add('show'); closeSidebar(); renderSearchSuggestions(); }
-function closeSearchWebPanel() { document.getElementById('searchWebPanel').classList.remove('show'); }
-window.openSearchWebPanel = openSearchWebPanel;
-window.closeSearchWebPanel = closeSearchWebPanel;
+function openSearchWebPanel(){document.getElementById('searchWebPanel').classList.add('show');closeSidebar();renderSearchSuggestions();}
+function closeSearchWebPanel(){document.getElementById('searchWebPanel').classList.remove('show');}
+window.openSearchWebPanel=openSearchWebPanel;window.closeSearchWebPanel=closeSearchWebPanel;
 
-function renderSearchSuggestions() {
-  const box = document.getElementById('searchSuggestionsBox'); if (!box) return;
-  const suggestions = [
-    { label:'📰 Latest Nigeria news', url:'https://www.google.com/search?q=latest+nigeria+news', icon:'fa-google' },
-    { label:'💵 Naira to USD rate', url:'https://www.google.com/search?q=naira+to+usd+rate+today', icon:'fa-google' },
-    { label:'🌦️ Weather in Lagos', url:'https://www.google.com/search?q=weather+in+lagos', icon:'fa-google' },
-    { label:'📈 Crypto prices', url:'https://www.google.com/search?q=crypto+prices+today', icon:'fa-google' },
-    { label:'📧 Gmail', url:'https://mail.google.com', icon:'fa-envelope' },
-    { label:'🛒 Jumia', url:'https://www.jumia.com.ng', icon:'fa-shopping-cart' },
-    { label:'📸 Instagram', url:'https://instagram.com', icon:'fa-instagram' },
-    { label:'💬 WhatsApp', url:'https://web.whatsapp.com', icon:'fa-whatsapp' },
-    { label:'📚 Quran', url:'https://quran.com', icon:'fa-book-quran' },
-    { label:'📖 Wikipedia', url:'https://en.wikipedia.org', icon:'fa-wikipedia-w' },
-    { label:'▶️ YouTube', url:'https://www.youtube.com', icon:'fa-youtube' },
-    { label:'📺 BBC News', url:'https://www.bbc.com/news', icon:'fa-tower-broadcast' }
+function renderSearchSuggestions(){
+  const box=document.getElementById('searchSuggestionsBox');if(!box)return;
+  const suggestions=[
+    {label:'📰 Nigeria news',url:'https://www.google.com/search?q=latest+nigeria+news'},
+    {label:'💵 Naira rate',url:'https://www.google.com/search?q=naira+to+usd+rate'},
+    {label:'🌦️ Weather',url:'https://www.google.com/search?q=weather+lagos'},
+    {label:'📧 Gmail',url:'https://mail.google.com'},
+    {label:'🛒 Jumia',url:'https://www.jumia.com.ng'},
+    {label:'📖 Wikipedia',url:'https://en.wikipedia.org'}
   ];
-  box.innerHTML = suggestions.map(s => '<a class="quick-chip" href="' + s.url + '" target="_blank" rel="noopener"><i class="fab ' + s.icon + '"></i> ' + s.label + '</a>').join('');
+  box.innerHTML=suggestions.map(s=>'<a class="quick-chip" href="'+s.url+'" target="_blank" rel="noopener">'+s.label+'</a>').join('');
 }
-async function doSearchWeb(query) {
-  const results = document.getElementById('searchWebResults');
-  const shortcut = document.getElementById('askWiseKingShortcut');
-  if (!results) return;
-  const q = (query || '').trim();
-  if (!q) { results.innerHTML = ''; shortcut.style.display = 'none'; return; }
-  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Searching...</div>';
-  const res = await sendMessageWithFallback('Search the live web: ' + q);
-  if (res.success) {
-    results.innerHTML = '<div class="result-card"><h4><i class="fas fa-wand-magic-sparkles"></i> Answer</h4><p>' + linkify(escapeHtml(res.reply)).replace(/\n/g,'<br>') + '</p></div>';
-    shortcut.style.display = 'block';
-    shortcut.innerHTML = '<button class="btn accent" onclick="askWiseKingFromSearch(\'' + q.replace(/'/g, "\\'") + '\')"><i class="fas fa-comments"></i> Continue in Chat</button>';
-  } else results.innerHTML = '<div class="result-card"><p>⚠️ Search failed.</p></div>';
-}
-window.doSearchWeb = doSearchWeb;
-function askWiseKingFromSearch(q) { closeSearchWebPanel(); insertQuickPrompt(q); }
-window.askWiseKingFromSearch = askWiseKingFromSearch;
 
 async function doSearchWeb(query){
   const results=document.getElementById('searchWebResults');
@@ -2534,6 +2101,7 @@ setTimeout(setupProfileButton,1500);
 </script>
 </body>
 </html>
-  
 
+  
+ 
   
