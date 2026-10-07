@@ -379,18 +379,7 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
 .data-stat{background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:12px}
 .data-stat .ds-label{font-size:11px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px}
 .data-stat .ds-value{font-size:20px;font-weight:700;color:var(--accent-hover)}
-.data-chart-wrap{background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:16px;height:300px;margin-bottom:16px}
-
-/* MUSIC */
-.music-card{background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px;margin-bottom:10px}
-.music-card .music-title{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:4px}
-.music-card .music-meta{font-size:12px;color:var(--text-tertiary);margin-bottom:8px}
-.music-card .music-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-.tv-card{background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;cursor:pointer;transition:all 0.2s}
-.tv-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
-
-/* AI CALL */
-#aiCallOverlay{display:none;position:fixed;inset:0;background:linear-gradient(180deg,#0a0a0f 0%,#1a1a24 100%);z-index:99999;flex-direction:column;align-items:center;justify-content:space-between;padding:40px 20px}
+.data-chart-wrap{background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:16px;height:300px;margin-bottom:16px}tify-content:space-between;padding:40px 20px}
 @keyframes pulseCall{0%,100%{box-shadow:0 0 60px rgba(99,102,241,0.6)}50%{box-shadow:0 0 100px rgba(99,102,241,0.9)}}
 
 /* TOAST */
@@ -418,154 +407,10 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
   .welcome-popup-card{padding:32px 24px}
   .wp-title{font-size:20px}
   .msg-action-bar{opacity:1}
-}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-
-<script>
-// Auto-highlight code blocks after every AI message
-function highlightCodeBlocks() {
-  if (typeof Prism === 'undefined') return;
-  document.querySelectorAll('.md pre code:not(.language-none):not([data-highlighted])').forEach(block => {
-    try { Prism.}(block); } catch(e) {}
-  });
-}
-
-// Watch for new messages and highlight automatically
-const observer = new MutationObserver(() => { setTimeout(highlightCodeBlocks, 80); });
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    const area = document.getElementById('messagesArea');
-    if (area) observer.observe(area, { childList: true, subtree: true });
-    highlightCodeBlocks();
-  }, 800);
-});
-
-// Also highlight on every render
-const _origRender = window.renderMessages;
-if (typeof _origRender === 'function') {
-  window.renderMessages = function() {
-    _origRender.apply(this, arguments);
-    setTimeout(highlightCodeBlocks, 100);
-  };
-}
-</script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-
-<script>
-// Auto-highlight code blocks after every AI message
-function highlightCodeBlocks() {
-  if (typeof Prism === 'undefined') return;
-  document.querySelectorAll('.md pre code:not(.language-none):not([data-highlighted])').forEach(block => {
-    try { Prism.highlightElement(block); } catch(e) {}
-  });
-}
-
-// Watch for new messages and highlight automatically
-const observer = new MutationObserver(() => { setTimeout(highlightCodeBlocks, 80); });
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    const area = document.getElementById('messagesArea');
-    if (area) observer.observe(area, { childList: true, subtree: true });
-    highlightCodeBlocks();
-  }, 800);
-});
-
-// Also highlight on every render
-const _origRender = window.renderMessages;
-if (typeof _origRender === 'function') {
-  window.renderMessages = function() {
-    _origRender.apply(this, arguments);
-    setTimeout(highlightCodeBlocks, 100);
-  };
-}
-</script>
-</style>
+ }
+</style>  
 </head>
-<body>  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-
-<script>
-// Auto-highlight code blocks after every AI message
-function highlightCodeBlocks() {
-  if (typeof Prism === 'undefined') return;
-  document.querySelectorAll('.md pre code:not(.language-none):not([data-highlighted])').forEach(block => {
-    try { Prism.}(block); } catch(e) {}
-  });
-}
-
-// Watch for new messages and highlight automatically
-const observer = new MutationObserver(() => { setTimeout(highlightCodeBlocks, 80); });
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    const area = document.getElementById('messagesArea');
-    if (area) observer.observe(area, { childList: true, subtree: true });
-    highlightCodeBlocks();
-  }, 800);
-});
-
-// Also highlight on every render
-const _origRender = window.renderMessages;
-if (typeof _origRender === 'function') {
-  window.renderMessages = function() {
-    _origRender.apply(this, arguments);
-    setTimeout(highlightCodeBlocks, 100);
-  };
-}
-</script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-
-<script>
-// Auto-highlight code blocks after every AI message
-function highlightCodeBlocks() {
-  if (typeof Prism === 'undefined') return;
-  document.querySelectorAll('.md pre code:not(.language-none):not([data-highlighted])').forEach(block => {
-    try { Prism.highlightElement(block); } catch(e) {}
-  });
-}
-
-// Watch for new messages and highlight automatically
-const observer = new MutationObserver(() => { setTimeout(highlightCodeBlocks, 80); });
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    const area = document.getElementById('messagesArea');
-    if (area) observer.observe(area, { childList: true, subtree: true });
-    highlightCodeBlocks();
-  }, 800);
-});
-
-// Also highlight on every render
-const _origRender = window.renderMessages;
-if (typeof _origRender === 'function') {
-  window.renderMessages = function() {
-    _origRender.apply(this, arguments);
-    setTimeout(highlightCodeBlocks, 100);
-  };
-}
-</script>
-</style>
-</head>
-<body>  
+<body>
 
 <!-- LOGIN SCREEN -->
 <div id="loginScreen">
@@ -1009,8 +854,7 @@ window.closeWelcomePopup = function() {
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    const isNewSession = !sessionStorage.getItem('wk_session_active');
-    sessionStorage.setItem('wk_session_active', '1');
+    const isNewSession = true;
     localStorage.setItem('wk_logged_in', '1');
     localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
     localStorage.setItem('wk_user_email', user.email || '');
