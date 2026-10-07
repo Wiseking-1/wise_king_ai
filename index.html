@@ -398,7 +398,373 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
 }
 </style>
 </head>
+<body>
 
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">👑</div>
+    <h1 class="login-title">Welcome to Wise King AI</h1>
+    <p class="login-subtitle">Your conversations, memories, and creations — synced forever.</p>
+    <div class="auth-error" id="authError"></div>
+    <div class="auth-success" id="authSuccess"></div>
+    <button class="social-btn" onclick="signInWithGoogle()"><i class="fab fa-google" style="color:#ea4335"></i> Continue with Google</button>
+    <div class="auth-divider">OR</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabSignIn" onclick="switchAuthTab('signin')">Sign In</button>
+      <button class="auth-tab" id="tabSignUp" onclick="switchAuthTab('signup')">Sign Up</button>
+    </div>
+    <div class="auth-panel active" id="panelSignIn">
+      <div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" class="auth-input" id="signInEmail" placeholder="Email address"></div>
+      <div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" class="auth-input" id="signInPassword" placeholder="Password"></div>
+      <button class="auth-link" style="align-self:flex-end;margin-bottom:4px" onclick="showResetPasswordForm()">Forgot password?</button>
+      <button class="auth-submit" id="signInBtn" onclick="emailSignIn()"><i class="fas fa-right-to-bracket"></i> Sign In</button>
+    </div>
+    <div class="auth-panel" id="panelSignUp">
+      <div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" class="auth-input" id="signUpName" placeholder="Full name"></div>
+      <div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" class="auth-input" id="signUpEmail" placeholder="Email address"></div>
+      <div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" class="auth-input" id="signUpPassword" placeholder="Password (min 6 chars)"></div>
+      <button class="auth-submit" id="signUpBtn" onclick="emailSignUp()"><i class="fas fa-user-plus"></i> Create Account</button>
+    </div>
+    <div class="auth-panel" id="panelReset">
+      <div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" class="auth-input" id="resetEmail" placeholder="Your email address"></div>
+      <button class="auth-submit" id="resetBtn" onclick="sendPasswordReset()"><i class="fas fa-paper-plane"></i> Send Reset Link</button>
+      <button class="auth-link" onclick="switchAuthTab('signin')">Back to sign in</button>
+    </div>
+    <button class="skip-auth" onclick="skipLoginAsGuest()">Continue as Guest (Local Mode)</button>
+  </div>
+</div>
+
+<!-- WELCOME POPUP -->
+<div id="welcomePopup" class="welcome-popup-bg">
+  <div class="welcome-popup-card">
+    <div class="wp-avatar" id="wpAvatar">👑</div>
+    <h2 class="wp-title">Welcome, <span id="wpName">Friend</span>! 🎉</h2>
+    <p class="wp-message">You are now signed in to <strong>Wise King AI</strong>.<br>Your chats and memories will sync across devices.</p>
+    <button class="wp-btn" onclick="closeWelcomePopup()"><i class="fas fa-comments"></i> Start Chatting</button>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="app" id="mainApp" style="opacity:0;transition:opacity .4s">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand"><div class="brand-logo">👑</div><div class="brand-name">Wise King Ai 👑</div></div>
+      <button class="sidebar-close-btn" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="sidebar-fixed-top">
+      <button class="nav-btn" onclick="createNewChat()"><span class="nav-icon"><i class="fas fa-pen-to-square"></i></span>New chat</button>
+      <div class="sidebar-search"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search chats" oninput="filterChats()"></div>
+    </div>
+    <div class="sidebar-scrollable">
+      <button class="nav-btn" onclick="openMusicPanel()"><span class="nav-icon gradient-8"><i class="fas fa-music"></i></span>Music</button>
+      <button class="nav-btn" onclick="openPdfChatPanel()"><span class="nav-icon gradient-9"><i class="fas fa-file-pdf"></i></span>PDF Chat</button>
+      <button class="nav-btn" onclick="openTranslatePanel()"><span class="nav-icon gradient-3"><i class="fas fa-language"></i></span>Translate</button>
+      <button class="nav-btn" onclick="openDataAnalysisPanel()"><span class="nav-icon gradient-4"><i class="fas fa-chart-line"></i></span>Data Analysis</button>
+      <button class="nav-btn" onclick="openSearchWebPanel()"><span class="nav-icon gradient-3"><i class="fas fa-globe"></i></span>Search Web</button>
+      <button class="nav-btn" onclick="openBuildAppPanel()"><span class="nav-icon gradient-6"><i class="fas fa-code"></i></span>Build App</button>
+      <button class="nav-btn" onclick="openLiveTVPanel()"><span class="nav-icon" style="color:#ef4444"><i class="fas fa-tv"></i></span>Live TV</button>
+      <button class="nav-btn" onclick="openPricingPanel()"><span class="nav-icon" style="color:#fbbf24"><i class="fas fa-crown"></i></span>Upgrade Plan</button>
+      <button class="nav-btn" onclick="openDownloadHub()"><span class="nav-icon gradient-6"><i class="fas fa-download"></i></span>Downloads</button>
+      <button class="nav-btn" onclick="openVault()"><span class="nav-icon gradient-4"><i class="fas fa-shield-halved"></i></span>Vault<span class="nav-badge" id="vaultCountBadge">0</span></button>
+      <button class="nav-btn" onclick="openMemoryPanel()"><span class="nav-icon gradient-4"><i class="fas fa-brain"></i></span>Memory<span class="nav-badge" id="memoryCountBadge">0</span></button>
+      <button class="nav-btn" onclick="openSettings()"><span class="nav-icon gradient-7"><i class="fas fa-sliders"></i></span>Settings</button>
+      <div class="section">
+        <div class="section-header open" onclick="toggleSection(this)"><div class="left">Recent</div><i class="fas fa-chevron-down arrow"></i></div>
+        <div class="section-body open"><div id="chatsList"></div></div>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-chip" onclick="openSettings()">
+        <div class="avatar" id="sidebarAvatar">WK</div>
+        <div class="user-info"><div class="user-name" id="sidebarName">Wise King User</div><div class="user-plan" id="userPlanBadge">Free plan</div></div>
+      </div>
+      <button class="icon-action" onclick="openSettings()"><i class="fas fa-cog"></i></button>
+    </div>
+  </aside>
+
+  <main class="chat-main">
+    <div class="chat-topbar">
+      <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="chat-title-wrap">
+        <span class="chat-title" id="chatTitle">New chat</span>
+        <span class="chat-model-badge" id="modelBadge"><i class="fas fa-circle"></i> <span id="modelBadgeText">Gemini 2.5 Flash</span></span>
+      </div>
+      <div class="chat-actions">
+        <button class="top-btn install-btn" id="installAppBtn" onclick="promptInstallApp()" style="display:none"><i class="fas fa-download"></i><span class="label"> Install</span></button>
+        <button class="top-btn" onclick="startAICall()" style="background:linear-gradient(135deg,#10b981,#059669);color:white;border:none"><i class="fas fa-phone"></i><span class="label"> Call AI</span></button>
+        <button class="top-btn" onclick="openSearchWebPanel()"><i class="fas fa-globe"></i><span class="label"> Search</span></button>
+        <button class="top-btn" onclick="openBuildAppPanel()"><i class="fas fa-code"></i><span class="label"> Build</span></button>
+        <button class="top-btn" onclick="openVault()"><i class="fas fa-shield-halved"></i><span class="label"> Vault</span></button>
+        <button class="top-btn" onclick="goToWelcome()"><i class="fas fa-house"></i><span class="label"> Home</span></button>
+      </div>
+      <div class="top-profile-container" id="topProfileContainer">
+        <div class="top-profile-avatar" id="topProfileAvatar" role="button" tabindex="0">👑</div>
+        <div class="profile-menu-popup" id="topProfileMenu">
+          <div class="pm-header">
+            <div class="pm-user-info">
+              <div class="pm-avatar" id="pmAvatar">👑</div>
+              <div class="pm-details"><div class="pm-name" id="pmName">Wise King User</div><div class="pm-email" id="pmEmail">Not signed in</div></div>
+            </div>
+            <button class="pm-close" onclick="closeTopProfileMenu()"><i class="fas fa-times"></i></button>
+          </div>
+          <div class="pm-body">
+            <button class="pm-item" onclick="document.getElementById('profilePhotoInput').click(); closeTopProfileMenu();"><i class="fas fa-camera"></i> Upload Photo</button>
+            <input type="file" id="profilePhotoInput" accept="image/*" style="display:none" onchange="handleProfilePhotoUpload(event)">
+            <button class="pm-item" onclick="openPricingPanel(); closeTopProfileMenu();"><i class="fas fa-crown" style="color:#fbbf24"></i> Upgrade Plan 👑</button>
+            <button class="pm-item" onclick="openManageAccount(); closeTopProfileMenu();"><i class="fas fa-id-card"></i> Manage Account</button>
+            <div class="pm-divider"></div>
+            <button class="pm-item" onclick="addAnotherAccount(); closeTopProfileMenu();"><i class="fas fa-user-plus"></i> Add Account</button>
+            <button class="pm-item" onclick="switchAccount(); closeTopProfileMenu();"><i class="fas fa-right-left"></i> Switch Account</button>
+            <div class="pm-divider"></div>
+            <button class="pm-item" onclick="openSettings(); closeTopProfileMenu();"><i class="fas fa-gear"></i> Settings</button>
+            <button class="pm-item danger" onclick="askSignOut();"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-scroll" id="chatScroll">
+      <div class="chat-inner" id="chatInner">
+        <div class="welcome" id="welcomeScreen">
+          <div class="welcome-logo">👑</div>
+          <h1>How can I help you today?</h1>
+          <p>I'm <strong>Wise King AI</strong>. I can see photos, remember conversations, generate music, read PDFs, translate languages, and analyze data.</p>
+          <div class="suggestions">
+            <div class="suggestion-card" onclick="useSuggestion('Build me a simple to-do list app in HTML')"><i class="fas fa-code"></i><div class="sc-title">Build an app</div><div class="sc-desc">"Build me a to-do list app"</div></div>
+            <div class="suggestion-card" onclick="useSuggestion('Explain how AI works in simple Hausa')"><i class="fas fa-language"></i><div class="sc-title">Explain in Hausa</div><div class="sc-desc">"How does AI work?"</div></div>
+            <div class="suggestion-card" onclick="useSuggestion('Write a short motivational story about a young Nigerian entrepreneur')"><i class="fas fa-book"></i><div class="sc-title">Write a story</div><div class="sc-desc">"A Nigerian entrepreneur"</div></div>
+            <div class="suggestion-card" onclick="useSuggestion('What is the latest news in Nigeria today?')"><i class="fas fa-newspaper"></i><div class="sc-title">Latest news</div><div class="sc-desc">"Nigeria today"</div></div>
+          </div>
+        </div>
+        <div id="messagesArea"></div>
+      </div>
+    </div>
+
+    <div class="input-dock">
+      <div class="input-inner-wrap">
+        <div class="preview-area" id="previewArea"></div>
+        <div class="gk-input-box" id="gkInputBox">
+          <div class="gk-text-row">
+            <textarea class="gk-textarea" id="messageInput" rows="1" placeholder="Ask Wise King AI Anything..." onkeydown="handleKeyDown(event)" oninput="handleInputChange()"></textarea>
+            <button class="gk-send-btn hidden" id="sendBtn" onclick="handleSendOrCancel()"><i class="fas fa-arrow-up"></i></button>
+          </div>
+          <div class="gk-hold-pill" id="gkHoldPill"><i class="fas fa-microphone"></i> <span id="gkHoldLabel">Hold to speak</span></div>
+          <div class="gk-options-row">
+            <button class="gk-chip" id="chipThink" onclick="toggleThinkMode()"><i class="fas fa-brain"></i> Think</button>
+            <button class="gk-chip" id="chipSearch" onclick="toggleSearchMode()"><i class="fas fa-globe"></i> Search</button>
+            <div class="gk-options-spacer"></div>
+            <button class="gk-input-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()" title="Attach image / PDF / file"><i class="fas fa-plus"></i></button>
+            <button class="gk-input-btn" id="micBtn" onclick="toggleVoiceMode()" title="Voice / Keyboard"><i class="fas fa-microphone" id="micIcon"></i></button>
+          </div>
+        </div>
+        <input type="file" id="fileInput" accept="image/*,.pdf,.txt,.md,.json,.csv,.js,.html,.css,.py,.doc,.docx,audio/*" style="display:none" multiple onchange="handleFiles(event)">
+        <div class="input-hint">Wise King AI can make mistakes, please verify information</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- FULLSCREEN PANELS -->
+<div class="full-panel" id="musicPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-music"></i> AI Music Studio</div><button class="btn ghost" onclick="closeMusicPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner">
+    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">Paste lyrics OR describe the style — AI builds your song prompt.</p>
+    <textarea class="search-big" id="musicInput" rows="6" placeholder="Lyrics or music style..." style="min-height:140px;resize:vertical;font-family:inherit"></textarea>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px">
+      <select class="input-field" id="musicGenre" style="margin-bottom:0"><option value="">Genre</option><option>Afrobeat</option><option>Amapiano</option><option>Hip-hop</option><option>R&B</option><option>Gospel</option><option>Reggae</option><option>Pop</option><option>Traditional Hausa</option></select>
+      <select class="input-field" id="musicMood" style="margin-bottom:0"><option value="">Mood</option><option>Happy</option><option>Romantic</option><option>Motivational</option><option>Spiritual</option><option>Party</option><option>Chill</option><option>Sad</option></select>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+      <button class="btn accent" style="flex:1;justify-content:center" onclick="generateMusicFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Build Prompt</button>
+      <button class="btn solid" style="flex:1;justify-content:center" onclick="generateLyricsFromPanel()"><i class="fas fa-pen-fancy"></i> Write Lyrics</button>
+    </div>
+    <div id="musicPanelResults"></div>
+    <h3 style="margin:24px 0 12px;color:var(--accent-hover);font-size:15px">My Music Library</h3>
+    <div id="musicLibraryBox"></div>
+  </div></div>
+</div>
+
+<div class="full-panel" id="pdfChatPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-file-pdf"></i> PDF Chat</div><button class="btn ghost" onclick="closePdfChatPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner">
+    <div class="pdf-dropzone" onclick="document.getElementById('pdfFileInput').click()"><i class="fas fa-cloud-upload-alt"></i><p><strong>Click to upload PDF</strong></p><small>Read, summarize, ask questions</small><input type="file" id="pdfFileInput" accept=".pdf" style="display:none" onchange="handlePdfUpload(event)"></div>
+    <div id="pdfFileInfo"></div>
+    <div id="pdfSummaryBox"></div>
+    <input type="text" class="search-big" id="pdfQuestionInput" placeholder="Ask anything about the PDF..." onkeydown="if(event.key==='Enter'){askPdfQuestion()}" style="margin-top:16px">
+    <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="askPdfQuestion()"><i class="fas fa-question-circle"></i> Ask About PDF</button>
+    <div id="pdfChatResults"></div>
+  </div></div>
+</div>
+
+<div class="full-panel" id="translatePanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-language"></i> Translation</div><button class="btn ghost" onclick="closeTranslatePanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner">
+    <div class="lang-selector">
+      <select class="lang-select" id="translateFrom"><option value="auto">Auto-detect</option><option value="en">English</option><option value="ha">Hausa</option><option value="ar">Arabic</option><option value="fr">French</option><option value="yo">Yoruba</option><option value="ig">Igbo</option><option value="sw">Swahili</option><option value="es">Spanish</option><option value="pt">Portuguese</option><option value="de">German</option><option value="zh">Chinese</option><option value="hi">Hindi</option><option value="ru">Russian</option><option value="ja">Japanese</option><option value="tr">Turkish</option><option value="ur">Urdu</option></select>
+      <button class="lang-swap" onclick="swapLanguages()"><i class="fas fa-right-left"></i></button>
+      <select class="lang-select" id="translateTo"><option value="en">English</option><option value="ha">Hausa</option><option value="ar">Arabic</option><option value="fr">French</option><option value="yo">Yoruba</option><option value="ig">Igbo</option><option value="sw">Swahili</option><option value="es">Spanish</option><option value="pt">Portuguese</option><option value="de">German</option><option value="zh">Chinese</option><option value="hi">Hindi</option><option value="ru">Russian</option><option value="ja">Japanese</option><option value="tr">Turkish</option><option value="ur">Urdu</option></select>
+    </div>
+    <textarea class="search-big" id="translateInput" rows="6" placeholder="Type or paste text..." style="min-height:130px;resize:vertical;font-family:inherit"></textarea>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+      <button class="btn accent" style="flex:1;justify-content:center" onclick="doTranslate()"><i class="fas fa-language"></i> Translate</button>
+      <button class="btn solid" onclick="startLiveTranslateVoice()"><i class="fas fa-microphone"></i> Voice</button>
+    </div>
+    <div id="translateResults"></div>
+  </div></div>
+</div>
+
+<div class="full-panel" id="dataAnalysisPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-chart-line"></i> Data Analysis</div><button class="btn ghost" onclick="closeDataAnalysisPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner">
+    <div class="pdf-dropzone" onclick="document.getElementById('dataFileInput').click()"><i class="fas fa-file-csv"></i><p><strong>Upload CSV, Excel, or JSON</strong></p><input type="file" id="dataFileInput" accept=".csv,.xlsx,.xls,.json,.txt" style="display:none" onchange="handleDataUpload(event)"></div>
+    <textarea class="search-big" id="dataPasteInput" rows="5" placeholder="Or paste CSV data..." style="min-height:120px;resize:vertical;font-family:monospace;font-size:12.5px"></textarea>
+    <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="analyzePastedData()"><i class="fas fa-chart-bar"></i> Analyze</button>
+    <div id="dataAnalysisResults"></div>
+  </div></div>
+</div>
+
+<div class="full-panel" id="downloadHubPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-cloud-arrow-down"></i> Downloads</div><button class="btn ghost" onclick="closeDownloadHub()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner"><div class="download-grid" id="downloadHubGrid"></div></div></div>
+</div>
+
+<div class="full-panel" id="pricingPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-crown"></i> Wise King Plans</div><button class="btn ghost" onclick="closePricingPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner">
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;text-align:center">Choose your plan. Upgrade anytime. 👑</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+      <div class="result-card" style="text-align:center"><div style="font-size:40px;margin-bottom:8px">🌱</div><h3 style="font-size:18px;margin-bottom:4px">Free</h3><div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦0</div><ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px"><li>✅ Unlimited chats</li><li>✅ Voice & translation</li><li>✅ PDF & photo analysis</li><li>⚠️ 20 AI messages/day</li></ul><button class="btn solid" style="width:100%;justify-content:center" disabled>Current</button></div>
+      <div class="result-card" style="text-align:center;border:2px solid var(--accent);position:relative"><div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent-gradient);color:white;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px">POPULAR 🔥</div><div style="font-size:40px;margin-bottom:8px">⚡</div><h3 style="font-size:18px;margin-bottom:4px">Pro</h3><div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦5,000<span style="font-size:14px;font-weight:400;color:var(--text-tertiary)">/month</span></div><ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px"><li>✅ Everything in Free</li><li>✅ Unlimited AI messages</li><li>✅ Priority speed</li></ul><button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Pro', 5000)"><i class="fas fa-rocket"></i> Upgrade</button></div>
+      <div class="result-card" style="text-align:center"><div style="font-size:40px;margin-bottom:8px">👑</div><h3 style="font-size:18px;margin-bottom:4px">Premium</h3><div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦15,000<span style="font-size:14px;font-weight:400;color:var(--text-tertiary)">/month</span></div><ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px"><li>✅ Everything in Pro</li><li>✅ Custom AI models</li><li>✅ 24/7 priority support</li></ul><button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Premium', 15000)"><i class="fas fa-crown"></i> Go Premium</button></div>
+    </div>
+    <p style="font-size:12px;color:var(--text-tertiary);margin-top:20px;text-align:center">💳 Payments powered by Paystack.</p>
+  </div></div>
+</div>
+
+<div class="full-panel" id="searchWebPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-globe"></i> Search Web</div><button class="btn ghost" onclick="closeSearchWebPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner">
+    <input type="text" class="search-big" id="searchWebInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter'){doSearchWeb(this.value)}">
+    <div id="searchSuggestionsBox" style="margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px"></div>
+    <div id="askWiseKingShortcut" style="margin-bottom:20px;display:none"></div>
+    <div id="searchWebResults"></div>
+  </div></div>
+</div>
+
+<div class="full-panel" id="buildAppPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-code"></i> Build an App</div><button class="btn ghost" onclick="closeBuildAppPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner">
+    <input type="text" class="search-big" id="buildAppInput" placeholder="Search app ideas..." oninput="filterBuildIdeas(this.value)">
+    <div id="buildAppIdeas"></div>
+  </div></div>
+</div>
+
+<div class="full-panel" id="liveTVPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-tv"></i> Live TV & Movies</div><button class="btn ghost" onclick="closeLiveTVPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+      <button class="btn solid" onclick="filterTV('all',this)">All</button>
+      <button class="btn solid" onclick="filterTV('live',this)">🔴 Live</button>
+      <button class="btn solid" onclick="filterTV('movie',this)">🎬 Movies</button>
+      <button class="btn solid" onclick="filterTV('series',this)">📺 Series</button>
+    </div>
+    <input type="text" class="search-big" id="tvSearchInput" placeholder="Search..." oninput="renderTVChannels()">
+    <div id="tvGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px"></div>
+  </div></div>
+</div>
+
+<div class="full-panel" id="memoryPanel">
+  <div class="panel-header"><div class="panel-title"><i class="fas fa-brain"></i> Memory</div><button class="btn ghost" onclick="closeMemoryPanel()"><i class="fas fa-arrow-left"></i> Back</button></div>
+  <div class="panel-body"><div class="panel-inner"><div id="memoryPanelResults"></div></div></div>
+</div>
+
+<!-- POPUP MENU -->
+<div class="popup-menu" id="chatPopupMenu">
+  <button class="popup-menu-item" id="chatPinBtn" onclick="togglePinCurrentChat()"><i class="fas fa-thumbtack"></i> <span id="chatPinLabel">Pin chat</span></button>
+  <button class="popup-menu-item" onclick="renameCurrentChat()"><i class="fas fa-pen"></i> Rename</button>
+  <button class="popup-menu-item" onclick="deleteCurrentChat()"><i class="fas fa-trash"></i> Delete</button>
+  <button class="popup-menu-item" onclick="shareCurrentChat()"><i class="fas fa-share"></i> Share</button>
+</div>
+
+<!-- SHARE POPUP -->
+<div id="sharePopup">
+  <div class="share-card">
+    <div class="share-head"><div class="share-title"><i class="fas fa-share-nodes"></i> Share to</div><button class="share-close" onclick="closeSharePopup()"><i class="fas fa-times"></i></button></div>
+    <div class="share-grid">
+      <button class="share-platform" onclick="shareTo('whatsapp')"><div class="sp-icon sp-whatsapp"><i class="fab fa-whatsapp"></i></div><div class="sp-name">WhatsApp</div></button>
+      <button class="share-platform" onclick="shareTo('facebook')"><div class="sp-icon sp-facebook"><i class="fab fa-facebook-f"></i></div><div class="sp-name">Facebook</div></button>
+      <button class="share-platform" onclick="shareTo('telegram')"><div class="sp-icon sp-telegram"><i class="fab fa-telegram-plane"></i></div><div class="sp-name">Telegram</div></button>
+      <button class="share-platform" onclick="shareTo('x')"><div class="sp-icon sp-x"><i class="fab fa-x-twitter"></i></div><div class="sp-name">X</div></button>
+    </div>
+    <button class="share-cancel" onclick="closeSharePopup()">Cancel</button>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-bg" id="editMessageModal"><div class="modal" style="max-width:520px"><div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Edit message</div><button class="modal-close" onclick="closeModal('editMessageModal')"><i class="fas fa-times"></i></button></div><p class="modal-text">Editing will regenerate the AI response.</p><textarea class="input-field" id="editMessageInput" rows="4" style="min-height:120px;resize:vertical"></textarea><div class="modal-actions"><button class="btn ghost" onclick="closeModal('editMessageModal')">Cancel</button><button class="btn accent" onclick="saveEditedMessage()"><i class="fas fa-check"></i> Save & Regenerate</button></div></div></div>
+
+<div class="modal-bg" id="renameChatModal"><div class="modal" style="max-width:420px"><div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Rename chat</div><button class="modal-close" onclick="closeModal('renameChatModal')"><i class="fas fa-times"></i></button></div><input type="text" class="input-field" id="renameChatInput" placeholder="Enter new name" maxlength="60"><div class="modal-actions"><button class="btn ghost" onclick="closeModal('renameChatModal')">Cancel</button><button class="btn accent" onclick="saveRenamedChat()"><i class="fas fa-check"></i> Save</button></div></div></div>
+
+<div class="modal-bg" id="deleteChatModal"><div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">🗑️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete this chat?</div><p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">Cannot be undone.</p><div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0"><button class="btn ghost" style="flex:1" onclick="closeModal('deleteChatModal')">Cancel</button><button class="btn danger" style="flex:1" onclick="confirmDeleteChat()">Delete</button></div></div></div>
+
+<div class="modal-bg" id="deleteMessageModal"><div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">🗑️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete this message?</div><div class="modal-actions" style="justify-content:center;gap:12px;margin-top:24px"><button class="btn ghost" style="flex:1" onclick="closeModal('deleteMessageModal')">Cancel</button><button class="btn danger" style="flex:1" onclick="confirmDeleteMessage()">Delete</button></div></div></div>
+
+<div class="modal-bg" id="dislikeModal"><div class="modal" style="max-width:400px"><div class="modal-head"><div class="modal-title"><i class="fas fa-thumbs-down"></i> Feedback</div><button class="modal-close" onclick="closeModal('dislikeModal')"><i class="fas fa-times"></i></button></div><textarea class="input-field" id="dislikeFeedbackInput" rows="3" placeholder="What went wrong?" style="min-height:80px;resize:vertical;margin-bottom:0"></textarea><div class="modal-actions"><button class="btn ghost" onclick="closeModal('dislikeModal')">Cancel</button><button class="btn accent" onclick="submitDislikeFeedback()">Submit</button></div></div></div>
+
+<div class="modal-bg" id="signOutModal"><div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">⚠️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Sign out?</div><p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">Your session will close.</p><div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0"><button class="btn ghost" style="flex:1" onclick="closeModal('signOutModal')">Cancel</button><button class="btn danger" style="flex:1" onclick="confirmSignOut()">Sign Out</button></div></div></div>
+
+<div class="modal-bg" id="vaultModal"><div class="modal"><div class="modal-head"><div class="modal-title"><i class="fas fa-shield-halved"></i> Master Vault</div><button class="modal-close" onclick="closeModal('vaultModal')"><i class="fas fa-times"></i></button></div><p class="modal-text">Permanent memories the AI will never forget.</p><div class="settings-card" style="margin-bottom:16px"><textarea class="input-field" id="vaultNewInput" rows="3" placeholder="e.g., My name is Ibrahim..." style="resize:vertical;min-height:70px;margin-bottom:10px"></textarea><button class="btn accent" style="width:100%;justify-content:center" onclick="addVaultMemory()"><i class="fas fa-plus"></i> Lock this memory</button></div><div id="vaultList"></div><div class="modal-actions"><button class="btn solid" onclick="closeModal('vaultModal')">Close</button></div></div></div>
+
+<div class="modal-bg" id="settingsModal">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-cog"></i> Settings</div><button class="modal-close" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button></div>
+    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-palette"></i> Appearance</div><div class="settings-card"><div class="toggle-row"><div class="toggle-label">Light Mode</div><div class="toggle-switch" id="lightModeToggle" onclick="toggleLightMode()"></div></div></div></div>
+    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-sliders-h"></i> Features</div><div class="settings-card"><div class="toggle-row"><div class="toggle-label">Enable Web Search</div><div class="toggle-switch on" id="webSearchToggle" onclick="toggleWebSearchSetting()"></div></div><div style="height:1px;background:var(--border-subtle);margin:10px 0"></div><div class="toggle-row"><div class="toggle-label">Enable Memory</div><div class="toggle-switch on" id="memoryToggle" onclick="toggleMemorySetting()"></div></div></div></div>
+    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-key"></i> API Keys</div><div class="settings-card"><input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key" autocomplete="off"><input type="password" class="input-field" id="deepseekKeyInput" placeholder="DeepSeek API key (fallback)" autocomplete="off" style="margin-bottom:0"></div></div>
+    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div><div class="settings-card"><select class="input-field" id="modelSelect" style="margin-bottom:0"><option value="gemini-2.5-flash">Gemini 2.5 Flash — Instant ⚡</option><option value="gemini-2.0-flash">Gemini 2.0 Flash</option><option value="gemini-1.5-flash">Gemini 1.5 Flash</option></select></div></div>
+    <div class="modal-actions" style="justify-content:space-between"><button class="btn ghost" style="color:#f87171" onclick="closeModal('settingsModal'); setTimeout(()=>askSignOut(),150);"><i class="fas fa-sign-out-alt"></i> Sign out</button><button class="btn accent" onclick="saveSettings()">Save</button></div>
+  </div>
+</div>
+
+<!-- AI CALL OVERLAY -->
+<div id="aiCallOverlay">
+  <div style="text-align:center;margin-top:40px">
+    <div style="width:140px;height:140px;border-radius:50%;background:var(--accent-gradient);display:flex;align-items:center;justify-content:center;font-size:64px;margin:0 auto 20px;box-shadow:0 0 60px rgba(99,102,241,0.6);animation:pulseCall 2s infinite">👑</div>
+    <div style="font-size:22px;font-weight:700;color:white">Wise King AI</div>
+    <div style="font-size:14px;color:#a1a1aa;margin-top:6px" id="callStatus">Starting...</div>
+  </div>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;width:100%;max-width:600px;padding:20px">
+    <div style="color:white;text-align:center;width:100%">
+      <div id="callUserText" style="font-size:14px;color:#a1a1aa;margin-bottom:14px;min-height:24px;font-style:italic"></div>
+      <div id="callAIText" style="font-size:17px;font-weight:500;line-height:1.6;min-height:60px"></div>
+    </div>
+  </div>
+  <div style="display:flex;gap:24px;align-items:center;margin-bottom:40px">
+    <button onclick="toggleCallMute()" id="callMuteBtn" style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.1);border:none;color:white;font-size:22px;cursor:pointer"><i class="fas fa-microphone"></i></button>
+    <button onclick="endAICall()" style="width:80px;height:80px;border-radius:50%;background:#ef4444;border:none;color:white;font-size:28px;cursor:pointer;box-shadow:0 8px 30px rgba(239,68,68,0.5)"><i class="fas fa-phone-slash"></i></button>
+    <button onclick="toggleCallSpeaker()" id="callSpeakerBtn" style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.1);border:none;color:white;font-size:22px;cursor:pointer"><i class="fas fa-volume-up"></i></button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ============ EXTERNAL LIBS ============ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>  
+  
 <script>
 window.__wkCodeBlocks = window.__wkCodeBlocks || {};
 function fallbackCopy(text){try{var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.top='-1000px';document.body.appendChild(ta);ta.select();var ok=document.execCommand('copy');ta.remove();return !!ok;}catch(e){return false;}}
