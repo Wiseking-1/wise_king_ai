@@ -25,7 +25,7 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
     app: 'Wise King AI',
-    mode: process.env.GEMINI_API_KEY ? 'live-gemini' : 'demo-mode' 
+    mode: process.env.DEEPSEEK_API_KEY ? 'live-deepseek' : 'demo-mode'
   });
 });
 
