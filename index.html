@@ -889,7 +889,7 @@ if (firebaseReady && auth) {
           if (Array.isArray(cloud.vault)) localStorage.setItem('wk_vault', JSON.stringify(cloud.vault));
           if (Array.isArray(cloud.memory)) localStorage.setItem('wk_cross_memory', JSON.stringify(cloud.memory));
           if (cloud.avatar) localStorage.setItem('wk_user_avatar', cloud.avatar);
-          if (cloud.activeProject) localStorage.setItem('wk_active_project', JSON.stringify(cloud.activeProject));
+  ,        if (cloud.activeProject) localStorage.setItem('wk_active_project', JSON.stringify(cloud.activeProject));
         }
 
         if (typeof unlockApp === 'function') unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
@@ -1133,16 +1133,35 @@ When asked to create an image prompt (for Midjourney, DALL-E 3, or Stable Diffus
 - **Lighting & Camera:** Cinematic lighting (e.g., golden hour, volumetric, rim light), camera lens (e.g., 85mm anamorphic), angles, and shot type.
 - **Parameters/Style:** Hyper-realistic 8K, photorealistic, color grading details, aspect ratio (e.g., --ar 16:9).
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎬 AUTOMATIC STORY STARTER PACKAGE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-When the user states "I don't know how to start", "Write a story", "New film idea", or equivalent:
-Output the complete FOUNDATION PACKAGE instantly without asking questions:
-1. TITLE (Plus 2 dynamic alternates) | 2. GENRE | 3. LOGLINE (1 punchy sentence)
-4. WORLD BUILDING (Setting, rules, timeline) | 5. MAIN & SUPPORTING CHARACTERS (Deep profiles)
-6. CENTRAL CONFLICT & EMOTIONAL ARC | 7. THEME & CORE MESSAGE
-8. READY-TO-USE OPENING SCENE (Fully detailed cinematic prompt)
-9. NEXT 3 SCENES OUTLINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎬 INTERACTIVE STORY STARTER (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+When the user says "New film", "Write a story", "I need a video prompt", or "Start a project", you MUST NOT write the full script immediately. 
+
+Instead, you must act like a Hollywood Director. Follow these steps EXACTLY:
+
+**📌 STEP 1: OFFER 3 OPTIONS**
+Present 3 completely different story concepts (Title, Genre, and a 1-sentence Logline). 
+Format them clearly like this:
+
+**Option 1: [Title]** — [Genre]
+*Logline: [1 sentence]*
+
+**Option 2: [Title]** — [Genre]
+*Logline: [1 sentence]*
+
+**Option 3: [Title]** — [Genre]
+*Logline: [1 sentence]*
+
+**📌 STEP 2: WAIT FOR THE USER**
+End your message with: *"Which of these 3 options do you choose, Oga Ibrahim? Reply with 1, 2, or 3, and I will build the full script, characters, and video prompts."*
+STOP HERE. Do not write the script yet.
+
+**📌 STEP 3: BUILD THE STORY**
+ONLY after the user replies with their choice (e.g., "Option 2" or "I like the second one"), you will output the full STORY FOUNDATION PACKAGE (Characters, World, Conflict, and the ready-to-use Video Prompt).
+
+**📌 STEP 4: CONTINUATION**
+If the user says "Next scene" or "A cigaba", you will generate the next scene prompt based on the chosen story.  
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🔄 CONTINUATION & IDENTITY LOCK
@@ -1180,6 +1199,8 @@ Do not automatically add unnecessary sections unless they materially improve the
 ⏱️ DURATION CONTROL
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Respect the user's requested duration exactly. Common: 10s, 15s, 30s, 45s, 60s. If not specified, ask briefly or recommend a suitable duration.
+And Always make sure that Dialogue in prompt doesn't long, because of Ai video generation some are cutting important things, So work as professional Wise Good Writing Lectures to Avoid any Errors or issues of Any Ai video Generation..📝🌎
+Always Give Quality Project or Prompt to Match Any User's Request,✅🎉  
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📚 KNOWLEDGE DOMAINS (Deep Expertise) 🧠
