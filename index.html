@@ -1102,6 +1102,7 @@ You operate with ultimate cognitive capacity, combining world-class engineering,
 • Data & Comparisons → ALWAYS use highly structured, clean Markdown tables.
 • Adaptability: Match the King's language composition precisely (Hausa, English, or seamless code-mixing).
 •Always Use Bold key Letters With Mediums While Given An instructions to user's just like Chatgpt options
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ✍️ UNIVERSAL WRITING & CONTENT STANDARDS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1783,24 +1784,18 @@ function closeSidebar(){document.getElementById('sidebar').classList.remove('ope
 window.toggleSidebar=toggleSidebar;window.closeSidebar=closeSidebar;window.toggleSection=toggleSection;
 
 async function loadChatsFromLocalStorage() {
-  // 1. Load locally first so the screen isn't blank while waiting
   try {
     const s = localStorage.getItem('wk_chats');
     if (s) window.chats = JSON.parse(s);
   } catch (e) { window.chats = []; }
 
-  // 2. Fetch from Firebase Cloud
   const userUid = localStorage.getItem('wk_user_uid');
   if (window.WK_CLOUD && userUid) {
     try {
       const cloudData = await window.WK_CLOUD.loadUserData(userUid);
-      
       if (cloudData && cloudData.chats && cloudData.chats.length > 0) {
-        // Cloud has data! Overwrite local data with cloud data.
         window.chats = cloudData.chats;
         localStorage.setItem('wk_chats', JSON.stringify(window.chats));
-        
-        // Also load memories
         if (cloudData.vault) {
           vaultMemories = cloudData.vault;
           localStorage.setItem('wk_vault', JSON.stringify(vaultMemories));
@@ -1809,28 +1804,19 @@ async function loadChatsFromLocalStorage() {
           crossChatMemory = cloudData.memory;
           localStorage.setItem('wk_cross_memory', JSON.stringify(crossChatMemory));
         }
-        
-        console.log("✅ Chats loaded from Firebase Cloud");
       }
-    } catch (err) {
-      console.error("Cloud load failed:", err);
-    }
+    } catch (err) { console.error("Cloud load failed:", err); }
   }
 
-  // 3. Make sure there is at least one chat
   if (!Array.isArray(window.chats) || !window.chats.length) {
     window.chats = [{ id: 'chat-' + Date.now(), title: 'New chat', messages: [], createdAt: Date.now() }];
   }
-  
   renderChats();
   renderMessages();
 }
 async function saveChats() {
-  // 1. Save locally first (instant)
   localStorage.setItem('wk_chats', JSON.stringify(window.chats));
   renderChats();
-
-  // 2. Save to Firebase Cloud
   const userUid = localStorage.getItem('wk_user_uid');
   if (window.WK_CLOUD && userUid) {
     try {
@@ -1840,10 +1826,7 @@ async function saveChats() {
         memory: crossChatMemory,
         activeProject: activeProject
       });
-      console.log("✅ Chats saved to Firebase Cloud");
-    } catch (err) {
-      console.error("Cloud save failed:", err);
-    }
+    } catch (err) { console.error("Cloud save failed:", err); }
   }
 }
 function createNewChat(){
@@ -1974,10 +1957,18 @@ function handleProfilePhotoUpload(e){
 window.handleProfilePhotoUpload=handleProfilePhotoUpload;
 
 function openSettings(){
-  document.getElementById('settingsModal').classList.add('show');
-  closeSidebar();
-  const k1=localStorage.getItem('wk_api_key');if(k1)document.getElementById('apiKeyInput').value=k1;
-  const dk=localStorage.getItem('wk_deepseek_key');if(dk)document.getElementById('deepseekKeyInput').value=dk;
+  try{
+    const sm=document.getElementById('settingsModal');
+    if(!sm)return;
+    const k1=localStorage.getItem('wk_api_key');if(k1&&document.getElementById('apiKeyInput'))document.getElementById('apiKeyInput').value=k1;
+    const dk=localStorage.getItem('wk_deepseek_key');if(dk&&document.getElementById('deepseekKeyInput'))document.getElementById('deepseekKeyInput').value=dk;
+    const m=localStorage.getItem('wk_model');if(m&&document.getElementById('modelSelect'))document.getElementById('modelSelect').value=m;
+    try{closeSidebar();}catch(e){}
+    setTimeout(function(){sm.classList.add('show');sm.style.zIndex='99999';},80);
+  }catch(err){
+    console.warn('Settings error:',err);
+    if(typeof showToast==='function')showToast('⚠️ Could not open settings');
+  }
 }
 window.openSettings=openSettings;
 
@@ -1990,10 +1981,9 @@ function saveSettings(){
 window.saveSettings=saveSettings;
 
 function updateModelBadge(){
-  const m=localStorage.getItem('wk_model')||'gemini-2.5-flash';
-  let label='Gemini 2.5 Flash';
-  if(m.indexOf('2.0')>=0)label='Gemini 2.0 Flash';
-  else if(m.indexOf('1.5')>=0)label='Gemini 1.5 Flash';
+  const m=localStorage.getItem('wk_model')||'gemini-3.6-flash';
+  let label='Gemini 3.6 Flash';
+  if(m.indexOf('2.5')>=0)label='Gemini 2.5 Flash';
   document.getElementById('modelBadgeText').textContent=label;
 }
 window.updateModelBadge=updateModelBadge;
@@ -2670,7 +2660,8 @@ async function tryDeepSeekFallback(userText,chatHistory,signal){
     const messages=[{role:'system',content:SYSTEM_PROMPT}];
     (chatHistory||[]).slice(-6).forEach(m=>messages.push({role:m.role==='user'?'user':'assistant',content:(m.content||'').slice(0,6000)}));
     messages.push({role:'user',content:userText});
-    const opts={method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+dsKey},body:JSON.stringify({model:'deepseek-chat',messages:messages,max_tokens:2000,temperature:0.7})};
+    // UPDATED MODEL
+    const opts={method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+dsKey},body:JSON.stringify({model:'deepseek-v4-flash',messages:messages,max_tokens:2000,temperature:0.7})};
     if(signal)opts.signal=signal;
     const res=await fetch('https://api.deepseek.com/v1/chat/completions',opts);
     if(!res.ok)return {success:false};
@@ -2704,7 +2695,9 @@ window.buildChatHistoryForModel=buildChatHistoryForModel;
 async function sendMessageWithFallback(userText,chatHistory,signal){
   chatHistory=chatHistory||[];
   const apiKey=(localStorage.getItem('wk_api_key')||'').trim()||ENV_GEMINI_KEY;
-  const model=localStorage.getItem('wk_model')||'gemini-2.5-flash';
+  
+  // UPDATED DEFAULT MODEL
+  const model=localStorage.getItem('wk_model')||'gemini-3.6-flash';
   const url='https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent?key='+apiKey;
 
   const liveKeywords=/\b(news|latest|today|now|current|weather|price|rate)\b/i;
@@ -2773,7 +2766,7 @@ async function sendMessageWithFallback(userText,chatHistory,signal){
       if(attempts>=2){
         const fallback=await tryDeepSeekFallback(userText,chatHistory,signal);
         if(fallback.success)return fallback;
-        return {success:true,reply:'Ranka ya dade! I received your message. Please try again. 👑',provider:'local'};
+        return {success:false,reply:'Ranka ya dade! I received your message but could not connect to the AI servers. Please check your API key in Settings. 👑',provider:'local'};
       }
       await new Promise(r=>setTimeout(r,200));
     }
@@ -2792,7 +2785,7 @@ async function triggerResponse(chat,userMsg){
     const history=buildChatHistoryForModel(chat).filter(m=>m!==aiMsg);
     const result=await sendMessageWithFallback(userMsg.content,history,currentAbortController.signal);
     if(result&&result.success&&result.reply&&result.reply.trim().length>0){aiMsg.content=result.reply;}
-    else if(result&&result.reply){aiMsg.content=result.reply;}
+    else if(result&&result.reply){aiMsg.error=true;aiMsg.content=result.reply;}
     else{aiMsg.error=true;aiMsg.content='⚠️ No response. Please try again.';}
     try{extractProjectFacts(userMsg.content,aiMsg.content,chat);}catch(e){}
   }catch(err){
@@ -2878,3 +2871,5 @@ else bootstrap();
 </script>
 </body>
 </html>
+
+  
