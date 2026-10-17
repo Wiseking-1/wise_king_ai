@@ -790,13 +790,17 @@ window.wkRunCode=function(blockId){
 };
 function highlightCodeBlocks(){if(typeof Prism==='undefined')return;document.querySelectorAll('.md pre code:not([data-highlighted])').forEach(function(block){try{Prism.highlightElement(block);}catch(e){}});}
 window.highlightCodeBlocks=highlightCodeBlocks;
+  
 </script>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";  
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+// 👇 ADD THIS LINE RIGHT HERE 👇
 import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
-
+  
 const firebaseConfig = {
   apiKey: "AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU",
   authDomain: "wise-king-ai-259fc.firebaseapp.com",
@@ -1082,7 +1086,6 @@ window.showGenericModal = function(id, title, html) {
 </script>
 
 <script>
-const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
 const ENV_DEEPSEEK_KEY = '';
 
 const SYSTEM_PROMPT = `You are WISE KING AI — an omnipotent, supreme, world-class AI system capable of creating, writing, coding, and analyzing absolutely ANYTHING in existence. Created by IBRAHIM ABDULLAHI from Nigeria (Wise King Industry). OWNER: Oga Ibrahim 🇳🇬.
@@ -1758,18 +1761,68 @@ function toggleSidebar(){document.getElementById('sidebar').classList.toggle('op
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');}
 window.toggleSidebar=toggleSidebar;window.closeSidebar=closeSidebar;window.toggleSection=toggleSection;
 
-function loadChatsFromLocalStorage(){
-  try{const s=localStorage.getItem('wk_chats');if(s)window.chats=JSON.parse(s);}catch(e){window.chats=[];}
-  if(!Array.isArray(window.chats)||!window.chats.length)window.chats=[{id:'chat-'+Date.now(),title:'New chat',messages:[],createdAt:Date.now()}];
-  renderChats();renderMessages();
-}
-window.loadChatsFromLocalStorage=loadChatsFromLocalStorage;
+async function loadChatsFromLocalStorage() {
+  // 1. Load locally first so the screen isn't blank while waiting
+  try {
+    const s = localStorage.getItem('wk_chats');
+    if (s) window.chats = JSON.parse(s);
+  } catch (e) { window.chats = []; }
 
-function saveChats(){
-  localStorage.setItem('wk_chats',JSON.stringify(window.chats));
+  // 2. Fetch from Firebase Cloud
+  const userUid = localStorage.getItem('wk_user_uid');
+  if (window.WK_CLOUD && userUid) {
+    try {
+      const cloudData = await window.WK_CLOUD.loadUserData(userUid);
+      
+      if (cloudData && cloudData.chats && cloudData.chats.length > 0) {
+        // Cloud has data! Overwrite local data with cloud data.
+        window.chats = cloudData.chats;
+        localStorage.setItem('wk_chats', JSON.stringify(window.chats));
+        
+        // Also load memories
+        if (cloudData.vault) {
+          vaultMemories = cloudData.vault;
+          localStorage.setItem('wk_vault', JSON.stringify(vaultMemories));
+        }
+        if (cloudData.memory) {
+          crossChatMemory = cloudData.memory;
+          localStorage.setItem('wk_cross_memory', JSON.stringify(crossChatMemory));
+        }
+        
+        console.log("✅ Chats loaded from Firebase Cloud");
+      }
+    } catch (err) {
+      console.error("Cloud load failed:", err);
+    }
+  }
+
+  // 3. Make sure there is at least one chat
+  if (!Array.isArray(window.chats) || !window.chats.length) {
+    window.chats = [{ id: 'chat-' + Date.now(), title: 'New chat', messages: [], createdAt: Date.now() }];
+  }
+  
   renderChats();
-  if(window.WK_CLOUD&&localStorage.getItem('wk_user_uid')){
-    window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'),{chats:window.chats,vault:vaultMemories,memory:crossChatMemory,music:musicLibrary,activeProject:activeProject});
+  renderMessages();
+}
+async function saveChats() {
+  // 1. Save locally first (instant)
+  localStorage.setItem('wk_chats', JSON.stringify(window.chats));
+  renderChats();
+
+  // 2. Save to Firebase Cloud
+  const userUid = localStorage.getItem('wk_user_uid');
+  if (window.WK_CLOUD && userUid) {
+    try {
+      await window.WK_CLOUD.saveUserData(userUid, {
+        chats: window.chats,
+        vault: vaultMemories,
+        memory: crossChatMemory,
+        activeProject: activeProject
+      });
+      console.log("✅ Chats saved to Firebase Cloud");
+    } catch (err) {
+      console.error("Cloud save failed:", err);
+    }
   }
 }
 function createNewChat(){
